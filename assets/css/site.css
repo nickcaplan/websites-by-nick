@@ -259,6 +259,7 @@ button { color: inherit; font: inherit; }
 .career-chev { color: var(--accent-ink); font-family: var(--display); font-size: 26px; line-height: 1; transition: transform .18s ease; }
 .career-history[open] .career-chev { transform: rotate(45deg); }
 .career-history .experience-list { border-top: 0; }
+.career-panel { overflow: hidden; transition: height .32s ease; }
 
 .lower-grid { display: grid; gap: 90px; grid-template-columns: 1.15fr .85fr; margin-top: 100px; }
 .tag-cloud { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
