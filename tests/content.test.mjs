@@ -11,7 +11,7 @@ import { dirname, join } from 'node:path';
 import vm from 'node:vm';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const pages = ['index.html', 'experience/index.html', 'contact/index.html', 'privacy/index.html'];
+const pages = ['index.html', 'experience/index.html', 'pricing/index.html', 'contact/index.html', 'privacy/index.html'];
 const read = (page) => readFileSync(join(root, page), 'utf8');
 
 function attr(tag, name) {
@@ -124,7 +124,7 @@ for (const page of pages) {
     assert.ok(chips, 'nav-chips block exists');
     assert.ok(!/<small/.test(chips[0]), 'chips carry no subtitles on any page');
     const labels = [...chips[0].matchAll(/<a\b[^>]*>([^<]+)<\/a>/g)].map((m) => m[1].trim());
-    assert.deepEqual(labels, ['Work', 'Experience', 'Contact']);
+    assert.deepEqual(labels, ['Work', 'Experience', 'Pricing', 'Contact']);
   });
 
   test(`${page}: aria reference attributes resolve to existing ids`, () => {
@@ -250,6 +250,38 @@ test('experience page: pre-NatWest roles foreground website delivery', () => {
   assert.match(byTitle('Alfa'), /enterprise web platform/);
   assert.match(byTitle('NatWest Boxed'), /Core banking platforms, customer onboarding and account services/);
   assert.match(byTitle('NatWest Boxed'), /the same rigour I bring to your website\./);
+});
+
+test('pricing page: three tiers with guide prices, inclusions and a route to the contact page', () => {
+  const html = read('pricing/index.html');
+  const tiers = [...html.matchAll(/<article class="tier">[\s\S]*?<\/article>/g)].map((m) => m[0]);
+  assert.equal(tiers.length, 3, 'Starter, Content & growth and Bespoke engineering tiers');
+  const names = tiers.map((t) => (t.match(/<h2 class="tier-kicker">([^<]+)<\/h2>/) || [])[1]);
+  assert.deepEqual(names, ['Starter', 'Content &amp; growth', 'Bespoke engineering']);
+  assert.match(tiers[0], /<p class="tier-price"><span class="tier-from">from<\/span> £500<\/p>/, 'starter guide price is from £500');
+  assert.match(tiers[1], /<p class="tier-price"><span class="tier-from">from<\/span> £2,200<\/p>/, 'content & growth guide price is from £2,200');
+  assert.match(tiers[2], /<p class="tier-price">Priced <span class="tier-from">per project<\/span><\/p>/, 'bespoke engineering is priced per project');
+  for (const tier of tiers) {
+    assert.match(tier, /<p class="tier-price">/, 'every tier shows its guide price');
+    assert.match(tier, /<ul class="tier-list">/, 'every tier lists what is included');
+    assert.match(tier, /<h2 class="tier-kicker">/, 'every tier name is a heading for screen-reader navigation');
+    assert.match(tier, /<h3 class="tier-heading">/, 'inclusions sit under the tier heading');
+    assert.match(tier, /<a class="button tier-cta" href="\.\.\/contact\/">/, 'every tier leads to the contact page');
+  }
+  // Prices stay honest guide prices: framed as starting points with an
+  // individually written quote before any commitment, and the free
+  // 20-minute consultation from the business plan is the first step.
+  assert.match(tiers[0], /Search engine optimisation \(SEO\)/, 'the starter tier names SEO rather than underselling it');
+  assert.doesNotMatch(tiers[0], /search engine basics/i, 'starter SEO is not described as basics');
+  assert.match(tiers[1], /Ongoing support/, 'the content & growth tier includes ongoing support');
+  assert.match(tiers[1], /vulnerability fixes/, 'the content & growth tier includes vulnerability fixes');
+  assert.match(tiers[0], /Built within one week/, 'the starter tier states its one-week turnaround');
+  assert.match(tiers[1], /Built within three weeks/, 'the content & growth tier states its three-week turnaround');
+  assert.match(html, /once we&rsquo;ve agreed the scope and your content is ready/, 'turnarounds start from agreed scope and ready content');
+  assert.match(html, />from</, 'prices are framed as starting points');
+  assert.match(html, /quoted individually/, 'every project is quoted individually');
+  assert.match(html, /free 20-minute chat/, 'the free consultation is the first step');
+  assert.doesNotMatch(html, /guarantee|no obligation to buy|limited time offer/i, 'no pressure tactics or invented promises');
 });
 
 test('web manifest icons exist in the repo', () => {
