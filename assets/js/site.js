@@ -93,6 +93,7 @@ if (careerHistory) {
     if (careerHistory.open) {
       careerPanel.style.height = careerPanel.scrollHeight + 'px';
       requestAnimationFrame(() => {
+        void careerPanel.offsetHeight; // commit the start height, or some engines snap
         careerPanel.style.height = '0px';
         finishSlide(() => { careerHistory.open = false; });
       });
@@ -101,6 +102,7 @@ if (careerHistory) {
       const target = careerPanel.scrollHeight;
       careerPanel.style.height = '0px';
       requestAnimationFrame(() => {
+        void careerPanel.offsetHeight; // commit the start height, or some engines snap
         careerPanel.style.height = target + 'px';
         finishSlide(null);
       });
