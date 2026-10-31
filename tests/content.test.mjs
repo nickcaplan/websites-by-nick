@@ -249,6 +249,7 @@ test('experience page: pre-NatWest roles foreground website delivery', () => {
   assert.match(byTitle('Moogsoft'), /web platform/);
   assert.match(byTitle('Alfa'), /enterprise web platform/);
   assert.match(byTitle('NatWest Boxed'), /Core banking platforms, customer onboarding and account services/);
+  assert.match(byTitle('NatWest Boxed'), /the same rigour I bring to your website\./);
 });
 
 test('web manifest icons exist in the repo', () => {
