@@ -229,7 +229,7 @@ test('navigation: every page is reachable by its real URL from the nav', async (
   await page.goto('/');
   await page.locator('.nav-links a[href="experience/"]').click();
   await page.waitForURL('**/experience/');
-  assert.equal(await page.evaluate(() => document.querySelector('h1').textContent.trim()), 'Selected experience.');
+  assert.equal(await page.evaluate(() => document.querySelector('h1').textContent.trim()), 'Websites are what I build.');
   assert.equal(await page.evaluate(() => document.querySelector('.nav-links a[aria-current="page"]').textContent.trim()), 'Experience');
   await page.locator('.nav-links a[href="../contact/"]').click();
   await page.waitForURL('**/contact/');

@@ -41,6 +41,7 @@ function runPage({ prefersDark = false, stored = {} }) {
     querySelector(selector) {
       if (selector === '.theme-toggle') return themeToggle;
       if (selector === '.mobile-toggle') return mobileToggle;
+      if (selector === '.career-history') return null; // these stub pages have no career-history section
       return makeElement();
     },
     querySelectorAll() {
@@ -132,6 +133,7 @@ test('storage failures never break theme setup or toggling', () => {
     body: { dataset: {} },
     querySelector(selector) {
       if (selector === '.theme-toggle') return themeToggle;
+      if (selector === '.career-history') return null; // these stub pages have no career-history section
       return makeElement();
     },
     querySelectorAll() { return []; },

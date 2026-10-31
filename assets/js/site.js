@@ -66,3 +66,46 @@ if (allowsMobilePreview) {
 }
 syncLayout();
 mobileViewport.addEventListener('change', syncLayout);
+
+// Career history: slide the expandable open and closed instead of snapping.
+// Progressive enhancement - without this the native details toggle still
+// works, and the global reduced-motion rule makes the slide instant.
+const careerHistory = document.querySelector('.career-history');
+if (careerHistory) {
+  const careerPanel = careerHistory.querySelector('.career-panel');
+  let careerAnimating = false;
+  const finishSlide = (after) => {
+    let settled = false;
+    const wrap = () => {
+      if (settled) return;
+      settled = true;
+      careerPanel.style.height = '';
+      careerAnimating = false;
+      if (after) after();
+    };
+    careerPanel.addEventListener('transitionend', wrap, { once: true });
+    setTimeout(wrap, 450);
+  };
+  careerHistory.querySelector('summary').addEventListener('click', (event) => {
+    if (careerAnimating) { event.preventDefault(); return; }
+    event.preventDefault();
+    careerAnimating = true;
+    if (careerHistory.open) {
+      careerPanel.style.height = careerPanel.scrollHeight + 'px';
+      requestAnimationFrame(() => {
+        void careerPanel.offsetHeight; // commit the start height, or some engines snap
+        careerPanel.style.height = '0px';
+        finishSlide(() => { careerHistory.open = false; });
+      });
+    } else {
+      careerHistory.open = true;
+      const target = careerPanel.scrollHeight;
+      careerPanel.style.height = '0px';
+      requestAnimationFrame(() => {
+        void careerPanel.offsetHeight; // commit the start height, or some engines snap
+        careerPanel.style.height = target + 'px';
+        finishSlide(null);
+      });
+    }
+  });
+}
