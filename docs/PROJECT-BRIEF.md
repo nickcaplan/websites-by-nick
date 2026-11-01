@@ -12,7 +12,7 @@ Prospective clients who want a modern, responsive website designed, built and ma
 
 ## Pages
 
-- **Home**: leads with the websites Nick has built. Each project shows what it is, Nick's role and a link to the live site.
+- **Home**: leads with the websites Nick has built, plus the Compass concept demo. Each project shows what it is and a link to the live site or demo.
 - **Experience**: Nick's background, written in terms of what it means for a client. Earlier roles are presented around the website building they involved. Use only facts Nick has approved and never invent projects, responsibilities or results.
 - **Pricing**: guide prices for the three kinds of website project (starter, content & growth, bespoke engineering), what each includes and how a project starts. Prices are starting points; every project is quoted individually before the visitor commits. A short section states that Nick can manage domain registration, SSL certificates and other services for clients, without promising prices or inclusions.
 - **Contact**: a short enquiry form ("Have a website in mind?"), sent through Formspree.
