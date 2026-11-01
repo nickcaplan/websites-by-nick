@@ -100,7 +100,7 @@ button { color: inherit; font: inherit; }
 .mobile-toggle[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--bg); }
 @media (hover: hover) {
   .mobile-toggle:hover { background: var(--ink); border-color: var(--ink); color: var(--bg); }
-  .nav-links a:hover { color: var(--accent); }
+  .nav-links a:not([aria-current="page"]):hover { color: var(--accent); }
   .theme-toggle:hover { background: var(--surface); border-color: var(--accent); color: var(--accent); }
   .button:hover { background: var(--ink); color: var(--bg); transform: translateY(-3px); }
   .button-primary:hover { background: var(--ink); border-color: var(--ink); }

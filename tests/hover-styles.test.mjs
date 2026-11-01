@@ -27,3 +27,10 @@ test('hover styles only apply on devices that can hover', () => {
   }
   assert.deepEqual(outside, []);
 });
+
+// The hover rule now sits before the current-page rule in the file, so it must
+// exclude the current page itself or the active link would turn accent on hover.
+test('nav link hover leaves the current page link alone', () => {
+  assert.match(css, /\.nav-links a:not\(\[aria-current="page"\]\):hover/);
+  assert.doesNotMatch(css, /\.nav-links a:hover/);
+});
