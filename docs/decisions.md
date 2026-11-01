@@ -2,6 +2,10 @@
 
 Important decisions, newest first. This is not a changelog: small fixes and implementation details belong in the pull request. Add an entry only when a choice would otherwise be questioned or reversed later. Requirements are in [PROJECT-BRIEF.md](PROJECT-BRIEF.md).
 
+## 1 November 2026: Pricing page says Nick can manage domains, SSL certificates and other services
+
+At Nick's request, the Pricing page has a short "Domains, certificates and other services" section stating that he can register domains, set up and renew SSL certificates and manage other technical services for clients. It makes no price, inclusion or turnaround promise: what is covered and what it costs sits in each project's written quote. Not yet decided: whether these services are inside the guide prices, how third-party fees are charged, and whether hosting or email are offered.
+
 ## 31 October 2026: Hyphens for prose punctuation
 
 Nick briefly tried en-dashes for prose punctuation, then settled on ordinary hyphens for dashes in website prose and his communications generally. Hyphens everywhere: punctuation, ranges and compounds.
