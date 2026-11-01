@@ -734,7 +734,7 @@ test('showcase: composed overviews have a single readable set of controls at eve
     // the visitor's own device shows alone at every width.
     assert.equal(state.shots, 3, `only the capture matching the visitor's device is visible at ${width}px`);
     assert.equal(state.duplicateControls, 0, 'no competing arrows, thumbnail images or enlargement affordance');
-    assert.equal(state.sizes.length, width <= 960 ? 11 : 10);
+    assert.equal(state.sizes.length, width <= 960 ? 12 : 11);
     if (width <= 400) {
       for (const row of await page.locator('.thumbs').all()) {
         const layout = await row.evaluate(el => ({width: el.clientWidth, scroll: el.scrollWidth, tops: [...el.querySelectorAll('.thumb:not([hidden])')].map(button => button.offsetTop)}));
