@@ -513,7 +513,13 @@ test('phone contact link keeps the form clear of the pinned tabs', async ({ page
   await page.goto('/contact/');
   await page.locator('.footer-cta').click();
   await page.waitForFunction(() => location.hash === '#contact-form');
-  await page.waitForTimeout(1200);
+  // Wait for the smooth scroll to settle: the form top must read the same value on consecutive frames.
+  await page.waitForFunction(() => {
+    const top = Math.round(document.querySelector('#contact-form').getBoundingClientRect().top);
+    const settled = window.__lastFormTop === top;
+    window.__lastFormTop = top;
+    return settled;
+  }, undefined, { polling: 'raf' });
   const top = await page.evaluate(() => Math.round(document.querySelector('#contact-form').getBoundingClientRect().top));
   assert.ok(top >= 48, `form top (${top}px) sits below the 48px pinned tabs`);
 });
