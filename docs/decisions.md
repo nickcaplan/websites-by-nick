@@ -74,3 +74,7 @@ Browser checks run on Playwright (Chromium, Firefox, WebKit and mobile Chrome) i
 ## 1 November 2026: Phone page navigation becomes underlined text tabs
 
 Nick chose option A from the navigation review. On phones the four boxed page chips become one row of plain text tabs with the active page underlined, matching the screenshot tabs on the Work page. The row scrolls sideways if more pages are added, so the header never grows taller. Desktop navigation is unchanged. Tabs stay at least 44px tall.
+
+## 1 November 2026: Phone page tabs stay pinned
+
+On phones the underlined tab row is sticky at the top while the rest of the header scrolls away. Pinning the whole header would take 128px, 15% of an 844px screen. The tab row alone takes 48px. The shell uses overflow clip on phones so sticky works. Desktop navigation is unchanged.

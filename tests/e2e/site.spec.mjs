@@ -481,6 +481,52 @@ test('mobile page tabs: one scrollable row with an underlined active page and 44
   assert.equal(state.extraRows, 1, 'overflowing tabs stay on one row');
 });
 
+test('mobile page tabs stay pinned to the top while scrolling, and desktop nav does not', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/pricing/');
+  await page.evaluate(() => window.scrollTo(0, 1500));
+  await page.waitForFunction(() => window.scrollY > 1000);
+  await page.waitForFunction(() => Math.abs(window.scrollY - 1500) < 2);
+  const pinned = await page.evaluate(() => {
+    const row = document.querySelector('.nav-chips');
+    const box = row.getBoundingClientRect();
+    return { scrolled: window.scrollY, top: Math.round(box.top), height: Math.round(box.height), position: getComputedStyle(row).position, overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth };
+  });
+  assert.ok(pinned.scrolled > 1000, 'the page scrolled');
+  assert.equal(pinned.position, 'sticky');
+  assert.equal(pinned.top, 0, 'tab row sits at the top of the screen after scrolling');
+  assert.ok(pinned.height >= 44, 'pinned tab row keeps 44px targets');
+  assert.ok(pinned.overflow <= 1, 'no horizontal scroll');
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/pricing/');
+  const desktop = await page.evaluate(() => {
+    const row = document.querySelector('.nav-chips');
+    const nav = document.querySelector('.site-nav');
+    return { chipsPosition: getComputedStyle(row).position, shell: getComputedStyle(document.querySelector('.site-shell')).overflowY, navPosition: getComputedStyle(nav).position };
+  });
+  assert.notEqual(desktop.chipsPosition, 'sticky', 'desktop tab row is not pinned');
+  assert.equal(desktop.shell, 'hidden', 'desktop shell overflow is unchanged');
+});
+
+test('phone contact link keeps the form clear of the pinned tabs', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/contact/');
+  const startY = await page.evaluate(() => Math.round(window.scrollY));
+  // A native click, so Playwright does not scroll the link into view first and hide the jump being tested.
+  await page.evaluate(() => document.querySelector('.footer-cta').click());
+  await page.waitForFunction(() => location.hash === '#contact-form');
+  // Wait for the smooth scroll to move away from where it started and then settle: ten consecutive frames at one position.
+  await page.waitForFunction((from) => {
+    const y = Math.round(window.scrollY);
+    const state = window.__scrollSettle || (window.__scrollSettle = { y: -1, frames: 0 });
+    state.frames = y === state.y ? state.frames + 1 : 0;
+    state.y = y;
+    return y !== from && state.frames >= 10;
+  }, startY, { polling: 'raf' });
+  const top = await page.evaluate(() => Math.round(document.querySelector('#contact-form').getBoundingClientRect().top));
+  assert.ok(top >= 48, `form top (${top}px) sits below the 48px pinned tabs`);
+});
+
 test('portrait: headline and portrait share the hero without overlap or horizontal scroll', async ({ page }, testInfo) => {
   for (const width of [1440, 390, 320]) {
     await page.setViewportSize({ width, height: 900 });
