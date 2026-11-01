@@ -2,6 +2,10 @@
 
 Important decisions, newest first. This is not a changelog: small fixes and implementation details belong in the pull request. Add an entry only when a choice would otherwise be questioned or reversed later. Requirements are in [PROJECT-BRIEF.md](PROJECT-BRIEF.md).
 
+## 1 November 2026: Contact page promises a reply within two working days
+
+At Nick's request the contact intro now reads "Tell me about the site you're planning and I'll get back to you within two working days." Working days rather than 48 hours, so a weekend enquiry is not promised a weekend reply. The meta descriptions and the form's success message still say "I'll get back to you" without a time; they were not part of the approved wording.
+
 ## 1 November 2026: Pricing page says Nick can manage domains, SSL certificates and other services
 
 At Nick's request, the Pricing page has a short "Domains, certificates and other services" section stating that he can manage domain registration and renewals, set up and renew SSL certificates and manage other services by agreement. It makes no price, inclusion or turnaround promise: what is covered and what it costs sits in each project's written quote. Not yet decided: whether these services are inside the guide prices, how third-party fees are charged, and whether hosting or email are offered.
