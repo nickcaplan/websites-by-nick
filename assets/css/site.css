@@ -279,7 +279,8 @@ button { color: inherit; font: inherit; }
 .contact-form { display: grid; gap: 16px; }
 .form-field { display: grid; gap: 7px; }
 .form-field label { color: var(--muted); font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
-.form-hint { color: var(--muted); font-size: 16px; line-height: 1.5; margin: 0; }
+.visually-hidden { border: 0; clip: rect(0 0 0 0); clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0; position: absolute; white-space: nowrap; width: 1px; }
+.form-field textarea::placeholder { color: var(--muted); line-height: 1.5; opacity: 1; }
 .form-field input, .form-field textarea { background: var(--surface); border: 1px solid var(--line); border-radius: 4px; color: var(--ink); font: inherit; font-size: 16px; padding: 13px 14px; width: 100%; }
 .form-field textarea { min-height: 150px; resize: vertical; }
 .form-field input:focus, .form-field textarea:focus { border-color: var(--accent); outline: 2px solid color-mix(in srgb, var(--accent) 25%, transparent); outline-offset: 1px; }
@@ -435,7 +436,6 @@ body[data-style="atelier"][data-theme="dark"] .credstrip { background: #101711; 
   .lower-grid { display: block; margin-top: 72px; }
   .lower-grid > section + section { margin-top: 65px; }
   .contact-grid { display: block; }
-  .contact-form { margin-top: 34px; }
   .footer { padding: 60px 20px 24px; }
   .credstrip { width: calc(100% - 40px); }
   body[data-style="atelier"] .role { display: block; }
@@ -504,7 +504,6 @@ body[data-mobile="true"] .role-highlights { grid-template-columns: 1fr; }
 body[data-mobile="true"] .lower-grid { display: block; margin-top: 28px; }
 body[data-mobile="true"] .lower-grid > section + section { margin-top: 36px; }
 body[data-mobile="true"] .contact-grid { display: block; }
-body[data-mobile="true"] .contact-form { margin-top: 28px; }
 body[data-mobile="true"] .footer { padding: 28px 20px 18px; }
 body[data-mobile="true"] .footer h2 { font-size: 48px; line-height: .95; margin-bottom: 18px; }
 body[data-mobile="true"] .footer-intro { font-size: 16px; margin: 0 0 28px; }

@@ -533,17 +533,40 @@ test('phone: work appears before details, body text is readable and headline wra
   }
 });
 
-test('contact: mobile fields avoid focus zoom and the message hint is accessible', async ({ page }) => {
+test('contact: mobile fields avoid focus zoom and the message prompt is a readable placeholder', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/contact/');
-  const state = await page.evaluate(() => ({
-    fonts: [...document.querySelectorAll('.form-field input, .form-field textarea')].map((el) => parseFloat(getComputedStyle(el).fontSize)),
-    describedBy: document.querySelector('#contact-message').getAttribute('aria-describedby'),
-    hint: document.querySelector('#message-hint').textContent,
-  }));
+  const state = await page.evaluate(() => {
+    const area = document.querySelector('#contact-message');
+    const channels = (value) => value.match(/[\d.]+/g).slice(0, 3).map(Number);
+    const luminance = (rgb) => {
+      const [r, g, b] = rgb.map((v) => { const c = v / 255; return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; });
+      return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    };
+    const placeholder = getComputedStyle(area, '::placeholder');
+    const a = luminance(channels(placeholder.color));
+    const b = luminance(channels(getComputedStyle(area).backgroundColor));
+    return {
+      fonts: [...document.querySelectorAll('.form-field input, .form-field textarea')].map((el) => parseFloat(getComputedStyle(el).fontSize)),
+      describedBy: area.getAttribute('aria-describedby'),
+      placeholder: area.getAttribute('placeholder'),
+      label: document.querySelector('label[for="contact-message"]').textContent,
+      hint: document.querySelector('#message-hint').textContent,
+      hintVisible: document.querySelector('#message-hint').getBoundingClientRect().width > 1,
+      opacity: placeholder.opacity,
+      contrast: (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05),
+    };
+  });
   assert.ok(state.fonts.every((size) => size >= 16), 'all input text is at least 16px');
+  assert.equal(state.label, 'Message');
+  assert.equal(state.hint, state.placeholder, 'a hidden copy of the prompt is kept for assistive technology');
+  assert.ok(!state.hintVisible, 'the hidden copy takes no visible space');
   assert.deepEqual(state.describedBy.split(/\s+/), ['message-hint', 'contact-message-error']);
-  assert.match(state.hint, /what would you like the website to achieve/);
+  assert.equal(state.placeholder, 'What do you or your organisation do, and what would you like the website to achieve?');
+  assert.equal(state.opacity, '1');
+  assert.ok(state.contrast >= 4.5, `placeholder contrast ${state.contrast.toFixed(2)} is at least 4.5`);
+  await page.locator('#contact-message').fill('Hello');
+  assert.equal(await page.locator('#contact-message').inputValue(), 'Hello', 'typed text replaces the prompt; the prompt is never a value');
 });
 
 test('closing contact copy has sufficient contrast in both themes', async ({ page }) => {
