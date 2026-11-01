@@ -63,6 +63,7 @@ body[data-mobile="true"] .tier-audience { font-size: 16px; }
 body[data-mobile="true"] .tier-list li { font-size: 16px; }
 body[data-mobile="true"] .pricing-note { font-size: 16px; }
 body[data-mobile="true"] .included-list li { font-size: 16px; }
+body[data-mobile="true"] .tier-kicker { font-size: 22px; }
 body[data-mobile="true"] .tier-price { font-size: 30px; }
 body[data-mobile="true"] .tier-cta { align-self: stretch; justify-content: center; }
 body[data-mobile="true"] .steps-list li { grid-template-columns: 44px 1fr; }
