@@ -511,16 +511,18 @@ test('mobile page tabs stay pinned to the top while scrolling, and desktop nav d
 test('phone contact link keeps the form clear of the pinned tabs', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/contact/');
-  await page.locator('.footer-cta').click();
+  const startY = await page.evaluate(() => Math.round(window.scrollY));
+  // A native click, so Playwright does not scroll the link into view first and hide the jump being tested.
+  await page.evaluate(() => document.querySelector('.footer-cta').click());
   await page.waitForFunction(() => location.hash === '#contact-form');
-  // Wait for the smooth scroll to start and then settle: the page must hold one scroll position for ten consecutive frames.
-  await page.waitForFunction(() => {
+  // Wait for the smooth scroll to move away from where it started and then settle: ten consecutive frames at one position.
+  await page.waitForFunction((from) => {
     const y = Math.round(window.scrollY);
     const state = window.__scrollSettle || (window.__scrollSettle = { y: -1, frames: 0 });
     state.frames = y === state.y ? state.frames + 1 : 0;
     state.y = y;
-    return y > 0 && state.frames >= 10;
-  }, undefined, { polling: 'raf' });
+    return y !== from && state.frames >= 10;
+  }, startY, { polling: 'raf' });
   const top = await page.evaluate(() => Math.round(document.querySelector('#contact-form').getBoundingClientRect().top));
   assert.ok(top >= 48, `form top (${top}px) sits below the 48px pinned tabs`);
 });
