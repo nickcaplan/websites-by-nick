@@ -3,19 +3,31 @@
    breakpoints as site.css (stacked below 960px, phone spacing when
    data-mobile="true", single column at genuinely enlarged text). */
 
-.pricing-grid { display: grid; gap: 24px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+/* Slightly wider than the shared .content so the three card heads fit
+   their larger titles and prices on one line. */
+.content { max-width: 1280px; }
+
+.pricing-grid { display: grid; gap: 18px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .tier {
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   display: flex;
   flex-direction: column;
-  padding: 30px 28px 28px;
+  padding: 30px 23px 28px;
 }
+.tier-head { align-items: baseline; display: flex; flex-wrap: wrap; gap: 2px 6px; justify-content: space-between; margin-bottom: 14px; }
 h2.tier-kicker { margin: 0; }
-.tier-kicker { color: var(--accent-ink); font-family: var(--mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; }
-.tier-price { font-family: var(--display); font-size: 40px; font-weight: 600; letter-spacing: -.045em; line-height: 1.05; margin: 14px 0 10px; }
+.tier-kicker { color: var(--accent-ink); font-family: var(--display); font-size: 22px; font-weight: 600; letter-spacing: -.03em; }
+.tier-price { font-family: var(--display); font-size: 40px; font-weight: 600; letter-spacing: -.045em; line-height: 1.05; margin: 0 0 0 auto; }
 .tier-from { color: var(--muted); font-family: var(--body); font-size: 15px; font-weight: 400; letter-spacing: -.01em; white-space: nowrap; }
+@media (min-width: 961px) {
+  .tier-kicker { font-size: 28px; }
+  /* Desktop heads stay on one row in natural reading order ("from £2,200",
+     "Priced per project"): the price steps down from 40px so it shares
+     the baseline with the 28px coral titles. */
+  .tier-price { font-size: 22px; }
+}
 .tier-audience { color: var(--muted); font-size: 15px; line-height: 1.5; margin: 0 0 20px; }
 .tier-heading { font-family: var(--body); font-size: 13px; font-weight: 600; letter-spacing: .02em; margin: 0 0 12px; }
 .tier-list { border-top: 1px solid var(--line); display: grid; gap: 11px; list-style: none; margin: 0; padding: 18px 0 0; }
@@ -44,6 +56,9 @@ h2.tier-kicker { margin: 0; }
   .included-list li:first-child { border-top: 0; }
 }
 
+/* Phone mode (real phones and the preview phone frame) stacks the tier
+   cards; the 960px viewport rule above does not fire inside the frame. */
+body[data-mobile="true"] .pricing-grid { grid-template-columns: minmax(0, 1fr); }
 body[data-mobile="true"] .included,
 body[data-mobile="true"] .steps { margin-top: 36px; }
 /* Project brief: body text is at least 16px on phones. */
@@ -56,7 +71,8 @@ body[data-mobile="true"] .tier-audience { font-size: 16px; }
 body[data-mobile="true"] .tier-list li { font-size: 16px; }
 body[data-mobile="true"] .pricing-note { font-size: 16px; }
 body[data-mobile="true"] .included-list li { font-size: 16px; }
-body[data-mobile="true"] .tier-price { font-size: 34px; }
+body[data-mobile="true"] .tier-kicker { font-size: 22px; }
+body[data-mobile="true"] .tier-price { display: block; font-size: 30px; }
 body[data-mobile="true"] .tier-cta { align-self: stretch; justify-content: center; }
 body[data-mobile="true"] .steps-list li { grid-template-columns: 44px 1fr; }
 
