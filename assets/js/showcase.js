@@ -273,6 +273,26 @@ document.querySelectorAll('.case').forEach((caseEl) => {
       "600": "compass-plan-mob-dark-600w.webp",
       "960": "compass-plan-mob-dark-960w.webp"
     }
+  },
+  "compass-plans-mob.webp": {
+    "width": 1170,
+    "height": 2106,
+    "variants": {
+      "160": "compass-plans-mob-160w.webp",
+      "320": "compass-plans-mob-320w.webp",
+      "600": "compass-plans-mob-600w.webp",
+      "960": "compass-plans-mob-960w.webp"
+    }
+  },
+  "compass-plans-mob-dark.webp": {
+    "width": 1170,
+    "height": 2106,
+    "variants": {
+      "160": "compass-plans-mob-dark-160w.webp",
+      "320": "compass-plans-mob-dark-320w.webp",
+      "600": "compass-plans-mob-dark-600w.webp",
+      "960": "compass-plans-mob-dark-960w.webp"
+    }
   }
 };
   const sources = (src, kind) => {
