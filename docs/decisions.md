@@ -70,3 +70,7 @@ Nick's rule: a CTA arrow or icon never wraps away from the end of its label. The
 ## 24 October 2026: Playwright for browser checks
 
 Browser checks run on Playwright (Chromium, Firefox, WebKit and mobile Chrome) in the official Playwright container, matching the FOA and Samantha Fernando repositories. Unit and content checks stay dependency-free. Checks assert the intended state and are never removed or weakened to make the suite pass.
+
+## 1 November 2026: Compass concept demo added to the Work page
+
+The home page gains a third project, Compass, a concept demo of a life-sciences media planner built on a media-planning idea from The Hybrid House. It uses the same desktop and phone screenshot frame and tabs as the other projects (Overview, Brief, Plan, Plans), with real captures of the live demo in both themes using its built-in example brief. The copy says the figures are illustrative demo data and makes no claim about sign-in, saved plans or a client engagement. The portrait status video is not used because it does not fit the landscape and phone frames. Its tabs load eagerly like the other projects.

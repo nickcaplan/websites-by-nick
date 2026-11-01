@@ -26,13 +26,13 @@ for (const theme of ['dark', 'light']) {
       if (request.url().includes('/images/work/')) requests.push(request.url());
     });
     await page.goto('/');
-    await expect(page.locator('.shot-img')).toHaveCount(4);
+    await expect(page.locator('.shot-img')).toHaveCount(6);
     await page.waitForFunction(() => [...document.querySelectorAll('.shot-img')].every((i) => i.complete && i.naturalWidth > 0));
     // Exactly the four initial captures, plus at most the bounded
     // same-theme neighbour preloads (one step either side per case, current
     // form factor only): the guard stays that no other capture SET loads.
-    expect(requests.length).toBeGreaterThanOrEqual(4);
-    expect(requests.length).toBeLessThanOrEqual(8);
+    expect(requests.length).toBeGreaterThanOrEqual(6);
+    expect(requests.length).toBeLessThanOrEqual(12);
     for (const url of requests) expect(/-dark(?:-\d+w)?\.webp$/.test(url)).toBe(theme === 'dark');
     // Width-appropriateness (user-approved replacement for the variant-picked
     // proxy): the sizes hint must track the rendered width, and the requested
@@ -94,7 +94,7 @@ test('static no-JavaScript homepage retains all showcase images', async ({ brows
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();
   await page.goto(baseURL);
-  await expect(page.locator('.shot-img')).toHaveCount(4);
+  await expect(page.locator('.shot-img')).toHaveCount(6);
   // Every capture stays in the DOM and loads; small screens hide the desktop
   // capture by design (the phone capture stands alone there).
   // One capture per viewport: exactly the capture matching the viewport's
@@ -163,7 +163,7 @@ test('theme change during a pending selection keeps the requested screenshots', 
   // The theme flips while the requested pair is still decoding; the pending
   // choice must survive, reloading the same selection for the new theme.
   await page.evaluate(() => { document.body.dataset.theme = document.body.dataset.theme === 'dark' ? 'light' : 'dark'; });
-  await page.waitForFunction(() => window.decodeReleases.length >= 6);
+  await page.waitForFunction(() => window.decodeReleases.length >= 8);
   await page.evaluate(() => window.decodeReleases.splice(0).forEach((release) => release()));
   await expect(page.locator('.case:first-child .thumb[data-label="What’s On"]')).toHaveAttribute('aria-pressed', 'true');
   await expect(page.locator('.case:first-child .pill-label')).toHaveText(/What.s On/);
@@ -183,7 +183,7 @@ test('screenshot activation preserves the reserved layout before scripts run', a
   const before = await box();
   expect(before.height).toBeGreaterThan(300);
   release();
-  await expect(page.locator('.shot-img')).toHaveCount(4);
+  await expect(page.locator('.shot-img')).toHaveCount(6);
   const after = await box();
   expect(Math.abs(after.height - before.height)).toBeLessThan(1);
   expect(Math.abs(after.y - before.y)).toBeLessThan(1);
@@ -207,7 +207,7 @@ test('first visible capture has high priority before sources are assigned', asyn
     }
   });
   await page.goto('/');
-  await expect(page.locator('.shot-img')).toHaveCount(4);
+  await expect(page.locator('.shot-img')).toHaveCount(6);
   expect(await page.evaluate(() => window.initialCapturePriority.slice(0, 2))).toEqual([
     { property: 'srcset', priority: 'high' },
     { property: 'src', priority: 'high' },

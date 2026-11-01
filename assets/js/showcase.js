@@ -213,6 +213,86 @@ document.querySelectorAll('.case').forEach((caseEl) => {
       "600": "sam-bio-mob-dark-600w.webp",
       "960": "sam-bio-mob-dark-960w.webp"
     }
+  },
+  "compass-overview-mob.webp": {
+    "width": 1170,
+    "height": 2106,
+    "variants": {
+      "160": "compass-overview-mob-160w.webp",
+      "320": "compass-overview-mob-320w.webp",
+      "600": "compass-overview-mob-600w.webp",
+      "960": "compass-overview-mob-960w.webp"
+    }
+  },
+  "compass-overview-mob-dark.webp": {
+    "width": 1170,
+    "height": 2106,
+    "variants": {
+      "160": "compass-overview-mob-dark-160w.webp",
+      "320": "compass-overview-mob-dark-320w.webp",
+      "600": "compass-overview-mob-dark-600w.webp",
+      "960": "compass-overview-mob-dark-960w.webp"
+    }
+  },
+  "compass-brief-mob.webp": {
+    "width": 1170,
+    "height": 2106,
+    "variants": {
+      "160": "compass-brief-mob-160w.webp",
+      "320": "compass-brief-mob-320w.webp",
+      "600": "compass-brief-mob-600w.webp",
+      "960": "compass-brief-mob-960w.webp"
+    }
+  },
+  "compass-brief-mob-dark.webp": {
+    "width": 1170,
+    "height": 2106,
+    "variants": {
+      "160": "compass-brief-mob-dark-160w.webp",
+      "320": "compass-brief-mob-dark-320w.webp",
+      "600": "compass-brief-mob-dark-600w.webp",
+      "960": "compass-brief-mob-dark-960w.webp"
+    }
+  },
+  "compass-plan-mob.webp": {
+    "width": 1170,
+    "height": 2106,
+    "variants": {
+      "160": "compass-plan-mob-160w.webp",
+      "320": "compass-plan-mob-320w.webp",
+      "600": "compass-plan-mob-600w.webp",
+      "960": "compass-plan-mob-960w.webp"
+    }
+  },
+  "compass-plan-mob-dark.webp": {
+    "width": 1170,
+    "height": 2106,
+    "variants": {
+      "160": "compass-plan-mob-dark-160w.webp",
+      "320": "compass-plan-mob-dark-320w.webp",
+      "600": "compass-plan-mob-dark-600w.webp",
+      "960": "compass-plan-mob-dark-960w.webp"
+    }
+  },
+  "compass-plans-mob.webp": {
+    "width": 1170,
+    "height": 2106,
+    "variants": {
+      "160": "compass-plans-mob-160w.webp",
+      "320": "compass-plans-mob-320w.webp",
+      "600": "compass-plans-mob-600w.webp",
+      "960": "compass-plans-mob-960w.webp"
+    }
+  },
+  "compass-plans-mob-dark.webp": {
+    "width": 1170,
+    "height": 2106,
+    "variants": {
+      "160": "compass-plans-mob-dark-160w.webp",
+      "320": "compass-plans-mob-dark-320w.webp",
+      "600": "compass-plans-mob-dark-600w.webp",
+      "960": "compass-plans-mob-dark-960w.webp"
+    }
   }
 };
   const sources = (src, kind) => {
