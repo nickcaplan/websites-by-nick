@@ -485,7 +485,8 @@ test('mobile page tabs stay pinned to the top while scrolling, and desktop nav d
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/pricing/');
   await page.evaluate(() => window.scrollTo(0, 1500));
-  await page.waitForTimeout(250);
+  await page.waitForFunction(() => window.scrollY > 1000);
+  await page.waitForFunction(() => Math.abs(window.scrollY - 1500) < 2);
   const pinned = await page.evaluate(() => {
     const row = document.querySelector('.nav-chips');
     const box = row.getBoundingClientRect();
@@ -505,6 +506,16 @@ test('mobile page tabs stay pinned to the top while scrolling, and desktop nav d
   });
   assert.notEqual(desktop.chipsPosition, 'sticky', 'desktop tab row is not pinned');
   assert.equal(desktop.shell, 'hidden', 'desktop shell overflow is unchanged');
+});
+
+test('phone contact link keeps the form clear of the pinned tabs', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/contact/');
+  await page.locator('.footer-cta').click();
+  await page.waitForFunction(() => location.hash === '#contact-form');
+  await page.waitForTimeout(1200);
+  const top = await page.evaluate(() => Math.round(document.querySelector('#contact-form').getBoundingClientRect().top));
+  assert.ok(top >= 48, `form top (${top}px) sits below the 48px pinned tabs`);
 });
 
 test('portrait: headline and portrait share the hero without overlap or horizontal scroll', async ({ page }, testInfo) => {
