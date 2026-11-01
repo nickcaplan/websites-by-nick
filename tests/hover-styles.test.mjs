@@ -13,7 +13,10 @@ test('hover styles only apply on devices that can hover', () => {
   let hoverDepth = null;
   for (const line of css.split('\n')) {
     if (/^\s*@media\s*\(hover:\s*hover\)/.test(line)) hoverDepth = depth;
-    if (/:hover/.test(line) && hoverDepth === null && !/:focus-visible/.test(line)) outside.push(line.trim());
+    // Check each selector on its own so a grouped :focus-visible cannot hide a :hover.
+    for (const selector of line.split('{')[0].split(',')) {
+      if (/:hover/.test(selector) && hoverDepth === null) outside.push(selector.trim());
+    }
     for (const c of line) {
       if (c === '{') depth++;
       if (c === '}') {

@@ -106,6 +106,7 @@ button { color: inherit; font: inherit; }
   .button-primary:hover { background: var(--ink); border-color: var(--ink); }
   .thumb:hover span { color: var(--ink); }
   .credstrip .r:hover { text-decoration: underline; }
+  .footer-cta:hover .cta-icon { transform: translate(6px, -.22em); }
 }
 .mobile-toggle:focus-visible, .theme-toggle:focus-visible, .style-button:focus-visible, .button:focus-visible, a:focus-visible, .thumb:focus-visible, .arr:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 .style-picker { display: none; }
@@ -303,7 +304,7 @@ body[data-style="atelier"][data-theme="dark"] .form-field textarea:focus { borde
 .footer h2 em { color: var(--accent); font-style: normal; }
 .footer-cta { color: inherit; display: block; text-decoration: none; }
 .footer-cta .cta-icon { display: inline-block; font-size: .42em; line-height: 1; margin-left: .14em; vertical-align: middle; transform: translateY(-.22em); transition: transform .25s var(--ease); }
-.footer-cta:hover .cta-icon, .footer-cta:focus-visible .cta-icon { transform: translate(6px, -.22em); }
+.footer-cta:focus-visible .cta-icon { transform: translate(6px, -.22em); }
 .footer-links { display: none; }
 .footer-bottom { align-items: end; border-top: 1px solid rgba(244, 240, 232, .18); color: rgba(244, 240, 232, .55); display: grid; font-family: var(--mono); font-size: 9px; font-weight: 400; gap: 12px 20px; grid-template-areas: "identity credit" "source privacy"; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); line-height: 2; padding-top: 18px; text-transform: uppercase; }
 .footer-bottom > span { min-width: 0; }
