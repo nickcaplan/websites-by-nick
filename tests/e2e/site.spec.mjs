@@ -759,7 +759,7 @@ test('showcase: on desktop widths the framed desktop capture stands alone', asyn
     await page.setViewportSize({ width, height: 900 });
     await page.goto('/');
     await settle(page);
-    for (const caseSel of ['.case:first-child', '.case:last-child']) {
+    for (const caseSel of ['.case:first-child', '.case:nth-child(2)', '.case:nth-child(3)']) {
       const g = await page.evaluate((cs) => {
         const rectOf = (sel) => {
           const r = document.querySelector(`${cs} ${sel}`).getBoundingClientRect();
@@ -787,7 +787,7 @@ test('showcase: on mobile widths the phone capture stands alone, large and reada
     await page.setViewportSize({ width, height: 900 });
     await page.goto('/');
     await settle(page);
-    for (const caseSel of ['.case:first-child', '.case:last-child']) {
+    for (const caseSel of ['.case:first-child', '.case:nth-child(2)', '.case:nth-child(3)']) {
       const g = await page.evaluate((cs) => {
         const rectOf = (sel) => {
           const r = document.querySelector(`${cs} ${sel}`).getBoundingClientRect();
