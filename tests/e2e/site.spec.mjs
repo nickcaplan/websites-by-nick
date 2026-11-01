@@ -690,7 +690,7 @@ test('showcase: thumbnails choose the screenshot, desktop', async ({ page, isMob
     mobSrc: document.querySelector('.case:first-child .shot-mob').src,
     pill: document.querySelector('.case:first-child .pill').textContent,
     pressed: document.querySelector('.case:first-child .thumb[data-label="What’s On"]').getAttribute('aria-pressed'),
-    otherPill: document.querySelector('.case:last-child .pill').textContent,
+    otherPill: document.querySelector('.case:nth-child(2) .pill').textContent,
   }));
   assert.match(after.src, /foa-whatson-desk-dark\.webp$/, 'main screenshot swaps to the chosen page');
   assert.match(after.mobSrc, /foa-whatson-mob-dark\.webp$/, 'mobile variant swaps too');
@@ -713,7 +713,7 @@ test('showcase: mobile page choices are readable, keyboard-accessible and indepe
     await page.waitForFunction((name) => document.querySelector('.case:first-child .shot-mob').currentSrc.includes(`foa-${name}-mob`), expected);
     const state = await page.evaluate(() => ({
       pressed: [...document.querySelectorAll('.case:first-child .thumb')].map((b) => b.getAttribute('aria-pressed')),
-      other: document.querySelector('.case:last-child .shot-mob').currentSrc,
+      other: document.querySelector('.case:nth-child(2) .shot-mob').currentSrc,
     }));
     assert.deepEqual(state.pressed, [0, 1, 2, 3].map((j) => String(j === index)));
     assert.match(state.other, /sam-home-mob-dark(?:-\d+w)?\.webp$/, 'choosing a page does not change the other project');
@@ -732,9 +732,9 @@ test('showcase: composed overviews have a single readable set of controls at eve
     }));
     // One capture per viewport (Nick, 27 October 2026): the capture matching
     // the visitor's own device shows alone at every width.
-    assert.equal(state.shots, 2, `only the capture matching the visitor's device is visible at ${width}px`);
+    assert.equal(state.shots, 3, `only the capture matching the visitor's device is visible at ${width}px`);
     assert.equal(state.duplicateControls, 0, 'no competing arrows, thumbnail images or enlargement affordance');
-    assert.equal(state.sizes.length, width <= 960 ? 8 : 7);
+    assert.equal(state.sizes.length, width <= 960 ? 11 : 10);
     if (width <= 400) {
       for (const row of await page.locator('.thumbs').all()) {
         const layout = await row.evaluate(el => ({width: el.clientWidth, scroll: el.scrollWidth, tops: [...el.querySelectorAll('.thumb:not([hidden])')].map(button => button.offsetTop)}));
@@ -854,7 +854,7 @@ test('showcase: mobile activation preserves the reserved phone block', async ({ 
   const box = () => page.locator('.case:first-child .shot').boundingBox();
   const before = await box();
   release();
-  await page.waitForFunction(() => document.querySelectorAll('.shot-img').length === 4);
+  await page.waitForFunction(() => document.querySelectorAll('.shot-img').length === 6);
   const after = await box();
   assert.ok(Math.abs(after.height - before.height) < 1, `showcase card height preserved on activation (before ${before.height}, after ${after.height})`);
   assert.ok(Math.abs(after.y - before.y) < 1, 'showcase card position preserved on activation');
@@ -969,7 +969,7 @@ test('showcase: screenshots follow the page light/dark theme', async ({ page }) 
   await settle(page);
   const read = () => page.evaluate(() => {
     const first = document.querySelector('.case:first-child');
-    const last = document.querySelector('.case:last-child');
+    const last = document.querySelector('.case:nth-child(2)');
     return {
       theme: document.body.dataset.theme,
       foaDesk: first.querySelector('.shot-desk').currentSrc.split('/').pop().replace(/^(?:\d+-)+/, '').replace(/-\d+w(?=\.webp$)/, ''),
@@ -1003,7 +1003,7 @@ test('showcase: screenshots follow the page light/dark theme', async ({ page }) 
     const first = document.querySelector('.case:first-child');
     return first.querySelector('.shot-desk').currentSrc.replace(/-\d+w(?=\.webp$)/, '').endsWith(`foa-whatson-desk${ending}.webp`)
       && first.querySelector('.shot-mob').currentSrc.replace(/-\d+w(?=\.webp$)/, '').endsWith(`foa-whatson-mob${ending}.webp`)
-      && document.querySelector('.case:last-child .shot-desk').currentSrc.replace(/-\d+w(?=\.webp$)/, '').endsWith(`sam-home-desk${ending}.webp`);
+      && document.querySelector('.case:nth-child(2) .shot-desk').currentSrc.replace(/-\d+w(?=\.webp$)/, '').endsWith(`sam-home-desk${ending}.webp`);
   }, suffix);
   await waitForSelectedPair('-dark');
 
