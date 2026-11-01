@@ -292,3 +292,14 @@ test('web manifest icons exist in the repo', () => {
     assert.ok(existsSync(join(root, icon.src)), `${icon.src} exists in the repo`);
   }
 });
+
+test('pricing page: says domains, SSL certificates and other services can be managed, without promising prices', () => {
+  const html = read('pricing/index.html');
+  const section = (html.match(/<section class="included" aria-labelledby="services-heading">[\s\S]*?<\/section>/) || [])[0];
+  assert.ok(section, 'a services section exists');
+  assert.match(section, /<h2 id="services-heading">/);
+  assert.match(section, /Domain registration/);
+  assert.match(section, /SSL certificates/);
+  assert.match(section, /Other services/);
+  assert.doesNotMatch(section, /£|\bfree\b|included in/i, 'no price or inclusion promise');
+});
