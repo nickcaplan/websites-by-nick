@@ -513,12 +513,13 @@ test('phone contact link keeps the form clear of the pinned tabs', async ({ page
   await page.goto('/contact/');
   await page.locator('.footer-cta').click();
   await page.waitForFunction(() => location.hash === '#contact-form');
-  // Wait for the smooth scroll to settle: the form top must read the same value on consecutive frames.
+  // Wait for the smooth scroll to start and then settle: the page must hold one scroll position for ten consecutive frames.
   await page.waitForFunction(() => {
-    const top = Math.round(document.querySelector('#contact-form').getBoundingClientRect().top);
-    const settled = window.__lastFormTop === top;
-    window.__lastFormTop = top;
-    return settled;
+    const y = Math.round(window.scrollY);
+    const state = window.__scrollSettle || (window.__scrollSettle = { y: -1, frames: 0 });
+    state.frames = y === state.y ? state.frames + 1 : 0;
+    state.y = y;
+    return y > 0 && state.frames >= 10;
   }, undefined, { polling: 'raf' });
   const top = await page.evaluate(() => Math.round(document.querySelector('#contact-form').getBoundingClientRect().top));
   assert.ok(top >= 48, `form top (${top}px) sits below the 48px pinned tabs`);
