@@ -262,6 +262,7 @@ test('pricing page: three tiers with guide prices, inclusions and a route to the
   assert.match(tiers[1], /<p class="tier-price"><span class="tier-from">from<\/span> £2,200<\/p>/, 'content & growth guide price is from £2,200');
   assert.match(tiers[2], /<p class="tier-price">Priced <span class="tier-from">per project<\/span><\/p>/, 'bespoke engineering is priced per project');
   for (const tier of tiers) {
+    assert.match(tier, /<div class="tier-head">\s*<h2 class="tier-kicker">[^<]+<\/h2>\s*<p class="tier-price">[\s\S]*?<\/p>\s*<\/div>/, 'every tier pairs its name and price in the card head');
     assert.match(tier, /<p class="tier-price">/, 'every tier shows its guide price');
     assert.match(tier, /<ul class="tier-list">/, 'every tier lists what is included');
     assert.match(tier, /<h2 class="tier-kicker">/, 'every tier name is a heading for screen-reader navigation');
