@@ -260,7 +260,7 @@ test('pricing page: three tiers with guide prices, inclusions and a route to the
   assert.deepEqual(names, ['Starter', 'Content &amp; growth', 'Bespoke']);
   assert.match(tiers[0], /<p class="tier-price"><span class="tier-from">from<\/span> £500<\/p>/, 'starter guide price is from £500');
   assert.match(tiers[1], /<p class="tier-price"><span class="tier-from">from<\/span> £2,200<\/p>/, 'content & growth guide price is from £2,200');
-  assert.match(tiers[2], /<p class="tier-price tier-price--stacked">Priced <span class="tier-from">per project<\/span><\/p>/, 'bespoke tier is priced per project, stacked so its head stays on one row');
+  assert.match(tiers[2], /<p class="tier-price tier-price--stacked">Priced <span class="tier-from">per project<\/span><\/p>/, 'bespoke tier is priced per project');
   for (const tier of tiers) {
     assert.match(tier, /<div class="tier-head">\s*<h2 class="tier-kicker">[^<]+<\/h2>\s*<p class="tier-price[^"]*">[\s\S]*?<\/p>\s*<\/div>/, 'every tier pairs its name and price in the card head');
     assert.match(tier, /<p class="tier-price[^"]*">/, 'every tier shows its guide price');
