@@ -255,15 +255,15 @@ test('experience page: pre-NatWest roles foreground website delivery', () => {
 test('pricing page: three tiers with guide prices, inclusions and a route to the contact page', () => {
   const html = read('pricing/index.html');
   const tiers = [...html.matchAll(/<article class="tier">[\s\S]*?<\/article>/g)].map((m) => m[0]);
-  assert.equal(tiers.length, 3, 'Starter, Content & growth and Bespoke engineering tiers');
+  assert.equal(tiers.length, 3, 'Starter, Content & growth and Bespoke tiers');
   const names = tiers.map((t) => (t.match(/<h2 class="tier-kicker">([^<]+)<\/h2>/) || [])[1]);
-  assert.deepEqual(names, ['Starter', 'Content &amp; growth', 'Bespoke engineering']);
+  assert.deepEqual(names, ['Starter', 'Content &amp; growth', 'Bespoke']);
   assert.match(tiers[0], /<p class="tier-price"><span class="tier-from">from<\/span> £500<\/p>/, 'starter guide price is from £500');
   assert.match(tiers[1], /<p class="tier-price"><span class="tier-from">from<\/span> £2,200<\/p>/, 'content & growth guide price is from £2,200');
-  assert.match(tiers[2], /<p class="tier-price">Priced <span class="tier-from">per project<\/span><\/p>/, 'bespoke engineering is priced per project');
+  assert.match(tiers[2], /<p class="tier-price tier-price--stacked">Priced <span class="tier-from">per project<\/span><\/p>/, 'bespoke tier is priced per project, stacked so its head stays on one row');
   for (const tier of tiers) {
-    assert.match(tier, /<div class="tier-head">\s*<h2 class="tier-kicker">[^<]+<\/h2>\s*<p class="tier-price">[\s\S]*?<\/p>\s*<\/div>/, 'every tier pairs its name and price in the card head');
-    assert.match(tier, /<p class="tier-price">/, 'every tier shows its guide price');
+    assert.match(tier, /<div class="tier-head">\s*<h2 class="tier-kicker">[^<]+<\/h2>\s*<p class="tier-price[^"]*">[\s\S]*?<\/p>\s*<\/div>/, 'every tier pairs its name and price in the card head');
+    assert.match(tier, /<p class="tier-price[^"]*">/, 'every tier shows its guide price');
     assert.match(tier, /<ul class="tier-list">/, 'every tier lists what is included');
     assert.match(tier, /<h2 class="tier-kicker">/, 'every tier name is a heading for screen-reader navigation');
     assert.match(tier, /<h3 class="tier-heading">/, 'inclusions sit under the tier heading');

@@ -17,6 +17,8 @@ h2.tier-kicker { margin: 0; }
 .tier-kicker { color: var(--accent-ink); font-family: var(--mono); font-size: 15px; letter-spacing: .07em; text-transform: uppercase; }
 .tier-price { font-family: var(--display); font-size: 40px; font-weight: 600; letter-spacing: -.045em; line-height: 1.05; margin: 0 0 0 auto; }
 .tier-from { color: var(--muted); font-family: var(--body); font-size: 15px; font-weight: 400; letter-spacing: -.01em; white-space: nowrap; }
+/* Bespoke: "per project" sits under "Priced" so the card head stays on one row. */
+.tier-price--stacked { align-items: flex-end; display: flex; flex-direction: column; gap: 2px; line-height: 1.1; text-align: right; }
 .tier-audience { color: var(--muted); font-size: 15px; line-height: 1.5; margin: 0 0 20px; }
 .tier-heading { font-family: var(--body); font-size: 13px; font-weight: 600; letter-spacing: .02em; margin: 0 0 12px; }
 .tier-list { border-top: 1px solid var(--line); display: grid; gap: 11px; list-style: none; margin: 0; padding: 18px 0 0; }
