@@ -21,10 +21,12 @@ h2.tier-kicker { margin: 0; }
 .tier-price--stacked { align-items: flex-end; display: flex; flex-direction: column; gap: 2px; line-height: 1.1; text-align: right; }
 @media (min-width: 961px) {
   .tier-kicker { font-size: 28px; }
-  /* Desktop heads stay on one row: the "from" qualifier stacks over the
-     amount (same pattern as the Bespoke price) and the amount steps
-     down from 40px so the larger coral titles keep the focus. */
+  /* Desktop heads stay on one row: the amount stacks over its qualifier
+     ("from" / "per project" drop to a small second line) so the big
+     prices line up across the cards, and the amount steps down from
+     40px so the larger coral titles keep the focus. */
   .tier-price { align-items: flex-end; display: flex; flex-direction: column; font-size: 30px; gap: 2px; line-height: 1.1; text-align: right; }
+  .tier-price .tier-from { order: 2; }
   .tier-head { align-items: flex-start; }
 }
 .tier-audience { color: var(--muted); font-size: 15px; line-height: 1.5; margin: 0 0 20px; }
