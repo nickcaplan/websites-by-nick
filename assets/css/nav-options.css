@@ -59,3 +59,5 @@
 .o-more nav { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; bottom: 64px; display: grid; padding: 6px 16px; position: absolute; right: 10px; width: 200px; }
 .o-more nav a { border-bottom: 1px solid var(--line); font-size: 15px !important; padding: 12px 0; }
 .o-more nav a:last-child { border-bottom: 0; }
+.o-row figure { max-width: 100%; min-width: 0; }
+@media (max-width: 480px) { .o-page { padding-left: 14px; padding-right: 14px; } }
