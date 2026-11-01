@@ -45,6 +45,9 @@ h2.tier-kicker { margin: 0; }
   .included-list li:first-child { border-top: 0; }
 }
 
+/* Phone mode (real phones and the preview phone frame) stacks the tier
+   cards; the 960px viewport rule above does not fire inside the frame. */
+body[data-mobile="true"] .pricing-grid { grid-template-columns: minmax(0, 1fr); }
 body[data-mobile="true"] .included,
 body[data-mobile="true"] .steps { margin-top: 36px; }
 /* Project brief: body text is at least 16px on phones. */
