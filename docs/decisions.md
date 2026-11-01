@@ -70,3 +70,7 @@ Nick's rule: a CTA arrow or icon never wraps away from the end of its label. The
 ## 24 October 2026: Playwright for browser checks
 
 Browser checks run on Playwright (Chromium, Firefox, WebKit and mobile Chrome) in the official Playwright container, matching the FOA and Samantha Fernando repositories. Unit and content checks stay dependency-free. Checks assert the intended state and are never removed or weakened to make the suite pass.
+
+## 1 November 2026: Phone page navigation becomes underlined text tabs
+
+Nick chose option A from the navigation review. On phones the four boxed page chips become one row of plain text tabs with the active page underlined, matching the screenshot tabs on the Work page. The row scrolls sideways if more pages are added, so the header never grows taller. Desktop navigation is unchanged. Tabs stay at least 44px tall.
