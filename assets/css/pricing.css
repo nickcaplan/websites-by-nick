@@ -3,19 +3,26 @@
    breakpoints as site.css (stacked below 960px, phone spacing when
    data-mobile="true", single column at genuinely enlarged text). */
 
-.pricing-grid { display: grid; gap: 24px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.pricing-grid { display: grid; gap: 20px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .tier {
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   display: flex;
   flex-direction: column;
-  padding: 30px 28px 28px;
+  padding: 30px 24px 28px;
 }
 .tier-head { align-items: baseline; display: flex; flex-wrap: wrap; gap: 2px 8px; justify-content: space-between; margin-bottom: 14px; }
 h2.tier-kicker { margin: 0; }
-.tier-kicker { color: var(--accent-ink); font-family: var(--display); font-size: 22px; font-weight: 600; letter-spacing: -.02em; }
-@media (min-width: 961px) { .tier-kicker { font-size: 28px; } }
+.tier-kicker { color: var(--accent-ink); font-family: var(--display); font-size: 22px; font-weight: 600; letter-spacing: -.03em; }
+@media (min-width: 961px) {
+  .tier-kicker { font-size: 28px; }
+  /* Desktop heads stay on one row: the "from" qualifier stacks over the
+     amount (same pattern as the Bespoke price) and the amount steps
+     down from 40px so the larger coral titles keep the focus. */
+  .tier-price { align-items: flex-end; display: flex; flex-direction: column; font-size: 30px; gap: 2px; line-height: 1.1; text-align: right; }
+  .tier-head { align-items: flex-start; }
+}
 .tier-price { font-family: var(--display); font-size: 40px; font-weight: 600; letter-spacing: -.045em; line-height: 1.05; margin: 0 0 0 auto; }
 .tier-from { color: var(--muted); font-family: var(--body); font-size: 15px; font-weight: 400; letter-spacing: -.01em; white-space: nowrap; }
 /* Bespoke: "per project" sits under "Priced" so the card head stays on one row. */
@@ -64,7 +71,7 @@ body[data-mobile="true"] .tier-list li { font-size: 16px; }
 body[data-mobile="true"] .pricing-note { font-size: 16px; }
 body[data-mobile="true"] .included-list li { font-size: 16px; }
 body[data-mobile="true"] .tier-kicker { font-size: 22px; }
-body[data-mobile="true"] .tier-price { font-size: 30px; }
+body[data-mobile="true"] .tier-price { display: block; font-size: 30px; }
 body[data-mobile="true"] .tier-cta { align-self: stretch; justify-content: center; }
 body[data-mobile="true"] .steps-list li { grid-template-columns: 44px 1fr; }
 
