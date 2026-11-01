@@ -3,16 +3,16 @@
    breakpoints as site.css (stacked below 960px, phone spacing when
    data-mobile="true", single column at genuinely enlarged text). */
 
-.pricing-grid { display: grid; gap: 20px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.pricing-grid { display: grid; gap: 18px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .tier {
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   display: flex;
   flex-direction: column;
-  padding: 30px 24px 28px;
+  padding: 30px 23px 28px;
 }
-.tier-head { align-items: baseline; display: flex; flex-wrap: wrap; gap: 2px 8px; justify-content: space-between; margin-bottom: 14px; }
+.tier-head { align-items: baseline; display: flex; flex-wrap: wrap; gap: 2px 6px; justify-content: space-between; margin-bottom: 14px; }
 h2.tier-kicker { margin: 0; }
 .tier-kicker { color: var(--accent-ink); font-family: var(--display); font-size: 22px; font-weight: 600; letter-spacing: -.03em; }
 .tier-price { font-family: var(--display); font-size: 40px; font-weight: 600; letter-spacing: -.045em; line-height: 1.05; margin: 0 0 0 auto; }
