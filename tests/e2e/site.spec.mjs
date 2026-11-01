@@ -551,15 +551,17 @@ test('contact: mobile fields avoid focus zoom and the message prompt is a readab
       describedBy: area.getAttribute('aria-describedby'),
       placeholder: area.getAttribute('placeholder'),
       label: document.querySelector('label[for="contact-message"]').textContent,
-      hintGone: !document.querySelector('#message-hint'),
+      hint: document.querySelector('#message-hint').textContent,
+      hintVisible: document.querySelector('#message-hint').getBoundingClientRect().width > 1,
       opacity: placeholder.opacity,
       contrast: (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05),
     };
   });
   assert.ok(state.fonts.every((size) => size >= 16), 'all input text is at least 16px');
   assert.equal(state.label, 'Message');
-  assert.ok(state.hintGone, 'the prompt is no longer a separate paragraph');
-  assert.equal(state.describedBy, 'contact-message-error');
+  assert.equal(state.hint, state.placeholder, 'a hidden copy of the prompt is kept for assistive technology');
+  assert.ok(!state.hintVisible, 'the hidden copy takes no visible space');
+  assert.deepEqual(state.describedBy.split(/\s+/), ['message-hint', 'contact-message-error']);
   assert.equal(state.placeholder, 'What do you or your organisation do, and what would you like the website to achieve?');
   assert.equal(state.opacity, '1');
   assert.ok(state.contrast >= 4.5, `placeholder contrast ${state.contrast.toFixed(2)} is at least 4.5`);
