@@ -14,7 +14,7 @@
 }
 .tier-head { align-items: baseline; display: flex; flex-wrap: wrap; gap: 2px 12px; justify-content: space-between; margin-bottom: 14px; }
 h2.tier-kicker { margin: 0; }
-.tier-kicker { color: var(--accent-ink); font-family: var(--mono); font-size: 15px; letter-spacing: .14em; text-transform: uppercase; }
+.tier-kicker { color: var(--accent-ink); font-family: var(--mono); font-size: 15px; letter-spacing: .07em; text-transform: uppercase; }
 .tier-price { font-family: var(--display); font-size: 40px; font-weight: 600; letter-spacing: -.045em; line-height: 1.05; margin: 0 0 0 auto; }
 .tier-from { color: var(--muted); font-family: var(--body); font-size: 15px; font-weight: 400; letter-spacing: -.01em; white-space: nowrap; }
 .tier-audience { color: var(--muted); font-size: 15px; line-height: 1.5; margin: 0 0 20px; }
