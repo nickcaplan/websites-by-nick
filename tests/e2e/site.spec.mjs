@@ -426,6 +426,59 @@ for (const [name, path] of [['home', '/'], ['experience', '/experience/'], ['pri
   });
 }
 
+test('mobile page tabs: one scrollable row with an underlined active page and 44px targets', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/');
+  const state = await page.evaluate(() => {
+    const nav = document.querySelector('.nav-chips');
+    const tabs = [...nav.querySelectorAll('a')];
+    const active = tabs.filter((a) => a.getAttribute('aria-current') === 'page');
+    const navStyle = getComputedStyle(nav);
+    const activeStyle = active[0] && getComputedStyle(active[0]);
+    const idle = tabs.find((a) => a.getAttribute('aria-current') !== 'page');
+    const idleStyle = getComputedStyle(idle);
+    const rows = new Set(tabs.map((a) => Math.round(a.getBoundingClientRect().top)));
+    // Temporary extra tabs force overflow, to prove the row scrolls sideways instead of wrapping or growing taller.
+    const before = nav.getBoundingClientRect().height;
+    for (let i = 0; i < 6; i += 1) {
+      const extra = document.createElement('a');
+      extra.href = '#';
+      extra.textContent = `Extra page ${i}`;
+      extra.dataset.testExtra = 'true';
+      nav.append(extra);
+    }
+    const overflowing = nav.scrollWidth > nav.clientWidth;
+    const after = nav.getBoundingClientRect().height;
+    const extraRows = new Set([...nav.querySelectorAll('a')].map((a) => Math.round(a.getBoundingClientRect().top)));
+    nav.querySelectorAll('[data-test-extra]').forEach((a) => a.remove());
+    return {
+      activeCount: active.length,
+      overflowX: navStyle.overflowX,
+      wrap: navStyle.flexWrap,
+      singleRow: rows.size,
+      minHeight: Math.min(...tabs.map((a) => a.getBoundingClientRect().height)),
+      activeBorder: activeStyle.borderBottomColor,
+      activeColor: activeStyle.color,
+      activeWeight: Number(activeStyle.fontWeight),
+      idleBorderWidth: idleStyle.borderBottomWidth,
+      idleColor: idleStyle.color,
+      overflowing, grew: after - before, extraRows: extraRows.size,
+    };
+  });
+  assert.equal(state.activeCount, 1, 'exactly one tab is the current page');
+  assert.equal(state.overflowX, 'auto', 'the tab row scrolls sideways');
+  assert.equal(state.wrap, 'nowrap', 'tabs never wrap');
+  assert.equal(state.singleRow, 1, 'tabs share one row');
+  assert.ok(state.minHeight >= 44, `tabs are at least 44px tall (${state.minHeight}px)`);
+  assert.notEqual(state.activeBorder, 'rgba(0, 0, 0, 0)', 'active tab has a visible underline');
+  assert.ok(state.activeWeight >= 600, 'active tab is semibold');
+  assert.notEqual(state.activeColor, state.idleColor, 'active tab ink differs from idle tabs');
+  assert.equal(state.idleBorderWidth, '2px', 'idle tabs reserve the underline space');
+  assert.equal(state.overflowing, true, 'extra tabs overflow the row');
+  assert.ok(state.grew <= 1, `row does not grow taller when it overflows (${state.grew}px)`);
+  assert.equal(state.extraRows, 1, 'overflowing tabs stay on one row');
+});
+
 test('portrait: headline and portrait share the hero without overlap or horizontal scroll', async ({ page }, testInfo) => {
   for (const width of [1440, 390, 320]) {
     await page.setViewportSize({ width, height: 900 });
