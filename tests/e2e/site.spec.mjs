@@ -458,6 +458,7 @@ test('mobile page tabs: one scrollable row with an underlined active page and 44
       singleRow: rows.size,
       minHeight: Math.min(...tabs.map((a) => a.getBoundingClientRect().height)),
       activeBorder: activeStyle.borderBottomColor,
+      activeBorderWidth: activeStyle.borderBottomWidth,
       activeColor: activeStyle.color,
       activeWeight: Number(activeStyle.fontWeight),
       idleBorderWidth: idleStyle.borderBottomWidth,
@@ -471,6 +472,7 @@ test('mobile page tabs: one scrollable row with an underlined active page and 44
   assert.equal(state.singleRow, 1, 'tabs share one row');
   assert.ok(state.minHeight >= 44, `tabs are at least 44px tall (${state.minHeight}px)`);
   assert.notEqual(state.activeBorder, 'rgba(0, 0, 0, 0)', 'active tab has a visible underline');
+  assert.equal(state.activeBorderWidth, '2px', 'active tab underline is 2px wide');
   assert.ok(state.activeWeight >= 600, 'active tab is semibold');
   assert.notEqual(state.activeColor, state.idleColor, 'active tab ink differs from idle tabs');
   assert.equal(state.idleBorderWidth, '2px', 'idle tabs reserve the underline space');
