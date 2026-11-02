@@ -57,7 +57,9 @@
   .btn.secondary{background:transparent;color:var(--primary);border:1px solid var(--line-strong)}
   .btn.call-header{margin-left:auto;padding:9px 16px;font-size:.88rem}
   .nav ~ .btn.call-header{margin-left:0}
-  .theme-switch{display:flex;align-items:center;gap:8px;margin-left:12px}
+  .theme-switch{display:flex;align-items:center;gap:8px}
+  .preview-bar{display:flex;align-items:center;justify-content:center;gap:10px;padding:6px 12px;background:var(--bg-tint);border-bottom:1px solid var(--line);font-size:.75rem;color:var(--muted)}
+  .preview-bar .pb-note{font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-size:.66rem}
   .theme-switch .ts-label{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
   .ts-group{display:flex;border:1px solid var(--line-strong);border-radius:var(--radius);overflow:hidden}
   .ts-group button{appearance:none;border:0;background:transparent;color:var(--ink-soft);font-family:var(--font-body);font-size:.78rem;font-weight:600;padding:6px 12px;min-height:44px;cursor:pointer}
@@ -163,7 +165,6 @@
   @media (max-width:719px){
     html[data-theme="heritage"] body{padding-bottom:0}
     .btn.call-header{display:none}
-    .theme-switch{margin-left:auto}
     .section{padding:44px 0}
     body{padding-bottom:4rem}
     .hero-card{padding:18px}
@@ -214,15 +215,18 @@
       <a href="#contact">Contact</a>
     </nav>
     <a class="btn call-header" href="tel:+441932247906">Call 01932 247906</a>
-    <div class="theme-switch" role="group" aria-label="Preview style">
-      <span class="ts-label">Style</span>
-      <div class="ts-group">
-        <button type="button" data-set-theme="fresh" aria-pressed="true">Fresh</button>
-        <button type="button" data-set-theme="heritage" aria-pressed="false">Heritage</button>
-      </div>
-    </div>
   </div>
 </header>
+<div class="preview-bar">
+  <span class="pb-note">Design preview</span>
+  <div class="theme-switch" role="group" aria-label="Preview style">
+    <span class="ts-label">Style</span>
+    <div class="ts-group">
+      <button type="button" data-set-theme="fresh" aria-pressed="true">Fresh</button>
+      <button type="button" data-set-theme="heritage" aria-pressed="false">Heritage</button>
+    </div>
+  </div>
+</div>
 
 <main id="top">
 
