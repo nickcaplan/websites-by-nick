@@ -433,7 +433,7 @@
   }
   var initial="fresh";
   try{
-    var m=/[?&]theme=(fresh|heritage|a|b)/.exec(location.search);
+    var m=/[?&]theme=(fresh|heritage|a|b)(?:&|$)/.exec(location.search);
     if(m){initial=(m[1]==="heritage"||m[1]==="a")?"heritage":"fresh";}
     else if(/[?&]theme=/.test(location.search)){initial="fresh";}
     else{var saved=localStorage.getItem("kumar-preview-theme");if(saved){initial=saved;}}
