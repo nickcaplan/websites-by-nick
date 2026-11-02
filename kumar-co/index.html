@@ -144,6 +144,8 @@
   footer.site-footer{border-top:1px solid var(--line);padding:30px 0 40px;font-size:.82rem;color:var(--muted)}
   footer .foot-grid{display:grid;gap:8px}
   .concept-note{margin-top:14px;font-size:.78rem;color:var(--muted);border-top:1px dashed var(--line-strong);padding-top:14px}
+  .concept-note a{color:var(--primary);font-weight:600;text-decoration:underline;text-underline-offset:2px}
+  .concept-note a:focus-visible{outline:2px solid var(--primary);outline-offset:2px;border-radius:2px}
 
   /* Heritage theme: formal centred layout, brass rules, no call bar */
   html[data-theme="heritage"] body::before{content:"";display:block;height:6px;background:var(--primary-deep)}
@@ -181,7 +183,7 @@
     .chip + .chip::before{content:none}
     html[data-theme="heritage"] .trust-chips{align-items:center}
     .call-bar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:60;background:var(--surface);border-top:1px solid var(--line-strong);padding:10px 14px calc(10px + env(safe-area-inset-bottom));gap:10px}
-    .call-bar .btn{flex:1;padding:12px 10px;font-size:.95rem}
+    .call-bar .btn{flex:1;min-width:0;padding:12px 10px;font-size:.95rem}
     .call-bar .btn.secondary{flex:.7}
     footer.site-footer{padding-bottom:20px}
   }
@@ -414,7 +416,7 @@
   <div class="wrap foot-grid">
     <span>Kumar &amp; Co - Chartered Accountants - Springfield House, 23 Oatlands Drive, Weybridge, Surrey KT13 9LZ</span>
     <span>Registered in England, company no. 06544677 - ICAEW member firm</span>
-    <div class="concept-note">Design concept by Websites by Nick - a design preview, not the practice's live site. Firm details and service commitments are drawn from the practice's own published material.</div>
+    <div class="concept-note">Design concept by <a href="https://websitesbynick.co.uk/">Websites by Nick</a></div>
   </div>
 </footer>
 
