@@ -347,24 +347,19 @@
       <h2>Straight answers</h2>
       <div class="faq-list">
         <div class="faq-item">
-          <button class="faq-q" type="button" aria-expanded="false">Is switching accountant complicated?<svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
-          <div class="faq-a"><p>No. It takes one letter from you. We handle the whole transfer, including notifying your previous accountant and HMRC, so there is no awkward conversation for you to have.</p></div>
+          <button class="faq-q" type="button" aria-expanded="false" aria-controls="faq-a-1">Is switching accountant complicated?<svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button><div class="faq-a" id="faq-a-1" aria-hidden="true"><p>No. It takes one letter from you. We handle the whole transfer, including notifying your previous accountant and HMRC, so there is no awkward conversation for you to have.</p></div>
         </div>
         <div class="faq-item">
-          <button class="faq-q" type="button" aria-expanded="false">How much will it cost?<svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
-          <div class="faq-a"><p>A fixed fee for 12 months, agreed in advance after a free consultation and paid monthly. The agreed fee is the fee you pay - we do not quote low and raise the price later.</p></div>
+          <button class="faq-q" type="button" aria-expanded="false" aria-controls="faq-a-2">How much will it cost?<svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button><div class="faq-a" id="faq-a-2" aria-hidden="true"><p>A fixed fee for 12 months, agreed in advance after a free consultation and paid monthly. The agreed fee is the fee you pay - we do not quote low and raise the price later.</p></div>
         </div>
         <div class="faq-item">
-          <button class="faq-q" type="button" aria-expanded="false">When should tax planning start?<svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
-          <div class="faq-a"><p>As early as possible. Planning before the tax year end gives you the most options, and we raise opportunities proactively rather than after the deadline has passed.</p></div>
+          <button class="faq-q" type="button" aria-expanded="false" aria-controls="faq-a-3">When should tax planning start?<svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button><div class="faq-a" id="faq-a-3" aria-hidden="true"><p>As early as possible. Planning before the tax year end gives you the most options, and we raise opportunities proactively rather than after the deadline has passed.</p></div>
         </div>
         <div class="faq-item">
-          <button class="faq-q" type="button" aria-expanded="false">Will I deal with a different person each time?<svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
-          <div class="faq-a"><p>No. You get direct partner access and a named contact who knows your affairs from day one.</p></div>
+          <button class="faq-q" type="button" aria-expanded="false" aria-controls="faq-a-4">Will I deal with a different person each time?<svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button><div class="faq-a" id="faq-a-4" aria-hidden="true"><p>No. You get direct partner access and a named contact who knows your affairs from day one.</p></div>
         </div>
         <div class="faq-item">
-          <button class="faq-q" type="button" aria-expanded="false">What if I am not happy with the service?<svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
-          <div class="faq-a"><p>Our published promise is a 100% risk free guarantee: if you are not completely happy with the work and we cannot sort the issue, you do not pay for the part you are not happy with. It is quoted above, word for word.</p></div>
+          <button class="faq-q" type="button" aria-expanded="false" aria-controls="faq-a-5">What if I am not happy with the service?<svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button><div class="faq-a" id="faq-a-5" aria-hidden="true"><p>Our published promise is a 100% risk free guarantee: if you are not completely happy with the work and we cannot sort the issue, you do not pay for the part you are not happy with. It is quoted above, word for word.</p></div>
         </div>
       </div>
     </div>
@@ -454,6 +449,7 @@
       q.addEventListener("click",function(){
         var open=item.classList.toggle("open");
         q.setAttribute("aria-expanded",open?"true":"false");
+        a.setAttribute("aria-hidden",open?"false":"true");
         if(open){
           a.style.maxHeight=a.scrollHeight+"px";
           a.addEventListener("transitionend",function h(){a.removeEventListener("transitionend",h);if(item.classList.contains("open")){a.style.maxHeight="none";}});
