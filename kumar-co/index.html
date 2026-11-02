@@ -126,7 +126,7 @@
   .contact-lines svg{flex:none;color:var(--primary);margin-top:2px}
   .contact-lines a{color:var(--primary);font-weight:600;text-decoration:none}
   .contact-lines a:hover{text-decoration:underline}
-  form.consult{display:grid;gap:14px}
+  .consult{display:grid;gap:14px}
   .field label{display:block;font-size:.82rem;font-weight:650;color:var(--ink);margin-bottom:5px}
   .field input,.field textarea{width:100%;font-family:var(--font-body);font-size:.95rem;color:var(--ink);background:var(--bg);border:1px solid var(--line-strong);border-radius:var(--radius);padding:11px 13px}
   .field input:focus,.field textarea:focus{outline:2px solid var(--primary);outline-offset:1px}
@@ -313,7 +313,7 @@
       </div>
       <div class="band" style="margin-top:28px">
         <span class="eyebrow">Our guarantee, in writing</span>
-        <blockquote>"If at any time you are not completely happy with our work please discuss it with us. If we really can't sort the issue for you then don't pay for the part you're not happy with."</blockquote>
+        <blockquote>"If at any time you are not completely happy with our work please discuss it with us. If we really can't sort the issue for you then don't pay for the part you're not happy with. Ask for it at any time within 30 days of the work and we won't expect payment."</blockquote>
         <div class="attribution">Our published 100% risk free guarantee.</div>
       </div>
     </div>
@@ -468,7 +468,7 @@
       }else if(firstBad){firstBad.focus();}
     };
     document.getElementById("consult-submit").addEventListener("click",validate);
-    form.querySelectorAll("input").forEach(function(el){el.addEventListener("keydown",function(ev){if(ev.key==="Enter"){ev.preventDefault();validate();}});});
+    form.querySelectorAll("input").forEach(function(el){el.addEventListener("keydown",function(ev){if(ev.key==="Enter"&&!ev.isComposing&&ev.keyCode!==229){ev.preventDefault();validate();}});});
   }
 })();
 </script>
