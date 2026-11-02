@@ -49,6 +49,8 @@
   .header-inner{display:flex;align-items:center;gap:14px;padding:12px 20px;max-width:1080px;margin:0 auto;flex-wrap:wrap}
   .brand{font-family:var(--font-display);font-weight:var(--h-weight);font-size:1.12rem;color:var(--ink);text-decoration:none;letter-spacing:var(--h-letter)}
   .brand small{display:block;font-size:.68rem;letter-spacing:.08em;color:var(--muted);font-family:var(--font-body);font-weight:500}
+  .brand-logo{display:inline-block;background:var(--primary-deep);border-radius:8px;padding:5px 10px;line-height:0}
+  .brand-logo img{height:24px;width:auto;display:block}
   .nav{display:none;gap:18px;margin-left:auto}
   .nav a{color:var(--ink-soft);text-decoration:none;font-size:.92rem;font-weight:500}
   .nav a:hover{color:var(--primary)}
@@ -69,6 +71,7 @@
   .hero{padding:64px 0 52px;background:linear-gradient(180deg,var(--bg-tint),var(--bg))}
   .hero-grid{display:grid;gap:32px;align-items:center}
   .hero h1{font-size:clamp(1.9rem,5.2vw,3rem);margin:14px 0 16px}
+  .strapline{font-family:var(--font-display);font-style:italic;font-weight:600;font-size:1.05rem;color:var(--primary);margin:18px 0 0}
   .hero .lead{margin-bottom:26px}
   .cta-row{display:flex;gap:12px;flex-wrap:wrap}
   .trust-chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
@@ -208,7 +211,7 @@
 
 <header class="site-header">
   <div class="header-inner">
-    <a class="brand" href="#top">Kumar &amp; Co<small>Chartered Accountants - Walton-on-Thames</small></a>
+    <a class="brand" href="#top" aria-label="Kumar and Co - back to top"><span class="brand-logo"><img src="logo.png" alt="Kumar and Co - chartered accountants" width="378" height="119"></span><small>Chartered Accountants - Walton-on-Thames</small></a>
     <nav class="nav" aria-label="Sections">
       <a href="#promises">Promises</a>
       <a href="#services">Services</a>
@@ -247,6 +250,7 @@
           <span class="chip">ICAEW member firm</span>
           <span class="chip">Fixed fees, agreed in advance</span>
         </div>
+        <p class="strapline">Accounting for Life</p>
       </div>
       <aside class="hero-card">
         <h3>Talk to a partner today</h3>
