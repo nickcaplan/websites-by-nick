@@ -51,7 +51,7 @@
   .nav{display:none;gap:18px;margin-left:auto}
   .nav a{color:var(--ink-soft);text-decoration:none;font-size:.92rem;font-weight:500}
   .nav a:hover{color:var(--primary)}
-  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--primary);color:var(--on-primary);text-decoration:none;font-weight:650;font-size:.95rem;padding:11px 20px;border-radius:var(--radius);border:1px solid var(--primary-deep);cursor:pointer;font-family:var(--font-body);transition:filter .15s ease}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--primary-deep);color:var(--on-primary);text-decoration:none;font-weight:650;font-size:.95rem;padding:11px 20px;border-radius:var(--radius);border:1px solid var(--primary-deep);cursor:pointer;font-family:var(--font-body);transition:filter .15s ease}
   .btn:hover{filter:brightness(1.06)}
   .btn.secondary{background:transparent;color:var(--primary);border:1px solid var(--line-strong)}
   .btn.call-header{margin-left:auto;padding:9px 16px;font-size:.88rem}
@@ -59,8 +59,8 @@
   .theme-switch{display:flex;align-items:center;gap:8px;margin-left:12px}
   .theme-switch .ts-label{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
   .ts-group{display:flex;border:1px solid var(--line-strong);border-radius:var(--radius);overflow:hidden}
-  .ts-group button{appearance:none;border:0;background:transparent;color:var(--ink-soft);font-family:var(--font-body);font-size:.78rem;font-weight:600;padding:6px 11px;cursor:pointer}
-  .ts-group button[aria-pressed="true"]{background:var(--primary);color:var(--on-primary)}
+  .ts-group button{appearance:none;border:0;background:transparent;color:var(--ink-soft);font-family:var(--font-body);font-size:.78rem;font-weight:600;padding:6px 12px;min-height:44px;cursor:pointer}
+  .ts-group button[aria-pressed="true"]{background:var(--primary-deep);color:var(--on-primary)}
 
   /* Hero */
   .hero{padding:64px 0 52px;background:linear-gradient(180deg,var(--bg-tint),var(--bg))}
@@ -83,7 +83,7 @@
   /* Promises */
   .promise-grid{display:grid;gap:12px;margin-top:26px;grid-template-columns:1fr}
   .promise{display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);padding:15px 16px}
-  .promise .n{flex:none;font-family:var(--font-display);font-size:.8rem;font-weight:700;color:var(--on-primary);background:var(--primary);width:26px;height:26px;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;margin-top:1px}
+  .promise .n{flex:none;font-family:var(--font-display);font-size:.8rem;font-weight:700;color:var(--on-primary);background:var(--primary-deep);width:26px;height:26px;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;margin-top:1px}
   .promise p{font-size:.92rem;color:var(--ink-soft)}
   .promise p strong{display:block;color:var(--ink);font-weight:650;margin-bottom:2px;font-size:.95rem}
 
@@ -151,7 +151,7 @@
   html[data-theme="heritage"] .section .wrap > .eyebrow{display:block;text-align:center}
   html[data-theme="heritage"] .section h2{text-align:center}
   html[data-theme="heritage"] .section .wrap > .lead{margin-left:auto;margin-right:auto;text-align:center}
-  html[data-theme="heritage"] .btn{background:var(--accent);border-color:#8a6f3f;color:#ffffff}
+  html[data-theme="heritage"] .btn{background:#7a6236;border-color:#5f4c28;color:#ffffff}
   html[data-theme="heritage"] .btn.secondary{background:transparent;color:var(--primary);border-color:var(--line-strong)}
   html[data-theme="heritage"] .call-bar{display:none}
   html[data-theme="heritage"] .form-confirm,html[data-theme="heritage"] .form-note{background:var(--bg-tint)}
@@ -228,7 +228,7 @@
         <h3>Talk to a partner today</h3>
         <p>Free initial consultation. You will speak with a partner, not a call handler.</p>
         <a class="tel" href="tel:+441932247906">01932 247906</a>
-        <div class="hours">Office hours, Monday to Friday. Messages answered the same day.</div>
+        <div class="hours">Office hours, Monday to Friday. Messages answered within 24 hours.</div>
         <ul>
           <li>Direct partner access from day one</li>
           <li>One letter to switch - they handle the transfer</li>
@@ -245,7 +245,7 @@
       <p class="lead" style="margin-top:12px">These are the commitments the practice publishes to every client.</p>
       <div class="promise-grid">
         <div class="promise"><span class="n">1</span><p><strong>Personal attention</strong>You deal with a partner who knows your affairs, not a rotating cast of juniors.</p></div>
-        <div class="promise"><span class="n">2</span><p><strong>Same-day response</strong>Calls and emails answered the same working day.</p></div>
+        <div class="promise"><span class="n">2</span><p><strong>Fast response</strong>Calls and emails returned within 24 hours, usually sooner.</p></div>
         <div class="promise"><span class="n">3</span><p><strong>Annual review meetings</strong>Included as standard, not billed as extras.</p></div>
         <div class="promise"><span class="n">4</span><p><strong>Fixed fees agreed in advance</strong>A 12-month fee settled before work starts, paid monthly.</p></div>
         <div class="promise"><span class="n">5</span><p><strong>Early, proactive tax advice</strong>Opportunities raised before deadlines, not after.</p></div>
@@ -253,7 +253,7 @@
         <div class="promise"><span class="n">7</span><p><strong>Plain English</strong>Advice without jargon, so decisions are yours to make.</p></div>
         <div class="promise"><span class="n">8</span><p><strong>Calls returned when promised</strong>If they say Tuesday, it is Tuesday.</p></div>
         <div class="promise"><span class="n">9</span><p><strong>Painless switching</strong>One letter from you; they handle the transfer, your previous accountant and HMRC.</p></div>
-        <div class="promise"><span class="n">10</span><p><strong>A guarantee in writing</strong>Their published service guarantee backs every engagement.</p></div>
+        <div class="promise"><span class="n">10</span><p><strong>A 100% risk free guarantee</strong>All work is covered by their published guarantee, quoted below.</p></div>
       </div>
     </div>
   </section>
@@ -305,8 +305,8 @@
       </div>
       <div class="band" style="margin-top:28px">
         <span class="eyebrow">In the practice's own words</span>
-        <blockquote>"If you claim that you are not happy or satisfied with our service, we will refund you 100%."</blockquote>
-        <div class="attribution">The practice's published guarantee, quoted from their own material.</div>
+        <blockquote>"If at any time you are not completely happy with our work please discuss it with us. If we really can't sort the issue for you then don't pay for the part you're not happy with."</blockquote>
+        <div class="attribution">The practice's published 100% risk free guarantee, quoted from their own material.</div>
       </div>
     </div>
   </section>
@@ -334,7 +334,7 @@
         </div>
         <div class="faq-item">
           <button class="faq-q" type="button" aria-expanded="false">What if I am not happy with the service?<svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
-          <div class="faq-a"><p>Their published promise is a 100% refund if you claim you are not satisfied - the guarantee quoted above, in their own words.</p></div>
+          <div class="faq-a"><p>Their published promise is a 100% risk free guarantee: if you are not completely happy with the work and they cannot sort the issue, you do not pay for the part you are not happy with. It is quoted above in their own words.</p></div>
         </div>
       </div>
     </div>
@@ -356,26 +356,26 @@
         </div>
         <div class="contact-card">
           <h3>Request a consultation</h3>
-          <form class="consult" id="consult-form" novalidate>
+          <div class="consult" id="consult-form">
             <div class="field" id="f-name">
               <label for="in-name">Your name</label>
-              <input id="in-name" name="name" type="text" autocomplete="name" required>
-              <div class="error">Please enter your name.</div>
+              <input id="in-name" name="name" type="text" autocomplete="name" aria-describedby="err-name" required>
+              <div class="error" id="err-name">Please enter your name.</div>
             </div>
             <div class="field" id="f-contact">
               <label for="in-contact">Email or phone</label>
-              <input id="in-contact" name="contact" type="text" autocomplete="email" required>
-              <div class="error">Please enter an email address or phone number.</div>
+              <input id="in-contact" name="contact" type="text" autocomplete="email" aria-describedby="err-contact" required>
+              <div class="error" id="err-contact">Please enter an email address or phone number.</div>
             </div>
             <div class="field" id="f-msg">
               <label for="in-msg">What would you like help with?</label>
-              <textarea id="in-msg" name="message" rows="4" required></textarea>
-              <div class="error">Please add a sentence or two so the right partner can reply.</div>
+              <textarea id="in-msg" name="message" rows="4" aria-describedby="err-msg" required></textarea>
+              <div class="error" id="err-msg">Please add a sentence or two so the right partner can reply.</div>
             </div>
             <p class="form-note"><strong>Design preview - this form does not send yet.</strong> On the live site it would go directly to the practice, with no obligation and no teaser quotes.</p>
-            <button class="btn" type="submit">Try the preview form</button>
-            <div class="form-confirm" id="form-confirm"><strong>Thank you.</strong> Concept preview - on the live site this enquiry would reach the practice. Nothing was sent.</div>
-          </form>
+            <button class="btn" type="button" id="consult-submit">Try the preview form</button>
+            <div class="form-confirm" id="form-confirm" role="status" tabindex="-1"><strong>Thank you.</strong> Concept preview - on the live site this enquiry would reach the practice. Nothing was sent.</div>
+          </div>
         </div>
       </div>
     </div>
@@ -423,16 +423,22 @@
       q.addEventListener("click",function(){
         var open=item.classList.toggle("open");
         q.setAttribute("aria-expanded",open?"true":"false");
-        a.style.maxHeight=open?a.scrollHeight+"px":"0";
+        if(open){
+          a.style.maxHeight=a.scrollHeight+"px";
+          a.addEventListener("transitionend",function h(){a.removeEventListener("transitionend",h);if(item.classList.contains("open")){a.style.maxHeight="none";}});
+        }else{
+          a.style.maxHeight=a.scrollHeight+"px";
+          void a.offsetHeight;
+          a.style.maxHeight="0";
+        }
       });
     })(items[j]);
   }
 
   var form=document.getElementById("consult-form");
   if(form){
-    form.addEventListener("submit",function(ev){
-      ev.preventDefault();
-      var ok=true;
+    var validate=function(){
+      var ok=true,firstBad=null;
       var checks=[
         ["f-name",function(v){return v.trim().length>1;}],
         ["f-contact",function(v){v=v.trim();return /^\S+@\S+\.\S+$/.test(v)||/^[+()\-\s\d]{7,}$/.test(v);}],
@@ -443,13 +449,18 @@
         var input=field.querySelector("input,textarea");
         var valid=checks[k][1](input.value||"");
         field.classList.toggle("invalid",!valid);
-        if(!valid){ok=false;}
+        input.setAttribute("aria-invalid",valid?"false":"true");
+        if(!valid){ok=false;if(!firstBad){firstBad=input;}}
       }
       if(ok){
         form.querySelectorAll("input,textarea,button").forEach(function(el){el.disabled=true;});
-        document.getElementById("form-confirm").style.display="block";
-      }
-    });
+        var c=document.getElementById("form-confirm");
+        c.style.display="block";
+        c.focus();
+      }else if(firstBad){firstBad.focus();}
+    };
+    document.getElementById("consult-submit").addEventListener("click",validate);
+    form.querySelectorAll("input").forEach(function(el){el.addEventListener("keydown",function(ev){if(ev.key==="Enter"){ev.preventDefault();validate();}});});
   }
 })();
 </script>
