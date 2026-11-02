@@ -175,7 +175,9 @@
     .hero-card{padding:18px}
     .hero-card .tel,.hero-card ul{display:none}
     .hero-card .hours{margin-bottom:0}
-    .promise-grid{grid-template-columns:1fr 1fr;gap:8px}
+    .promise-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+    .promise{min-width:0}
+    .promise p{overflow-wrap:break-word}
     .promise{padding:11px 12px;gap:9px}
     .promise .n{width:22px;height:22px;font-size:.72rem}
     .promise p{font-size:.8rem}
