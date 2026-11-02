@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="fresh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Kumar &amp; Co - Chartered Accountants, Walton-on-Thames</title>
+<style>
+  :root{
+    --bg:#f6faf9; --bg-tint:#e7f3f0; --surface:#ffffff;
+    --ink:#14261f; --ink-soft:#3f5a51; --muted:#5f7a71;
+    --primary:#0e8a80; --primary-deep:#0b6159; --on-primary:#ffffff;
+    --line:rgba(11,97,89,.16); --line-strong:rgba(11,97,89,.3);
+    --radius:12px; --radius-card:10px;
+    --shadow:0 1px 2px rgba(11,97,89,.06),0 8px 24px rgba(11,97,89,.08);
+    --font-display:"Inter","SF Pro Display","Segoe UI",system-ui,sans-serif;
+    --font-body:"Inter","SF Pro Text","Segoe UI",system-ui,sans-serif;
+    --eyebrow-transform:uppercase; --eyebrow-spacing:.14em; --eyebrow-weight:700;
+    --h-weight:750; --h-letter:-0.015em;
+    --accent:#c9822e;
+  }
+  html[data-theme="heritage"]{
+    --bg:#f7f5f0; --bg-tint:#efe9dc; --surface:#fffdf8;
+    --ink:#1d2433; --ink-soft:#46506a; --muted:#6a7390;
+    --primary:#26354d; --primary-deep:#1a2434; --on-primary:#f7f5f0;
+    --line:rgba(38,53,77,.2); --line-strong:rgba(38,53,77,.38);
+    --radius:5px; --radius-card:4px;
+    --shadow:0 1px 0 rgba(38,53,77,.05),0 10px 30px rgba(38,53,77,.1);
+    --font-display:Georgia,"Iowan Old Style","Times New Roman",serif;
+    --font-body:"Segoe UI",system-ui,"Helvetica Neue",sans-serif;
+    --eyebrow-transform:uppercase; --eyebrow-spacing:.22em; --eyebrow-weight:600;
+    --h-weight:600; --h-letter:0;
+    --accent:#a68a53;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;padding-bottom:0}
+  a{color:var(--primary)}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+  .eyebrow{font-size:.72rem;font-weight:var(--eyebrow-weight);letter-spacing:var(--eyebrow-spacing);text-transform:var(--eyebrow-transform);color:var(--primary)}
+  h1,h2,h3{font-family:var(--font-display);font-weight:var(--h-weight);letter-spacing:var(--h-letter);line-height:1.15}
+  h2{font-size:clamp(1.5rem,3.4vw,2.05rem)}
+  .section{padding:56px 0}
+  .lead{color:var(--ink-soft);font-size:1.06rem;max-width:56ch}
+
+  /* Header */
+  .site-header{position:sticky;top:0;z-index:50;background:var(--surface);border-bottom:1px solid var(--line)}
+  .header-inner{display:flex;align-items:center;gap:14px;padding:12px 20px;max-width:1080px;margin:0 auto;flex-wrap:wrap}
+  .brand{font-family:var(--font-display);font-weight:var(--h-weight);font-size:1.12rem;color:var(--ink);text-decoration:none;letter-spacing:var(--h-letter)}
+  .brand small{display:block;font-size:.68rem;letter-spacing:.08em;color:var(--muted);font-family:var(--font-body);font-weight:500}
+  .nav{display:none;gap:18px;margin-left:auto}
+  .nav a{color:var(--ink-soft);text-decoration:none;font-size:.92rem;font-weight:500}
+  .nav a:hover{color:var(--primary)}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--primary);color:var(--on-primary);text-decoration:none;font-weight:650;font-size:.95rem;padding:11px 20px;border-radius:var(--radius);border:1px solid var(--primary-deep);cursor:pointer;font-family:var(--font-body);transition:filter .15s ease}
+  .btn:hover{filter:brightness(1.06)}
+  .btn.secondary{background:transparent;color:var(--primary);border:1px solid var(--line-strong)}
+  .btn.call-header{margin-left:auto;padding:9px 16px;font-size:.88rem}
+  .nav ~ .btn.call-header{margin-left:0}
+  .theme-switch{display:flex;align-items:center;gap:8px;margin-left:12px}
+  .theme-switch .ts-label{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .ts-group{display:flex;border:1px solid var(--line-strong);border-radius:var(--radius);overflow:hidden}
+  .ts-group button{appearance:none;border:0;background:transparent;color:var(--ink-soft);font-family:var(--font-body);font-size:.78rem;font-weight:600;padding:6px 11px;cursor:pointer}
+  .ts-group button[aria-pressed="true"]{background:var(--primary);color:var(--on-primary)}
+
+  /* Hero */
+  .hero{padding:64px 0 52px;background:linear-gradient(180deg,var(--bg-tint),var(--bg))}
+  .hero-grid{display:grid;gap:32px;align-items:center}
+  .hero h1{font-size:clamp(1.9rem,5.2vw,3rem);margin:14px 0 16px}
+  .hero .lead{margin-bottom:26px}
+  .cta-row{display:flex;gap:12px;flex-wrap:wrap}
+  .trust-chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
+  .chip{display:inline-flex;align-items:center;gap:7px;font-size:.82rem;font-weight:600;color:var(--ink-soft);background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:7px 13px}
+  .chip svg{flex:none}
+  .hero-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);box-shadow:var(--shadow);padding:26px}
+  .hero-card h3{font-size:1.06rem;margin-bottom:6px}
+  .hero-card p{color:var(--ink-soft);font-size:.94rem;margin-bottom:16px}
+  .hero-card .tel{font-family:var(--font-display);font-size:1.5rem;font-weight:700;color:var(--primary);text-decoration:none;display:block;margin-bottom:4px}
+  .hero-card .hours{font-size:.82rem;color:var(--muted);margin-bottom:16px}
+  .hero-card ul{list-style:none;display:grid;gap:8px;font-size:.9rem;color:var(--ink-soft)}
+  .hero-card li{display:flex;gap:8px;align-items:flex-start}
+  .hero-card li::before{content:"";flex:none;width:7px;height:7px;border-radius:50%;background:var(--primary);margin-top:7px}
+
+  /* Promises */
+  .promise-grid{display:grid;gap:12px;margin-top:26px;grid-template-columns:1fr}
+  .promise{display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);padding:15px 16px}
+  .promise .n{flex:none;font-family:var(--font-display);font-size:.8rem;font-weight:700;color:var(--on-primary);background:var(--primary);width:26px;height:26px;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;margin-top:1px}
+  .promise p{font-size:.92rem;color:var(--ink-soft)}
+  .promise p strong{display:block;color:var(--ink);font-weight:650;margin-bottom:2px;font-size:.95rem}
+
+  /* Services */
+  .services-grid{display:grid;gap:16px;margin-top:26px;grid-template-columns:1fr}
+  .service{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);box-shadow:var(--shadow);padding:24px}
+  .service h3{font-size:1.08rem;margin:12px 0 8px}
+  .service p{color:var(--ink-soft);font-size:.93rem}
+  .service .icon{width:40px;height:40px;border-radius:var(--radius);background:var(--bg-tint);display:flex;align-items:center;justify-content:center;color:var(--primary)}
+
+  /* Team */
+  .team-grid{display:grid;gap:16px;margin-top:26px;grid-template-columns:1fr}
+  .person{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);padding:20px;display:flex;gap:15px;align-items:flex-start}
+  .monogram{flex:none;width:48px;height:48px;border-radius:var(--radius);background:var(--primary);color:var(--on-primary);font-family:var(--font-display);font-weight:700;display:flex;align-items:center;justify-content:center;font-size:1rem}
+  .person h3{font-size:1rem}
+  .person .role{font-size:.78rem;font-weight:600;color:var(--accent);letter-spacing:.06em;text-transform:uppercase;margin:3px 0 7px}
+  .person p{font-size:.88rem;color:var(--ink-soft)}
+
+  /* Guarantee band */
+  .band{background:var(--primary-deep);color:var(--on-primary);border-radius:var(--radius-card);padding:34px 30px;margin-top:8px}
+  .band .eyebrow{color:var(--accent)}
+  .band blockquote{font-family:var(--font-display);font-size:clamp(1.15rem,2.6vw,1.5rem);line-height:1.4;margin:12px 0 10px}
+  .band .attribution{font-size:.84rem;opacity:.85}
+
+  /* FAQ */
+  .faq-list{margin-top:26px;border-top:1px solid var(--line-strong)}
+  .faq-item{border-bottom:1px solid var(--line-strong)}
+  .faq-q{width:100%;appearance:none;background:none;border:0;text-align:left;font-family:var(--font-body);font-size:1rem;font-weight:650;color:var(--ink);padding:18px 4px;cursor:pointer;display:flex;justify-content:space-between;gap:14px;align-items:center}
+  .faq-q .chev{flex:none;transition:transform .2s ease;color:var(--primary)}
+  .faq-item.open .chev{transform:rotate(180deg)}
+  .faq-a{max-height:0;overflow:hidden;transition:max-height .25s ease}
+  .faq-a p{padding:0 4px 18px;color:var(--ink-soft);font-size:.94rem;max-width:64ch}
+
+  /* Contact */
+  .contact-grid{display:grid;gap:28px;margin-top:26px}
+  .contact-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);box-shadow:var(--shadow);padding:26px}
+  .contact-card h3{font-size:1.1rem;margin-bottom:14px}
+  .contact-lines{display:grid;gap:12px;font-size:.94rem}
+  .contact-lines .row{display:flex;gap:11px;align-items:flex-start;color:var(--ink-soft)}
+  .contact-lines svg{flex:none;color:var(--primary);margin-top:2px}
+  .contact-lines a{color:var(--primary);font-weight:600;text-decoration:none}
+  .contact-lines a:hover{text-decoration:underline}
+  form.consult{display:grid;gap:14px}
+  .field label{display:block;font-size:.82rem;font-weight:650;color:var(--ink);margin-bottom:5px}
+  .field input,.field textarea{width:100%;font-family:var(--font-body);font-size:.95rem;color:var(--ink);background:var(--bg);border:1px solid var(--line-strong);border-radius:var(--radius);padding:11px 13px}
+  .field input:focus,.field textarea:focus{outline:2px solid var(--primary);outline-offset:1px}
+  .field .error{display:none;font-size:.78rem;color:#b3352b;margin-top:4px}
+  .field.invalid input,.field.invalid textarea{border-color:#b3352b}
+  .field.invalid .error{display:block}
+  .form-note{font-size:.8rem;color:var(--muted)}
+  .form-confirm{display:none;background:var(--bg-tint);border:1px solid var(--line-strong);border-radius:var(--radius-card);padding:18px;font-size:.92rem;color:var(--ink-soft)}
+  .form-confirm strong{color:var(--ink)}
+
+  footer.site-footer{border-top:1px solid var(--line);padding:30px 0 40px;font-size:.82rem;color:var(--muted)}
+  footer .foot-grid{display:grid;gap:8px}
+  .concept-note{margin-top:14px;font-size:.78rem;color:var(--muted);border-top:1px dashed var(--line-strong);padding-top:14px}
+
+  .call-bar{display:none}
+  @media (max-width:719px){
+    .btn.call-header{display:none}
+    .theme-switch{margin-left:auto}
+    .section{padding:44px 0}
+    body{padding-bottom:64px}
+    .call-bar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:60;background:var(--surface);border-top:1px solid var(--line-strong);padding:10px 14px calc(10px + env(safe-area-inset-bottom));gap:10px}
+    .call-bar .btn{flex:1;padding:12px 10px;font-size:.95rem}
+    .call-bar .btn.secondary{flex:.7}
+    footer.site-footer{padding-bottom:20px}
+  }
+  @media (min-width:720px){
+    .nav{display:flex}
+    .hero-grid{grid-template-columns:1.25fr .9fr}
+    .promise-grid{grid-template-columns:1fr 1fr}
+    .services-grid{grid-template-columns:repeat(2,1fr)}
+    .team-grid{grid-template-columns:repeat(2,1fr)}
+    .contact-grid{grid-template-columns:.9fr 1.1fr}
+  }
+  @media (min-width:1000px){
+    .services-grid{grid-template-columns:repeat(3,1fr)}
+    .team-grid{grid-template-columns:repeat(3,1fr)}
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="#top">Kumar &amp; Co<small>Chartered Accountants - Walton-on-Thames</small></a>
+    <nav class="nav" aria-label="Sections">
+      <a href="#promises">Promises</a>
+      <a href="#services">Services</a>
+      <a href="#team">Team</a>
+      <a href="#faq">FAQ</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <a class="btn call-header" href="tel:+441932247906">Call 01932 247906</a>
+    <div class="theme-switch" role="group" aria-label="Preview style">
+      <span class="ts-label">Style</span>
+      <div class="ts-group">
+        <button type="button" data-set-theme="fresh" aria-pressed="true">Fresh</button>
+        <button type="button" data-set-theme="heritage" aria-pressed="false">Heritage</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="eyebrow">Family-run accountants - North Surrey since 1975</span>
+        <h1>Your accounts, handled like family.</h1>
+        <p class="lead">Kumar &amp; Co is a family-run firm of chartered accountants in Walton-on-Thames, looking after owner-managed businesses and families across North Surrey and inside the M25. Direct partner access, fixed fees agreed in advance, and advice in plain English.</p>
+        <div class="cta-row">
+          <a class="btn" href="tel:+441932247906">Call 01932 247906</a>
+          <a class="btn secondary" href="#contact">Request a consultation</a>
+        </div>
+        <div class="trust-chips">
+          <span class="chip">Established 1975</span>
+          <span class="chip">ICAEW member firm</span>
+          <span class="chip">Fixed fees, agreed in advance</span>
+        </div>
+      </div>
+      <aside class="hero-card">
+        <h3>Talk to a partner today</h3>
+        <p>Free initial consultation. You will speak with a partner, not a call handler.</p>
+        <a class="tel" href="tel:+441932247906">01932 247906</a>
+        <div class="hours">Office hours, Monday to Friday. Messages answered the same day.</div>
+        <ul>
+          <li>Direct partner access from day one</li>
+          <li>One letter to switch - they handle the transfer</li>
+          <li>Fee agreed before work begins</li>
+        </ul>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section" id="promises">
+    <div class="wrap">
+      <span class="eyebrow">Their published service standards</span>
+      <h2>Ten promises, in writing</h2>
+      <p class="lead" style="margin-top:12px">These are the commitments the practice publishes to every client.</p>
+      <div class="promise-grid">
+        <div class="promise"><span class="n">1</span><p><strong>Personal attention</strong>You deal with a partner who knows your affairs, not a rotating cast of juniors.</p></div>
+        <div class="promise"><span class="n">2</span><p><strong>Same-day response</strong>Calls and emails answered the same working day.</p></div>
+        <div class="promise"><span class="n">3</span><p><strong>Annual review meetings</strong>Included as standard, not billed as extras.</p></div>
+        <div class="promise"><span class="n">4</span><p><strong>Fixed fees agreed in advance</strong>A 12-month fee settled before work starts, paid monthly.</p></div>
+        <div class="promise"><span class="n">5</span><p><strong>Early, proactive tax advice</strong>Opportunities raised before deadlines, not after.</p></div>
+        <div class="promise"><span class="n">6</span><p><strong>No teaser quotes</strong>The agreed fee is the fee you pay.</p></div>
+        <div class="promise"><span class="n">7</span><p><strong>Plain English</strong>Advice without jargon, so decisions are yours to make.</p></div>
+        <div class="promise"><span class="n">8</span><p><strong>Calls returned when promised</strong>If they say Tuesday, it is Tuesday.</p></div>
+        <div class="promise"><span class="n">9</span><p><strong>Painless switching</strong>One letter from you; they handle the transfer, your previous accountant and HMRC.</p></div>
+        <div class="promise"><span class="n">10</span><p><strong>A guarantee in writing</strong>Their published service guarantee backs every engagement.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="services" style="background:var(--bg-tint)">
+    <div class="wrap">
+      <span class="eyebrow">Services</span>
+      <h2>What they take off your desk</h2>
+      <div class="services-grid">
+        <div class="service">
+          <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v14"/><path d="M8 7h8M8 11h8M8 15h5"/></svg></div>
+          <h3>Accounting &amp; compliance</h3>
+          <p>Annual accounts, bookkeeping and statutory filings handled on schedule, so nothing lands late.</p>
+        </div>
+        <div class="service">
+          <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M5 8c0-2 3-3 7-3s7 1 7 3-3 3-7 3-7 1-7 3 3 3 7 3 7-1 7-3"/></svg></div>
+          <h3>Tax planning</h3>
+          <p>Personal and company tax planned early in the year, with opportunities raised proactively.</p>
+        </div>
+        <div class="service">
+          <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg></div>
+          <h3>Growth &amp; business advice</h3>
+          <p>Practical advice for owner-managed businesses, from pricing and cash flow to the next stage of growth.</p>
+        </div>
+        <div class="service">
+          <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><path d="M16 4.5h5M16 8.5h5"/></svg></div>
+          <h3>Payroll &amp; pensions</h3>
+          <p>Payroll run on time and workplace pension compliance managed end to end.</p>
+        </div>
+        <div class="service">
+          <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="14" rx="2"/><path d="M3 10h18"/><path d="M7 15h4"/></svg></div>
+          <h3>Fixed fees, transparent pricing</h3>
+          <p>A fixed annual fee agreed in advance and paid monthly - no surprise bills, no teaser rates.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="team">
+    <div class="wrap">
+      <span class="eyebrow">The team</span>
+      <h2>People you will know by name</h2>
+      <div class="team-grid">
+        <div class="person"><span class="monogram">SK</span><div><h3>Susan Kumar</h3><div class="role">Partner - ACA</div><p>Chartered accountant with senior experience at KPMG and Disney. Leads client relationships and the firm's service standards.</p></div></div>
+        <div class="person"><span class="monogram">JB</span><div><h3>Jas S. Bhohi</h3><div class="role">MAAT MBA MCIM</div><p>Qualified with chartered certified accountants and a background at Abbey National and BTS. Advises owner-managed businesses on tax and growth.</p></div></div>
+        <div class="person"><span class="monogram">RG</span><div><h3>Russell Granat</h3><div class="role">ACA</div><p>Over 35 years advising partnerships and family businesses, alongside his wife Joy.</p></div></div>
+        <div class="person"><span class="monogram">JG</span><div><h3>Joy Granat</h3><div class="role">ACA</div><p>Over 35 years advising partnerships and family businesses, alongside her husband Russell.</p></div></div>
+        <div class="person"><span class="monogram">SK</span><div><h3>Shub Kumar</h3><div class="role">Founder - ACMA</div><p>Founded the practice in 1975. Specialises in grant funding, with multi-million-pound claims secured for Surrey SMEs.</p></div></div>
+      </div>
+      <div class="band" style="margin-top:28px">
+        <span class="eyebrow">In the practice's own words</span>
+        <blockquote>&ldquo;If you claim that you are not happy or satisfied with our service, we will refund you 100%.&rdquo;</blockquote>
+        <div class="attribution">The practice's published guarantee, quoted from their own material.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="faq" style="background:var(--bg-tint)">
+    <div class="wrap">
+      <span class="eyebrow">From their published FAQ</span>
+      <h2>Straight answers</h2>
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-q" type="button" aria-expanded="false">Is switching accountant complicated?<svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+          <div class="faq-a"><p>No. It takes one letter from you. They handle the whole transfer, including notifying your previous accountant and HMRC, so there is no awkward conversation for you to have.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button" aria-expanded="false">How much will it cost?<svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+          <div class="faq-a"><p>A fixed fee for 12 months, agreed in advance after a free consultation and paid monthly. The agreed fee is the fee you pay - they do not quote low and raise the price later.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button" aria-expanded="false">When should tax planning start?<svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+          <div class="faq-a"><p>As early as possible. Planning before the tax year end gives you the most options, and the practice raises opportunities proactively rather than after the deadline has passed.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button" aria-expanded="false">Will I deal with a different person each time?<svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+          <div class="faq-a"><p>No. You get direct partner access and a named contact who knows your affairs from day one.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button" aria-expanded="false">What if I am not happy with the service?<svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+          <div class="faq-a"><p>Their published promise is a 100% refund if you claim you are not satisfied - the guarantee quoted above, in their own words.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="contact">
+    <div class="wrap">
+      <span class="eyebrow">Contact</span>
+      <h2>Start with a free consultation</h2>
+      <div class="contact-grid">
+        <div class="contact-card">
+          <h3>Kumar &amp; Co</h3>
+          <div class="contact-lines">
+            <div class="row"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.13.96.36 1.9.7 2.8a2 2 0 0 1-.45 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.45c.9.34 1.84.57 2.8.7a2 2 0 0 1 1.7 2.05Z"/></svg><a href="tel:+441932247906">01932 247906</a></div>
+            <div class="row"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg><a href="mailto:info@kumar-co.co.uk">info@kumar-co.co.uk</a></div>
+            <div class="row"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg><span>Springfield House, 23 Oatlands Drive,<br>Weybridge, Surrey KT13 9LZ</span></div>
+            <div class="row"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l19-8-8 19-2.5-8.5L3 11z"/></svg><a href="https://www.google.com/maps/search/?api=1&amp;query=Springfield+House+23+Oatlands+Drive+Weybridge+KT13+9LZ" target="_blank" rel="noopener">Get directions</a></div>
+          </div>
+        </div>
+        <div class="contact-card">
+          <h3>Request a consultation</h3>
+          <form class="consult" id="consult-form" novalidate>
+            <div class="field" id="f-name">
+              <label for="in-name">Your name</label>
+              <input id="in-name" name="name" type="text" autocomplete="name" required>
+              <div class="error">Please enter your name.</div>
+            </div>
+            <div class="field" id="f-contact">
+              <label for="in-contact">Email or phone</label>
+              <input id="in-contact" name="contact" type="text" autocomplete="email" required>
+              <div class="error">Please enter an email address or phone number.</div>
+            </div>
+            <div class="field" id="f-msg">
+              <label for="in-msg">What would you like help with?</label>
+              <textarea id="in-msg" name="message" rows="4" required></textarea>
+              <div class="error">Please add a sentence or two so the right partner can reply.</div>
+            </div>
+            <button class="btn" type="submit">Send enquiry</button>
+            <p class="form-note">Goes directly to the practice. No obligation, no teaser quotes.</p>
+            <div class="form-confirm" id="form-confirm"><strong>Thank you.</strong> Concept preview - on the live site this enquiry would reach the practice. Nothing was sent.</div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div class="call-bar">
+  <a class="btn" href="tel:+441932247906">Call now</a>
+  <a class="btn secondary" href="#contact">Enquire</a>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap foot-grid">
+    <span>Kumar &amp; Co - Chartered Accountants - Springfield House, 23 Oatlands Drive, Weybridge, Surrey KT13 9LZ</span>
+    <span>Registered in England, company no. 06544677 - ICAEW member firm</span>
+    <div class="concept-note">Design concept by Websites by Nick - a private preview, not the practice's live site. Firm details and service commitments are drawn from the practice's own published material.</div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var root=document.documentElement;
+  function setTheme(name){
+    if(name!=="fresh"&&name!=="heritage"){name="fresh";}
+    root.setAttribute("data-theme",name);
+    try{localStorage.setItem("kumar-preview-theme",name);}catch(e){}
+    var btns=document.querySelectorAll("[data-set-theme]");
+    for(var i=0;i<btns.length;i++){btns[i].setAttribute("aria-pressed",btns[i].getAttribute("data-set-theme")===name?"true":"false");}
+  }
+  var initial="fresh";
+  try{
+    var m=/[?&]theme=(fresh|heritage|a|b)/.exec(location.search);
+    if(m){initial=(m[1]==="heritage"||m[1]==="a")?"heritage":"fresh";}
+    else{var saved=localStorage.getItem("kumar-preview-theme");if(saved){initial=saved;}}
+  }catch(e){}
+  setTheme(initial);
+  var btns=document.querySelectorAll("[data-set-theme]");
+  for(var i=0;i<btns.length;i++){btns[i].addEventListener("click",function(){setTheme(this.getAttribute("data-set-theme"));});}
+
+  var items=document.querySelectorAll(".faq-item");
+  for(var j=0;j<items.length;j++){
+    (function(item){
+      var q=item.querySelector(".faq-q"),a=item.querySelector(".faq-a");
+      q.addEventListener("click",function(){
+        var open=item.classList.toggle("open");
+        q.setAttribute("aria-expanded",open?"true":"false");
+        a.style.maxHeight=open?a.scrollHeight+"px":"0";
+      });
+    })(items[j]);
+  }
+
+  var form=document.getElementById("consult-form");
+  if(form){
+    form.addEventListener("submit",function(ev){
+      ev.preventDefault();
+      var ok=true;
+      var checks=[
+        ["f-name",function(v){return v.trim().length>1;}],
+        ["f-contact",function(v){v=v.trim();return /^\S+@\S+\.\S+$/.test(v)||/^[+()\-\s\d]{7,}$/.test(v);}],
+        ["f-msg",function(v){return v.trim().length>5;}]
+      ];
+      for(var k=0;k<checks.length;k++){
+        var field=document.getElementById(checks[k][0]);
+        var input=field.querySelector("input,textarea");
+        var valid=checks[k][1](input.value||"");
+        field.classList.toggle("invalid",!valid);
+        if(!valid){ok=false;}
+      }
+      if(ok){
+        form.querySelectorAll("input,textarea,button").forEach(function(el){el.disabled=true;});
+        document.getElementById("form-confirm").style.display="block";
+      }
+    });
+  }
+})();
+</script>
+</body>
+</html>
