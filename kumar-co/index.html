@@ -172,10 +172,14 @@
     .promise .n{width:22px;height:22px;font-size:.72rem}
     .promise p{font-size:.8rem}
     .promise p strong{font-size:.84rem}
+    .promise-grid{grid-template-columns:1fr 1fr}
     .call-bar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:60;background:var(--surface);border-top:1px solid var(--line-strong);padding:10px 14px calc(10px + env(safe-area-inset-bottom));gap:10px}
     .call-bar .btn{flex:1;padding:12px 10px;font-size:.95rem}
     .call-bar .btn.secondary{flex:.7}
     footer.site-footer{padding-bottom:20px}
+  }
+  @media (max-width:359px){
+    .promise-grid{grid-template-columns:1fr}
   }
   @media (min-width:720px){
     .nav{display:flex}
