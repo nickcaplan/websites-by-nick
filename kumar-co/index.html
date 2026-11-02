@@ -69,7 +69,8 @@
   .hero .lead{margin-bottom:26px}
   .cta-row{display:flex;gap:12px;flex-wrap:wrap}
   .trust-chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
-  .chip{display:inline-flex;align-items:center;gap:7px;font-size:.82rem;font-weight:600;color:var(--ink-soft);background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:7px 13px}
+  .chip{display:inline-flex;align-items:center;font-size:.82rem;font-weight:550;color:var(--muted);padding:2px 0}
+  .chip + .chip::before{content:"\00b7";margin-right:10px;color:var(--muted)}
   .chip svg{flex:none}
   .hero-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);box-shadow:var(--shadow);padding:26px}
   .hero-card h3{font-size:1.06rem;margin-bottom:6px}
@@ -172,6 +173,8 @@
     .promise .n{width:22px;height:22px;font-size:.72rem}
     .promise p{font-size:.8rem}
     .promise p strong{font-size:.84rem}
+    .cta-row{flex-direction:column;align-items:stretch}
+    .cta-row .btn{width:100%}
     .call-bar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:60;background:var(--surface);border-top:1px solid var(--line-strong);padding:10px 14px calc(10px + env(safe-area-inset-bottom));gap:10px}
     .call-bar .btn{flex:1;padding:12px 10px;font-size:.95rem}
     .call-bar .btn.secondary{flex:.7}
