@@ -25,7 +25,7 @@
     --primary:#26354d; --primary-deep:#1a2434; --on-primary:#f7f5f0;
     --line:rgba(38,53,77,.2); --line-strong:rgba(38,53,77,.38);
     --radius:5px; --radius-card:4px;
-    --shadow:0 1px 0 rgba(38,53,77,.05),0 10px 30px rgba(38,53,77,.1);
+    --shadow:none;
     --font-display:Georgia,"Iowan Old Style","Times New Roman",serif;
     --font-body:"Segoe UI",system-ui,"Helvetica Neue",sans-serif;
     --eyebrow-transform:uppercase; --eyebrow-spacing:.22em; --eyebrow-weight:600;
@@ -141,8 +141,25 @@
   footer .foot-grid{display:grid;gap:8px}
   .concept-note{margin-top:14px;font-size:.78rem;color:var(--muted);border-top:1px dashed var(--line-strong);padding-top:14px}
 
+  /* Heritage theme: formal centred layout, brass rules, no call bar */
+  html[data-theme="heritage"] body::before{content:"";display:block;height:6px;background:var(--primary-deep)}
+  html[data-theme="heritage"] .hero{background:var(--bg);text-align:center;border-bottom:3px double var(--accent)}
+  html[data-theme="heritage"] .hero-grid{grid-template-columns:1fr}
+  html[data-theme="heritage"] .hero .lead{margin-left:auto;margin-right:auto}
+  html[data-theme="heritage"] .cta-row,html[data-theme="heritage"] .trust-chips{justify-content:center}
+  html[data-theme="heritage"] .hero-card{display:none}
+  html[data-theme="heritage"] .section .wrap > .eyebrow{display:block;text-align:center}
+  html[data-theme="heritage"] .section h2{text-align:center}
+  html[data-theme="heritage"] .section .wrap > .lead{margin-left:auto;margin-right:auto;text-align:center}
+  html[data-theme="heritage"] .btn{background:var(--accent);border-color:#8a6f3f;color:#ffffff}
+  html[data-theme="heritage"] .btn.secondary{background:transparent;color:var(--primary);border-color:var(--line-strong)}
+  html[data-theme="heritage"] .call-bar{display:none}
+  html[data-theme="heritage"] .form-confirm,html[data-theme="heritage"] .form-note{background:var(--bg-tint)}
+
+  .form-note{border:1px dashed var(--line-strong);border-radius:var(--radius);padding:10px 12px;background:var(--bg-tint);color:var(--ink-soft)}
   .call-bar{display:none}
   @media (max-width:719px){
+    html[data-theme="heritage"] body{padding-bottom:0}
     .btn.call-header{display:none}
     .theme-switch{margin-left:auto}
     .section{padding:44px 0}
@@ -356,7 +373,7 @@
               <div class="error">Please add a sentence or two so the right partner can reply.</div>
             </div>
             <button class="btn" type="submit">Send enquiry</button>
-            <p class="form-note">Goes directly to the practice. No obligation, no teaser quotes.</p>
+            <p class="form-note"><strong>Design preview - this form does not send yet.</strong> On the live site it would go directly to the practice, with no obligation and no teaser quotes.</p>
             <div class="form-confirm" id="form-confirm"><strong>Thank you.</strong> Concept preview - on the live site this enquiry would reach the practice. Nothing was sent.</div>
           </form>
         </div>
@@ -375,7 +392,7 @@
   <div class="wrap foot-grid">
     <span>Kumar &amp; Co - Chartered Accountants - Springfield House, 23 Oatlands Drive, Weybridge, Surrey KT13 9LZ</span>
     <span>Registered in England, company no. 06544677 - ICAEW member firm</span>
-    <div class="concept-note">Design concept by Websites by Nick - a private preview, not the practice's live site. Firm details and service commitments are drawn from the practice's own published material.</div>
+    <div class="concept-note">Design concept by Websites by Nick - a design preview, not the practice's live site. Firm details and service commitments are drawn from the practice's own published material.</div>
   </div>
 </footer>
 
