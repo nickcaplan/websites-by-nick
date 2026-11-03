@@ -12,7 +12,7 @@
     --ink-soft:#4a4237;
     --muted:#6f6553;
     --gold:#b98a2f;
-    --gold-deep:#96700f;
+    --gold-deep:#8a680c;
     --ivory:#f6f1e6;
     --cream:#efe7d6;
     --surface:#fffdf7;
@@ -41,8 +41,8 @@
   .btn:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
   .btn-gold{background:var(--gold);color:#17140f}
   .btn-gold:hover{background:#cda03f;transform:translateY(-1px);box-shadow:0 6px 16px rgba(185,138,47,.35)}
-  .btn-ghost{border:2px solid var(--gold);color:var(--gold)}
-  .btn-ghost:hover{background:rgba(185,138,47,.12)}
+  .btn-ghost{border:2px solid var(--gold);color:var(--gold);background:rgba(23,20,15,.85);backdrop-filter:blur(3px)}
+  .btn-ghost:hover{background:rgba(23,20,15,.92)}
   .header-in .btn{padding:9px 18px;font-size:14px}
 
   .hero{position:relative;color:#fff;min-height:78vh;display:flex;align-items:center}
@@ -61,7 +61,7 @@
   .visit-bar a{color:#fff;font-weight:700;text-decoration:none;border-bottom:1px solid var(--gold)}
   .visit-bar a:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
 
-  section{padding:64px 0}
+  section{padding:64px 0;scroll-margin-top:96px}
   .sec-head{max-width:600px;margin-bottom:34px}
   h2{font-family:var(--font-head);font-weight:700;font-size:clamp(26px,3.4vw,34px);line-height:1.18;letter-spacing:-.2px;margin-bottom:12px}
   .sec-head p{font-size:16.5px;color:var(--ink-soft)}
@@ -108,6 +108,7 @@
     .brand .est{display:none}
     nav{order:3;flex-basis:100%;justify-content:center}
     .hero{min-height:0}
+    section{scroll-margin-top:172px}
     .hero-in{padding:52px 24px 40px}
     .eyebrow{letter-spacing:1.8px;font-size:11.5px}
     .visit-bar{grid-template-columns:1fr}
@@ -189,11 +190,11 @@
       <div class="trio">
         <figure>
           <img src="images/coffee-machine.jpg" alt="Espresso pouring from the machine">
-          <figcaption><b>Made properly</b>Every shot pulled with care.</figcaption>
+          <figcaption><b>Made properly</b>Espresso, made to order.</figcaption>
         </figure>
         <figure>
           <img src="images/coffee-table.jpg" alt="A vintage suitcase used as a coffee table">
-          <figcaption><b>Full of character</b>Nothing here is off a production line.</figcaption>
+          <figcaption><b>Full of character</b>A vintage suitcase for a coffee table.</figcaption>
         </figure>
         <figure>
           <img src="images/cafe.jpg" alt="The cafe interior with the wooden boat on the ceiling">
