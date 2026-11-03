@@ -9,7 +9,7 @@
 <style>
   :root{
     --bg:#f4f8f7; --surface:#ffffff; --surface-tint:#e7f1ef;
-    --ink:#173331; --ink-soft:#3f5c58; --muted:#6b8580;
+    --ink:#173331; --ink-soft:#3f5c58; --muted:#4f6b66;
     --primary:#0e6f66; --primary-deep:#0a544d; --on-primary:#f2faf8;
     --line:rgba(14,111,102,.16); --line-strong:rgba(14,111,102,.34);
     --radius:14px; --radius-card:12px;
@@ -31,7 +31,7 @@
   .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:13px 24px;font-weight:700;font-size:15px;text-decoration:none;border:1px solid transparent;cursor:pointer}
   .btn-primary{background:var(--primary);color:var(--on-primary)}
   .btn-primary:hover{background:var(--primary-deep)}
-  .btn-primary:focus-visible{outline:2px solid var(--on-primary);outline-offset:2px}
+  .btn-primary:focus-visible{outline:2px solid var(--primary-deep);outline-offset:2px}
   .btn-ghost{background:var(--surface);color:var(--primary-deep);border-color:var(--line-strong)}
   .btn-ghost:hover{border-color:var(--primary)}
   .btn-ghost:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
@@ -118,6 +118,7 @@
     .grid-3,.quote-grid,.visit-grid,.stats-grid{grid-template-columns:1fr}
     .hero{padding:44px 0 36px}
   }
+  @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto} .faq-a,.faq-q .chev{transition-duration:.01ms}}
 </style>
 </head>
 <body>
