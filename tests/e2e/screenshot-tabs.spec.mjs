@@ -1,4 +1,10 @@
 import {test, expect} from '@playwright/test';
+
+// Fail closed: no check in this suite may send a real enquiry. Every page gets
+// a network-level abort for the live form endpoint before anything else runs.
+test.beforeEach(async ({ page }) => {
+  await page.route('**/formspree.io/**', route => route.abort());
+});
 for (const theme of ['dark', 'light']) for (const width of [320, 390, 1440]) test(`underline screenshot choices ${theme} at ${width}`, async ({page}) => {
   await page.setViewportSize({width, height:900});
   await page.addInitScript(t => {localStorage.setItem('nick-theme', t); localStorage.setItem('websites-by-nick-cookie-preferences', 'essential');}, theme);
