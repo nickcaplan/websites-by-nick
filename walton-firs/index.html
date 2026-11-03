@@ -22,7 +22,7 @@
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
-  section[id]{scroll-margin-top:5.5rem}
+  section[id]{scroll-margin-top:112px}
   body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
   a{color:var(--primary)}
   .wrap{max-width:1060px;margin:0 auto;padding:0 20px}
@@ -120,6 +120,7 @@
   .hero .hero-grid{grid-template-columns:1fr 1fr;gap:30px}
   .tagline{font-family:Inkfree,cursive;font-size:26px;line-height:1.3;color:#f6f231;margin:0 0 24px;max-width:32rem}
   .hero .btn-primary{background:#f6f231;color:#17321d}
+  .hero .btn:focus-visible{outline:3px solid #fff;outline-offset:4px}
   .hero .btn-primary:hover{background:#fffda5;color:#17321d}
   .hero .btn-ghost{border-color:#c4dfce;color:#fff}
   .hero .btn-ghost:hover{background:#074d2b;color:#fff}
@@ -135,7 +136,7 @@
   a:focus-visible{outline:3px solid #b16b12;outline-offset:4px}
   nav a.btn-primary:hover{color:var(--on-primary)}
   @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
-  @media(max-width:950px){.header-in{flex-wrap:wrap}nav{order:3;width:100%;justify-content:center}.brand{flex:1}.header-in>.btn{font-size:14px;padding:10px 14px}}
+  @media(max-width:950px){.header-in{flex-wrap:wrap}nav{order:3;width:100%;justify-content:center}.brand{flex:1}.header-in>.btn{font-size:14px;padding:10px 14px}section[id]{scroll-margin-top:160px}}
   @media(max-width:700px){.hero .hero-grid,.photo-pair{grid-template-columns:1fr}.hero figure img{height:auto;aspect-ratio:3/2}.hero{padding:30px 0}.tagline{font-size:24px}.header-in{padding:8px 20px}.brand img{width:44px;height:50px}.brand .name{font-size:23px}.header-in>.btn{max-width:136px;font-size:13px;padding:8px 12px}.brand .est{display:none}nav{justify-content:space-between;gap:0}nav a{padding:8px 6px;font-size:14px}.fact-list li{display:block}.fact-list .k{display:block}.visit-card{padding:22px 18px}.visit-card a{overflow-wrap:anywhere}section[id]{scroll-margin-top:135px}}
 </style>
 </head>
@@ -240,7 +241,7 @@
     </div>
   </section>
 
-  <section class="booking" id="booking"><div class="wrap"><div class="section-head"><h2 class="section-title">Plan your visit</h2><p>Call, email or use our existing enquiry form to check availability. We make a provisional booking, then issue a booking form to complete within 14 days. A deposit is due within 14 days of confirmation; parties, courses and holiday club bookings require full payment.</p></div><p>Our existing booking terms and forms still apply. Check the full process and current prices before confirming your visit.</p><div class="resource-links"><a href="https://www.waltonfirs.co.uk/contact-us">Enquiry form</a><a href="https://www.waltonfirs.co.uk/how-to-book">How to book and terms</a><a href="https://www.waltonfirs.co.uk/booking-forms">Booking forms</a><a href="https://www.waltonfirs.co.uk/price-lists">Price lists</a><a href="https://www.waltonfirs.co.uk/risk-assessments">Risk assessments</a><a href="https://www.waltonfirs.co.uk/accommodation">Accommodation details</a></div></div></section>
+  <section class="booking" id="booking"><div class="wrap"><div class="section-head"><h2 class="section-title">Plan your visit</h2><p>Call, email or use our existing enquiry form to check availability. We make a provisional booking, then issue a booking form to complete within 14 days. Deposit amounts, payment deadlines and full-payment requirements are set out in our existing booking instructions and terms.</p></div><p>Our existing booking terms and forms still apply. Check the full process and current prices before confirming your visit.</p><div class="resource-links"><a href="https://www.waltonfirs.co.uk/contact-us">Enquiry form</a><a href="https://www.waltonfirs.co.uk/how-to-book">How to book and terms</a><a href="https://www.waltonfirs.co.uk/booking-forms">Booking forms</a><a href="https://www.waltonfirs.co.uk/price-lists">Price lists</a><a href="https://www.waltonfirs.co.uk/risk-assessments">Risk assessments</a><a href="https://www.waltonfirs.co.uk/accommodation">Accommodation details</a></div></div></section>
   <section id="visit">
     <div class="wrap visit-grid">
       <div class="visit-card">
