@@ -1,5 +1,11 @@
 import {test, expect} from '@playwright/test';
 
+// Fail closed: no check in this suite may send a real enquiry. Every page gets
+// a network-level abort for the live form endpoint before anything else runs.
+test.beforeEach(async ({ page }) => {
+  await page.route('**/formspree.io/**', route => route.abort());
+});
+
 // Swipe and horizontal-scroll gestures step through the screenshot choices,
 // on the shots themselves and on the page-name row. The underline buttons
 // remain the accessible control.
