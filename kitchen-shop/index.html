@@ -66,17 +66,23 @@
   }
 
   /* Hero */
-  .hero{padding:64px 0 48px;background:linear-gradient(180deg,var(--bg-tint),var(--bg))}
+  .hero{padding:64px 0 48px;background-image:repeating-linear-gradient(0deg,rgba(124,53,18,.05) 0 1px,transparent 1px 28px),repeating-linear-gradient(90deg,rgba(124,53,18,.05) 0 1px,transparent 1px 28px),linear-gradient(180deg,var(--bg-tint),var(--bg))}
+  html[data-theme="classic"] .hero{background-image:repeating-linear-gradient(0deg,rgba(28,46,110,.055) 0 1px,transparent 1px 28px),repeating-linear-gradient(90deg,rgba(28,46,110,.055) 0 1px,transparent 1px 28px),linear-gradient(180deg,var(--bg-tint),var(--bg))}
   .hero h1{font-size:clamp(2rem,5.4vw,3.1rem);margin:.5rem 0 1rem;max-width:20ch}
   .hero .lead{margin-bottom:1.6rem}
   .hero-actions{display:flex;gap:12px;flex-wrap:wrap}
   .est-pill{display:inline-block;background:var(--surface);border:1px solid var(--line-strong);color:var(--primary-deep);font-size:.75rem;font-weight:700;letter-spacing:.1em;padding:5px 12px;border-radius:999px}
+
+  /* Header theme toggle */
+  .header-toggle{flex:none}
+  @media (max-width:879px){.header-toggle{order:5;flex-basis:100%;justify-content:center;margin-top:8px}}
 
   /* Theme toggle */
   .theme-toggle{display:inline-flex;border:1px solid var(--line-strong);border-radius:999px;overflow:hidden;background:var(--surface)}
   .faq-q:focus-visible,.theme-toggle button:focus-visible{outline:2px solid var(--primary);outline-offset:-3px}
   .theme-toggle button{appearance:none;border:0;background:transparent;color:var(--ink-soft);font:600 .8rem/1 var(--font-body);padding:12px 18px;min-height:44px;display:inline-flex;align-items:center;cursor:pointer;transition:background .15s ease,color .15s ease}
   .theme-toggle button[aria-pressed="true"]{background:var(--primary-deep);color:var(--on-primary)}
+  .theme-toggle button[aria-pressed="true"]:focus-visible{outline-color:var(--on-primary)}
 
   /* Highlights */
   .highlights{padding:8px 0 40px}
@@ -98,8 +104,16 @@
   .source-note{margin-top:18px;font-size:.92rem;color:var(--ink-soft);background:var(--surface);border:1px dashed var(--line-strong);border-radius:var(--radius-card);padding:14px 18px}
 
   /* Brands */
-  .brand-list{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
-  .brand-list span{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);padding:8px 14px;font-size:.88rem;color:var(--ink-soft)}
+  .logo-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:22px}
+  @media (min-width:640px){.logo-grid{grid-template-columns:repeat(3,1fr)}}
+  @media (min-width:880px){.logo-grid{grid-template-columns:repeat(4,1fr)}}
+  .logo-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius-card);box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:18px 14px 12px;margin:0}
+  .logo-card img{height:40px;width:auto;max-width:100%;object-fit:contain;display:block}
+  .logo-card img.tall{height:54px}
+  .logo-card img.inv{filter:invert(1) grayscale(1)}
+  .logo-card figcaption{font-size:.78rem;color:var(--muted);font-weight:600;text-align:center}
+  .brand-rest{margin-top:16px;font-size:.9rem;color:var(--ink-soft)}
+  .brand-rest strong{color:var(--ink);font-weight:650}
 
   /* About */
   .about-grid{display:grid;gap:28px;grid-template-columns:1fr}
@@ -153,6 +167,10 @@
       <a href="#faq">FAQ</a>
       <a href="#visit">Visit us</a>
     </nav>
+    <span class="theme-toggle header-toggle" role="group" aria-label="Colour theme">
+      <button type="button" data-set-theme="warm" aria-pressed="true">Warm</button>
+      <button type="button" data-set-theme="classic" aria-pressed="false">Classic</button>
+    </span>
     <a class="btn call-header" href="tel:+441932840426">Call 01932 840 426</a>
   </div>
 </header>
@@ -167,10 +185,6 @@
       <div class="hero-actions">
         <a class="btn" href="tel:+441932840426">Call 01932 840 426</a>
         <a class="btn btn-ghost" href="#visit">Plan your visit</a>
-        <span class="theme-toggle" role="group" aria-label="Colour theme">
-          <button type="button" data-set-theme="warm" aria-pressed="true">Warm</button>
-          <button type="button" data-set-theme="classic" aria-pressed="false">Classic</button>
-        </span>
       </div>
     </div>
   </section>
@@ -234,9 +248,23 @@
     <div class="wrap">
       <span class="eyebrow">Leading brands</span>
       <h2>Names you know, in stock to see and hold</h2>
-      <div class="brand-list">
-        <span>KitchenAid</span><span>Magimix</span><span>Cuisinart</span><span>Dualit</span><span>Chasseur</span><span>SKK</span><span>Mermaid</span><span>Alan Silverwood</span><span>Gaggia</span><span>Nespresso</span><span>La Cafetiere</span><span>Mauviel</span><span>Demeyere</span><span>Peugeot</span><span>Cole &amp; Mason</span><span>TG Green</span><span>Pillivuyt</span><span>Guzzini</span><span>Simplehuman</span><span>Vacuvin</span>
+      <div class="logo-grid">
+        <figure class="logo-card"><img src="assets/logos/kitchenaid.svg" alt="KitchenAid logo" loading="lazy"><figcaption>KitchenAid</figcaption></figure>
+        <figure class="logo-card"><img src="assets/logos/magimix.png" alt="Magimix logo" loading="lazy"><figcaption>Magimix</figcaption></figure>
+        <figure class="logo-card"><img src="assets/logos/cuisinart.svg" alt="Cuisinart logo" loading="lazy"><figcaption>Cuisinart</figcaption></figure>
+        <figure class="logo-card"><img src="assets/logos/dualit.png" alt="Dualit logo" loading="lazy"><figcaption>Dualit</figcaption></figure>
+        <figure class="logo-card"><img class="tall" src="assets/logos/gaggia.svg" alt="Gaggia Milano logo" loading="lazy"><figcaption>Gaggia</figcaption></figure>
+        <figure class="logo-card"><img class="tall" src="assets/logos/nespresso.svg" alt="Nespresso logo" loading="lazy"><figcaption>Nespresso</figcaption></figure>
+        <figure class="logo-card"><img src="assets/logos/demeyere.png" alt="Demeyere logo" loading="lazy"><figcaption>Demeyere</figcaption></figure>
+        <figure class="logo-card"><img class="tall" src="assets/logos/peugeot.svg" alt="Peugeot logo" loading="lazy"><figcaption>Peugeot</figcaption></figure>
+        <figure class="logo-card"><img class="inv" src="assets/logos/cole-mason-white.png" alt="Cole &amp; Mason logo" loading="lazy"><figcaption>Cole &amp; Mason</figcaption></figure>
+        <figure class="logo-card"><img src="assets/logos/guzzini.png" alt="Guzzini logo" loading="lazy"><figcaption>Guzzini</figcaption></figure>
+        <figure class="logo-card"><img class="tall" src="assets/logos/pillivuyt.jpg" alt="Pillivuyt logo" loading="lazy"><figcaption>Pillivuyt</figcaption></figure>
+        <figure class="logo-card"><img src="assets/logos/simplehuman.png" alt="Simplehuman logo" loading="lazy"><figcaption>Simplehuman</figcaption></figure>
+        <figure class="logo-card"><img class="tall" src="assets/logos/vacuvin.png" alt="Vacu Vin logo" loading="lazy"><figcaption>Vacu Vin</figcaption></figure>
+        <figure class="logo-card"><img class="inv" src="assets/logos/silverwood-white.png" alt="Alan Silverwood logo" loading="lazy"><figcaption>Alan Silverwood</figcaption></figure>
       </div>
+      <p class="brand-rest"><strong>Also stocked:</strong> Chasseur, SKK, Mermaid, La Cafetiere, Mauviel and TG Green.</p>
     </div>
   </section>
 
