@@ -8,13 +8,14 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <style>
   :root{
-    --bg:#f4f8f7; --surface:#ffffff; --surface-tint:#e7f1ef;
-    --ink:#173331; --ink-soft:#3f5c58; --muted:#4f6b66;
-    --primary:#0e6f66; --primary-deep:#0a544d; --on-primary:#f2faf8;
-    --line:rgba(14,111,102,.16); --line-strong:rgba(14,111,102,.34);
+    --bg:#f3f6fb; --surface:#ffffff; --surface-tint:#e6eef8;
+    --ink:#17293f; --ink-soft:#3c5068; --muted:#4d6178;
+    --primary:#005ca8; --primary-deep:#004a85; --on-primary:#f2f7fc;
+    --line:rgba(0,92,168,.16); --line-strong:rgba(0,92,168,.34);
     --radius:14px; --radius-card:12px;
-    --shadow:0 1px 2px rgba(9,66,60,.06),0 10px 28px rgba(9,66,60,.08);
+    --shadow:0 1px 2px rgba(10,50,95,.06),0 10px 28px rgba(10,50,95,.08);
     --font-body:"Segoe UI",system-ui,"Helvetica Neue",sans-serif;
+    --font-display:Georgia,"Iowan Old Style","Times New Roman",serif;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
@@ -23,8 +24,8 @@
   a{color:var(--primary)}
   .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
   .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--primary);background:var(--surface-tint);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
-  h1{font-size:clamp(30px,5vw,46px);line-height:1.12;letter-spacing:-0.01em;font-weight:750}
-  h2{font-size:clamp(23px,3.4vw,30px);line-height:1.2;font-weight:700;margin-bottom:10px}
+  h1{font-family:var(--font-display);font-size:clamp(30px,5vw,46px);line-height:1.12;letter-spacing:-0.01em;font-weight:700}
+  h2{font-family:var(--font-display);font-size:clamp(23px,3.4vw,30px);line-height:1.2;font-weight:700;margin-bottom:10px}
   h3{font-size:17px;font-weight:700}
   p{color:var(--ink-soft)}
   section{padding:56px 0}
@@ -39,19 +40,22 @@
   header{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
   .header-in{display:flex;align-items:center;gap:20px;max-width:1080px;margin:0 auto;padding:10px 20px}
   .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-weight:750;font-size:17px;letter-spacing:-0.01em}
-  .brand .mark{width:34px;height:34px;border-radius:10px;background:var(--primary);display:flex;align-items:center;justify-content:center;flex:none}
-  .brand .mark svg{width:20px;height:20px}
+  .brand-logo{height:40px;width:auto;display:block}
   nav{margin-left:auto;display:flex;gap:18px;align-items:center}
   nav a{color:var(--ink-soft);text-decoration:none;font-size:14.5px;font-weight:600}
   nav a:hover{color:var(--primary)}
   nav a:focus-visible{outline:2px solid var(--primary);outline-offset:3px;border-radius:4px}
   .header-call{flex:none;padding:10px 18px;font-size:14px}
 
-  .hero{background:linear-gradient(160deg,#eaf4f2 0%,var(--bg) 55%);padding:64px 0 48px}
+  .hero{background:linear-gradient(160deg,#e8f0f9 0%,var(--bg) 55%);padding:64px 0 48px}
   .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center}
   .hero p.lede{font-size:18px;margin:18px 0 26px;max-width:34em}
   .hero-actions{display:flex;gap:12px;flex-wrap:wrap}
-  .trust{display:grid;gap:12px}
+  .trust{display:grid;gap:12px;grid-template-columns:repeat(3,1fr);margin-top:34px}
+  .hero-photo img{width:100%;height:auto;border-radius:var(--radius-card);border:1px solid var(--line);box-shadow:var(--shadow);display:block}
+  .hero-photo figcaption,.ph figcaption{margin-top:8px;font-size:.84rem;color:var(--muted)}
+  .photo-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:26px}
+  .ph img{width:100%;height:auto;border-radius:var(--radius-card);border:1px solid var(--line);box-shadow:var(--shadow);display:block}
   .trust-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);box-shadow:var(--shadow);padding:18px 20px}
   .trust-card h3{margin-bottom:4px}
   .trust-card p{font-size:14.5px}
@@ -70,7 +74,7 @@
 
   .dentist-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:26px}
   .dentist{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);box-shadow:var(--shadow);padding:18px;text-align:center}
-  .avatar{width:64px;height:64px;border-radius:50%;background:var(--surface-tint);color:var(--primary-deep);font-weight:800;font-size:20px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+  img.avatar{width:88px;height:88px;border-radius:50%;object-fit:cover;border:2px solid var(--line-strong);margin:0 auto 10px;display:block}
   .dentist .gdc{font-size:13px;color:var(--muted);margin-top:3px}
 
   .quote-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:26px}
@@ -106,6 +110,8 @@
   @media (max-width:920px){
     .hero-grid{grid-template-columns:1fr;gap:28px}
     .grid-3,.quote-grid{grid-template-columns:repeat(2,1fr)}
+    .trust{grid-template-columns:1fr}
+    .photo-grid{grid-template-columns:1fr}
     .dentist-grid{grid-template-columns:repeat(2,1fr)}
   }
   @media (max-width:640px){
@@ -113,7 +119,7 @@
     nav{display:none}
     .header-call{margin-left:auto;padding:9px 12px;font-size:12.5px}
     .brand{font-size:14.5px;white-space:nowrap;gap:8px}
-    .brand .mark{width:28px;height:28px}
+    .brand-logo{height:30px}
     .header-in{gap:10px;padding:10px 14px}
     .grid-3,.quote-grid,.visit-grid,.stats-grid{grid-template-columns:1fr}
     .hero{padding:44px 0 36px}
@@ -125,12 +131,10 @@
 
 <header>
   <div class="header-in">
-    <a class="brand" href="#top">
-      <span class="mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#f2faf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5.5C10.5 3.8 8.2 3 6.5 4 4.5 5.2 4 8 5 10.5c1.2 3 2.4 6.5 3 9.5.2 1 1.6 1 1.9 0l1.1-4c.2-.8 1.2-.8 1.4 0l1.1 4c.3 1 1.7 1 1.9 0 .6-3 1.8-6.5 3-9.5 1-2.5.5-5.3-1.5-6.5-1.7-1-4-.2-5.5 1.5z"/></svg></span>
-      Walton Park Dental
-    </a>
+    <a class="brand" href="#top"><img class="brand-logo" src="assets/site/logo.png" alt="Walton Park Dental Practice"></a>
     <nav aria-label="Sections">
       <a href="#treatments">Treatments</a>
+      <a href="#practice">The practice</a>
       <a href="#about">About</a>
       <a href="#dentists">Dentists</a>
       <a href="#faq">FAQs</a>
@@ -153,6 +157,12 @@
         <a class="btn btn-ghost" href="#visit">Plan your visit</a>
       </div>
     </div>
+    <figure class="hero-photo">
+      <img src="assets/site/practice-front.jpg" alt="The Walton Park Dental Practice entrance and sign at 2a Walton Park" width="1400" height="933" fetchpriority="high">
+      <figcaption>Our practice at 2a Walton Park, Walton-on-Thames</figcaption>
+    </figure>
+  </div>
+  <div class="wrap">
     <div class="trust">
       <div class="trust-card"><h3><span class="tick">&#10003;</span>Nervous patients welcome</h3><p>Careful, sympathetic treatment in a friendly atmosphere, at your pace.</p></div>
       <div class="trust-card"><h3><span class="tick">&#10003;</span>Private and Denplan</h3><p>Adult care on a private basis, with Denplan monthly plans available.</p></div>
@@ -173,6 +183,17 @@
       <div class="card"><div class="icon">&#9673;</div><h3>Crowns and veneers</h3><p>A crown fits over a prepared tooth, making it strong and giving it the shape of a natural tooth.</p></div>
       <div class="card"><div class="icon">&#10022;</div><h3>Implants</h3><p>A permanent solution for replacing missing teeth, fixed in place without damaging adjacent teeth.</p></div>
       <div class="card"><div class="icon">&#9728;</div><h3>Teeth whitening</h3><p>Under a dentist's guidance, whitening is a safe and easy way to lighten discoloured teeth without damage.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="practice">
+  <div class="wrap">
+    <span class="eyebrow">Inside the practice</span>
+    <h2>Take a look inside</h2>
+    <div class="photo-grid">
+      <figure class="ph"><img src="assets/site/surgery-1.jpg" alt="One of the practice surgeries, with a blue dental chair and light blue cabinetry" loading="lazy" width="900" height="600"><figcaption>Inside one of our surgeries</figcaption></figure>
+      <figure class="ph"><img src="assets/site/surgery-2.jpg" alt="Another surgery at the practice, bright and modern, looking towards the window" loading="lazy" width="900" height="600"><figcaption>Another of our five surgeries</figcaption></figure>
     </div>
   </div>
 </section>
@@ -199,10 +220,10 @@
     <span class="eyebrow">Our dentists</span>
     <h2>An experienced, GDC-registered team</h2>
     <div class="dentist-grid">
-      <div class="dentist"><div class="avatar">JD</div><h3>Jason Drewett</h3><p class="gdc">GDC No. 67532</p></div>
-      <div class="dentist"><div class="avatar">SK</div><h3>Sonila Khaneh Zaei</h3><p class="gdc">GDC No. 265545</p></div>
-      <div class="dentist"><div class="avatar">HD</div><h3>Hugo Drewett</h3><p class="gdc">GDC No. 265201</p></div>
-      <div class="dentist"><div class="avatar">GK</div><h3>Grug Kenny</h3><p class="gdc">GDC No. 278285</p></div>
+      <div class="dentist"><img class="avatar" src="assets/site/jason-drewett.jpg" alt="Jason Drewett" loading="lazy"><h3>Jason Drewett</h3><p class="gdc">GDC No. 67532</p></div>
+      <div class="dentist"><img class="avatar" src="assets/site/sonila-khaneh-zaei.jpg" alt="Sonila Khaneh Zaei" loading="lazy"><h3>Sonila Khaneh Zaei</h3><p class="gdc">GDC No. 265545</p></div>
+      <div class="dentist"><img class="avatar" src="assets/site/hugo-drewett.jpg" alt="Hugo Drewett" loading="lazy"><h3>Hugo Drewett</h3><p class="gdc">GDC No. 265201</p></div>
+      <div class="dentist"><img class="avatar" src="assets/site/grug-kenny.jpg" alt="Grug Kenny" loading="lazy"><h3>Grug Kenny</h3><p class="gdc">GDC No. 278285</p></div>
     </div>
   </div>
 </section>
