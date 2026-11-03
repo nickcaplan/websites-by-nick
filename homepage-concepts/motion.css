@@ -531,10 +531,12 @@ footer h2 em {
 .footer-bottom p {
   margin: 0;
 }
-.paused .composition * {
+.paused .composition *,
+.hidden-page .composition * {
   animation-play-state: paused !important;
 }
-.paused .swoosh {
+.paused .swoosh,
+.hidden-page .swoosh {
   animation-play-state: paused !important;
 }
 @keyframes draw {

@@ -21,9 +21,7 @@
   // Motion is decorative, finite and never moves navigation or page layout.
   // The complete composition and every route remain usable without JavaScript.
   document.addEventListener("visibilitychange", () => {
-    document.querySelectorAll(".composition *").forEach((el) => {
-      el.style.animationPlayState = document.hidden || paused ? "paused" : "";
-    });
+    document.body.classList.toggle("hidden-page", document.hidden);
   });
   reduced.addEventListener("change", () => {
     if (reduced.matches) {
