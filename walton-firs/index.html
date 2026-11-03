@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Walton Firs Activity Centre - Outdoor Adventure for Groups in Cobham, Surrey</title>
+<meta name="description" content="Design concept for Walton Firs Activity Centre, an outdoor activity centre in Cobham, Surrey offering instructed activities, camping and residential stays for schools, uniformed groups, youth organisations and corporate teams.">
+<style>
+  :root{
+    --bg:#f5f2e9; --surface:#fffdf6; --surface-tint:#e9e5d3;
+    --ink:#24301f; --ink-soft:#46543c; --muted:#5c6a4e;
+    --primary:#2e5233; --primary-deep:#1f3b24; --on-primary:#f3f6ee;
+    --accent:#8a5a2b; --accent-soft:#c9a15f;
+    --line:rgba(46,82,51,.2); --line-strong:rgba(46,82,51,.45);
+    --radius:16px; --radius-card:12px;
+    --font-head:Georgia,'Times New Roman',serif;
+    --font-body:'Segoe UI',system-ui,-apple-system,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  section[id]{scroll-margin-top:5.5rem}
+  body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:var(--primary)}
+  .wrap{max-width:1060px;margin:0 auto;padding:0 20px}
+
+  header{position:sticky;top:0;z-index:20;background:rgba(245,242,233,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+  .header-in{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 20px}
+  .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+  .brand .mark{width:38px;height:38px;border-radius:50%;background:var(--primary);color:var(--on-primary);display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:700;font-size:13px;letter-spacing:.5px;border:2px solid rgba(255,255,255,.65);box-shadow:0 0 0 1px var(--primary)}
+  .brand .name{font-family:var(--font-head);font-weight:700;font-size:19px;letter-spacing:.2px}
+  .brand .est{display:block;font-family:var(--font-body);font-weight:400;font-size:11.5px;color:var(--muted);letter-spacing:.6px;text-transform:uppercase}
+  nav{display:flex;gap:4px;align-items:center;flex-wrap:wrap}
+  nav a{text-decoration:none;color:var(--ink-soft);font-size:14.5px;font-weight:600;padding:8px 12px;border-radius:8px}
+  nav a:hover{background:var(--surface-tint);color:var(--ink)}
+  nav a:focus-visible{outline:2px solid var(--primary);outline-offset:3px;border-radius:4px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:13px 24px;font-weight:700;font-size:15px;text-decoration:none;border:1px solid transparent;cursor:pointer}
+  .btn-primary{background:var(--primary);color:var(--on-primary)}
+  .btn-primary:hover{background:var(--primary-deep)}
+  .btn-primary:focus-visible{outline:2px solid var(--primary-deep);outline-offset:2px}
+  .btn-ghost{background:transparent;color:var(--primary);border-color:var(--line-strong)}
+  .btn-ghost:hover{background:var(--surface-tint)}
+  .btn-ghost:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+
+  .hero{padding:64px 0 52px;background:linear-gradient(160deg,#e6ead9 0%,var(--bg) 55%);border-bottom:1px solid var(--line)}
+  .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:36px;align-items:center}
+  .eyebrow{font-size:12.5px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+  h1{font-family:var(--font-head);font-size:clamp(32px,4.6vw,46px);line-height:1.12;letter-spacing:-.4px;margin-bottom:18px}
+  .hero p.lede{font-size:18px;color:var(--ink-soft);max-width:34rem;margin-bottom:26px}
+  .hero-cta{display:flex;gap:12px;flex-wrap:wrap}
+  .hero-panel{background:var(--primary);color:var(--on-primary);border-radius:var(--radius);padding:26px 24px;box-shadow:0 14px 30px rgba(31,59,36,.18)}
+  .hero-panel h2{font-family:var(--font-head);font-size:19px;margin-bottom:12px;color:var(--on-primary)}
+  .hero-panel ul{list-style:none;display:grid;gap:9px}
+  .hero-panel li{display:flex;gap:10px;align-items:flex-start;font-size:14.5px;line-height:1.45}
+  .hero-panel li::before{content:"";flex:0 0 8px;height:8px;border-radius:50%;background:var(--accent-soft);margin-top:7px}
+  .hero-panel a{color:#dfe9d2;font-weight:600}
+
+  section{padding:52px 0}
+  .section-head{max-width:40rem;margin-bottom:30px}
+  h2.section-title{font-family:var(--font-head);font-size:clamp(24px,3vw,30px);letter-spacing:-.3px;margin-bottom:10px}
+  .section-head p{color:var(--ink-soft)}
+
+  .audience-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+  .audience-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);padding:18px 18px 16px;text-decoration:none;color:var(--ink);display:block;transition:border-color .15s,box-shadow .15s}
+  .audience-card:hover{border-color:var(--line-strong);box-shadow:0 6px 18px rgba(36,48,31,.08)}
+  .audience-card:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+  .audience-card h3{font-family:var(--font-head);font-size:17px;margin-bottom:5px}
+  .audience-card p{font-size:13.5px;color:var(--muted);line-height:1.45}
+
+  .activities{background:var(--primary-deep);color:var(--on-primary)}
+  .activities .section-title{color:var(--on-primary)}
+  .activities .section-head p{color:#c8d4bd}
+  .chips{display:flex;flex-wrap:wrap;gap:10px}
+  .chip{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.22);color:var(--on-primary);border-radius:999px;padding:9px 18px;font-size:14.5px;font-weight:600}
+  .chip span{color:var(--accent-soft);font-weight:700}
+
+  .stay-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+  .stay-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);padding:22px 20px}
+  .stay-card h3{font-family:var(--font-head);font-size:18px;margin-bottom:6px}
+  .stay-card .cap{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+  .stay-card p{font-size:14px;color:var(--ink-soft)}
+
+  .booking{background:var(--surface-tint);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .booking-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:8px}
+  .step{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);padding:18px}
+  .step .n{width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;margin-bottom:10px}
+  .step h3{font-size:15.5px;margin-bottom:4px;font-family:var(--font-head)}
+  .step p{font-size:13.5px;color:var(--muted)}
+
+  .visit-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start}
+  .visit-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:26px 24px}
+  .visit-card h3{font-family:var(--font-head);font-size:19px;margin-bottom:12px}
+  .visit-card p{font-size:15px;color:var(--ink-soft);margin-bottom:10px}
+  .fact-list{list-style:none;display:grid;gap:10px;margin-top:6px}
+  .fact-list li{display:flex;gap:10px;font-size:14.5px}
+  .fact-list .k{flex:0 0 92px;font-weight:700;color:var(--ink)}
+  .award{display:inline-flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--accent-soft);color:var(--accent);border-radius:999px;padding:8px 16px;font-size:13px;font-weight:700;margin-top:16px}
+
+  footer{background:var(--primary-deep);color:#c8d4bd;padding:30px 0;font-size:13.5px}
+  footer .wrap{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:center}
+  footer a{color:#dfe9d2}
+
+  @media (max-width:820px){
+    .hero-grid,.visit-grid{grid-template-columns:1fr}
+    .hero{padding:44px 0 38px}
+    nav a{padding:8px 9px;font-size:14px}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap header-in">
+    <a class="brand" href="#top" aria-label="Walton Firs Activity Centre - back to top">
+      <span class="mark" aria-hidden="true">WF</span>
+      <span><span class="name">Walton Firs</span><span class="est">Activity Centre - Cobham, Surrey</span></span>
+    </a>
+    <nav aria-label="Sections">
+      <a href="#groups">Groups</a>
+      <a href="#activities">Activities</a>
+      <a href="#stay">Stay</a>
+      <a href="#visit">Visit us</a>
+    </nav>
+    <a class="btn btn-primary" href="tel:+441932863243">Call 01932 863243</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="eyebrow">Outdoor activity centre - Cobham, Surrey</p>
+        <h1>Experience outdoor fun, a stone's throw from the A3 and M25</h1>
+        <p class="lede">Instructed activities, woodland camping and residential stays for schools, uniformed groups, youth organisations, parties and corporate teams.</p>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="tel:+441932863243">Call 01932 863243</a>
+          <a class="btn btn-ghost" href="mailto:info@waltonfirs.co.uk">Email info@waltonfirs.co.uk</a>
+        </div>
+      </div>
+      <div class="hero-panel">
+        <h2>Start your booking</h2>
+        <ul>
+          <li>Call, email or come in for a chat with our reception team.</li>
+          <li>We make a provisional booking for your group and hold it while you confirm.</li>
+          <li>One point of contact from first enquiry to final visit.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="groups">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 class="section-title">Who are you bringing?</h2>
+        <p>Every group gets a visit shaped around it. Pick your group to see how a day or residential at Walton Firs works for you.</p>
+      </div>
+      <div class="audience-grid">
+        <a class="audience-card" href="#visit"><h3>Uniformed groups</h3><p>Scouts, Guides and other uniformed groups - evenings, weekends and residentials.</p></a>
+        <a class="audience-card" href="#visit"><h3>Schools and colleges</h3><p>Curriculum-friendly days and residentials with risk assessments ready to download.</p></a>
+        <a class="audience-card" href="#visit"><h3>Youth organisations</h3><p>Flexible instructed sessions and self-led options for youth groups of all sizes.</p></a>
+        <a class="audience-card" href="#visit"><h3>Birthday parties</h3><p>Activity-packed party days on site.</p></a>
+        <a class="audience-card" href="#visit"><h3>DofE Gold residentials</h3><p>Residential stays that meet Duke of Edinburgh's Award Gold requirements.</p></a>
+        <a class="audience-card" href="#visit"><h3>Holiday camp</h3><p>Outdoor Adventurers holiday camp during school holidays.</p></a>
+        <a class="audience-card" href="#visit"><h3>Corporate bookings</h3><p>Team days and away days built around our instructed activities.</p></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="activities" class="activities">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 class="section-title">Instructed activities</h2>
+        <p>Led by our instructors, with self-led options too. Nine activity lines run across the site.</p>
+      </div>
+      <div class="chips">
+        <span class="chip">Archery</span>
+        <span class="chip">Air rifle shooting</span>
+        <span class="chip">Bushcraft <span>- 6 activities</span></span>
+        <span class="chip">Caving</span>
+        <span class="chip">Climbing</span>
+        <span class="chip">Crate stacking</span>
+        <span class="chip">High ropes <span>- 6 activities</span></span>
+        <span class="chip">Low ropes</span>
+        <span class="chip">Tomahawk throwing</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="stay">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 class="section-title">Stay over</h2>
+        <p>Buildings, pod villages and campsites across the site, with fields for outdoor activities and campfire space.</p>
+      </div>
+      <div class="stay-grid">
+        <div class="stay-card">
+          <span class="cap">Sleeps 24</span>
+          <h3>Brunswick</h3>
+          <p>A building in the lower field sleeping 24, with a field in front for activities or tents.</p>
+        </div>
+        <div class="stay-card">
+          <span class="cap">Sleeps 4 - hall for 30</span>
+          <h3>Training Hut</h3>
+          <p>Sleeps 4 with a spacious main hall for up to 30, plus field space and a campfire circle.</p>
+        </div>
+        <div class="stay-card">
+          <span class="cap">Pods and pitches</span>
+          <h3>Camping and pods</h3>
+          <p>Camping pod villages and campsites for a more outdoors experience.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="visit">
+    <div class="wrap visit-grid">
+      <div class="visit-card">
+        <h3>Visit us</h3>
+        <div class="fact-list">
+          <li><span class="k">Address</span><span>Walton Firs Activity Centre, Convent Lane, Cobham, Surrey KT11 1HB</span></li>
+          <li><span class="k">Phone</span><span><a href="tel:+441932863243">01932 863243</a></span></li>
+          <li><span class="k">Email</span><span><a href="mailto:info@waltonfirs.co.uk">info@waltonfirs.co.uk</a></span></li>
+          <li><span class="k">Access</span><span>Through Convent Lane, a private road - please be respectful of our neighbours.</span></li>
+        </ul>
+        <span class="award">Queen's Award recognised</span>
+      </div>
+      <div class="visit-card">
+        <h3>Good to know</h3>
+        <p>Nearest stations are Cobham &amp; Stoke D'Abernon and Byfleet &amp; New Haw, and London is an easy day trip from West Byfleet.</p>
+        <p>FAQs, risk assessments, price lists and booking forms are all available for group leaders.</p>
+        <p>Planning a stay? One call or email is all it takes to start - we hold a provisional booking while you confirm the details.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Walton Firs Activity Centre - Convent Lane, Cobham, Surrey KT11 1HB</span>
+    <span>Design concept by <a href="https://websitesbynick.co.uk">Websites by Nick</a></span>
+  </div>
+</footer>
+</body>
+</html>
