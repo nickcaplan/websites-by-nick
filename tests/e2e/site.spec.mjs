@@ -7,6 +7,14 @@ import assert from 'node:assert/strict';
 import { mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 
+
+// Fail closed: no check in this suite may send a real enquiry. Every page gets
+// a network-level abort for the live form endpoint before anything else runs.
+const FORMSPREE = '**/formspree.io/**';
+test.beforeEach(async ({ page }) => {
+  await page.route(FORMSPREE, route => route.abort());
+});
+
 const shotsDir = join(process.cwd(), 'test-results', 'screenshots');
 async function shot(page, name, project) {
   mkdirSync(shotsDir, { recursive: true });
@@ -371,13 +379,14 @@ test('keyboard: Enter on a nav link navigates, Enter and Space toggle the theme'
   assert.equal(await page.evaluate(() => document.body.dataset.theme), 'dark', 'Space on the focused toggle switches back');
 });
 
-test('keyboard: contact form can be completed and submitted by keyboard (submission intercepted)', async ({ page, isMobile }) => {
+test('keyboard: contact form can be completed and submitted by keyboard (submission blocked at network level)', async ({ page, isMobile }) => {
   desktopOnly(isMobile);
-  await page.addInitScript(() => {
-    window.addEventListener('DOMContentLoaded', () => {
-      window.__submitted = false;
-      document.querySelector('.contact-form')?.addEventListener('submit', (e) => { e.preventDefault(); window.__submitted = true; });
-    });
+  // Network-level interception, not a page-side flag: the app's real submit
+  // handler must fire exactly one request and this route must abort it.
+  const caught = [];
+  await page.route(FORMSPREE, route => {
+    caught.push(route.request().postData() || '');
+    return route.abort();
   });
   await page.setViewportSize(DESKTOP);
   await page.goto('/contact/');
@@ -391,10 +400,14 @@ test('keyboard: contact form can be completed and submitted by keyboard (submiss
   const focused = await page.evaluate(() => document.activeElement && document.activeElement.className);
   assert.match(String(focused), /button|submit/, `keyboard flow ends on the submit button (focused: ${focused})`);
   await page.keyboard.press('Enter');
-  await page.waitForTimeout(400);
-  const state = await page.evaluate(() => ({ submitted: window.__submitted, valid: document.querySelector('.contact-form').checkValidity() }));
-  assert.equal(state.valid, true, 'form is valid after keyboard entry');
-  assert.equal(state.submitted, true, 'Enter on the submit button fires submission (intercepted, nothing sent)');
+  // Deterministic settle, no fixed sleep: the fail-closed status only appears
+  // after the aborted fetch's catch runs, so the route has already captured
+  // the request by the time it shows.
+  await expect(page.locator('#contact-status')).toContainText('Check your connection');
+  const valid = await page.evaluate(() => document.querySelector('.contact-form').checkValidity());
+  assert.equal(valid, true, 'form is valid after keyboard entry');
+  assert.equal(caught.length, 1, 'Enter on the submit button fires exactly one submission request (caught and aborted, nothing sent)');
+  assert.ok(caught[0].includes('Hello from the keyboard'), 'the intercepted request carries the typed message');
 });
 
 for (const [name, path] of [['home', '/'], ['experience', '/experience/'], ['pricing', '/pricing/'], ['contact', '/contact/']]) {
