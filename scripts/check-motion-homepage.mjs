@@ -65,6 +65,11 @@ for (const width of [320, 390, 768, 1280, 1600]) {
   if (errors.length) throw Error(errors);
   if (width === 390 || width === 1280)
     await p.screenshot({ path: output + "/motion-" + width + ".png" });
+  await p.waitForFunction(() =>
+    [...document.querySelectorAll(".composition, .swoosh")]
+      .flatMap((e) => e.getAnimations({ subtree: true }))
+      .some((a) => a.playState === "running"),
+  );
   await p.getByRole("button", { name: "Pause motion", exact: true }).click();
   if (
     (await p
@@ -74,13 +79,32 @@ for (const width of [320, 390, 768, 1280, 1600]) {
     throw Error("pause");
   const states = () =>
     p
-      .locator(".composer")
-      .evaluate((e) => e.getAnimations().map((a) => a.playState));
+      .locator(".composition, .swoosh")
+      .evaluateAll((elements) =>
+        elements.flatMap((e) =>
+          e.getAnimations({ subtree: true }).map((a) => a.playState),
+        ),
+      );
   if ((await states()).some((s) => s === "running"))
     throw Error("motion not paused");
   await p.getByRole("button", { name: "Resume motion" }).click();
   if ((await states()).some((s) => s === "paused"))
     throw Error("motion not resumed");
+  await p.evaluate(() => {
+    Object.defineProperty(document, "hidden", {
+      configurable: true,
+      get: () => true,
+    });
+    document.dispatchEvent(new Event("visibilitychange"));
+  });
+  if ((await states()).some((s) => s === "running"))
+    throw Error("visibility alone did not pause");
+  await p.evaluate(() => {
+    delete document.hidden;
+    document.dispatchEvent(new Event("visibilitychange"));
+  });
+  if ((await states()).some((s) => s === "paused"))
+    throw Error("visibility alone did not resume");
   await p.getByRole("button", { name: "Pause motion", exact: true }).click();
   await p.evaluate(() => {
     Object.defineProperty(document, "hidden", {
