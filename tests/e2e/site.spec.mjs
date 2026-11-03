@@ -400,12 +400,14 @@ test('keyboard: contact form can be completed and submitted by keyboard (submiss
   const focused = await page.evaluate(() => document.activeElement && document.activeElement.className);
   assert.match(String(focused), /button|submit/, `keyboard flow ends on the submit button (focused: ${focused})`);
   await page.keyboard.press('Enter');
-  await page.waitForTimeout(400);
+  // Deterministic settle, no fixed sleep: the fail-closed status only appears
+  // after the aborted fetch's catch runs, so the route has already captured
+  // the request by the time it shows.
+  await expect(page.locator('#contact-status')).toContainText('Check your connection');
   const valid = await page.evaluate(() => document.querySelector('.contact-form').checkValidity());
   assert.equal(valid, true, 'form is valid after keyboard entry');
   assert.equal(caught.length, 1, 'Enter on the submit button fires exactly one submission request (caught and aborted, nothing sent)');
   assert.ok(caught[0].includes('Hello from the keyboard'), 'the intercepted request carries the typed message');
-  await expect(page.locator('#contact-status')).toContainText('Check your connection');
 });
 
 for (const [name, path] of [['home', '/'], ['experience', '/experience/'], ['pricing', '/pricing/'], ['contact', '/contact/']]) {
