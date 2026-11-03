@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="warm">
+<html lang="en" data-theme="classic">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -50,7 +50,8 @@
   .header-inner{display:flex;align-items:center;gap:14px;padding:12px 20px;max-width:1080px;margin:0 auto;flex-wrap:wrap}
   .brand{display:inline-flex;align-items:center;gap:10px;flex-wrap:wrap;font-family:var(--font-display);font-weight:var(--h-weight);font-size:1.12rem;color:var(--ink);text-decoration:none;letter-spacing:var(--h-letter)}
   .brand small{font-size:.68rem;letter-spacing:.08em;color:var(--muted);font-family:var(--font-body);font-weight:500}
-  .brand-mark{display:inline-flex;align-items:center;justify-content:center;background:var(--primary-deep);border-radius:8px;width:38px;height:38px;flex:none}
+  .brand-mark{display:inline-flex;align-items:center;justify-content:center;background:var(--primary-deep);border-radius:8px;width:38px;height:38px;flex:none;overflow:hidden}
+  .brand-mark img{width:100%;height:100%;object-fit:cover;display:block}
   .brand-mark svg{width:22px;height:22px;display:block}
   .nav{display:none;gap:14px;margin-left:auto}
   .nav a{color:var(--ink-soft);text-decoration:none;font-size:.92rem;font-weight:500}
@@ -72,6 +73,16 @@
   .hero h1{font-size:clamp(2rem,5.4vw,3.1rem);margin:.5rem 0 1rem;max-width:20ch}
   .hero .lead{margin-bottom:1.6rem}
   .hero-actions{display:flex;gap:12px;flex-wrap:wrap}
+  .hero-grid{display:grid;gap:32px;align-items:center}
+  @media (min-width:880px){.hero-grid{grid-template-columns:1.05fr .95fr}}
+  .hero-photo img{width:100%;height:auto;display:block;border-radius:var(--radius-card);border:1px solid var(--line);box-shadow:var(--shadow)}
+  .hero-photo figcaption{margin-top:8px;font-size:.84rem;color:var(--muted)}
+  .photo-grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:24px}
+  .ph img{width:100%;height:auto;display:block;border-radius:var(--radius-card);border:1px solid var(--line)}
+  .ph figcaption{margin-top:6px;font-size:.84rem;color:var(--muted)}
+  .about-photo{margin-top:18px}
+  .about-photo img{width:100%;max-width:420px;height:auto;display:block;border-radius:var(--radius-card);border:1px solid var(--line)}
+  .about-photo figcaption{margin-top:6px;font-size:.84rem;color:var(--muted)}
   .est-pill{display:inline-block;background:var(--surface);border:1px solid var(--line-strong);color:var(--primary-deep);font-size:.75rem;font-weight:700;letter-spacing:.1em;padding:5px 12px;border-radius:999px}
 
   /* Header theme toggle */
@@ -158,13 +169,7 @@
 <header class="site-header">
   <div class="header-inner">
     <a class="brand" href="#top" aria-label="The Kitchen Shop - back to top">
-      <span class="brand-mark" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#fffaf2" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M5 10h14v6a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4z"/>
-          <path d="M8 10V7a4 4 0 0 1 8 0v3"/>
-          <path d="M2 13h3M19 13h3"/>
-        </svg>
-      </span>
+      <span class="brand-mark" aria-hidden="true"><img src="assets/site/pot-logo.gif" alt="" width="38" height="38"></span>
       The Kitchen Shop<small>Fine cookware - Weybridge</small>
     </a>
     <nav class="nav" aria-label="Sections">
@@ -175,8 +180,8 @@
       <a href="#visit">Visit us</a>
     </nav>
     <span class="theme-toggle header-toggle" role="group" aria-label="Colour theme">
-      <button type="button" data-set-theme="warm" aria-pressed="true">Warm</button>
-      <button type="button" data-set-theme="classic" aria-pressed="false">Classic</button>
+      <button type="button" data-set-theme="warm" aria-pressed="false">Warm</button>
+      <button type="button" data-set-theme="classic" aria-pressed="true">Classic</button>
     </span>
     <a class="btn call-header" href="tel:+441932840426">Call 01932 840 426</a>
   </div>
@@ -185,14 +190,20 @@
 <main id="top">
 
   <section class="hero">
-    <div class="wrap">
-      <span class="est-pill">Est. 1973 - family-run</span>
-      <h1>An Aladdin's Cave of cookware in the heart of Weybridge</h1>
-      <p class="lead">For over 30 years we have supplied fine cookware, renowned brands and honest, friendly advice to cooking enthusiasts and professional chefs alike.</p>
-      <div class="hero-actions">
-        <a class="btn" href="tel:+441932840426">Call 01932 840 426</a>
-        <a class="btn btn-ghost" href="#visit">Plan your visit</a>
+    <div class="wrap hero-grid">
+      <div>
+        <span class="est-pill">Est. 1973 - family-run</span>
+        <h1>An Aladdin's Cave of cookware in the heart of Weybridge</h1>
+        <p class="lead">For over 30 years we have supplied fine cookware, renowned brands and honest, friendly advice to cooking enthusiasts and professional chefs alike.</p>
+        <div class="hero-actions">
+          <a class="btn" href="tel:+441932840426">Call 01932 840 426</a>
+          <a class="btn btn-ghost" href="#visit">Plan your visit</a>
+        </div>
       </div>
+      <figure class="hero-photo">
+        <img src="assets/site/shop-photo.jpg" alt="The Kitchen Shop's blue storefront and awning on the Ship Yard in Weybridge" width="355" height="266">
+        <figcaption>Our shop on the Ship Yard, just off the High Street</figcaption>
+      </figure>
     </div>
   </section>
 
@@ -205,6 +216,19 @@
         <div class="hl-card"><h3>Free local delivery</h3><p>We deliver locally at no charge, including assembled kitchen trolleys.</p></div>
         <div class="hl-card"><h3>Free customer parking</h3><p>Park right by us in the Ship Yard, just off the High Street.</p></div>
         <div class="hl-card"><h3>Children's play area</h3><p>Browse at your own pace while little ones are entertained.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="inside" style="padding-top:0">
+    <div class="wrap">
+      <span class="eyebrow">Inside the shop</span>
+      <h2>The Aladdin's Cave, shelf by shelf</h2>
+      <div class="photo-grid">
+        <figure class="ph"><img src="assets/site/shop-211_360.jpg" alt="The main aisle of the shop, stocked from floor to ceiling" loading="lazy" width="360" height="270"><figcaption>The main aisle</figcaption></figure>
+        <figure class="ph"><img src="assets/site/shop-166_355.jpg" alt="Pots and pans hanging above the shop floor" loading="lazy" width="355" height="266"><figcaption>Pots and pans overhead</figcaption></figure>
+        <figure class="ph"><img src="assets/site/shop-040_355.jpg" alt="Shelves of cookware and kitchen storage" loading="lazy" width="355" height="266"><figcaption>Cookware and storage shelves</figcaption></figure>
+        <figure class="ph"><img src="assets/site/shop-257_355.jpg" alt="China and tableware shelves with gingham trim" loading="lazy" width="355" height="266"><figcaption>China and tableware</figcaption></figure>
       </div>
     </div>
   </section>
@@ -284,6 +308,10 @@
         <p>From everyday kitchen necessities to dinner-party tableware and celebrity-chef-endorsed products, our extensive range satisfies most requirements - and we are always happy to source more unusual items.</p>
         <p>Our staff are experienced and friendly: happy to give help and advice, or to simply let you browse.</p>
         <p>Nick, Gemma and the team look forward to welcoming you.</p>
+        <figure class="about-photo">
+          <img src="assets/site/shop-128_360.jpg" alt="Behind the counter at The Kitchen Shop" loading="lazy" width="360" height="270">
+          <figcaption>Behind the counter</figcaption>
+        </figure>
       </div>
       <div id="faq">
         <span class="eyebrow">Good to know</span>
@@ -339,17 +367,17 @@
 (function(){
   var root=document.documentElement;
   function setTheme(name){
-    if(name!=="warm"&&name!=="classic"){name="warm";}
+    if(name!=="warm"&&name!=="classic"){name="classic";}
     root.setAttribute("data-theme",name);
     try{localStorage.setItem("kitchen-shop-preview-theme",name);}catch(e){}
     var btns=document.querySelectorAll("[data-set-theme]");
     for(var i=0;i<btns.length;i++){btns[i].setAttribute("aria-pressed",btns[i].getAttribute("data-set-theme")===name?"true":"false");}
   }
-  var initial="warm";
+  var initial="classic";
   try{
     var m=/[?&]theme=(warm|classic|a|b)(?:&|$)/.exec(location.search);
     if(m){initial=(m[1]==="classic"||m[1]==="b")?"classic":"warm";}
-    else if(/[?&]theme=/.test(location.search)){initial="warm";}
+    else if(/[?&]theme=/.test(location.search)){initial="classic";}
     else{var saved=localStorage.getItem("kitchen-shop-preview-theme");if(saved){initial=saved;}}
   }catch(e){}
   setTheme(initial);
