@@ -9,7 +9,7 @@
 <style>
   :root{
     --bg:#faf6ef; --bg-tint:#f3ead9; --surface:#fffdf8;
-    --ink:#2b2118; --ink-soft:#5c4a38; --muted:#8a7660;
+    --ink:#2b2118; --ink-soft:#5c4a38; --muted:#7d6850;
     --primary:#a34d1c; --primary-deep:#7c3512; --on-primary:#fffaf2;
     --line:rgba(124,53,18,.16); --line-strong:rgba(124,53,18,.32);
     --radius:12px; --radius-card:10px;
@@ -35,7 +35,7 @@
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
-  section[id]{scroll-margin-top:6.75rem}
+  section[id],#faq{scroll-margin-top:6.75rem}
   body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
   a{color:var(--primary)}
   .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
@@ -74,7 +74,8 @@
 
   /* Theme toggle */
   .theme-toggle{display:inline-flex;border:1px solid var(--line-strong);border-radius:999px;overflow:hidden;background:var(--surface)}
-  .theme-toggle button{appearance:none;border:0;background:transparent;color:var(--ink-soft);font:600 .8rem/1 var(--font-body);padding:9px 16px;cursor:pointer;transition:background .15s ease,color .15s ease}
+  .faq-q:focus-visible,.theme-toggle button:focus-visible{outline:2px solid var(--primary);outline-offset:-3px}
+  .theme-toggle button{appearance:none;border:0;background:transparent;color:var(--ink-soft);font:600 .8rem/1 var(--font-body);padding:12px 18px;min-height:44px;display:inline-flex;align-items:center;cursor:pointer;transition:background .15s ease,color .15s ease}
   .theme-toggle button[aria-pressed="true"]{background:var(--primary-deep);color:var(--on-primary)}
 
   /* Highlights */
