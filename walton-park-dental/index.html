@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Walton Park Dental Practice - Dentist in Walton-on-Thames</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+  :root{
+    --bg:#f4f8f7; --surface:#ffffff; --surface-tint:#e7f1ef;
+    --ink:#173331; --ink-soft:#3f5c58; --muted:#6b8580;
+    --primary:#0e6f66; --primary-deep:#0a544d; --on-primary:#f2faf8;
+    --line:rgba(14,111,102,.16); --line-strong:rgba(14,111,102,.34);
+    --radius:14px; --radius-card:12px;
+    --shadow:0 1px 2px rgba(9,66,60,.06),0 10px 28px rgba(9,66,60,.08);
+    --font-body:"Segoe UI",system-ui,"Helvetica Neue",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  section[id]{scroll-margin-top:5.5rem}
+  body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  a{color:var(--primary)}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+  .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--primary);background:var(--surface-tint);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+  h1{font-size:clamp(30px,5vw,46px);line-height:1.12;letter-spacing:-0.01em;font-weight:750}
+  h2{font-size:clamp(23px,3.4vw,30px);line-height:1.2;font-weight:700;margin-bottom:10px}
+  h3{font-size:17px;font-weight:700}
+  p{color:var(--ink-soft)}
+  section{padding:56px 0}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:13px 24px;font-weight:700;font-size:15px;text-decoration:none;border:1px solid transparent;cursor:pointer}
+  .btn-primary{background:var(--primary);color:var(--on-primary)}
+  .btn-primary:hover{background:var(--primary-deep)}
+  .btn-primary:focus-visible{outline:2px solid var(--on-primary);outline-offset:2px}
+  .btn-ghost{background:var(--surface);color:var(--primary-deep);border-color:var(--line-strong)}
+  .btn-ghost:hover{border-color:var(--primary)}
+  .btn-ghost:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+
+  header{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .header-in{display:flex;align-items:center;gap:20px;max-width:1080px;margin:0 auto;padding:10px 20px}
+  .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-weight:750;font-size:17px;letter-spacing:-0.01em}
+  .brand .mark{width:34px;height:34px;border-radius:10px;background:var(--primary);display:flex;align-items:center;justify-content:center;flex:none}
+  .brand .mark svg{width:20px;height:20px}
+  nav{margin-left:auto;display:flex;gap:18px;align-items:center}
+  nav a{color:var(--ink-soft);text-decoration:none;font-size:14.5px;font-weight:600}
+  nav a:hover{color:var(--primary)}
+  nav a:focus-visible{outline:2px solid var(--primary);outline-offset:3px;border-radius:4px}
+  .header-call{flex:none;padding:10px 18px;font-size:14px}
+
+  .hero{background:linear-gradient(160deg,#eaf4f2 0%,var(--bg) 55%);padding:64px 0 48px}
+  .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center}
+  .hero p.lede{font-size:18px;margin:18px 0 26px;max-width:34em}
+  .hero-actions{display:flex;gap:12px;flex-wrap:wrap}
+  .trust{display:grid;gap:12px}
+  .trust-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);box-shadow:var(--shadow);padding:18px 20px}
+  .trust-card h3{margin-bottom:4px}
+  .trust-card p{font-size:14.5px}
+  .tick{color:var(--primary);font-weight:800;margin-right:6px}
+
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:26px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);box-shadow:var(--shadow);padding:20px}
+  .card h3{margin-bottom:6px}
+  .card p{font-size:14.5px}
+  .card .icon{width:38px;height:38px;border-radius:10px;background:var(--surface-tint);display:flex;align-items:center;justify-content:center;margin-bottom:12px;color:var(--primary);font-size:19px}
+
+  .stats{background:var(--primary);color:var(--on-primary);padding:40px 0}
+  .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;text-align:center}
+  .stats .num{font-size:40px;font-weight:800;letter-spacing:-0.02em}
+  .stats .lbl{opacity:.85;font-size:14.5px}
+
+  .dentist-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:26px}
+  .dentist{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);box-shadow:var(--shadow);padding:18px;text-align:center}
+  .avatar{width:64px;height:64px;border-radius:50%;background:var(--surface-tint);color:var(--primary-deep);font-weight:800;font-size:20px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+  .dentist .gdc{font-size:13px;color:var(--muted);margin-top:3px}
+
+  .quote-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:26px}
+  blockquote{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--primary);border-radius:var(--radius-card);box-shadow:var(--shadow);padding:20px}
+  blockquote p{font-style:italic;color:var(--ink-soft);font-size:14.5px}
+  blockquote cite{display:block;margin-top:12px;font-style:normal;font-size:13px;font-weight:700;color:var(--primary-deep)}
+
+  .nervous{background:var(--surface-tint)}
+  .nervous .wrap{max-width:760px}
+  .nervous p{margin-bottom:12px}
+
+  .faq-list{margin-top:22px;display:grid;gap:10px}
+  .faq-item{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);box-shadow:var(--shadow);overflow:hidden}
+  .faq-q{width:100%;text-align:left;background:none;border:none;padding:16px 18px;font:inherit;font-weight:700;font-size:15.5px;color:var(--ink);cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .faq-q:focus-visible{outline:2px solid var(--primary);outline-offset:-2px}
+  .faq-q .chev{flex:none;transition:transform .2s;color:var(--primary)}
+  .faq-item.open .chev{transform:rotate(180deg)}
+  .faq-a{max-height:0;overflow:hidden;transition:max-height .25s ease}
+  .faq-a p{padding:0 18px 16px;font-size:14.5px}
+
+  .visit-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:26px}
+  .visit-grid .card p{margin-bottom:8px}
+  .visit-grid .card .btn{margin-top:8px}
+  .hours td{padding:4px 0;font-size:14.5px;color:var(--ink-soft)}
+  .hours td:first-child{font-weight:600;color:var(--ink);padding-right:18px}
+  a.big-link{display:inline-block;font-weight:700;font-size:17px;margin-top:4px;text-decoration:none;color:var(--primary-deep)}
+  a.big-link:hover{text-decoration:underline}
+  a.big-link:focus-visible{outline:2px solid var(--primary);outline-offset:3px;border-radius:4px}
+
+  footer{border-top:1px solid var(--line);padding:28px 0 36px;background:var(--surface)}
+  footer p{font-size:13.5px;color:var(--muted);margin-bottom:4px}
+
+  @media (max-width:920px){
+    .hero-grid{grid-template-columns:1fr;gap:28px}
+    .grid-3,.quote-grid{grid-template-columns:repeat(2,1fr)}
+    .dentist-grid{grid-template-columns:repeat(2,1fr)}
+  }
+  @media (max-width:640px){
+    section{padding:42px 0}
+    nav{display:none}
+    .header-call{margin-left:auto}
+    .grid-3,.quote-grid,.visit-grid,.stats-grid{grid-template-columns:1fr}
+    .hero{padding:44px 0 36px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-in">
+    <a class="brand" href="#top">
+      <span class="mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#f2faf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5.5C10.5 3.8 8.2 3 6.5 4 4.5 5.2 4 8 5 10.5c1.2 3 2.4 6.5 3 9.5.2 1 1.6 1 1.9 0l1.1-4c.2-.8 1.2-.8 1.4 0l1.1 4c.3 1 1.7 1 1.9 0 .6-3 1.8-6.5 3-9.5 1-2.5.5-5.3-1.5-6.5-1.7-1-4-.2-5.5 1.5z"/></svg></span>
+      Walton Park Dental
+    </a>
+    <nav aria-label="Sections">
+      <a href="#treatments">Treatments</a>
+      <a href="#about">About</a>
+      <a href="#dentists">Dentists</a>
+      <a href="#faq">FAQs</a>
+      <a href="#visit">Visit</a>
+    </nav>
+    <a class="btn btn-primary header-call" href="tel:+441932220449">Call 01932 220449</a>
+  </div>
+</header>
+
+<main id="top">
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">Caring for Walton since the 1950s</span>
+      <h1>Friendly, modern dentistry for the whole family</h1>
+      <p class="lede">Walton Park Dental Practice has looked after local smiles for over 70 years. Private care for adults, NHS places for the children of our registered patients, and Denplan plans that spread the cost.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="tel:+441932220449">Call 01932 220449</a>
+        <a class="btn btn-ghost" href="#visit">Plan your visit</a>
+      </div>
+    </div>
+    <div class="trust">
+      <div class="trust-card"><h3><span class="tick">&#10003;</span>Nervous patients welcome</h3><p>Careful, sympathetic treatment in a friendly atmosphere, at your pace.</p></div>
+      <div class="trust-card"><h3><span class="tick">&#10003;</span>Private and Denplan</h3><p>Adult care on a private basis, with Denplan monthly plans available.</p></div>
+      <div class="trust-card"><h3><span class="tick">&#10003;</span>Children seen within the NHS</h3><p>We can see the children of our registered adult patients within the NHS.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="treatments">
+  <div class="wrap">
+    <span class="eyebrow">Treatments</span>
+    <h2>From six-monthly check-ups to a new smile</h2>
+    <p>Prevention first, with the expertise to help when more is needed - often with simpler, less invasive procedures than you might expect.</p>
+    <div class="grid-3">
+      <div class="card"><div class="icon">&#10003;</div><h3>Routine exams and hygiene</h3><p>Regular check-ups and hygienist visits keep your mouth healthy and catch issues before they develop.</p></div>
+      <div class="card"><div class="icon">&#9786;</div><h3>Clear braces</h3><p>Teeth straightening with clear braces that are almost invisible. Most treatment is completed within 6 months.</p></div>
+      <div class="card"><div class="icon">&#10010;</div><h3>Fillings</h3><p>Fillings repair a tooth damaged by decay or accident, restoring its shape and strength.</p></div>
+      <div class="card"><div class="icon">&#9673;</div><h3>Crowns and veneers</h3><p>A crown fits over a prepared tooth, making it strong and giving it the shape of a natural tooth.</p></div>
+      <div class="card"><div class="icon">&#10022;</div><h3>Implants</h3><p>A permanent solution for replacing missing teeth, fixed in place without damaging adjacent teeth.</p></div>
+      <div class="card"><div class="icon">&#9728;</div><h3>Teeth whitening</h3><p>Under a dentist's guidance, whitening is a safe and easy way to lighten discoloured teeth without damage.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="stats">
+  <div class="wrap stats-grid">
+    <div><div class="num">70+</div><div class="lbl">years serving Walton-on-Thames</div></div>
+    <div><div class="num">5</div><div class="lbl">modern surgeries</div></div>
+    <div><div class="num">17</div><div class="lbl">people on our team</div></div>
+  </div>
+</section>
+
+<section id="about" class="nervous">
+  <div class="wrap">
+    <span class="eyebrow">Nervous about the dentist?</span>
+    <h2>You are not alone - and we can help</h2>
+    <p>We are very aware of the fear some people feel when considering dental treatment. Our goal, as a team, is to combine modern techniques with careful and sympathetic treatment in a friendly atmosphere. Working together, we can build your confidence.</p>
+    <p>The focus is on prevention, keeping treatment to a minimum through good oral health. And when treatment is needed, modern techniques and materials often mean simpler, less invasive procedures than in the past.</p>
+  </div>
+</section>
+
+<section id="dentists">
+  <div class="wrap">
+    <span class="eyebrow">Our dentists</span>
+    <h2>An experienced, GDC-registered team</h2>
+    <div class="dentist-grid">
+      <div class="dentist"><div class="avatar">JD</div><h3>Jason Drewett</h3><p class="gdc">GDC No. 67532</p></div>
+      <div class="dentist"><div class="avatar">SK</div><h3>Sonila Khaneh Zaei</h3><p class="gdc">GDC No. 265545</p></div>
+      <div class="dentist"><div class="avatar">HD</div><h3>Hugo Drewett</h3><p class="gdc">GDC No. 265201</p></div>
+      <div class="dentist"><div class="avatar">GK</div><h3>Grug Kenny</h3><p class="gdc">GDC No. 278285</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="patients">
+  <div class="wrap">
+    <span class="eyebrow">Happy patients</span>
+    <h2>What people tell us</h2>
+    <div class="quote-grid">
+      <blockquote><p>"Brilliant 5* experience at this Dentist. Polite and reassuring staff and nothing was a bother. The end result of my treatment is perfect."</p><cite>Patient review</cite></blockquote>
+      <blockquote><p>"Absolutely incredible dentists, had some bad experiences elsewhere and then I stumbled across this place and so happy with the results!"</p><cite>Patient review</cite></blockquote>
+      <blockquote><p>"An invaluable practice where outstanding expertise coexists with outstanding personal service. A very superb practice all round."</p><cite>Patient review</cite></blockquote>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <span class="eyebrow">Good to know</span>
+    <h2>Questions we hear a lot</h2>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false">Do you see NHS patients?<span class="chev">&#9662;</span></button>
+        <div class="faq-a" aria-hidden="true"><p>We provide care for adult patients on a private basis. We are also able to see the children of our registered adult patients within the NHS.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false">Can I spread the cost of my care?<span class="chev">&#9662;</span></button>
+        <div class="faq-a" aria-hidden="true"><p>Yes - we offer care within Denplan, the UK's largest dental plan provider, for an affordable monthly fee.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false">I am nervous about treatment. What can you do?<span class="chev">&#9662;</span></button>
+        <div class="faq-a" aria-hidden="true"><p>Tell us when you call. Our team takes a careful, sympathetic approach in a friendly atmosphere, and we will work at a pace that builds your confidence.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false">What about weekends and emergencies?<span class="chev">&#9662;</span></button>
+        <div class="faq-a" aria-hidden="true"><p>We are open Monday to Friday. Saturdays and Sundays are for emergencies only - call us on 01932 220449.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="visit">
+  <div class="wrap">
+    <span class="eyebrow">Visit us</span>
+    <h2>In the heart of Walton-on-Thames</h2>
+    <div class="visit-grid">
+      <div class="card">
+        <h3>Find us</h3>
+        <p>Walton Park Dental Practice<br>2a Walton Park<br>Walton-on-Thames<br>Surrey KT12 3ET</p>
+        <table class="hours">
+          <tr><td>Monday to Thursday</td><td>8:00am - 5:30pm</td></tr>
+          <tr><td>Friday</td><td>8:00am - 5:00pm</td></tr>
+          <tr><td>Saturday and Sunday</td><td>Emergencies only</td></tr>
+        </table>
+        <a class="btn btn-ghost" href="https://www.google.com/maps/search/?api=1&query=Walton+Park+Dental+Practice+2a+Walton+Park+Walton-on-Thames+KT12+3ET" target="_blank" rel="noopener">Open in Google Maps</a>
+      </div>
+      <div class="card">
+        <h3>Talk to us</h3>
+        <p>New patients, Denplan questions, or a treatment you would like to discuss - call or email any time.</p>
+        <a class="big-link" href="tel:+441932220449">01932 220449</a><br>
+        <a class="big-link" href="mailto:info@waltonparkdental.co.uk">info@waltonparkdental.co.uk</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Walton Park Dental Practice - 2a Walton Park, Walton-on-Thames, Surrey KT12 3ET</p>
+    <p>Private and Denplan care for adults - NHS places for children of registered adult patients.</p>
+    <p>Design concept by <a href="https://nickcaplan.co.uk">Websites by Nick</a></p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var items=document.querySelectorAll(".faq-item");
+  for(var j=0;j<items.length;j++){
+    (function(item){
+      var q=item.querySelector(".faq-q"),a=item.querySelector(".faq-a");
+      q.addEventListener("click",function(){
+        var open=item.classList.toggle("open");
+        q.setAttribute("aria-expanded",open?"true":"false");
+        a.setAttribute("aria-hidden",open?"false":"true");
+        if(open){
+          a.style.maxHeight=a.scrollHeight+"px";
+          a.addEventListener("transitionend",function h(){a.removeEventListener("transitionend",h);if(item.classList.contains("open")){a.style.maxHeight="none";}});
+        }else{
+          a.style.maxHeight=a.scrollHeight+"px";
+          void a.offsetHeight;
+          a.style.maxHeight="0";
+        }
+      });
+    })(items[j]);
+  }
+})();
+</script>
+
+</body>
+</html>
