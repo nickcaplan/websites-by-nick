@@ -1,0 +1,24 @@
+(() => {
+  const body = document.body;
+  const themeButton = document.querySelector('#theme');
+  const storage = {get(key){try{return localStorage.getItem(key);}catch{return null;}},set(key,value){try{localStorage.setItem(key,value);}catch{}}};
+  const setTheme = theme => {body.dataset.theme=theme;themeButton.textContent=theme==='dark'?'Light mode':'Dark mode';themeButton.setAttribute('aria-pressed',String(theme==='light'));};
+  setTheme(storage.get('wbn-concept-theme')==='light'?'light':'dark');
+  themeButton.addEventListener('click',()=>{const theme=body.dataset.theme==='dark'?'light':'dark';setTheme(theme);storage.set('wbn-concept-theme',theme);});
+  document.querySelectorAll('.concept-nav a').forEach(a=>{if(a.pathname===location.pathname)a.setAttribute('aria-current','page');});
+  const select=(name,value)=>document.querySelectorAll(`[data-${name}]`).forEach(b=>{if(b.tagName==='BUTTON')b.setAttribute('aria-pressed',String(b.dataset[name]===value));});
+  const personalities={calm:'Calm: warm tones, generous space and a quiet serif.',bold:'Bold: a strong headline, sharper shapes and an assertive layout.',playful:'Playful: a flipped composition, softer shapes and a little unexpected colour.'};
+  document.querySelectorAll('button[data-personality]').forEach(b=>b.addEventListener('click',()=>{document.querySelector('.mini').dataset.personality=b.dataset.personality;select('personality',b.dataset.personality);document.querySelector('#demo-status').textContent=personalities[b.dataset.personality];}));
+  document.querySelectorAll('button[data-device]').forEach(b=>b.addEventListener('click',()=>{document.querySelector('.device-frame').dataset.device=b.dataset.device;select('device',b.dataset.device);}));
+  const setVersion = version => {const frame=document.querySelector('.transform-frame');frame.dataset.version=version;select('version',version);document.querySelector('#change-title').textContent=version==='after'?'After: a site with a point of view':'Before: the content without the character';document.querySelector('#change-note').textContent=version==='after'?'Clear hierarchy, room to breathe, original illustration and a useful next step.':'The same words and next step, with generic type and little visual hierarchy. Deliberately plain, not a real client site.';document.querySelector('.transform-action').textContent=version==='after'?'See where it started ↗':'Give it some character ↗';};
+  document.querySelectorAll('button[data-version]').forEach(b=>b.addEventListener('click',()=>setVersion(b.dataset.version)));
+  document.querySelector('.transform-action')?.addEventListener('click',()=>setVersion(document.querySelector('.transform-frame').dataset.version==='before'?'after':'before'));
+  const projects={community:{name:'The Friends of Ashley',type:'Community & charity',description:'A clear view of fundraising, with events and practical information for families.',url:'https://www.thefriendsofashley.org/',desktop:'/assets/images/work/foa-fundraising-desk-1280w.webp',phone:'/assets/images/work/foa-fundraising-mob.webp'},composer:{name:'Samantha Fernando',type:'Arts & portfolio',description:"A composer's introduction, with clear routes to listen, explore the works catalogue and get in touch.",url:'https://www.samanthafernando.com/',desktop:'/assets/images/work/3-sam-home-desk-1280w.webp',phone:'/assets/images/work/2-sam-home-mob.webp'}};
+  let project='community',shot='desktop';
+  const renderProject=()=>{const p=projects[project],img=document.querySelector('#project-image');img.src=p[shot];img.alt=`${p.name}, ${shot} website screenshot`;document.querySelector('#project-name').textContent=p.name;document.querySelector('#project-type').textContent=p.type;document.querySelector('#project-description').textContent=p.description;document.querySelector('#project-link').href=p.url;document.querySelector('.portfolio-image').dataset.shot=shot;document.querySelector('.portfolio-image').scrollTop=0;select('project',project);select('shot',shot);};
+  document.querySelectorAll('button[data-project]').forEach(b=>b.addEventListener('click',()=>{project=b.dataset.project;renderProject();}));
+  document.querySelectorAll('button[data-shot]').forEach(b=>b.addEventListener('click',()=>{shot=b.dataset.shot;renderProject();}));
+  const directions={quiet:'A little room to think.',expressive:'A little bolder? Thought so.',playful:'That looks more like you.'};
+  const setDirection=direction=>{body.dataset.direction=direction;document.querySelector('#direction-status').textContent=directions[direction];select('direction',direction);};
+  if(body.dataset.concept==='art-direction'){const saved=storage.get('wbn-concept-direction');if(Object.hasOwn(directions,saved))setDirection(saved);document.querySelectorAll('button[data-direction]').forEach(b=>b.addEventListener('click',()=>{setDirection(b.dataset.direction);storage.set('wbn-concept-direction',b.dataset.direction);}));}
+})();
