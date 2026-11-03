@@ -10,7 +10,7 @@
   :root{
     --bg:#f7f4ee; --surface:#ffffff; --surface-tint:#efe9dd;
     --ink:#2b2419; --ink-soft:#5a5040; --muted:#6f6450;
-    --primary:#7a4a1e; --primary-deep:#5c3714; --on-primary:#fdf9f2;
+    --primary:#6b2b20; --primary-deep:#4c1c15; --on-primary:#fdf9f2;
     --accent:#2e4d3a;
     --line:rgba(122,74,30,.18); --line-strong:rgba(122,74,30,.38);
     --radius:14px; --radius-card:12px;
@@ -105,6 +105,27 @@
     .mobile-call{display:flex;position:sticky;bottom:0;z-index:30;gap:10px;padding:10px 14px;background:rgba(247,244,238,.97);border-top:1px solid var(--line)}
     .mobile-call .btn{flex:1;padding:12px}
   }
+  /* Wheatley's own wordmark and project photography anchor the revision. */
+  .brand{flex-shrink:0}
+  .wordmark{width:218px;height:auto}
+  .hero{position:relative;background:linear-gradient(90deg,rgba(20,27,19,.89),rgba(20,27,19,.46) 60%,rgba(20,27,19,.12)),url('assets/site/hero.jpg') center 52%/cover;padding:82px 0 88px;color:white}
+  .hero h1{font-weight:400;max-width:16ch;font-size:clamp(36px,4.5vw,56px)}
+  .hero p.lede{color:#fff;max-width:53ch}
+  .hero .eyebrow{color:#fff;background:transparent;border:0;padding:0;letter-spacing:1.8px}
+  .hero .btn-primary{background:#fff;color:var(--primary-deep)}
+  .hero .btn-primary:hover{background:#efe9dd}
+  .hero .btn-ghost{background:rgba(0,0,0,.15);color:#fff;border-color:#fff}
+  .hero .btn:focus-visible{outline:2px solid white;outline-offset:4px}
+  .stats{margin-top:28px;border-radius:4px}
+  .card,.person,.visit-card{min-width:0}
+  .project-card{padding:0 0 24px;overflow:hidden;border-radius:4px}
+  .project-card img{width:100%;height:250px;object-fit:cover;margin-bottom:22px}
+  .project-card .tag,.project-card h3,.project-card p{margin-left:22px;margin-right:22px}
+  .visit-card a{overflow-wrap:anywhere}
+  footer.site-footer .credit{color:#cbbfa9}
+  @media(max-width:1050px){nav a{padding:8px;font-size:13px}.wordmark{width:190px}}
+  @media(max-width:900px){.hero{padding:52px 0 58px;background-position:62% center}.hero p.lede{font-size:16px}.project-card img{height:auto;aspect-ratio:720/599}.wordmark{width:188px}.stats{margin-top:20px}.stat{flex-basis:140px;padding:14px}.hero h1{max-width:15ch}}
+  @media(max-width:360px){.wordmark{width:175px}.hero .actions .btn{width:100%}}
   @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
 </style>
 </head>
@@ -113,8 +134,7 @@
 <header>
   <div class="wrap header-in">
     <a class="brand" href="#top">
-      <span class="mark">W</span>
-      <span><span class="name">Wheatley &amp; Sons</span><span class="est">Builders since 1850</span></span>
+      <img class="wordmark" src="assets/site/logo.png" width="272" height="91" alt="Wheatley &amp; Sons Limited">
     </a>
     <nav aria-label="Main">
       <a href="#work">Our work</a>
@@ -130,21 +150,23 @@
 <main id="top">
 
   <section class="hero">
-    <div class="wrap">
+    <div class="wrap hero-content">
       <span class="eyebrow">Molesey, Surrey - family-run since 1850</span>
       <h1>Excellence in construction since 1850.</h1>
-      <p class="lede">We are Wheatley &amp; Sons, a family-run building firm proudly serving Molesey and the surrounding areas for more than 170 years - refurbishments, extensions and complete transformations, carried out by people who have spent their working lives here.</p>
+      <p class="lede">We are Wheatley &amp; Sons, a family-run building firm serving Molesey and the surrounding areas for more than 170 years. Refurbishments, extensions and complete transformations.</p>
       <div class="actions">
         <a class="btn btn-primary" href="tel:+442089795762">Call 0208 979 5762</a>
         <a class="btn btn-ghost" href="#contact">Request an estimate</a>
       </div>
+    </div>
+  </section>
+  <div class="wrap">
       <div class="stats">
         <div class="stat"><b>1850</b><span>Founded by Jesse Wheatley</span></div>
         <div class="stat"><b>170+</b><span>Years building in Molesey</span></div>
         <div class="stat"><b>FMB</b><span>Federation of Master Builders member</span></div>
       </div>
-    </div>
-  </section>
+  </div>
 
   <section id="work">
     <div class="wrap">
@@ -152,17 +174,20 @@
       <h2>Refurbishments and extensions, done properly</h2>
       <p class="section-intro">A few examples of work carried out by Wheatleys, in and around Molesey.</p>
       <div class="grid-3">
-        <div class="card">
+        <div class="card project-card">
+          <img src="assets/site/arnison.jpg" width="720" height="599" alt="Refurbished Victorian house on Arnison Road" loading="lazy">
           <span class="tag">Arnison Road</span>
           <h3>Victorian transformation</h3>
           <p>Just a few doors away from Wheatley's original yard, we transformed a Victorian property that had not been touched for over 50 years.</p>
         </div>
-        <div class="card">
+        <div class="card project-card">
+          <img src="assets/site/burleigh.jpg" width="720" height="599" alt="Brick house at Burleigh Park following extension and refurbishment" loading="lazy">
           <span class="tag">Burleigh Park</span>
           <h3>Extension and complete refurbishment</h3>
           <p>In keeping with the other houses on the beautiful Cobham Estate, an extension and complete refurbishment transformed this property.</p>
         </div>
-        <div class="card">
+        <div class="card project-card">
+          <img src="assets/site/esher.jpg" width="720" height="599" alt="Extended and refurbished house on Esher Road" loading="lazy">
           <span class="tag">Esher Road</span>
           <h3>Into the 21st century</h3>
           <p>A 1930s pebble-dashed house extended to the side and rear, with a complete refurb and facelift bringing it stunningly into the 21st century.</p>
@@ -265,7 +290,7 @@
   <div class="wrap">
     <p>Wheatley &amp; Sons Limited - 74 High Street, West Molesey, Surrey KT8 2LY</p>
     <p>Excellence in construction since 1850.</p>
-    <p class="credit">Design concept by <a href="https://websitesbynick.co.uk/">Websites by Nick</a> - not the live Wheatley &amp; Sons website.</p>
+    <p class="credit">Design concept by <a href="https://websitesbynick.co.uk/">Websites by Nick</a></p>
   </div>
 </footer>
 
