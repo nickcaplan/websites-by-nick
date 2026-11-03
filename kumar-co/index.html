@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <title>Kumar &amp; Co - Chartered Accountants, Walton-on-Thames</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <style>
   :root{
     --bg:#f5f9fc; --bg-tint:#e7f1f8; --surface:#ffffff;
@@ -428,6 +431,8 @@
   function setTheme(name){
     if(name!=="fresh"&&name!=="heritage"){name="fresh";}
     root.setAttribute("data-theme",name);
+    var fav=document.querySelector('link[rel="icon"][type="image/svg+xml"]');
+    if(fav){fav.setAttribute("href",name==="heritage"?"favicon-heritage.svg":"favicon.svg");}
     try{localStorage.setItem("kumar-preview-theme",name);}catch(e){}
     var btns=document.querySelectorAll("[data-set-theme]");
     for(var i=0;i<btns.length;i++){btns[i].setAttribute("aria-pressed",btns[i].getAttribute("data-set-theme")===name?"true":"false");}
