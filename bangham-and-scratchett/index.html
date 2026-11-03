@@ -8,11 +8,11 @@
 <meta name="description" content="Design concept for Bangham and Scratchett of London Limited, cobblers, key cutters and engravers at 191 Vicarage Road, Sunbury on Thames.">
 <style>
   :root{
-    --bg:#f7f4ee; --surface:#ffffff; --surface-tint:#efe9dd;
-    --ink:#2b2419; --ink-soft:#5a5040; --muted:#6f6450;
-    --primary:#7a4a1e; --primary-deep:#5c3714; --on-primary:#fdf9f2;
-    --accent:#2e4d3a;
-    --line:rgba(122,74,30,.18); --line-strong:rgba(122,74,30,.38);
+    --bg:#f3f2ec; --surface:#ffffff; --surface-tint:#e8e6dc;
+    --ink:#26241f; --ink-soft:#4f4c42; --muted:#686457;
+    --primary:#7d6218; --primary-deep:#5c490f; --on-primary:#fbf8ec;
+    --accent:#2c2a24;
+    --line:rgba(125,98,24,.2); --line-strong:rgba(125,98,24,.42);
     --radius:14px; --radius-card:12px;
     --font-head:Georgia,'Times New Roman',serif;
     --font-body:'Segoe UI',system-ui,-apple-system,sans-serif;
@@ -25,10 +25,10 @@
   a{color:var(--primary)}
   .wrap{max-width:1060px;margin:0 auto;padding:0 20px}
 
-  header{position:sticky;top:0;z-index:20;background:rgba(247,244,238,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+  header{position:sticky;top:0;z-index:20;background:rgba(243,242,236,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
   .header-in{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 20px}
   .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
-  .brand .mark{width:34px;height:34px;border-radius:8px;background:var(--primary);color:var(--on-primary);display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:700;font-size:15px}
+  .brand .mark{width:34px;height:34px;border-radius:4px;background:var(--ink);color:#d8c37a;display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:700;font-size:14px;border:1px solid #d8c37a}
   .brand .name{font-family:var(--font-head);font-weight:700;font-size:19px;letter-spacing:.2px}
   .brand .est{display:block;font-family:var(--font-body);font-weight:400;font-size:11.5px;color:var(--muted);letter-spacing:.6px;text-transform:uppercase}
   nav{display:flex;gap:4px;align-items:center;flex-wrap:wrap}
@@ -73,12 +73,12 @@
   .clients ul{list-style:none;display:flex;flex-wrap:wrap;gap:10px 26px;margin-top:12px}
   .clients li{font-family:var(--font-head);font-size:17px;color:var(--ink)}
 
-  .history-band{background:var(--accent);color:#eef3ef;border-radius:var(--radius);padding:36px 32px}
-  .history-band h2{color:#fff}
-  .history-band p{color:#d8e2da;max-width:64ch}
+  .history-band{background:var(--accent);color:#e9e7df;border-radius:var(--radius);padding:36px 32px;border:1px solid #45423a}
+  .history-band h2{color:#f5f2e6}
+  .history-band p{color:#cfccc0;max-width:64ch}
   .history-band .years{display:flex;gap:26px;margin-top:22px;flex-wrap:wrap}
-  .history-band .years div b{display:block;font-family:var(--font-head);font-size:22px;color:#fff}
-  .history-band .years div span{font-size:13px;color:#c3d2c7}
+  .history-band .years div b{display:block;font-family:var(--font-head);font-size:22px;color:#d8c37a}
+  .history-band .years div span{font-size:13px;color:#a8a496}
 
   .visit-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
   .visit-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);padding:24px}
@@ -90,17 +90,17 @@
   .visit-card li{padding:4px 0;border-bottom:1px dashed var(--line)}
   .visit-card li:last-child{border-bottom:none}
 
-  footer.site-footer{background:#241d13;color:#cbbfa9;padding:30px 0;font-size:14px}
-  footer.site-footer a{color:#e8dcc2}
+  footer.site-footer{background:#1f1d18;color:#c9c4b2;padding:30px 0;font-size:14px}
+  footer.site-footer a{color:#d8c37a}
   footer.site-footer p{margin-bottom:4px}
-  footer.site-footer .credit{margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.12);font-size:13px;color:#9d9077}
+  footer.site-footer .credit{margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.12);font-size:13px;color:#97917e}
 
   .mobile-call{display:none}
   @media (max-width:900px){
     nav{display:none}
     .grid-3,.visit-grid{grid-template-columns:1fr}
     .hero{padding:48px 0 40px}
-    .mobile-call{display:flex;position:sticky;bottom:0;z-index:30;gap:10px;padding:10px 14px;background:rgba(247,244,238,.97);border-top:1px solid var(--line)}
+    .mobile-call{display:flex;position:sticky;bottom:0;z-index:30;gap:10px;padding:10px 14px;background:rgba(243,242,236,.97);border-top:1px solid var(--line)}
     .mobile-call .btn{flex:1;padding:12px}
   }
   @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
@@ -147,7 +147,7 @@
     <div class="wrap">
       <p class="kicker">Our services</p>
       <h2>Repairs, keys and engraving under one roof</h2>
-      <p class="section-intro">Everything below is real text you can read, copy and search - because that is what your customers and Google need.</p>
+      <p class="section-intro">From a new heel to a full set of transponder keys, trophies to watch batteries - one shop on Vicarage Road covers it, and trade services are available on all repairs.</p>
       <div class="grid-3">
         <div class="card">
           <span class="tag">Shoe repairs</span>
@@ -233,7 +233,7 @@
   <section id="history" style="padding-top:0">
     <div class="wrap">
       <div class="history-band">
-        <p class="kicker" style="color:#e8dcc2">Our story</p>
+        <p class="kicker" style="color:#d8c37a">Our story</p>
         <h2>From Ashford to Sunbury</h2>
         <p>Quality Cobbler was first set up in Ashford, Middlesex in 1998. In 2024 we moved with Shaw Trophies to our new premises at 191 Vicarage Road in Sunbury on Thames, to form Bangham and Scratchett of London Limited. Our owner and director has been in the shoe repair trade for some 40 years and more - and as you can imagine, has pretty much seen it all.</p>
         <div class="years">
