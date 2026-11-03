@@ -17,7 +17,7 @@
   };
   const setTheme = (theme) => {
     body.dataset.theme = theme;
-    themeButton.textContent = theme === "dark" ? "Light mode" : "Dark mode";
+    themeButton.textContent = "Light mode";
     themeButton.setAttribute("aria-pressed", String(theme === "light"));
   };
   setTheme(storage.get("wbn-concept-theme") === "light" ? "light" : "dark");

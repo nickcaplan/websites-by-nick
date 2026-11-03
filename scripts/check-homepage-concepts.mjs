@@ -69,17 +69,27 @@ try {
       await check();
       const name = slug.slice(0, -1) || "compare";
       await page.screenshot({
+        animations: "disabled",
         path: `${outputDir}/concept-${name}-${width}.png`,
       });
       if (slug === "playground/") {
         for (const label of ["Bold", "Playful", "Calm"]) {
           await page.getByRole("button", { name: label, exact: true }).click();
+          if ((await page.locator(".mini").getAttribute("data-personality")) !== label.toLowerCase())
+            throw Error("personality state missing " + label);
+          if ((await page.getByRole("button", {name:label,exact:true}).getAttribute("aria-pressed")) !== "true")
+            throw Error("personality selection missing " + label);
+          if (!(await page.locator("#demo-status").innerText()).startsWith(label + ":"))
+            throw Error("personality announcement missing " + label);
           await check();
         }
         await page.getByRole("button", { name: "Phone", exact: true }).click();
+        if ((await page.locator(".device-frame").getAttribute("data-device")) !== "phone")
+          throw Error("phone frame state missing");
         await check();
         if (width === 1280)
           await page.screenshot({
+        animations: "disabled",
             path: `${outputDir}/concept-playground-phone-frame.png`,
           });
       }
@@ -94,6 +104,7 @@ try {
         await check();
         if (width === 1280)
           await page.screenshot({
+        animations: "disabled",
             path: `${outputDir}/concept-transformation-before.png`,
           });
         await page
@@ -120,6 +131,7 @@ try {
         await check();
         if (width === 1280)
           await page.screenshot({
+        animations: "disabled",
             path: `${outputDir}/concept-portfolio-composer-phone.png`,
           });
       }
@@ -129,6 +141,7 @@ try {
           await check();
           if (width === 1280)
             await page.screenshot({
+        animations: "disabled",
               path: `${outputDir}/concept-art-${label.toLowerCase()}.png`,
             });
         }
@@ -146,8 +159,11 @@ try {
         .getByRole("button", { name: "Light mode", exact: true })
         .click();
       await check();
+      if ((await page.locator("body").getAttribute("data-theme")) !== "light" ||
+          (await page.getByRole("button", {name:"Light mode",exact:true}).getAttribute("aria-pressed")) !== "true")
+        throw Error("light theme state missing");
       await page
-        .getByRole("button", { name: "Dark mode", exact: true })
+        .getByRole("button", { name: "Light mode", exact: true })
         .click();
       await page.keyboard.press("Tab");
       await check();

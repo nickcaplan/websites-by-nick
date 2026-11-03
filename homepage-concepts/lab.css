@@ -6,6 +6,7 @@
   --line: #ffffff28;
   --accent: #ee835f;
   --lime: #d6df9e;
+  --bar-ink: #18251e;
   --display: "Fraunces", Georgia, serif;
   --body: "DM Sans", Arial, sans-serif;
 }
@@ -30,6 +31,7 @@ body[data-theme="light"] {
   --line: #17231e30;
   --accent: #a43f27;
   --lime: #53642b;
+  --bar-ink: #f4f0e8;
 }
 a {
   color: inherit;
@@ -96,7 +98,7 @@ h2 {
   gap: 16px;
   padding: 7px max(24px, calc((100vw - 1280px) / 2));
   background: var(--lime);
-  color: #18251e;
+  color: var(--bar-ink);
   font-size: 12px;
 }
 .preview-bar a {
@@ -104,16 +106,13 @@ h2 {
   font-weight: 700;
 }
 .preview-bar button {
-  border: 1px solid #18251e55;
+  border: 1px solid currentColor;
   background: transparent;
   border-radius: 30px;
   padding: 3px 15px;
   min-height: 34px;
   font-size: 12px;
-  color: #18251e;
-}
-.preview-bar span {
-  opacity: 0.8;
+  color: var(--bar-ink);
 }
 .nav,
 .concept-nav,
@@ -837,7 +836,8 @@ body[data-direction="expressive"] {
   --muted: #4f5263;
   --line: #1e253d33;
   --accent: #b33826;
-  --lime: #dd562e;
+  --lime: #f08a64;
+  --bar-ink: #18251e;
 }
 body[data-direction="expressive"] h1 {
   font-family: var(--body);
@@ -880,6 +880,7 @@ body[data-direction="playful"] {
   --line: #30243e33;
   --accent: #a83936;
   --lime: #d6df9e;
+  --bar-ink: #18251e;
 }
 body[data-direction="playful"] h1 {
   font-style: italic;
