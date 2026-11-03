@@ -1,5 +1,11 @@
 import { test, expect } from '@playwright/test';
 
+// Fail closed: no check in this suite may send a real enquiry. Every page gets
+// a network-level abort for the live form endpoint before anything else runs.
+test.beforeEach(async ({ page }) => {
+  await page.route('**/formspree.io/**', route => route.abort());
+});
+
 for (const saved of [null, 'true', 'false']) test(`phone hides redundant preview toggle with saved choice ${saved}`, async ({ page }) => {
   if (saved !== null) await page.addInitScript(value => localStorage.setItem('nick-mobile', value), saved);
   for (const path of ['/', '/experience/', '/contact/']) {
