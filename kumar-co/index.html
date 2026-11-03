@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="fresh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Kumar &amp; Co - Chartered Accountants, Walton-on-Thames</title>
+<style>
+  :root{
+    --bg:#f5f9fc; --bg-tint:#e7f1f8; --surface:#ffffff;
+    --ink:#10212f; --ink-soft:#3b5063; --muted:#5d7285;
+    --primary:#006699; --primary-deep:#00314f; --on-primary:#ffffff;
+    --line:rgba(0,49,79,.16); --line-strong:rgba(0,49,79,.3);
+    --radius:12px; --radius-card:10px;
+    --shadow:0 1px 2px rgba(0,49,79,.06),0 8px 24px rgba(0,49,79,.08);
+    --font-display:"Inter","SF Pro Display","Segoe UI",system-ui,sans-serif;
+    --font-body:"Inter","SF Pro Text","Segoe UI",system-ui,sans-serif;
+    --eyebrow-transform:uppercase; --eyebrow-spacing:.14em; --eyebrow-weight:700;
+    --h-weight:750; --h-letter:-0.015em;
+    --accent:#00a3e0;
+  }
+  html[data-theme="heritage"]{
+    --bg:#f7f5f0; --bg-tint:#efe9dc; --surface:#fffdf8;
+    --ink:#1d2433; --ink-soft:#46506a; --muted:#6a7390;
+    --primary:#26354d; --primary-deep:#1a2434; --on-primary:#f7f5f0;
+    --line:rgba(38,53,77,.2); --line-strong:rgba(38,53,77,.38);
+    --radius:5px; --radius-card:4px;
+    --shadow:none;
+    --font-display:Georgia,"Iowan Old Style","Times New Roman",serif;
+    --font-body:"Segoe UI",system-ui,"Helvetica Neue",sans-serif;
+    --eyebrow-transform:uppercase; --eyebrow-spacing:.22em; --eyebrow-weight:600;
+    --h-weight:600; --h-letter:0;
+    --accent:#a68a53;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  section[id]{scroll-margin-top:6.75rem}
+  body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;padding-bottom:0}
+  a{color:var(--primary)}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+  .eyebrow{font-size:.72rem;font-weight:var(--eyebrow-weight);letter-spacing:var(--eyebrow-spacing);text-transform:var(--eyebrow-transform);color:var(--primary)}
+  h1,h2,h3{font-family:var(--font-display);font-weight:var(--h-weight);letter-spacing:var(--h-letter);line-height:1.15}
+  h2{font-size:clamp(1.5rem,3.4vw,2.05rem)}
+  .section{padding:56px 0}
+  .lead{color:var(--ink-soft);font-size:1.06rem;max-width:56ch}
+
+  /* Header */
+  .site-header{position:sticky;top:0;z-index:50;background:var(--surface);border-bottom:1px solid var(--line)}
+  .header-inner{display:flex;align-items:center;gap:14px;padding:12px 20px;max-width:1080px;margin:0 auto;flex-wrap:wrap}
+  .brand{display:inline-flex;align-items:center;gap:10px;flex-wrap:wrap;font-family:var(--font-display);font-weight:var(--h-weight);font-size:1.12rem;color:var(--ink);text-decoration:none;letter-spacing:var(--h-letter)}
+  .brand small{font-size:.68rem;letter-spacing:.08em;color:var(--muted);font-family:var(--font-body);font-weight:500}
+  .brand-logo{display:inline-block;background:var(--primary-deep);border-radius:8px;padding:5px 10px;line-height:0}
+  .brand-logo img{height:24px;width:auto;display:block}
+  .nav{display:none;gap:18px;margin-left:auto}
+  .nav a{color:var(--ink-soft);text-decoration:none;font-size:.92rem;font-weight:500}
+  .nav a:hover{color:var(--primary)}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--primary-deep);color:var(--on-primary);text-decoration:none;font-weight:650;font-size:.95rem;padding:11px 20px;border-radius:var(--radius);border:1px solid var(--primary-deep);cursor:pointer;font-family:var(--font-body);transition:filter .15s ease}
+  .btn:hover{filter:brightness(1.06)}
+  .btn.secondary{background:transparent;color:var(--primary);border:1px solid var(--line-strong)}
+  .btn.call-header{margin-left:auto;padding:9px 16px;font-size:.88rem}
+  .nav ~ .btn.call-header{margin-left:0}
+  .theme-switch{display:flex;align-items:center;gap:8px}
+  .preview-bar{display:flex;flex-wrap:wrap;row-gap:4px;align-items:center;justify-content:center;gap:10px;padding:6px 12px;background:var(--bg-tint);border-bottom:1px solid var(--line);font-size:.75rem;color:var(--muted)}
+  .preview-bar .pb-note{font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-size:.66rem}
+  .theme-switch .ts-label{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .ts-group{display:flex;border:1px solid var(--line-strong);border-radius:var(--radius);overflow:hidden}
+  .ts-group button{appearance:none;border:0;background:transparent;color:var(--ink-soft);font-family:var(--font-body);font-size:.78rem;font-weight:600;padding:6px 12px;min-height:44px;cursor:pointer}
+  .ts-group button[aria-pressed="true"]{background:var(--primary-deep);color:var(--on-primary)}
+
+  /* Hero */
+  .hero{padding:64px 0 52px;background:linear-gradient(180deg,var(--bg-tint),var(--bg))}
+  .hero-grid{display:grid;gap:32px;align-items:center}
+  .hero h1{font-size:clamp(1.9rem,5.2vw,3rem);margin:14px 0 16px}
+  .strapline{font-family:var(--font-display);font-style:italic;font-weight:600;font-size:1.05rem;color:var(--primary);margin:18px 0 0}
+  .hero .lead{margin-bottom:26px}
+  .cta-row{display:flex;gap:12px;flex-wrap:wrap}
+  .trust-chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
+  .chip{display:inline-flex;align-items:center;font-size:.82rem;font-weight:550;color:var(--muted);padding:2px 0}
+  .chip + .chip::before{content:"\00b7";margin-right:10px;color:var(--muted)}
+  .chip svg{flex:none}
+  .hero-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);box-shadow:var(--shadow);padding:26px}
+  .hero-card h3{font-size:1.06rem;margin-bottom:6px}
+  .hero-card p{color:var(--ink-soft);font-size:.94rem;margin-bottom:16px}
+  .hero-card .tel{font-family:var(--font-display);font-size:1.5rem;font-weight:700;color:var(--primary);text-decoration:none;display:block;margin-bottom:4px}
+  .hero-card .hours{font-size:.82rem;color:var(--muted);margin-bottom:16px}
+  .hero-card ul{list-style:none;display:grid;gap:8px;font-size:.9rem;color:var(--ink-soft)}
+  .hero-card li{display:flex;gap:8px;align-items:flex-start}
+  .hero-card li::before{content:"";flex:none;width:7px;height:7px;border-radius:50%;background:var(--primary);margin-top:7px}
+
+  /* Promises */
+  .promise-grid{display:grid;gap:12px;margin-top:26px;grid-template-columns:1fr}
+  .promise{display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);padding:15px 16px}
+  .promise .n{flex:none;font-family:var(--font-display);font-size:.8rem;font-weight:700;color:var(--on-primary);background:var(--primary-deep);width:26px;height:26px;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;margin-top:1px}
+  .promise p{font-size:.92rem;color:var(--ink-soft)}
+  .promise p strong{display:block;color:var(--ink);font-weight:650;margin-bottom:2px;font-size:.95rem}
+
+  /* Services */
+  .services-grid{display:grid;gap:16px;margin-top:26px;grid-template-columns:1fr}
+  .service{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);box-shadow:var(--shadow);padding:24px}
+  .service h3{font-size:1.08rem;margin:12px 0 8px}
+  .service p{color:var(--ink-soft);font-size:.93rem}
+  .service .icon{width:40px;height:40px;border-radius:var(--radius);background:var(--bg-tint);display:flex;align-items:center;justify-content:center;color:var(--primary)}
+
+  /* Team */
+  .team-grid{display:grid;gap:16px;margin-top:26px;grid-template-columns:1fr}
+  .person{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);padding:20px;display:flex;gap:15px;align-items:flex-start}
+  .monogram{flex:none;width:48px;height:48px;border-radius:var(--radius);background:var(--primary);color:var(--on-primary);font-family:var(--font-display);font-weight:700;display:flex;align-items:center;justify-content:center;font-size:1rem}
+  .person h3{font-size:1rem}
+  .person .role{font-size:.78rem;font-weight:600;color:var(--primary);letter-spacing:.06em;text-transform:uppercase;margin:3px 0 7px}
+  .person p{font-size:.88rem;color:var(--ink-soft)}
+
+  /* Guarantee band */
+  .band{background:var(--primary-deep);color:var(--on-primary);border-radius:var(--radius-card);padding:34px 30px;margin-top:8px}
+  .band .eyebrow{color:var(--accent)}
+  .band blockquote{font-family:var(--font-display);font-size:clamp(1.15rem,2.6vw,1.5rem);line-height:1.4;margin:12px 0 10px}
+  .band .attribution{font-size:.84rem;opacity:.85}
+
+  /* FAQ */
+  .faq-list{margin-top:26px;border-top:1px solid var(--line-strong)}
+  .faq-item{border-bottom:1px solid var(--line-strong)}
+  .faq-q{width:100%;appearance:none;background:none;border:0;text-align:left;font-family:var(--font-body);font-size:1rem;font-weight:650;color:var(--ink);padding:18px 4px;cursor:pointer;display:flex;justify-content:space-between;gap:14px;align-items:center}
+  .faq-q .chev{flex:none;transition:transform .2s ease;color:var(--primary)}
+  .faq-item.open .chev{transform:rotate(180deg)}
+  .faq-a{max-height:0;overflow:hidden;transition:max-height .25s ease}
+  .faq-a p{padding:0 4px 18px;color:var(--ink-soft);font-size:.94rem;max-width:64ch}
+
+  /* Contact */
+  .contact-grid{display:grid;gap:28px;margin-top:26px}
+  .contact-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);box-shadow:var(--shadow);padding:26px}
+  .contact-card h3{font-size:1.1rem;margin-bottom:14px}
+  .contact-lines{display:grid;gap:12px;font-size:.94rem}
+  .contact-lines .row{display:flex;gap:11px;align-items:flex-start;color:var(--ink-soft)}
+  .contact-lines svg{flex:none;color:var(--primary);margin-top:2px}
+  .contact-lines a{color:var(--primary);font-weight:600;text-decoration:none}
+  .contact-lines a:hover{text-decoration:underline}
+  .consult{display:grid;gap:14px}
+  .field label{display:block;font-size:.82rem;font-weight:650;color:var(--ink);margin-bottom:5px}
+  .field input,.field textarea{width:100%;font-family:var(--font-body);font-size:.95rem;color:var(--ink);background:var(--bg);border:1px solid var(--line-strong);border-radius:var(--radius);padding:11px 13px}
+  .field input:focus,.field textarea:focus{outline:2px solid var(--primary);outline-offset:1px}
+  .field .error{display:none;font-size:.78rem;color:#b3352b;margin-top:4px}
+  .field.invalid input,.field.invalid textarea{border-color:#b3352b}
+  .field.invalid .error{display:block}
+  .form-note{font-size:.8rem;color:var(--muted)}
+  .form-confirm{display:none;background:var(--bg-tint);border:1px solid var(--line-strong);border-radius:var(--radius-card);padding:18px;font-size:.92rem;color:var(--ink-soft)}
+  .form-confirm strong{color:var(--ink)}
+
+  footer.site-footer{border-top:1px solid var(--line);padding:30px 0 40px;font-size:.82rem;color:var(--muted)}
+  footer .foot-grid{display:grid;gap:8px}
+  .concept-note{margin-top:14px;font-size:.78rem;color:var(--muted);border-top:1px dashed var(--line-strong);padding-top:14px}
+  .concept-note a{color:var(--primary);font-weight:600;text-decoration:underline;text-underline-offset:2px}
+  .concept-note a:focus-visible{outline:2px solid var(--primary);outline-offset:2px;border-radius:2px}
+
+  /* Heritage theme: formal centred layout, brass rules, no call bar */
+  html[data-theme="heritage"] body::before{content:"";display:block;height:6px;background:var(--primary-deep)}
+  html[data-theme="heritage"] .hero{background:var(--bg);text-align:center;border-bottom:3px double var(--accent)}
+  html[data-theme="heritage"] .hero-grid{grid-template-columns:1fr}
+  html[data-theme="heritage"] .hero .lead{margin-left:auto;margin-right:auto}
+  html[data-theme="heritage"] .cta-row,html[data-theme="heritage"] .trust-chips{justify-content:center}
+  html[data-theme="heritage"] .hero-card{display:none}
+  html[data-theme="heritage"] .section .wrap > .eyebrow{display:block;text-align:center}
+  html[data-theme="heritage"] .section h2{text-align:center}
+  html[data-theme="heritage"] .section .wrap > .lead{margin-left:auto;margin-right:auto;text-align:center}
+  html[data-theme="heritage"] .btn{background:#7a6236;border-color:#5f4c28;color:#ffffff}
+  html[data-theme="heritage"] .btn.secondary{background:transparent;color:var(--primary);border-color:var(--line-strong)}
+  html[data-theme="heritage"] .call-bar{display:none}
+  html[data-theme="heritage"] .form-confirm,html[data-theme="heritage"] .form-note{background:var(--bg-tint)}
+
+  .form-note{border:1px dashed var(--line-strong);border-radius:var(--radius);padding:10px 12px;background:var(--bg-tint);color:var(--ink-soft)}
+  .call-bar{display:none}
+  @media (max-width:719px){
+    html[data-theme="heritage"] body{padding-bottom:0}
+    .hero .eyebrow{letter-spacing:.14em}
+    .btn.call-header{display:none}
+    .section{padding:44px 0}
+    body{padding-bottom:4rem}
+    .hero-card{padding:18px}
+    .hero-card .tel,.hero-card ul{display:none}
+    .hero-card .hours{margin-bottom:0}
+    .promise-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+    .promise{min-width:0}
+    .promise p{overflow-wrap:anywhere}
+    .promise{padding:11px 12px;gap:9px}
+    .promise .n{width:22px;height:22px;font-size:.72rem}
+    .promise p{font-size:.8rem}
+    .promise p strong{font-size:.84rem}
+    .cta-row{flex-direction:column;align-items:stretch}
+    .cta-row .btn{width:100%}
+    .trust-chips{flex-direction:column;gap:6px;margin-top:20px}
+    .chip + .chip::before{content:none}
+    html[data-theme="heritage"] .trust-chips{align-items:center}
+    .call-bar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:60;background:var(--surface);border-top:1px solid var(--line-strong);padding:10px 14px calc(10px + env(safe-area-inset-bottom));gap:10px}
+    .call-bar .btn{flex:1;min-width:0;padding:12px 10px;font-size:.95rem}
+    .call-bar .btn.secondary{flex:.7}
+    footer.site-footer{padding-bottom:20px}
+  }
+  @media (max-width:359px){
+    .promise-grid{grid-template-columns:1fr}
+  }
+  @media (min-width:720px){
+    .nav{display:flex}
+    .hero-grid{grid-template-columns:1.25fr .9fr}
+    .promise-grid{grid-template-columns:1fr 1fr}
+    .services-grid{grid-template-columns:repeat(2,1fr)}
+    .team-grid{grid-template-columns:repeat(2,1fr)}
+    .contact-grid{grid-template-columns:.9fr 1.1fr}
+  }
+  @media (min-width:1000px){
+    .services-grid{grid-template-columns:repeat(3,1fr)}
+    .team-grid{grid-template-columns:repeat(3,1fr)}
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="#top" aria-label="Kumar and Co - back to top"><span class="brand-logo"><img src="logo.png" alt="Kumar and Co - chartered accountants" width="378" height="119"></span><small>Chartered Accountants - Walton-on-Thames</small></a>
+    <nav class="nav" aria-label="Sections">
+      <a href="#promises">Promises</a>
+      <a href="#services">Services</a>
+      <a href="#team">Team</a>
+      <a href="#faq">FAQ</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <a class="btn call-header" href="tel:+441932247906">Call 01932 247906</a>
+  </div>
+</header>
+<div class="preview-bar">
+  <span class="pb-note">Design preview</span>
+  <div class="theme-switch" role="group" aria-label="Preview style">
+    <span class="ts-label">Style</span>
+    <div class="ts-group">
+      <button type="button" data-set-theme="fresh" aria-pressed="true">Fresh</button>
+      <button type="button" data-set-theme="heritage" aria-pressed="false">Heritage</button>
+    </div>
+  </div>
+</div>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="eyebrow">Family-run accountants - since 1975</span>
+        <h1>Your accounts, handled like family.</h1>
+        <p class="lead">We are a family-run firm of chartered accountants in Walton-on-Thames, looking after owner-managed businesses and families across North Surrey and inside the M25. Direct partner access, fixed fees agreed in advance, and advice in plain English.</p>
+        <div class="cta-row">
+          <a class="btn" href="tel:+441932247906">Call 01932 247906</a>
+          <a class="btn secondary" href="#contact">Request a consultation</a>
+        </div>
+        <div class="trust-chips">
+          <span class="chip">Established 1975</span>
+          <span class="chip">ICAEW member firm</span>
+          <span class="chip">Fixed fees, agreed in advance</span>
+        </div>
+        <p class="strapline">Accounting for Life</p>
+      </div>
+      <aside class="hero-card">
+        <h3>Talk to a partner today</h3>
+        <p>Free initial consultation. You will speak with a partner, not a call handler.</p>
+        <a class="tel" href="tel:+441932247906">01932 247906</a>
+        <div class="hours">Office hours, Monday to Friday. Messages answered within 24 hours.</div>
+        <ul>
+          <li>Direct partner access from day one</li>
+          <li>One letter to switch - we handle the transfer</li>
+          <li>Fee agreed before work begins</li>
+        </ul>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section" id="promises">
+    <div class="wrap">
+      <span class="eyebrow">Our service standards</span>
+      <h2>Ten promises, in writing</h2>
+      <p class="lead" style="margin-top:12px">These are the commitments we make to every client, in writing.</p>
+      <div class="promise-grid">
+        <div class="promise"><span class="n">1</span><p><strong>Personal attention</strong>You deal with a partner who knows your affairs, not a rotating cast of juniors.</p></div>
+        <div class="promise"><span class="n">2</span><p><strong>Fast response</strong>Calls and emails returned within 24 hours, usually sooner.</p></div>
+        <div class="promise"><span class="n">3</span><p><strong>Annual review meetings</strong>Included as standard, not billed as extras.</p></div>
+        <div class="promise"><span class="n">4</span><p><strong>Fixed fees agreed in advance</strong>A 12-month fee settled before work starts, paid monthly.</p></div>
+        <div class="promise"><span class="n">5</span><p><strong>Early, proactive tax advice</strong>Opportunities raised before deadlines, not after.</p></div>
+        <div class="promise"><span class="n">6</span><p><strong>No teaser quotes</strong>The agreed fee is the fee you pay.</p></div>
+        <div class="promise"><span class="n">7</span><p><strong>Plain English</strong>Advice without jargon, so decisions are yours to make.</p></div>
+        <div class="promise"><span class="n">8</span><p><strong>Calls returned when promised</strong>If we say Tuesday, it is Tuesday.</p></div>
+        <div class="promise"><span class="n">9</span><p><strong>Painless switching</strong>One letter from you; we handle the transfer, your previous accountant and HMRC.</p></div>
+        <div class="promise"><span class="n">10</span><p><strong>A 100% risk free guarantee</strong>All our work is covered, quoted below.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="services" style="background:var(--bg-tint)">
+    <div class="wrap">
+      <span class="eyebrow">Services</span>
+      <h2>What we take off your desk</h2>
+      <div class="services-grid">
+        <div class="service">
+          <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v14"/><path d="M8 7h8M8 11h8M8 15h5"/></svg></div>
+          <h3>Accounting &amp; compliance</h3>
+          <p>Annual accounts, bookkeeping and statutory filings handled on schedule, so nothing lands late.</p>
+        </div>
+        <div class="service">
+          <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M5 8c0-2 3-3 7-3s7 1 7 3-3 3-7 3-7 1-7 3 3 3 7 3 7-1 7-3"/></svg></div>
+          <h3>Tax planning</h3>
+          <p>Personal and company tax planned early in the year, with opportunities raised proactively.</p>
+        </div>
+        <div class="service">
+          <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg></div>
+          <h3>Growth &amp; business advice</h3>
+          <p>Practical advice for owner-managed businesses, from pricing and cash flow to the next stage of growth.</p>
+        </div>
+        <div class="service">
+          <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><path d="M16 4.5h5M16 8.5h5"/></svg></div>
+          <h3>Payroll &amp; pensions</h3>
+          <p>Payroll run on time and workplace pension compliance managed end to end.</p>
+        </div>
+        <div class="service">
+          <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="14" rx="2"/><path d="M3 10h18"/><path d="M7 15h4"/></svg></div>
+          <h3>Fixed fees, transparent pricing</h3>
+          <p>A fixed annual fee agreed in advance and paid monthly - no surprise bills, no teaser rates.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="team">
+    <div class="wrap">
+      <span class="eyebrow">The team</span>
+      <h2>People you will know by name</h2>
+      <div class="team-grid">
+        <div class="person"><span class="monogram">SK</span><div><h3>Susan Kumar</h3><div class="role">Partner - ACA</div><p>Chartered accountant with senior experience at KPMG and Disney. Leads client relationships and the firm's service standards.</p></div></div>
+        <div class="person"><span class="monogram">JB</span><div><h3>Jas S. Bhohi</h3><div class="role">MAAT MBA MCIM</div><p>Qualified with chartered certified accountants and a background at Abbey National and BTS. Advises owner-managed businesses on tax and growth.</p></div></div>
+        <div class="person"><span class="monogram">RG</span><div><h3>Russell Granat</h3><div class="role">ACA</div><p>Over 35 years advising partnerships and family businesses, alongside his wife Joy.</p></div></div>
+        <div class="person"><span class="monogram">JG</span><div><h3>Joy Granat</h3><div class="role">ACA</div><p>Over 35 years advising partnerships and family businesses, alongside her husband Russell.</p></div></div>
+        <div class="person"><span class="monogram">SK</span><div><h3>Shub Kumar</h3><div class="role">Founder - ACMA</div><p>Founded the practice in 1975. Specialises in grant funding, with multi-million-pound claims secured for Surrey SMEs.</p></div></div>
+      </div>
+      <div class="band" style="margin-top:28px">
+        <span class="eyebrow">Our guarantee, in writing</span>
+        <blockquote>"If at any time you are not completely happy with our work please discuss it with us. If we really can't sort the issue for you then don't pay for the part you're not happy with. Ask for it at any time within 30 days of the work and we won't expect payment."</blockquote>
+        <div class="attribution">Our published 100% risk free guarantee.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="faq" style="background:var(--bg-tint)">
+    <div class="wrap">
+      <span class="eyebrow">Questions, answered</span>
+      <h2>Straight answers</h2>
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-q" type="button" aria-expanded="false" aria-controls="faq-a-1">Is switching accountant complicated?<svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button><div class="faq-a" id="faq-a-1" aria-hidden="true"><p>No. It takes one letter from you. We handle the whole transfer, including notifying your previous accountant and HMRC, so there is no awkward conversation for you to have.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button" aria-expanded="false" aria-controls="faq-a-2">How much will it cost?<svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button><div class="faq-a" id="faq-a-2" aria-hidden="true"><p>A fixed fee for 12 months, agreed in advance after a free consultation and paid monthly. The agreed fee is the fee you pay - we do not quote low and raise the price later.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button" aria-expanded="false" aria-controls="faq-a-3">When should tax planning start?<svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button><div class="faq-a" id="faq-a-3" aria-hidden="true"><p>As early as possible. Planning before the tax year end gives you the most options, and we raise opportunities proactively rather than after the deadline has passed.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button" aria-expanded="false" aria-controls="faq-a-4">Will I deal with a different person each time?<svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button><div class="faq-a" id="faq-a-4" aria-hidden="true"><p>No. You get direct partner access and a named contact who knows your affairs from day one.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button" aria-expanded="false" aria-controls="faq-a-5">What if I am not happy with the service?<svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button><div class="faq-a" id="faq-a-5" aria-hidden="true"><p>Our published promise is a 100% risk free guarantee: if you are not completely happy with the work and we cannot sort the issue, you do not pay for the part you are not happy with. It is quoted above, word for word.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="contact">
+    <div class="wrap">
+      <span class="eyebrow">Contact</span>
+      <h2>Start with a free consultation</h2>
+      <div class="contact-grid">
+        <div class="contact-card">
+          <h3>Kumar &amp; Co</h3>
+          <div class="contact-lines">
+            <div class="row"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.13.96.36 1.9.7 2.8a2 2 0 0 1-.45 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.45c.9.34 1.84.57 2.8.7a2 2 0 0 1 1.7 2.05Z"/></svg><a href="tel:+441932247906">01932 247906</a></div>
+            <div class="row"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg><a href="mailto:info@kumar-co.co.uk">info@kumar-co.co.uk</a></div>
+            <div class="row"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg><span>Springfield House, 23 Oatlands Drive,<br>Weybridge, Surrey KT13 9LZ</span></div>
+            <div class="row"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l19-8-8 19-2.5-8.5L3 11z"/></svg><a href="https://www.google.com/maps/search/?api=1&amp;query=Springfield+House+23+Oatlands+Drive+Weybridge+KT13+9LZ" target="_blank" rel="noopener">Get directions</a></div>
+          </div>
+        </div>
+        <div class="contact-card">
+          <h3>Request a consultation</h3>
+          <div class="consult" id="consult-form">
+            <div class="field" id="f-name">
+              <label for="in-name">Your name</label>
+              <input id="in-name" name="name" type="text" autocomplete="name" aria-describedby="err-name" required>
+              <div class="error" id="err-name">Please enter your name.</div>
+            </div>
+            <div class="field" id="f-contact">
+              <label for="in-contact">Email or phone</label>
+              <input id="in-contact" name="contact" type="text" autocomplete="email" aria-describedby="err-contact" required>
+              <div class="error" id="err-contact">Please enter an email address or phone number.</div>
+            </div>
+            <div class="field" id="f-msg">
+              <label for="in-msg">What would you like help with?</label>
+              <textarea id="in-msg" name="message" rows="4" aria-describedby="err-msg" required></textarea>
+              <div class="error" id="err-msg">Please add a sentence or two so the right partner can reply.</div>
+            </div>
+            <p class="form-note"><strong>Design preview - this form does not send yet.</strong> On the live site it would go directly to the practice, with no obligation and no teaser quotes.</p>
+            <button class="btn" type="button" id="consult-submit">Try the preview form</button>
+            <div class="form-confirm" id="form-confirm" role="status" tabindex="-1"><strong>Thank you.</strong> Concept preview - on the live site this enquiry would reach the practice. Nothing was sent.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div class="call-bar">
+  <a class="btn" href="tel:+441932247906">Call now</a>
+  <a class="btn secondary" href="#contact">Enquire</a>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap foot-grid">
+    <span>Kumar &amp; Co - Chartered Accountants - Springfield House, 23 Oatlands Drive, Weybridge, Surrey KT13 9LZ</span>
+    <span>Registered in England, company no. 06544677 - ICAEW member firm</span>
+    <div class="concept-note">Design concept by <a href="https://websitesbynick.co.uk/">Websites by Nick</a></div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var root=document.documentElement;
+  function setTheme(name){
+    if(name!=="fresh"&&name!=="heritage"){name="fresh";}
+    root.setAttribute("data-theme",name);
+    try{localStorage.setItem("kumar-preview-theme",name);}catch(e){}
+    var btns=document.querySelectorAll("[data-set-theme]");
+    for(var i=0;i<btns.length;i++){btns[i].setAttribute("aria-pressed",btns[i].getAttribute("data-set-theme")===name?"true":"false");}
+  }
+  var initial="fresh";
+  try{
+    var m=/[?&]theme=(fresh|heritage|a|b)(?:&|$)/.exec(location.search);
+    if(m){initial=(m[1]==="heritage"||m[1]==="a")?"heritage":"fresh";}
+    else if(/[?&]theme=/.test(location.search)){initial="fresh";}
+    else{var saved=localStorage.getItem("kumar-preview-theme");if(saved){initial=saved;}}
+  }catch(e){}
+  setTheme(initial);
+  var btns=document.querySelectorAll("[data-set-theme]");
+  for(var i=0;i<btns.length;i++){btns[i].addEventListener("click",function(){setTheme(this.getAttribute("data-set-theme"));});}
+
+  var items=document.querySelectorAll(".faq-item");
+  for(var j=0;j<items.length;j++){
+    (function(item){
+      var q=item.querySelector(".faq-q"),a=item.querySelector(".faq-a");
+      q.addEventListener("click",function(){
+        var open=item.classList.toggle("open");
+        q.setAttribute("aria-expanded",open?"true":"false");
+        a.setAttribute("aria-hidden",open?"false":"true");
+        if(open){
+          a.style.maxHeight=a.scrollHeight+"px";
+          a.addEventListener("transitionend",function h(){a.removeEventListener("transitionend",h);if(item.classList.contains("open")){a.style.maxHeight="none";}});
+        }else{
+          a.style.maxHeight=a.scrollHeight+"px";
+          void a.offsetHeight;
+          a.style.maxHeight="0";
+        }
+      });
+    })(items[j]);
+  }
+
+  var form=document.getElementById("consult-form");
+  if(form){
+    var validate=function(){
+      var ok=true,firstBad=null;
+      var checks=[
+        ["f-name",function(v){return v.trim().length>1;}],
+        ["f-contact",function(v){v=v.trim();return /^\S+@\S+\.\S+$/.test(v)||/^[+()\-\s\d]{7,}$/.test(v);}],
+        ["f-msg",function(v){return v.trim().length>5;}]
+      ];
+      for(var k=0;k<checks.length;k++){
+        var field=document.getElementById(checks[k][0]);
+        var input=field.querySelector("input,textarea");
+        var valid=checks[k][1](input.value||"");
+        field.classList.toggle("invalid",!valid);
+        input.setAttribute("aria-invalid",valid?"false":"true");
+        if(!valid){ok=false;if(!firstBad){firstBad=input;}}
+      }
+      if(ok){
+        form.querySelectorAll("input,textarea,button").forEach(function(el){el.disabled=true;});
+        var c=document.getElementById("form-confirm");
+        c.style.display="block";
+        c.focus();
+      }else if(firstBad){firstBad.focus();}
+    };
+    document.getElementById("consult-submit").addEventListener("click",validate);
+    form.querySelectorAll("input").forEach(function(el){el.addEventListener("keydown",function(ev){if(ev.key==="Enter"&&!ev.isComposing&&ev.keyCode!==229){ev.preventDefault();validate();}});});
+  }
+})();
+</script>
+</body>
+</html>
