@@ -7,14 +7,17 @@
 <title>Walton Firs Activity Centre - Outdoor Adventure for Groups in Cobham, Surrey</title>
 <meta name="description" content="Design concept for Walton Firs Activity Centre, an outdoor activity centre in Cobham, Surrey offering instructed activities, camping and residential stays for schools, uniformed groups, youth organisations and corporate teams.">
 <style>
+  @font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:700;font-display:swap;src:url('fonts/roboto-condensed-700.woff2') format('woff2')}
+  @font-face{font-family:Inkfree;font-display:swap;src:url('fonts/inkfree.ttf') format('truetype')}
+
   :root{
     --bg:#f5f2e9; --surface:#fffdf6; --surface-tint:#e9e5d3;
     --ink:#24301f; --ink-soft:#46543c; --muted:#5c6a4e;
-    --primary:#2e5233; --primary-deep:#1f3b24; --on-primary:#f3f6ee;
+    --primary:#086637; --primary-deep:#074d2b; --on-primary:#f3f6ee;
     --accent:#8a5a2b; --accent-soft:#c9a15f;
     --line:rgba(46,82,51,.2); --line-strong:rgba(46,82,51,.45);
     --radius:16px; --radius-card:12px;
-    --font-head:Georgia,'Times New Roman',serif;
+    --font-head:'Roboto Condensed','Arial Narrow',sans-serif;
     --font-body:'Segoe UI',system-ui,-apple-system,sans-serif;
   }
   *{box-sizing:border-box;margin:0;padding:0}
@@ -108,13 +111,39 @@
     nav{order:3;flex-basis:100%;justify-content:center}
     nav a{padding:8px 9px;font-size:14px}
   }
+
+  .brand img{width:65px;height:74px;object-fit:contain;flex-shrink:0}
+  .brand .name{font-size:24px}
+  .hero{background:var(--primary);color:white;padding:42px 0}
+  .hero h1{font-size:clamp(34px,4.8vw,55px);max-width:34rem}
+  .hero .eyebrow,.hero p.lede{color:#fff}
+  .hero .hero-grid{grid-template-columns:1fr 1fr;gap:30px}
+  .tagline{font-family:Inkfree,cursive;font-size:26px;line-height:1.3;color:#f6f231;margin:0 0 24px;max-width:32rem}
+  .hero .btn-primary{background:#f6f231;color:#17321d}
+  .hero .btn-primary:hover{background:#fffda5;color:#17321d}
+  .hero .btn-ghost{border-color:#c4dfce;color:#fff}
+  .hero .btn-ghost:hover{background:#074d2b;color:#fff}
+  .hero figure img{display:block;width:100%;height:410px;object-fit:cover;border-radius:8px}
+  .hero figcaption{color:#e0f1e6;font-size:13px;margin-top:8px}
+  .photo-pair{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:26px}
+  .photo-pair img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:8px}
+  .photo-pair figcaption{font-size:14px;margin-top:6px}
+  .stay-card img{width:100%;height:200px;object-fit:cover;border-radius:6px;margin-bottom:14px}
+  .resource-links{display:flex;flex-wrap:wrap;gap:12px 24px;margin-top:22px}
+  .activities a{color:#f6f231}
+  .booking p{max-width:46rem}
+  a:focus-visible{outline:3px solid #b16b12;outline-offset:4px}
+  nav a.btn-primary:hover{color:var(--on-primary)}
+  @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+  @media(max-width:950px){.header-in{flex-wrap:wrap}nav{order:3;width:100%;justify-content:center}.brand{flex:1}.header-in>.btn{font-size:14px;padding:10px 14px}}
+  @media(max-width:700px){.hero .hero-grid,.photo-pair{grid-template-columns:1fr}.hero figure img{height:auto;aspect-ratio:3/2}.hero{padding:30px 0}.tagline{font-size:24px}.header-in{padding:8px 20px}.brand img{width:44px;height:50px}.brand .name{font-size:23px}.header-in>.btn{max-width:136px;font-size:13px;padding:8px 12px}.brand .est{display:none}nav{justify-content:space-between;gap:0}nav a{padding:8px 6px;font-size:14px}.fact-list li{display:block}.fact-list .k{display:block}.visit-card{padding:22px 18px}.visit-card a{overflow-wrap:anywhere}section[id]{scroll-margin-top:135px}}
 </style>
 </head>
 <body>
 <header>
   <div class="wrap header-in">
-    <a class="brand" href="#top" aria-label="Walton Firs Activity Centre - back to top">
-      <span class="mark" aria-hidden="true">WF</span>
+    <a class="brand" href="#" aria-label="Walton Firs Activity Centre - back to top">
+      <img src="images/logo.png" width="1387" height="1583" alt="Walton Firs tree and rope logo">
       <span><span class="name">Walton Firs</span><span class="est">Activity Centre - Cobham, Surrey</span></span>
     </a>
     <nav aria-label="Sections">
@@ -123,7 +152,7 @@
       <a href="#stay">Stay</a>
       <a href="#visit">Visit us</a>
     </nav>
-    <a class="btn btn-primary" href="tel:+441932863243">Call 01932 863243</a>
+    <a class="btn btn-primary" href="tel:+441932863243">Call us</a>
   </div>
 </header>
 
@@ -132,21 +161,15 @@
     <div class="wrap hero-grid">
       <div>
         <p class="eyebrow">Outdoor activity centre - Cobham, Surrey</p>
-        <h1>Experience outdoor fun, a stone's throw from the A3 and M25</h1>
+        <h1>Outdoor learning. Woodland adventures.</h1>
+        <p class="tagline">Where young people learn, develop and enjoy in the natural environment</p>
         <p class="lede">Instructed activities, woodland camping and residential stays for schools, uniformed groups, youth organisations, parties and corporate teams.</p>
         <div class="hero-cta">
           <a class="btn btn-primary" href="tel:+441932863243">Call 01932 863243</a>
           <a class="btn btn-ghost" href="mailto:info@waltonfirs.co.uk">Email info@waltonfirs.co.uk</a>
         </div>
       </div>
-      <div class="hero-panel">
-        <h2>Start your booking</h2>
-        <ul>
-          <li>Call, email or come in for a chat with our reception team.</li>
-          <li>We make a provisional booking for your group and hold it while you confirm.</li>
-          <li>One point of contact from first enquiry to final visit.</li>
-        </ul>
-      </div>
+      <figure><img src="images/totem-pole.jpg" width="2500" height="1667" alt="Colourful totem pole outside a wooden building among the trees at Walton Firs"><figcaption>A welcome among the trees at Walton Firs</figcaption></figure>
     </div>
   </section>
 
@@ -154,16 +177,16 @@
     <div class="wrap">
       <div class="section-head">
         <h2 class="section-title">Who are you bringing?</h2>
-        <p>Every group gets a visit shaped around it. Pick your group to start the right enquiry, or call and tell us who you are bringing.</p>
+        <p>Explore information for your group, then call or email our team to check availability.</p>
       </div>
       <div class="audience-grid">
-        <a class="audience-card" href="mailto:info@waltonfirs.co.uk?subject=Uniformed%20group%20enquiry"><h3>Uniformed groups</h3><p>Scouts, Guides and other uniformed groups - evenings, weekends and residentials.</p></a>
-        <a class="audience-card" href="mailto:info@waltonfirs.co.uk?subject=School%20visit%20enquiry"><h3>Schools and colleges</h3><p>Curriculum-friendly days and residentials with risk assessments ready to download.</p></a>
-        <a class="audience-card" href="mailto:info@waltonfirs.co.uk?subject=Youth%20organisation%20enquiry"><h3>Youth organisations</h3><p>Flexible instructed sessions and self-led options for youth groups of all sizes.</p></a>
-        <a class="audience-card" href="mailto:info@waltonfirs.co.uk?subject=Birthday%20party%20enquiry"><h3>Birthday parties</h3><p>Activity-packed party days on site.</p></a>
-        <a class="audience-card" href="mailto:info@waltonfirs.co.uk?subject=DofE%20Gold%20residential%20enquiry"><h3>DofE Gold residentials</h3><p>Residential stays that meet Duke of Edinburgh's Award Gold requirements.</p></a>
-        <a class="audience-card" href="mailto:info@waltonfirs.co.uk?subject=Holiday%20camp%20enquiry"><h3>Holiday camp</h3><p>Outdoor Adventurers holiday camp during school holidays.</p></a>
-        <a class="audience-card" href="mailto:info@waltonfirs.co.uk?subject=Corporate%20booking%20enquiry"><h3>Corporate bookings</h3><p>Team days and away days built around our instructed activities.</p></a>
+        <a class="audience-card" href="https://www.waltonfirs.co.uk/uniformed-groups"><h3>Uniformed groups</h3><p>Scouts, Guides and other uniformed groups - evenings, weekends and residentials.</p></a>
+        <a class="audience-card" href="https://www.waltonfirs.co.uk/schools-and-colleges"><h3>Schools and colleges</h3><p>Outdoor learning for schools and colleges.</p></a>
+        <a class="audience-card" href="https://www.waltonfirs.co.uk/youth-organisations"><h3>Youth organisations</h3><p>Activities and visits for youth organisations.</p></a>
+        <a class="audience-card" href="https://www.waltonfirs.co.uk/birthday-parties"><h3>Birthday parties</h3><p>Activity-packed party days on site.</p></a>
+        <a class="audience-card" href="https://www.waltonfirs.co.uk/dofe-gold-residentials"><h3>DofE Gold residentials</h3><p>Residential stays that meet Duke of Edinburgh's Award Gold requirements.</p></a>
+        <a class="audience-card" href="https://www.waltonfirs.co.uk/outdoor-adventurers"><h3>Holiday camp</h3><p>Outdoor Adventurers holiday camp during school holidays.</p></a>
+        <a class="audience-card" href="https://www.waltonfirs.co.uk/corporate-bookings"><h3>Corporate bookings</h3><p>Information about corporate group visits.</p></a>
       </div>
     </div>
   </section>
@@ -172,8 +195,9 @@
     <div class="wrap">
       <div class="section-head">
         <h2 class="section-title">Instructed activities</h2>
-        <p>Led by our instructors, with self-led options too. Nine activity lines run across the site.</p>
+        <p>Led by our instructors, with self-led options too. Explore the nine instructed activity categories below.</p>
       </div>
+      <div class="photo-pair"><figure><img src="images/climbing.jpg" width="2500" height="1875" loading="lazy" alt="Outdoor climbing wall with colourful holds at Walton Firs"><figcaption>Climbing at Walton Firs</figcaption></figure><figure><img src="images/archery-path.jpg" width="2500" height="1667" loading="lazy" alt="Woodland path at Walton Firs"><figcaption>Paths through the woodland</figcaption></figure></div>
       <div class="chips">
         <span class="chip">Archery</span>
         <span class="chip">Air rifle shooting</span>
@@ -185,6 +209,7 @@
         <span class="chip">Low ropes</span>
         <span class="chip">Tomahawk throwing</span>
       </div>
+      <p class="resource-links"><a href="https://www.waltonfirs.co.uk/instructed-activities">Instructed activity details</a><a href="https://www.waltonfirs.co.uk/self-led-activities">Self-led activities</a></p>
     </div>
   </section>
 
@@ -195,6 +220,7 @@
         <p>Buildings, pod villages and campsites across the site, with fields for outdoor activities and campfire space.</p>
       </div>
       <div class="stay-grid">
+        <div class="stay-card"><img src="images/pembroke.jpg" width="1700" height="1280" loading="lazy" alt="Pembroke cabin at Walton Firs"><span class="cap">Sleeps up to 34</span><h3>Pembroke</h3><p>Our largest building, by the main field, with a campfire circle and space for extra tents.</p></div>
         <div class="stay-card">
           <span class="cap">Sleeps 24</span>
           <h3>Brunswick</h3>
@@ -206,7 +232,7 @@
           <p>Sleeps 4 with a spacious main hall for up to 30, plus field space and a campfire circle.</p>
         </div>
         <div class="stay-card">
-          <span class="cap">Pods and pitches</span>
+          <img src="images/upper-field.png" width="844" height="632" loading="lazy" alt="Open field bordered by trees at Walton Firs"><span class="cap">Pods and pitches</span>
           <h3>Camping and pods</h3>
           <p>Camping pod villages and campsites for a more outdoors experience.</p>
         </div>
@@ -214,6 +240,7 @@
     </div>
   </section>
 
+  <section class="booking" id="booking"><div class="wrap"><div class="section-head"><h2 class="section-title">Plan your visit</h2><p>Call, email or use our existing enquiry form to check availability. We make a provisional booking, then issue a booking form to complete within 14 days. A deposit is due within 14 days of confirmation; parties, courses and holiday club bookings require full payment.</p></div><p>Our existing booking terms and forms still apply. Check the full process and current prices before confirming your visit.</p><div class="resource-links"><a href="https://www.waltonfirs.co.uk/contact-us">Enquiry form</a><a href="https://www.waltonfirs.co.uk/how-to-book">How to book and terms</a><a href="https://www.waltonfirs.co.uk/booking-forms">Booking forms</a><a href="https://www.waltonfirs.co.uk/price-lists">Price lists</a><a href="https://www.waltonfirs.co.uk/risk-assessments">Risk assessments</a><a href="https://www.waltonfirs.co.uk/accommodation">Accommodation details</a></div></div></section>
   <section id="visit">
     <div class="wrap visit-grid">
       <div class="visit-card">
@@ -224,13 +251,13 @@
           <li><span class="k">Email</span><span><a href="mailto:info@waltonfirs.co.uk">info@waltonfirs.co.uk</a></span></li>
           <li><span class="k">Access</span><span>Through Convent Lane, a private road - please be respectful of our neighbours.</span></li>
         </ul>
-        <span class="award">Queen's Award recognised</span>
+        <p style="margin-top:16px">Office hours: Monday to Friday, 9am to 6pm.</p><span class="award">Queen's Award recognised</span>
       </div>
       <div class="visit-card">
         <h3>Good to know</h3>
         <p>Nearest stations are Cobham &amp; Stoke D'Abernon and Byfleet &amp; New Haw, and London is an easy day trip from West Byfleet.</p>
         <p>FAQs, risk assessments, price lists and booking forms are all available for group leaders.</p>
-        <p>Planning a stay? One call or email is all it takes to start - we hold a provisional booking while you confirm the details.</p>
+        <p>Planning a stay? Call or email to check availability, then follow our booking process and terms.</p>
       </div>
     </div>
   </section>
@@ -239,6 +266,7 @@
 <footer>
   <div class="wrap">
     <span>Walton Firs Activity Centre - Convent Lane, Cobham, Surrey KT11 1HB</span>
+    <span><a href="http://facebook.com/WaltonFirs">Facebook</a> · <a href="http://instagram.com/waltonfirsactivitycentre">Instagram</a> · <a href="http://twitter.com/waltonfirs">Twitter</a></span>
     <span>Design concept by <a href="https://websitesbynick.co.uk">Websites by Nick</a></span>
   </div>
 </footer>
