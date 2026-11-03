@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="warm">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>The Kitchen Shop - Fine Cookware, Weybridge</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+  :root{
+    --bg:#faf6ef; --bg-tint:#f3ead9; --surface:#fffdf8;
+    --ink:#2b2118; --ink-soft:#5c4a38; --muted:#8a7660;
+    --primary:#a34d1c; --primary-deep:#7c3512; --on-primary:#fffaf2;
+    --line:rgba(124,53,18,.16); --line-strong:rgba(124,53,18,.32);
+    --radius:12px; --radius-card:10px;
+    --shadow:0 1px 2px rgba(84,44,14,.06),0 8px 24px rgba(84,44,14,.08);
+    --font-display:Georgia,"Iowan Old Style","Times New Roman",serif;
+    --font-body:"Segoe UI",system-ui,"Helvetica Neue",sans-serif;
+    --eyebrow-transform:uppercase; --eyebrow-spacing:.18em; --eyebrow-weight:700;
+    --h-weight:600; --h-letter:-0.01em;
+    --accent:#c98a3d;
+  }
+  html[data-theme="classic"]{
+    --bg:#f2f4f9; --bg-tint:#e2e7f2; --surface:#ffffff;
+    --ink:#16213c; --ink-soft:#3a4a6e; --muted:#66759a;
+    --primary:#1c2e6e; --primary-deep:#101d49; --on-primary:#f4f6fc;
+    --line:rgba(28,46,110,.18); --line-strong:rgba(28,46,110,.36);
+    --radius:6px; --radius-card:5px;
+    --shadow:0 1px 2px rgba(16,29,73,.05),0 6px 18px rgba(16,29,73,.07);
+    --font-display:"Inter","SF Pro Display","Segoe UI",system-ui,sans-serif;
+    --font-body:"Inter","SF Pro Text","Segoe UI",system-ui,sans-serif;
+    --eyebrow-transform:uppercase; --eyebrow-spacing:.14em; --eyebrow-weight:700;
+    --h-weight:750; --h-letter:-0.015em;
+    --accent:#4a68b8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  section[id]{scroll-margin-top:6.75rem}
+  body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  a{color:var(--primary)}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+  .eyebrow{font-size:.72rem;font-weight:var(--eyebrow-weight);letter-spacing:var(--eyebrow-spacing);text-transform:var(--eyebrow-transform);color:var(--primary)}
+  h1,h2,h3{font-family:var(--font-display);font-weight:var(--h-weight);letter-spacing:var(--h-letter);line-height:1.15}
+  h2{font-size:clamp(1.5rem,3.4vw,2.05rem)}
+  .section{padding:56px 0}
+  .lead{color:var(--ink-soft);font-size:1.06rem;max-width:56ch}
+
+  /* Header */
+  .site-header{position:sticky;top:0;z-index:50;background:var(--surface);border-bottom:1px solid var(--line)}
+  .header-inner{display:flex;align-items:center;gap:14px;padding:12px 20px;max-width:1080px;margin:0 auto;flex-wrap:wrap}
+  .brand{display:inline-flex;align-items:center;gap:10px;flex-wrap:wrap;font-family:var(--font-display);font-weight:var(--h-weight);font-size:1.12rem;color:var(--ink);text-decoration:none;letter-spacing:var(--h-letter)}
+  .brand small{font-size:.68rem;letter-spacing:.08em;color:var(--muted);font-family:var(--font-body);font-weight:500}
+  .brand-mark{display:inline-flex;align-items:center;justify-content:center;background:var(--primary-deep);border-radius:8px;width:38px;height:38px;flex:none}
+  .brand-mark svg{width:22px;height:22px;display:block}
+  .nav{display:none;gap:18px;margin-left:auto}
+  .nav a{color:var(--ink-soft);text-decoration:none;font-size:.92rem;font-weight:500}
+  .nav a:hover{color:var(--primary)}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--primary-deep);color:var(--on-primary);text-decoration:none;font-weight:650;font-size:.95rem;padding:11px 20px;border-radius:var(--radius);border:1px solid var(--primary-deep);cursor:pointer;font-family:var(--font-body);transition:filter .15s ease}
+  .btn:hover{filter:brightness(1.12)}
+  .btn-ghost{background:transparent;color:var(--primary-deep);border:1px solid var(--line-strong)}
+  .btn-ghost:hover{background:var(--bg-tint);filter:none}
+  .call-header{margin-left:auto}
+  @media (min-width:880px){
+    .nav{display:flex}
+    .call-header{margin-left:0}
+  }
+
+  /* Hero */
+  .hero{padding:64px 0 48px;background:linear-gradient(180deg,var(--bg-tint),var(--bg))}
+  .hero h1{font-size:clamp(2rem,5.4vw,3.1rem);margin:.5rem 0 1rem;max-width:20ch}
+  .hero .lead{margin-bottom:1.6rem}
+  .hero-actions{display:flex;gap:12px;flex-wrap:wrap}
+  .est-pill{display:inline-block;background:var(--surface);border:1px solid var(--line-strong);color:var(--primary-deep);font-size:.75rem;font-weight:700;letter-spacing:.1em;padding:5px 12px;border-radius:999px}
+
+  /* Theme toggle */
+  .theme-toggle{display:inline-flex;border:1px solid var(--line-strong);border-radius:999px;overflow:hidden;background:var(--surface)}
+  .theme-toggle button{appearance:none;border:0;background:transparent;color:var(--ink-soft);font:600 .8rem/1 var(--font-body);padding:9px 16px;cursor:pointer;transition:background .15s ease,color .15s ease}
+  .theme-toggle button[aria-pressed="true"]{background:var(--primary-deep);color:var(--on-primary)}
+
+  /* Highlights */
+  .highlights{padding:8px 0 40px}
+  .hl-grid{display:grid;gap:12px;grid-template-columns:repeat(2,1fr)}
+  @media (min-width:760px){.hl-grid{grid-template-columns:repeat(3,1fr)}}
+  .hl-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);padding:16px 18px;box-shadow:var(--shadow)}
+  .hl-card h3{font-size:.95rem;margin-bottom:4px}
+  .hl-card p{font-size:.86rem;color:var(--ink-soft)}
+
+  /* Ranges */
+  .ranges{background:var(--bg-tint)}
+  .range-grid{display:grid;gap:16px;grid-template-columns:1fr;margin-top:24px}
+  @media (min-width:760px){.range-grid{grid-template-columns:repeat(2,1fr)}}
+  .range-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);padding:22px;box-shadow:var(--shadow)}
+  .range-card h3{margin-bottom:8px}
+  .range-card ul{list-style:none;display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
+  .range-card li{background:var(--bg-tint);border:1px solid var(--line);color:var(--ink-soft);font-size:.8rem;padding:4px 10px;border-radius:999px}
+  .range-card p{font-size:.9rem;color:var(--ink-soft)}
+  .source-note{margin-top:18px;font-size:.92rem;color:var(--ink-soft);background:var(--surface);border:1px dashed var(--line-strong);border-radius:var(--radius-card);padding:14px 18px}
+
+  /* Brands */
+  .brand-list{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+  .brand-list span{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);padding:8px 14px;font-size:.88rem;color:var(--ink-soft)}
+
+  /* About */
+  .about-grid{display:grid;gap:28px;grid-template-columns:1fr}
+  @media (min-width:880px){.about-grid{grid-template-columns:1.15fr .85fr;align-items:start}}
+  .about-copy p{margin-bottom:1rem;color:var(--ink-soft)}
+  .about-copy p:first-of-type{color:var(--ink);font-size:1.08rem}
+
+  /* FAQ */
+  .faq-item{border:1px solid var(--line);border-radius:var(--radius-card);background:var(--surface);margin-bottom:10px;overflow:hidden}
+  .faq-q{width:100%;display:flex;justify-content:space-between;align-items:center;gap:12px;background:transparent;border:0;padding:16px 18px;font:650 .98rem/1.3 var(--font-body);color:var(--ink);cursor:pointer;text-align:left}
+  .faq-q .chev{flex:none;transition:transform .2s ease;color:var(--primary)}
+  .faq-item.open .chev{transform:rotate(180deg)}
+  .faq-a{max-height:0;overflow:hidden;transition:max-height .25s ease}
+  .faq-a p{padding:0 18px 16px;color:var(--ink-soft);font-size:.94rem}
+
+  /* Visit */
+  .visit{background:var(--bg-tint)}
+  .visit-grid{display:grid;gap:20px;grid-template-columns:1fr;margin-top:24px}
+  @media (min-width:760px){.visit-grid{grid-template-columns:1fr 1fr}}
+  .visit-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);padding:22px;box-shadow:var(--shadow)}
+  .visit-card h3{margin-bottom:10px}
+  .visit-card p{font-size:.94rem;color:var(--ink-soft);margin-bottom:8px}
+  .visit-card .big-link{display:block;font-size:1.15rem;font-weight:700;margin:10px 0 2px;text-decoration:none}
+  .visit-card .big-link:hover{text-decoration:underline}
+
+  /* Footer */
+  .site-footer{border-top:1px solid var(--line);padding:28px 0 40px;background:var(--surface)}
+  .foot-grid{display:grid;gap:6px;font-size:.84rem;color:var(--muted)}
+  .concept-note{margin-top:10px;font-size:.8rem}
+  .concept-note a{color:var(--muted)}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="#top" aria-label="The Kitchen Shop - back to top">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fffaf2" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 10h14v6a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4z"/>
+          <path d="M8 10V7a4 4 0 0 1 8 0v3"/>
+          <path d="M2 13h3M19 13h3"/>
+        </svg>
+      </span>
+      The Kitchen Shop<small>Fine cookware - Weybridge</small>
+    </a>
+    <nav class="nav" aria-label="Sections">
+      <a href="#ranges">Ranges</a>
+      <a href="#brands">Brands</a>
+      <a href="#about">About</a>
+      <a href="#faq">FAQ</a>
+      <a href="#visit">Visit us</a>
+    </nav>
+    <a class="btn call-header" href="tel:+441932840426">Call 01932 840 426</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="wrap">
+      <span class="est-pill">Est. 1973 - family-run</span>
+      <h1>An Aladdin's Cave of cookware in the heart of Weybridge</h1>
+      <p class="lead">For over 30 years we have supplied fine cookware, renowned brands and honest, friendly advice to cooking enthusiasts and professional chefs alike.</p>
+      <div class="hero-actions">
+        <a class="btn" href="tel:+441932840426">Call 01932 840 426</a>
+        <a class="btn btn-ghost" href="#visit">Plan your visit</a>
+        <span class="theme-toggle" role="group" aria-label="Colour theme">
+          <button type="button" data-set-theme="warm" aria-pressed="true">Warm</button>
+          <button type="button" data-set-theme="classic" aria-pressed="false">Classic</button>
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <section class="highlights">
+    <div class="wrap">
+      <div class="hl-grid">
+        <div class="hl-card"><h3>Professional knife sharpening</h3><p>Bring your knives back to a proper edge, done in store.</p></div>
+        <div class="hl-card"><h3>Wedding list service</h3><p>Build a list with us and let guests choose from the whole shop.</p></div>
+        <div class="hl-card"><h3>Gift vouchers and wrapping</h3><p>Vouchers for any amount, with a wrapping service for gifts.</p></div>
+        <div class="hl-card"><h3>Free local delivery</h3><p>We deliver locally at no charge, including assembled kitchen trolleys.</p></div>
+        <div class="hl-card"><h3>Free customer parking</h3><p>Park right by us in the Ship Yard, just off the High Street.</p></div>
+        <div class="hl-card"><h3>Children's play area</h3><p>Browse at your own pace while little ones are entertained.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section ranges" id="ranges">
+    <div class="wrap">
+      <span class="eyebrow">What we stock</span>
+      <h2>Four floors of ideas, from prep to table</h2>
+      <div class="range-grid">
+        <div class="range-card">
+          <h3>Preparation</h3>
+          <p>Everything for quick, convenient prep.</p>
+          <ul>
+            <li>Knives</li><li>Chopping boards</li><li>Scales and measuring</li><li>Pasta machines</li><li>Pestle and mortar</li><li>Salt and pepper mills</li><li>Tools and gadgets</li><li>Cookbooks</li>
+          </ul>
+          <p>Wooden, bamboo and professional polypropylene boards, plus KitchenAid, Magimix, Cuisinart and Dualit electricals.</p>
+        </div>
+        <div class="range-card">
+          <h3>Cooking</h3>
+          <p>Pots, pans and bakeware for every hob and oven.</p>
+          <ul>
+            <li>Pots and pans</li><li>Casseroles</li><li>Bakeware</li><li>Woks</li><li>Pressure cookers</li><li>Poachers</li><li>Oven to table</li><li>Utensils</li>
+          </ul>
+          <p>From Mermaid and Silverwood bakeware to Chasseur cast iron, SKK titanium pans and Mauviel copper.</p>
+        </div>
+        <div class="range-card">
+          <h3>Drinks</h3>
+          <p>Coffee, tea, bar and wine.</p>
+          <ul>
+            <li>Coffee makers</li><li>Kettles</li><li>Tea pots</li><li>Juicers and blenders</li><li>Bar and wine</li><li>Mugs and flasks</li><li>Glass</li><li>Coasters</li>
+          </ul>
+          <p>Gaggia and Nespresso machines, La Cafetiere, Dunoon mugs and Vacuvin wine accessories.</p>
+        </div>
+        <div class="range-card">
+          <h3>Table and home</h3>
+          <p>Finishing touches and storage.</p>
+          <ul>
+            <li>Cutlery</li><li>Tableware</li><li>Kitchen clocks</li><li>Storage jars</li><li>Breadbins</li><li>Trays</li><li>Aprons</li><li>Chocolate fountains</li>
+          </ul>
+          <p>TG Green Cornish Blue, Pillivuyt porcelain, Henry Watson terracotta and Simplehuman bins.</p>
+        </div>
+      </div>
+      <p class="source-note">Can't see what you are after? Ask us - if we don't have it in stock, we are always happy to source unusual or elusive items for you.</p>
+    </div>
+  </section>
+
+  <section class="section" id="brands">
+    <div class="wrap">
+      <span class="eyebrow">Leading brands</span>
+      <h2>Names you know, in stock to see and hold</h2>
+      <div class="brand-list">
+        <span>KitchenAid</span><span>Magimix</span><span>Cuisinart</span><span>Dualit</span><span>Chasseur</span><span>SKK</span><span>Mermaid</span><span>Alan Silverwood</span><span>Gaggia</span><span>Nespresso</span><span>La Cafetiere</span><span>Mauviel</span><span>Demeyere</span><span>Peugeot</span><span>Cole &amp; Mason</span><span>TG Green</span><span>Pillivuyt</span><span>Guzzini</span><span>Simplehuman</span><span>Vacuvin</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="about" style="padding-top:0">
+    <div class="wrap about-grid">
+      <div class="about-copy">
+        <span class="eyebrow">About us</span>
+        <h2 style="margin-bottom:16px">A Weybridge institution for over 30 years</h2>
+        <p>Walk through the door and the first impression is of an Aladdin's Cave: an overwhelming selection of cookware, kitchen equipment, utensils, gadgets and gifts.</p>
+        <p>From everyday kitchen necessities to dinner-party tableware and celebrity-chef-endorsed products, our extensive range satisfies most requirements - and we are always happy to source more unusual items.</p>
+        <p>Our staff are experienced and friendly: happy to give help and advice, or to simply let you browse.</p>
+        <p>Nick, Gemma and the team look forward to welcoming you.</p>
+      </div>
+      <div id="faq">
+        <span class="eyebrow">Good to know</span>
+        <h2 style="margin-bottom:16px">Questions we hear a lot</h2>
+        <div class="faq-item">
+          <button type="button" class="faq-q" aria-expanded="false">Do you sharpen knives?<svg class="chev" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6l4 4 4-4"/></svg></button>
+          <div class="faq-a" aria-hidden="true"><p>Yes - we offer a professional knife-sharpening service in store. Bring your knives in and we will bring them back to a proper edge.</p></div>
+        </div>
+        <div class="faq-item">
+          <button type="button" class="faq-q" aria-expanded="false">Can you order something you don't stock?<svg class="chev" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6l4 4 4-4"/></svg></button>
+          <div class="faq-a" aria-hidden="true"><p>Almost always. If you don't see what you want, ask - it is likely we have it, and if we don't we can usually source it for you.</p></div>
+        </div>
+        <div class="faq-item">
+          <button type="button" class="faq-q" aria-expanded="false">Do you deliver?<svg class="chev" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6l4 4 4-4"/></svg></button>
+          <div class="faq-a" aria-hidden="true"><p>Yes, we offer free local deliveries. Larger items such as John Boos and Eddingtons kitchen trolleys can be delivered fully assembled by a two-man service on a date that suits you.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section visit" id="visit">
+    <div class="wrap">
+      <span class="eyebrow">Visit us</span>
+      <h2>Find us between Waitrose and The Ship Hotel</h2>
+      <div class="visit-grid">
+        <div class="visit-card">
+          <h3>The shop</h3>
+          <p>The Kitchen Shop<br>11/14 Ship Yard<br>High Street, Weybridge<br>Surrey KT13 8BH</p>
+          <p>Free customer parking in the Ship Yard, and a children's play area inside.</p>
+          <a class="big-link" href="https://www.google.com/maps/search/?api=1&amp;query=The+Kitchen+Shop+Ship+Yard+Weybridge+KT13+8BH" rel="noopener">Open in Google Maps</a>
+        </div>
+        <div class="visit-card">
+          <h3>Talk to us</h3>
+          <p>Questions about stock, sourcing an item, wedding lists or vouchers - call or email any time.</p>
+          <a class="big-link" href="tel:+441932840426">01932 840 426</a>
+          <a class="big-link" href="mailto:info@kitchenshopweybridge.co.uk?subject=Enquiry%20from%20website">info@kitchenshopweybridge.co.uk</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap foot-grid">
+    <span>The Kitchen Shop - fine cookware - 11/14 Ship Yard, High Street, Weybridge, Surrey KT13 8BH</span>
+    <span>The Kitchen Shop (Weybridge) Limited - registered in England, company no. 07790851</span>
+    <div class="concept-note">Design concept by <a href="https://websitesbynick.co.uk/">Websites by Nick</a></div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var root=document.documentElement;
+  function setTheme(name){
+    if(name!=="warm"&&name!=="classic"){name="warm";}
+    root.setAttribute("data-theme",name);
+    try{localStorage.setItem("kitchen-shop-preview-theme",name);}catch(e){}
+    var btns=document.querySelectorAll("[data-set-theme]");
+    for(var i=0;i<btns.length;i++){btns[i].setAttribute("aria-pressed",btns[i].getAttribute("data-set-theme")===name?"true":"false");}
+  }
+  var initial="warm";
+  try{
+    var m=/[?&]theme=(warm|classic|a|b)(?:&|$)/.exec(location.search);
+    if(m){initial=(m[1]==="classic"||m[1]==="b")?"classic":"warm";}
+    else if(/[?&]theme=/.test(location.search)){initial="warm";}
+    else{var saved=localStorage.getItem("kitchen-shop-preview-theme");if(saved){initial=saved;}}
+  }catch(e){}
+  setTheme(initial);
+  var btns=document.querySelectorAll("[data-set-theme]");
+  for(var i=0;i<btns.length;i++){btns[i].addEventListener("click",function(){setTheme(this.getAttribute("data-set-theme"));});}
+
+  var items=document.querySelectorAll(".faq-item");
+  for(var j=0;j<items.length;j++){
+    (function(item){
+      var q=item.querySelector(".faq-q"),a=item.querySelector(".faq-a");
+      q.addEventListener("click",function(){
+        var open=item.classList.toggle("open");
+        q.setAttribute("aria-expanded",open?"true":"false");
+        a.setAttribute("aria-hidden",open?"false":"true");
+        if(open){
+          a.style.maxHeight=a.scrollHeight+"px";
+          a.addEventListener("transitionend",function h(){a.removeEventListener("transitionend",h);if(item.classList.contains("open")){a.style.maxHeight="none";}});
+        }else{
+          a.style.maxHeight=a.scrollHeight+"px";
+          void a.offsetHeight;
+          a.style.maxHeight="0";
+        }
+      });
+    })(items[j]);
+  }
+})();
+</script>
+
+</body>
+</html>
