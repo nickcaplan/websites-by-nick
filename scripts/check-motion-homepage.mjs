@@ -72,7 +72,41 @@ for (const width of [320, 390, 768, 1280, 1600]) {
       .getAttribute("aria-pressed")) !== "true"
   )
     throw Error("pause");
+  const states = () =>
+    p
+      .locator(".composer")
+      .evaluate((e) => e.getAnimations().map((a) => a.playState));
+  if ((await states()).some((s) => s === "running"))
+    throw Error("motion not paused");
   await p.getByRole("button", { name: "Resume motion" }).click();
+  if ((await states()).some((s) => s === "paused"))
+    throw Error("motion not resumed");
+  await p.getByRole("button", { name: "Pause motion", exact: true }).click();
+  await p.evaluate(() => {
+    Object.defineProperty(document, "hidden", {
+      configurable: true,
+      get: () => true,
+    });
+    document.dispatchEvent(new Event("visibilitychange"));
+  });
+  if ((await states()).some((s) => s === "running"))
+    throw Error("background motion running");
+  await p.evaluate(() => {
+    delete document.hidden;
+    document.dispatchEvent(new Event("visibilitychange"));
+  });
+  if ((await states()).some((s) => s === "running"))
+    throw Error("manual pause lost");
+  await p.getByRole("button", { name: "Resume motion" }).click();
+  if ((await states()).some((s) => s === "paused"))
+    throw Error("motion stuck after visibility change");
+  if (
+    (await p
+      .locator(".nav nav a")
+      .last()
+      .evaluate((e) => getComputedStyle(e).borderBottomStyle)) === "none"
+  )
+    throw Error("contact underline");
   await p.getByRole("link", { name: "Take a closer look" }).click();
   await p.waitForFunction(
     () =>

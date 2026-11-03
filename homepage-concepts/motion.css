@@ -96,7 +96,7 @@ button:focus-visible {
 .nav nav a {
   padding: 10px 0;
 }
-.nav nav a:last-child {
+.nav nav a:last-of-type {
   border-bottom: 1px solid;
 }
 .entrance {
