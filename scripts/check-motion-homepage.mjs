@@ -144,6 +144,42 @@ if (await r.locator(".composer").evaluate((e) => e.getAnimations().length))
   throw Error("animation reduced");
 await r.screenshot({ path: output + "/motion-reduced.png" });
 console.log("PASS reduced");
+const hidden = await b.newPage();
+await hidden.addInitScript(() =>
+  Object.defineProperty(document, "hidden", {
+    configurable: true,
+    get: () => true,
+  }),
+);
+await hidden.goto(base + "/homepage-concepts/");
+if (
+  !(await hidden
+    .locator("body")
+    .evaluate((e) => e.classList.contains("hidden-page")))
+)
+  throw Error("initial hidden state");
+if (
+  (
+    await hidden
+      .locator(".composer")
+      .evaluate((e) => e.getAnimations().map((a) => a.playState))
+  ).some((s) => s === "running")
+)
+  throw Error("initial background motion running");
+await hidden.evaluate(() => {
+  delete document.hidden;
+  document.dispatchEvent(new Event("visibilitychange"));
+});
+if (
+  (
+    await hidden
+      .locator(".composer")
+      .evaluate((e) => e.getAnimations().map((a) => a.playState))
+  ).some((s) => s === "paused")
+)
+  throw Error("initial background motion stuck");
+await hidden.close();
+console.log("PASS initial hidden");
 const n = await b.newPage({ javaScriptEnabled: false });
 await n.goto(base + "/homepage-concepts/");
 if (!(await n.locator("h1").isVisible())) throw Error("noJS");
