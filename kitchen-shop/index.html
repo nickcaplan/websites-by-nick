@@ -369,7 +369,7 @@
   function setTheme(name){
     if(name!=="warm"&&name!=="classic"){name="classic";}
     root.setAttribute("data-theme",name);
-    try{localStorage.setItem("kitchen-shop-preview-theme",name);}catch(e){}
+    try{localStorage.setItem("kitchen-shop-preview-theme-v2",name);}catch(e){}
     var btns=document.querySelectorAll("[data-set-theme]");
     for(var i=0;i<btns.length;i++){btns[i].setAttribute("aria-pressed",btns[i].getAttribute("data-set-theme")===name?"true":"false");}
   }
@@ -378,7 +378,7 @@
     var m=/[?&]theme=(warm|classic|a|b)(?:&|$)/.exec(location.search);
     if(m){initial=(m[1]==="classic"||m[1]==="b")?"classic":"warm";}
     else if(/[?&]theme=/.test(location.search)){initial="classic";}
-    else{var saved=localStorage.getItem("kitchen-shop-preview-theme");if(saved){initial=saved;}}
+    else{var saved=localStorage.getItem("kitchen-shop-preview-theme-v2");if(saved){initial=saved;}}
   }catch(e){}
   setTheme(initial);
   var btns=document.querySelectorAll("[data-set-theme]");
