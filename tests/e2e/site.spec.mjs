@@ -384,8 +384,10 @@ test('keyboard: contact form can be completed and submitted by keyboard (submiss
   // Network-level interception, not a page-side flag: the app's real submit
   // handler must fire exactly one request and this route must abort it.
   const caught = [];
+  const methods = [];
   await page.route(FORMSPREE, route => {
     caught.push(route.request().postData() || '');
+    methods.push(route.request().method());
     return route.abort();
   });
   await page.setViewportSize(DESKTOP);
@@ -408,6 +410,7 @@ test('keyboard: contact form can be completed and submitted by keyboard (submiss
   assert.equal(valid, true, 'form is valid after keyboard entry');
   assert.equal(caught.length, 1, 'Enter on the submit button fires exactly one submission request (caught and aborted, nothing sent)');
   assert.ok(caught[0].includes('Hello from the keyboard'), 'the intercepted request carries the typed message');
+  assert.deepEqual(methods, ['POST'], 'the form submission uses the POST method');
 });
 
 for (const [name, path] of [['home', '/'], ['experience', '/experience/'], ['pricing', '/pricing/'], ['contact', '/contact/']]) {
