@@ -1,8 +1,13 @@
 import { chromium } from "@playwright/test";
 import { createServer } from "node:http";
-import { readFile } from "node:fs/promises";
+import { readFile, mkdir } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { existsSync } from "node:fs";
 import { resolve, extname, sep } from "node:path";
 import { fileURLToPath } from "node:url";
+const outputDir = process.env.CONCEPT_SCREENSHOTS || resolve(tmpdir(), "wbn-concept-screenshots");
+await mkdir(outputDir, {recursive:true});
+const chrome = process.env.CHROME_PATH || (existsSync("/usr/bin/google-chrome") ? "/usr/bin/google-chrome" : undefined);
 const root = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const server = createServer(async (req, res) => {
   try {
@@ -37,7 +42,7 @@ let browser;
 try {
   browser = await chromium.launch({
     headless: true,
-    executablePath: process.env.CHROME_PATH || "/usr/bin/google-chrome",
+    executablePath: chrome,
     args: ["--no-sandbox"],
   });
   for (const width of [320, 390, 768, 1280]) {
@@ -64,7 +69,7 @@ try {
       await check();
       const name = slug.slice(0, -1) || "compare";
       await page.screenshot({
-        path: `/downloads/concept-${name}-${width}.png`,
+        path: `${outputDir}/concept-${name}-${width}.png`,
       });
       if (slug === "playground/") {
         for (const label of ["Bold", "Playful", "Calm"]) {
@@ -75,7 +80,7 @@ try {
         await check();
         if (width === 1280)
           await page.screenshot({
-            path: "/downloads/concept-playground-phone-frame.png",
+            path: `${outputDir}/concept-playground-phone-frame.png`,
           });
       }
       if (slug === "transformation/") {
@@ -89,7 +94,7 @@ try {
         await check();
         if (width === 1280)
           await page.screenshot({
-            path: "/downloads/concept-transformation-before.png",
+            path: `${outputDir}/concept-transformation-before.png`,
           });
         await page
           .getByRole("button", { name: "Give it some character", exact: false })
@@ -115,7 +120,7 @@ try {
         await check();
         if (width === 1280)
           await page.screenshot({
-            path: "/downloads/concept-portfolio-composer-phone.png",
+            path: `${outputDir}/concept-portfolio-composer-phone.png`,
           });
       }
       if (slug === "art-direction/") {
@@ -124,7 +129,7 @@ try {
           await check();
           if (width === 1280)
             await page.screenshot({
-              path: `/downloads/concept-art-${label.toLowerCase()}.png`,
+              path: `${outputDir}/concept-art-${label.toLowerCase()}.png`,
             });
         }
         await page
