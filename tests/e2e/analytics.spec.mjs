@@ -1,5 +1,11 @@
 import { test, expect } from '@playwright/test';
 import { readFileSync } from 'node:fs';
+
+// Fail closed: no check in this suite may send a real enquiry. Every page gets
+// a network-level abort for the live form endpoint before anything else runs.
+test.beforeEach(async ({ page }) => {
+  await page.route('**/formspree.io/**', route => route.abort());
+});
 const source = readFileSync('assets/js/analytics.js', 'utf8');
 const pages = ['/', '/experience/', '/contact/', '/privacy/'];
 
