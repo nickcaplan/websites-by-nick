@@ -37,7 +37,7 @@
   nav a:focus-visible{outline:2px solid var(--primary);outline-offset:3px;border-radius:4px}
   .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:13px 24px;font-weight:700;font-size:15px;text-decoration:none;border:1px solid transparent;cursor:pointer}
   .btn-primary{background:var(--primary);color:var(--on-primary)}
-  .btn-primary:hover{background:var(--primary-deep)}
+  .btn-primary:hover{background:var(--primary-deep);color:var(--on-primary)}
   .btn-primary:focus-visible{outline:2px solid var(--primary-deep);outline-offset:2px}
   .btn-ghost{background:var(--surface);color:var(--primary-deep);border-color:var(--line-strong)}
   .btn-ghost:hover{border-color:var(--primary)}
@@ -108,6 +108,31 @@
     .mobile-call{display:flex;position:sticky;bottom:0;z-index:30;gap:10px;padding:10px 14px;background:rgba(243,242,236,.97);border-top:1px solid var(--line)}
     .mobile-call .btn{flex:1;padding:12px}
   }
+  .brand-banner{background:#282828;padding:18px 20px}
+  .brand-banner img{width:948px;height:auto;margin:auto}
+  .hero{padding:42px 0;background:#292824;color:#fff}
+  .hero .wrap{max-width:1060px}
+  .hero h1{font-size:clamp(32px,4vw,46px);max-width:24ch}
+  .hero p.lede{color:#e5e2d8;max-width:76ch;font-size:17px}
+  .hero .eyebrow{color:#e5d39c;border:0;background:none;padding:0}
+  .hero .btn-primary{background:#e0c77c;color:#27231a}
+  .hero .btn-primary:hover{background:#f2d993;color:#27231a}
+  .hero .btn-ghost{color:#e0c77c;border-color:#b4a36c;background:transparent}
+  .hero .btn:focus-visible{outline-color:#fff}
+  .stats{margin-top:26px;border-radius:4px}
+  .card,.visit-card{min-width:0}
+  .brand{min-width:0}.brand .name{overflow-wrap:anywhere}
+  .visit-card a{overflow-wrap:anywhere}
+  .craft-gallery{padding-top:0}
+  .craft-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  .craft-grid figure{background:white;border:1px solid var(--line);border-radius:4px;overflow:hidden}
+  .craft-grid .wide{grid-column:1/-1}
+  .craft-grid img{width:100%;height:auto}
+  .craft-grid figcaption{padding:14px 18px;font-weight:600;font-size:15px}
+  .catalogues{padding:24px 0 0}.catalogues h3{font-family:var(--font-head);font-size:22px}
+  .catalogues p{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}.catalogues a{padding:8px 16px;border:1px solid var(--line-strong);border-radius:4px}
+  footer.site-footer .credit{color:#c9c4b2}
+  @media(max-width:900px){.brand-banner{padding:0}.hero{padding:34px 0}.brand .name{font-size:18px}.brand .mark{display:none}.craft-grid{grid-template-columns:1fr}.craft-grid .wide{grid-column:auto}}
   @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
 </style>
 </head>
@@ -116,7 +141,7 @@
 <header>
   <div class="wrap header-in">
     <a class="brand" href="#top">
-      <span class="mark">B&amp;S</span>
+      
       <span><span class="name">Bangham and Scratchett</span><span class="est">Cobblers - Key cutting - Engraving</span></span>
     </a>
     <nav aria-label="Main">
@@ -131,22 +156,25 @@
 
 <main id="top">
 
+  <div class="brand-banner"><img src="assets/site/banner.jpg" width="948" height="334" alt="Bangham and Scratchett of London Limited - crest and gothic wordmark, shoes, keys and trophies"></div>
   <section class="hero">
     <div class="wrap">
       <span class="eyebrow">Sunbury on Thames - traditional cobblers since 1998</span>
-      <h1>Shoe repairs, key cutting and engraving, done properly.</h1>
-      <p class="lede">We are Bangham and Scratchett of London Limited, a traditional cobblers on Vicarage Road in Sunbury. Our owner has spent more than 40 years in the shoe repair trade, and we offer traditional services using old and new techniques - and we always love something new and challenging.</p>
+      <h1>Shoe repairs, key cutting and engraving.</h1>
+      <p class="lede">We are Bangham and Scratchett of London Limited, a traditional cobblers on Vicarage Road in Sunbury. Shoe repairs, keys, engraving and trophies, with trade services available on repairs.</p>
       <div class="actions">
         <a class="btn btn-primary" href="tel:+441784241999">Call 01784 241999</a>
         <a class="btn btn-ghost" href="#contact">Visit or contact us</a>
       </div>
+    </div>
+  </section>
+  <div class="wrap">
       <div class="stats">
         <div class="stat"><b>1998</b><span>Quality Cobbler first set up in Ashford</span></div>
         <div class="stat"><b>40+</b><span>Years in the shoe repair trade</span></div>
         <div class="stat"><b>2024</b><span>Moved to new Sunbury premises</span></div>
       </div>
-    </div>
-  </section>
+  </div>
 
   <section id="services">
     <div class="wrap">
@@ -212,6 +240,21 @@
     </div>
   </section>
 
+  <section class="craft-gallery">
+    <div class="wrap">
+      <p class="kicker">Engraving and trophies</p>
+      <h2>Awards, engraving and restoration</h2>
+      <div class="craft-grid">
+        <figure><img src="assets/site/photo-1.jpg" width="942" height="296" alt="Three silver trophy cups" loading="lazy"><figcaption>Trophy cups</figcaption></figure>
+        <figure><img src="assets/site/photo-3.jpg" width="936" height="296" alt="Glass and crystal-style awards" loading="lazy"><figcaption>Glass awards</figcaption></figure>
+        <figure class="wide"><img src="assets/site/photo-5.jpg" width="936" height="296" alt="Trophy restoration and detailed metalwork shown on our original website" loading="lazy"><figcaption>Restoration and detailed work</figcaption></figure>
+      </div>
+      <div class="catalogues">
+        <h3>Browse the trophy catalogues</h3>
+        <p><a href="http://trendsettingtrophies.com/">Trend</a> <a href="https://www.trophystreet2023.co.uk/">Glenway</a> <a href="https://view.flipdocs.com/swatkins-grandeur-edition">Swatkins</a> <a href="https://heyzine.com/flip-book/ced4fd6e99.html">Cebrian</a></p>
+      </div>
+    </div>
+  </section>
   <section id="trusted" style="padding-top:0">
     <div class="wrap">
       <p class="kicker">Trusted by</p>
@@ -288,7 +331,8 @@
   <div class="wrap">
     <p>Bangham and Scratchett of London Limited - 191 Vicarage Road, Sunbury on Thames, Middlesex TW16 7TP</p>
     <p>Shoe repairs, key cutting, engraving and trophies.</p>
-    <p class="credit">Design concept by <a href="https://websitesbynick.co.uk/">Websites by Nick</a> - not the live Bangham and Scratchett website.</p>
+    <p><a href="https://www.instagram.com/bangscratch/">Instagram</a> · <a href="https://www.facebook.com/bangscratch">Facebook</a> · <a href="https://www.youtube.com/channel/UCjAdcBhyNJadLLhNLMzm7nQ?view_as=subscriber">YouTube</a></p>
+    <p class="credit">Design concept by <a href="https://websitesbynick.co.uk/">Websites by Nick</a></p>
   </div>
 </footer>
 
