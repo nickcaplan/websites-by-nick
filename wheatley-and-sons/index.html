@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Wheatley &amp; Sons - Builders in Molesey since 1850</title>
+<meta name="description" content="Design concept for Wheatley & Sons Limited, builders in East and West Molesey since 1850.">
+<style>
+  :root{
+    --bg:#f7f4ee; --surface:#ffffff; --surface-tint:#efe9dd;
+    --ink:#2b2419; --ink-soft:#5a5040; --muted:#6f6450;
+    --primary:#6b2b20; --primary-deep:#4c1c15; --on-primary:#fdf9f2;
+    --accent:#2e4d3a;
+    --line:rgba(122,74,30,.18); --line-strong:rgba(122,74,30,.38);
+    --radius:14px; --radius-card:12px;
+    --font-head:Georgia,'Times New Roman',serif;
+    --font-body:'Segoe UI',system-ui,-apple-system,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  section[id]{scroll-margin-top:5.5rem}
+  body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  img{max-width:100%;display:block}
+  a{color:var(--primary)}
+  .wrap{max-width:1060px;margin:0 auto;padding:0 20px}
+
+  header{position:sticky;top:0;z-index:20;background:rgba(247,244,238,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+  .header-in{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 20px}
+  .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+  .brand .mark{width:34px;height:34px;border-radius:8px;background:var(--primary);color:var(--on-primary);display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:700;font-size:17px}
+  .brand .name{font-family:var(--font-head);font-weight:700;font-size:19px;letter-spacing:.2px}
+  .brand .est{display:block;font-family:var(--font-body);font-weight:400;font-size:11.5px;color:var(--muted);letter-spacing:.6px;text-transform:uppercase}
+  nav{display:flex;gap:4px;align-items:center;flex-wrap:wrap}
+  nav a{text-decoration:none;color:var(--ink-soft);font-size:14.5px;font-weight:600;padding:8px 12px;border-radius:8px}
+  nav a:hover{background:var(--surface-tint);color:var(--ink)}
+  nav a:focus-visible{outline:2px solid var(--primary);outline-offset:3px;border-radius:4px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:13px 24px;font-weight:700;font-size:15px;text-decoration:none;border:1px solid transparent;cursor:pointer}
+  .btn-primary{background:var(--primary);color:var(--on-primary)}
+  .btn-primary:hover{background:var(--primary-deep);color:var(--on-primary)}
+  .btn-primary:focus-visible{outline:2px solid var(--primary-deep);outline-offset:2px}
+  .btn-ghost{background:var(--surface);color:var(--primary-deep);border-color:var(--line-strong)}
+  .btn-ghost:hover{border-color:var(--primary)}
+  .btn-ghost:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+  .header-cta{padding:9px 18px;font-size:14px}
+
+  .hero{padding:72px 0 56px;background:linear-gradient(180deg,var(--surface-tint),var(--bg))}
+  .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:2.4px;text-transform:uppercase;color:var(--accent);background:rgba(46,77,58,.1);border:1px solid rgba(46,77,58,.25);padding:6px 14px;border-radius:999px;margin-bottom:18px}
+  .hero h1{font-family:var(--font-head);font-size:clamp(34px,5.4vw,54px);line-height:1.12;font-weight:700;max-width:16ch;margin-bottom:18px}
+  .hero p.lede{font-size:18px;color:var(--ink-soft);max-width:52ch;margin-bottom:26px}
+  .hero .actions{display:flex;gap:12px;flex-wrap:wrap}
+  .stats{display:flex;gap:0;margin-top:40px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);overflow:hidden;flex-wrap:wrap}
+  .stat{flex:1 1 150px;padding:18px 20px;border-right:1px solid var(--line)}
+  .stat:last-child{border-right:none}
+  .stat b{display:block;font-family:var(--font-head);font-size:26px;color:var(--primary-deep)}
+  .stat span{font-size:13.5px;color:var(--muted)}
+
+  section{padding:56px 0}
+  .kicker{font-size:12px;font-weight:700;letter-spacing:2.2px;text-transform:uppercase;color:var(--primary);margin-bottom:10px}
+  h2{font-family:var(--font-head);font-size:clamp(26px,3.6vw,36px);line-height:1.2;margin-bottom:14px}
+  .section-intro{color:var(--ink-soft);max-width:56ch;margin-bottom:28px}
+
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);padding:22px}
+  .card h3{font-family:var(--font-head);font-size:19px;margin-bottom:8px}
+  .card p{font-size:15px;color:var(--ink-soft)}
+  .tag{display:inline-block;font-size:11.5px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+
+  .quote-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  blockquote{background:var(--surface);border-left:4px solid var(--primary);border-radius:0 var(--radius-card) var(--radius-card) 0;padding:20px 22px;font-family:var(--font-head);font-size:17px;font-style:italic;color:var(--ink)}
+  blockquote footer{margin-top:12px;font-family:var(--font-body);font-style:normal;font-size:13.5px;font-weight:700;color:var(--muted)}
+
+  .team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .person{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);padding:22px;text-align:left}
+  .person .role{font-size:12.5px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--primary);margin:4px 0 10px}
+  .person p{font-size:14.5px;color:var(--ink-soft)}
+
+  .history-band{background:var(--accent);color:#eef3ef;border-radius:var(--radius);padding:36px 32px}
+  .history-band h2{color:#fff}
+  .history-band p{color:#d8e2da;max-width:64ch}
+  .history-band .years{display:flex;gap:26px;margin-top:22px;flex-wrap:wrap}
+  .history-band .years div b{display:block;font-family:var(--font-head);font-size:22px;color:#fff}
+  .history-band .years div span{font-size:13px;color:#c3d2c7}
+
+  .visit-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .visit-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);padding:24px}
+  .visit-card h3{font-family:var(--font-head);font-size:19px;margin-bottom:12px}
+  .visit-card p, .visit-card li{font-size:15px;color:var(--ink-soft)}
+  .visit-card .big-tel{display:inline-block;margin-top:10px;font-family:var(--font-head);font-size:24px;font-weight:700;color:var(--primary-deep);text-decoration:none}
+  .visit-card .big-tel:focus-visible{outline:2px solid var(--primary);outline-offset:3px}
+  .visit-card ul{list-style:none;margin-top:6px}
+  .visit-card li{padding:4px 0;border-bottom:1px dashed var(--line)}
+  .visit-card li:last-child{border-bottom:none}
+
+  footer.site-footer{background:#241d13;color:#cbbfa9;padding:30px 0;font-size:14px}
+  footer.site-footer a{color:#e8dcc2}
+  footer.site-footer p{margin-bottom:4px}
+  footer.site-footer .credit{margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.12);font-size:13px;color:#9d9077}
+
+  .mobile-call{display:none}
+  @media (max-width:900px){
+    nav{display:none}
+    .grid-3,.quote-grid,.team-grid,.visit-grid{grid-template-columns:1fr}
+    .hero{padding:48px 0 40px}
+    .mobile-call{display:flex;position:sticky;bottom:0;z-index:30;gap:10px;padding:10px 14px;background:rgba(247,244,238,.97);border-top:1px solid var(--line)}
+    .mobile-call .btn{flex:1;padding:12px}
+  }
+  /* Wheatley's own wordmark and project photography anchor the revision. */
+  .brand{flex-shrink:0}
+  .wordmark{width:218px;height:auto}
+  .hero{position:relative;background:linear-gradient(90deg,rgba(20,27,19,.89),rgba(20,27,19,.46) 60%,rgba(20,27,19,.12)),url('assets/site/hero.jpg') center 52%/cover;padding:82px 0 88px;color:white}
+  .hero h1{font-weight:400;max-width:16ch;font-size:clamp(36px,4.5vw,56px)}
+  .hero p.lede{color:#fff;max-width:53ch}
+  .hero .eyebrow{color:#fff;background:transparent;border:0;padding:0;letter-spacing:1.8px}
+  .hero .btn-primary{background:#fff;color:var(--primary-deep)}
+  .hero .btn-primary:hover{background:#efe9dd}
+  .hero .btn-ghost{background:rgba(0,0,0,.15);color:#fff;border-color:#fff}
+  .hero .btn:focus-visible{outline:2px solid white;outline-offset:4px}
+  .stats{margin-top:28px;border-radius:4px}
+  .card,.person,.visit-card{min-width:0}
+  .project-card{padding:0 0 24px;overflow:hidden;border-radius:4px}
+  .project-card img{width:100%;height:250px;object-fit:cover;margin-bottom:22px}
+  .project-card .tag,.project-card h3,.project-card p{margin-left:22px;margin-right:22px}
+  .visit-card a{overflow-wrap:anywhere}
+  footer.site-footer .credit{color:#cbbfa9}
+  @media(max-width:1050px){nav a{padding:8px;font-size:13px}.wordmark{width:190px}}
+  @media(max-width:900px){.hero{padding:52px 0 58px;background-position:62% center}.hero p.lede{font-size:16px}.project-card img{height:auto;aspect-ratio:720/599}.wordmark{width:188px}.stats{margin-top:20px}.stat{flex-basis:140px;padding:14px}.hero h1{max-width:15ch}}
+  @media(max-width:360px){.wordmark{width:175px}.hero .actions .btn{width:100%}}
+  .mobile-menu{display:none}
+  @media(max-width:900px){
+    .header-in{position:relative}
+    .mobile-menu{display:block}
+    .mobile-menu summary{cursor:pointer;list-style:none;border:1px solid var(--line-strong);border-radius:4px;padding:8px 10px;font-size:14px;font-weight:700;color:var(--primary-deep)}
+    .mobile-menu summary:focus-visible{outline:2px solid var(--primary);outline-offset:3px}
+    .mobile-menu nav{position:absolute;top:100%;right:20px;left:20px;background:var(--bg);border:1px solid var(--line-strong);border-radius:4px;padding:8px;box-shadow:0 12px 24px #0002}
+    .mobile-menu[open] nav{display:grid;grid-template-columns:1fr 1fr}
+    .mobile-menu nav a{font-size:15px;padding:12px}
+  }
+  @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap header-in">
+    <a class="brand" href="#top">
+      <img class="wordmark" src="assets/site/logo.png" width="272" height="91" alt="Wheatley &amp; Sons Limited">
+    </a>
+    <nav aria-label="Main">
+      <a href="#work">Our work</a>
+      <a href="#about">About</a>
+      <a href="#team">The team</a>
+      <a href="#history">History</a>
+      <a href="#contact">Contact</a>
+      <a class="btn btn-primary header-cta" href="tel:+442089795762">Call 0208 979 5762</a>
+    </nav>
+    <details class="mobile-menu">
+      <summary>Menu</summary>
+      <nav aria-label="Mobile sections">
+        <a href="#work">Our work</a><a href="#about">About</a>
+        <a href="#team">The team</a><a href="#history">History</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </details>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="wrap hero-content">
+      <span class="eyebrow">Molesey, Surrey - family-run since 1850</span>
+      <h1>Excellence in construction since 1850.</h1>
+      <p class="lede">We are Wheatley &amp; Sons, a family-run building firm serving Molesey and the surrounding areas for more than 170 years. Refurbishments, extensions and complete transformations.</p>
+      <div class="actions">
+        <a class="btn btn-primary" href="tel:+442089795762">Call 0208 979 5762</a>
+        <a class="btn btn-ghost" href="#contact">Request an estimate</a>
+      </div>
+    </div>
+  </section>
+  <div class="wrap">
+      <div class="stats">
+        <div class="stat"><b>1850</b><span>Founded by Jesse Wheatley</span></div>
+        <div class="stat"><b>170+</b><span>Years building in Molesey</span></div>
+        <div class="stat"><b>FMB</b><span>Federation of Master Builders member</span></div>
+      </div>
+  </div>
+
+  <section id="work">
+    <div class="wrap">
+      <p class="kicker">Our work</p>
+      <h2>Refurbishments and extensions, done properly</h2>
+      <p class="section-intro">A few examples of work carried out by Wheatleys, in and around Molesey.</p>
+      <div class="grid-3">
+        <div class="card project-card">
+          <img src="assets/site/arnison.jpg" width="720" height="599" alt="Refurbished Victorian house on Arnison Road" loading="lazy">
+          <span class="tag">Arnison Road</span>
+          <h3>Victorian transformation</h3>
+          <p>Just a few doors away from Wheatley's original yard, we transformed a Victorian property that had not been touched for over 50 years.</p>
+        </div>
+        <div class="card project-card">
+          <img src="assets/site/burleigh.jpg" width="720" height="599" alt="Brick house at Burleigh Park following extension and refurbishment" loading="lazy">
+          <span class="tag">Burleigh Park</span>
+          <h3>Extension and complete refurbishment</h3>
+          <p>In keeping with the other houses on the beautiful Cobham Estate, an extension and complete refurbishment transformed this property.</p>
+        </div>
+        <div class="card project-card">
+          <img src="assets/site/esher.jpg" width="720" height="599" alt="Extended and refurbished house on Esher Road" loading="lazy">
+          <span class="tag">Esher Road</span>
+          <h3>Into the 21st century</h3>
+          <p>A 1930s pebble-dashed house extended to the side and rear, with a complete refurb and facelift bringing it stunningly into the 21st century.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" style="padding-top:0">
+    <div class="wrap">
+      <p class="kicker">What our clients say</p>
+      <h2>Trusted on stressful projects</h2>
+      <div class="quote-grid">
+        <blockquote>
+          "We would like to thank your hardworking team, who are not just that, but intelligently think about all their work and the best outcomes for our living experience beyond. We want to thank you all for making this potentially stressful project a pleasure on account of each persons kind availability and care at every stage. We are most grateful."
+          <footer>Steve and Ali - East Molesey</footer>
+        </blockquote>
+        <blockquote>
+          "Thank you for undertaking and executing the work at the above property so professionally. It was started and completed on time with precise attention to detail, without snags. Difficulties encountered during the course of the contract were quickly resolved without any fuss or loss of time. Overall it was an excellent experience."
+          <footer>Peter - Architect</footer>
+        </blockquote>
+      </div>
+    </div>
+  </section>
+
+  <section id="team" style="padding-top:0">
+    <div class="wrap">
+      <p class="kicker">The team</p>
+      <h2>People you will actually deal with</h2>
+      <p class="section-intro">We aim to serve as your competent and reliable partner in business. Our staff will always welcome you with friendly, attentive service.</p>
+      <div class="team-grid">
+        <div class="person">
+          <h3>Abi Palmer</h3>
+          <p class="role">Managing Director</p>
+          <p>Abi started at Wheatleys in 2008 managing renovation projects, having worked on her own properties for 18 years. She took over as Managing Director following her father Allen's retirement.</p>
+        </div>
+        <div class="person">
+          <h3>Andy Simms</h3>
+          <p class="role">Company Secretary</p>
+          <p>Andy joined Wheatley &amp; Sons at 16 and has faithfully stayed with the company, becoming a major force in running Wheatleys. As Secretary and Manager he takes pride in running the company efficiently.</p>
+        </div>
+        <div class="person">
+          <h3>Jackie Palmer</h3>
+          <p class="role">Director</p>
+          <p>In her 40th year at Wheatleys, Jackie has reduced her office hours but remains a driving force in the company.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="history" style="padding-top:0">
+    <div class="wrap">
+      <div class="history-band">
+        <p class="kicker" style="color:#e8dcc2">Company history</p>
+        <h2>Building Molesey since the railway age</h2>
+        <p>Jesse Wheatley started in business as a builder and decorator in 1850 in neighbouring Walton-on-Thames, and came to Molesey in 1856. As the railway brought demand for housing, Wheatleys built much of East Molesey - including Beauchamp Road, Palace Road, Wolsey Road, Matham Road and Arnison Road - joined by Jesse's four sons, with a second office in Esher High Street. The company has long had a close association with the Church, including involvement in building the St Paul's Church spire in the late nineteenth century.</p>
+        <div class="years">
+          <div><b>1850</b><span>Jesse Wheatley starts out</span></div>
+          <div><b>1856</b><span>Offices open in Molesey</span></div>
+          <div><b>Today</b><span>Still family-run, still local</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" style="padding-top:0">
+    <div class="wrap">
+      <p class="kicker">Contact us</p>
+      <h2>Request an estimate</h2>
+      <p class="section-intro">Take the first step to becoming one of our many satisfied customers - call us now or send an enquiry and we will come back to you.</p>
+      <div class="visit-grid">
+        <div class="visit-card">
+          <h3>Talk to us</h3>
+          <p>The quickest way to reach us is by phone.</p>
+          <a class="big-tel" href="tel:+442089795762">0208 979 5762</a>
+          <p style="margin-top:10px">Email: <a href="mailto:wheatley_sons@btconnect.com">wheatley_sons@btconnect.com</a></p>
+        </div>
+        <div class="visit-card">
+          <h3>Find us</h3>
+          <ul>
+            <li>Wheatley &amp; Sons</li>
+            <li>74 High Street</li>
+            <li>West Molesey, Surrey</li>
+            <li>KT8 2LY</li>
+          </ul>
+          <p style="margin-top:10px"><a href="https://www.google.com/maps/search/?api=1&amp;query=Wheatley+and+Sons+74+High+Street+West+Molesey+KT8+2LY">Open in Google Maps</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div class="mobile-call">
+  <a class="btn btn-primary" href="tel:+442089795762">Call now</a>
+  <a class="btn btn-ghost" href="mailto:wheatley_sons@btconnect.com">Email us</a>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Wheatley &amp; Sons Limited - 74 High Street, West Molesey, Surrey KT8 2LY</p>
+    <p>Excellence in construction since 1850.</p>
+    <p class="credit">Design concept by <a href="https://websitesbynick.co.uk/">Websites by Nick</a></p>
+  </div>
+</footer>
+
+</body>
+</html>
