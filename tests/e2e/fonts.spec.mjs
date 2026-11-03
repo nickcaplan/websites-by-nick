@@ -1,6 +1,12 @@
 import { test } from '@playwright/test';
 import assert from 'node:assert/strict';
 
+// Fail closed: no check in this suite may send a real enquiry. Every page gets
+// a network-level abort for the live form endpoint before anything else runs.
+test.beforeEach(async ({ page }) => {
+  await page.route('**/formspree.io/**', route => route.abort());
+});
+
 // Hold the webfont until after a fallback paint, rather than relying on network
 // timing. This checks vertical text stability, not identical character widths or
 // zero CLS: the fallback cannot promise either of those.
