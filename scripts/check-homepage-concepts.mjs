@@ -50,7 +50,7 @@ try {
     const errors = [];
     page.on("pageerror", (e) => errors.push(e.message));
     for (const slug of [
-      "",
+      "directions/",
       "playground/",
       "transformation/",
       "portfolio/",
