@@ -96,11 +96,13 @@
   .faq-a p{padding:0 18px 16px;font-size:14.5px}
 
   .visit-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:26px}
+  .visit-grid .card{min-width:0}
   .visit-grid .card p{margin-bottom:8px}
   .visit-grid .card .btn{margin-top:8px}
-  .hours td{padding:4px 0;font-size:14.5px;color:var(--ink-soft)}
+  .hours{width:100%;table-layout:fixed}
+  .hours td{overflow-wrap:anywhere;padding:4px 0;font-size:14.5px;color:var(--ink-soft)}
   .hours td:first-child{font-weight:600;color:var(--ink);padding-right:18px}
-  a.big-link{display:inline-block;font-weight:700;font-size:17px;margin-top:4px;text-decoration:none;color:var(--primary-deep)}
+  a.big-link{overflow-wrap:anywhere;max-width:100%;display:inline-block;font-weight:700;font-size:17px;margin-top:4px;text-decoration:none;color:var(--primary-deep)}
   a.big-link:hover{text-decoration:underline}
   a.big-link:focus-visible{outline:2px solid var(--primary);outline-offset:3px;border-radius:4px}
 
