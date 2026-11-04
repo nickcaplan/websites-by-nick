@@ -12,6 +12,8 @@
   let refreshProjects = () => {};
   const apply = () => {
     document.body.classList.toggle("paused", paused);
+    const typedTitle = document.querySelector("h1.will-type.typed");
+    if (paused && typedTitle) typedTitle.classList.add("drawn");
     button.setAttribute("aria-pressed", String(paused));
     refreshProjects();
   };
@@ -54,7 +56,7 @@
       const finish = () => {
         chars.forEach((s) => s.classList.add("on"));
         caret.remove();
-        heroTitle.classList.add("typed");
+        heroTitle.classList.add("typed", "drawn");
       };
       const step = () => {
         if (reduced.matches) return finish();
@@ -67,6 +69,13 @@
           setTimeout(() => {
             caret.remove();
             heroTitle.classList.add("typed");
+            heroTitle
+              .querySelector(".swoosh")
+              .addEventListener(
+                "animationend",
+                () => heroTitle.classList.add("drawn"),
+                { once: true },
+              );
           }, 250);
           return;
         }

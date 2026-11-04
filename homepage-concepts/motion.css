@@ -164,6 +164,10 @@ h1.will-type .swoosh {
 h1.will-type.typed .swoosh {
   animation: draw 1.4s ease forwards;
 }
+h1.will-type.typed.drawn .swoosh {
+  animation: none;
+  stroke-dashoffset: 0;
+}
 .hero-caret {
   display: inline-block;
   width: 0.055em;
