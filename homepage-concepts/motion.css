@@ -302,7 +302,7 @@ h1.will-type.typed .swoosh {
   --rotation: -6deg;
   animation:
     enter-card 1.3s cubic-bezier(0.2, 0.75, 0.2, 1) both,
-    drift-left 7s 1.3s ease-in-out 6 alternate both;
+    drift-left 7s 1.3s ease-in-out 6 alternate forwards;
   transform: rotate(-6deg);
 }
 .community {
@@ -313,7 +313,7 @@ h1.will-type.typed .swoosh {
   --rotation: 7deg;
   animation:
     enter-card 1.4s 0.15s cubic-bezier(0.2, 0.75, 0.2, 1) both,
-    drift-right 8s 1.6s ease-in-out 6 alternate both;
+    drift-right 8s 1.6s ease-in-out 6 alternate forwards;
   transform: rotate(7deg);
 }
 .sketch {
@@ -328,7 +328,7 @@ h1.will-type.typed .swoosh {
   padding: 17px 25px;
   box-shadow: 0 12px 25px #20302718;
   z-index: 1;
-  animation: sketch-in 1.3s 0.3s both, rock 7s 1.7s ease-in-out 4 alternate both;
+  animation: sketch-in 1.3s 0.3s both, rock 7s 1.7s ease-in-out 4 alternate forwards;
   transition: scale 0.45s cubic-bezier(0.2, 0.9, 0.3, 1.35);
 }
 .sketch-small {
@@ -356,7 +356,7 @@ h1.will-type.typed .swoosh {
   font: 20px/1.1 var(--serif);
   z-index: 4;
   transform: rotate(-7deg);
-  animation: note-in 1.2s 0.9s both, bob 5s 2.2s ease-in-out 6 alternate both;
+  animation: note-in 1.2s 0.9s both, bob 5s 2.2s ease-in-out 6 alternate forwards;
   background: var(--lime);
   border-radius: 50%;
   padding: 22px 25px;
