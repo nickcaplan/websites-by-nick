@@ -48,18 +48,6 @@ button:focus-visible {
 .skip:focus {
   top: 10px;
 }
-.preview-note {
-  padding: 8px 4%;
-  font-size: 11px;
-  background: var(--ink);
-  color: #f4f0e8;
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-}
-.preview-note a {
-  text-decoration: underline;
-}
 .nav {
   max-width: 1600px;
   margin: auto;
@@ -162,6 +150,33 @@ h1 em {
   stroke-dasharray: 1500;
   stroke-dashoffset: 1500;
   animation: draw 1.4s 0.6s ease forwards;
+}
+h1.will-type .hc {
+  opacity: 0;
+}
+h1.will-type .hc.on {
+  opacity: 1;
+}
+h1.will-type .swoosh {
+  animation: none;
+  stroke-dashoffset: 1500;
+}
+h1.will-type.typed .swoosh {
+  animation: draw 1.4s ease forwards;
+}
+.hero-caret {
+  display: inline-block;
+  width: 0.055em;
+  height: 0.82em;
+  margin-left: 0.03em;
+  vertical-align: -0.06em;
+  background: var(--orange);
+  animation: caret-blink 0.9s steps(2) infinite;
+}
+@keyframes caret-blink {
+  50% {
+    opacity: 0;
+  }
 }
 .hero-bottom {
   display: flex;
@@ -571,6 +586,10 @@ body.paused .reveal {
 .hidden-page .wordmark-dot {
   animation-play-state: paused !important;
 }
+.paused .hero-caret,
+.hidden-page .hero-caret {
+  animation-play-state: paused !important;
+}
 .paused .swoosh,
 .hidden-page .swoosh {
   animation-play-state: paused !important;
@@ -680,13 +699,35 @@ body.paused .reveal {
   transform-origin: center;
   animation: st-emerge 12s ease-in-out infinite;
 }
+.studio .st-title {
+  font: 700 15px var(--serif);
+  fill: #203027;
+  clip-path: inset(0 0 0 0);
+  animation: st-title 12s linear infinite;
+}
+.studio .st-caret {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: left center;
+  animation: st-caret 12s linear infinite;
+}
+.studio .st-underline {
+  transform-box: fill-box;
+  transform-origin: left center;
+  animation: st-underline 12s ease-in-out infinite;
+}
+.studio .st-code {
+  transform-box: fill-box;
+  transform-origin: left center;
+}
+.studio .st-code-1 { animation: st-code1 12s ease-in-out infinite; }
+.studio .st-code-2 { animation: st-code2 12s ease-in-out infinite; }
 .studio .st-block {
   opacity: 1;
   transform-box: fill-box;
   transform-origin: center;
   animation: st-pop 12s ease-in-out infinite;
 }
-.studio .st-b1 { animation-name: st-pop1; }
 .studio .st-b2 { animation-name: st-pop2; }
 .studio .st-b3 { animation-name: st-pop3; }
 .studio .st-b4 { animation-name: st-pop4; }
@@ -713,35 +754,55 @@ body.paused .reveal {
   14%, 78% { opacity: 1; transform: translateY(0) scale(1); }
   88%, 100% { opacity: 0; transform: translateY(-10px) scale(0.96); }
 }
-@keyframes st-pop1 {
-  0%, 20% { opacity: 0; transform: scale(0.4); }
-  25%, 78% { opacity: 1; transform: scale(1); }
-  88%, 100% { opacity: 0; transform: scale(0.94); }
+@keyframes st-code1 {
+  0%, 3% { transform: scaleX(0.15); }
+  10%, 88% { transform: scaleX(1); }
+  94%, 100% { transform: scaleX(0.15); }
+}
+@keyframes st-code2 {
+  0%, 9% { transform: scaleX(0.15); }
+  16%, 88% { transform: scaleX(1); }
+  94%, 100% { transform: scaleX(0.15); }
+}
+@keyframes st-title {
+  0% { clip-path: inset(0 100% 0 0); }
+  16% { clip-path: inset(0 100% 0 0); animation-timing-function: steps(11); }
+  34%, 100% { clip-path: inset(0 0 0 0); }
+}
+@keyframes st-caret {
+  0%, 16% { opacity: 0; transform: translateX(0); }
+  16.5% { opacity: 1; animation-timing-function: steps(11); }
+  34% { opacity: 1; transform: translateX(90px); }
+  36%, 100% { opacity: 0; transform: translateX(90px); }
+}
+@keyframes st-underline {
+  0%, 35% { transform: scaleX(0); }
+  41%, 100% { transform: scaleX(1); }
 }
 @keyframes st-pop2 {
-  0%, 27% { opacity: 0; transform: scale(0.4); }
-  32%, 78% { opacity: 1; transform: scale(1); }
-  88%, 100% { opacity: 0; transform: scale(0.94); }
+  0%, 44% { opacity: 0; transform: scale(0.4); }
+  50%, 86% { opacity: 1; transform: scale(1); }
+  92%, 100% { opacity: 0; transform: scale(0.94); }
 }
 @keyframes st-pop3 {
-  0%, 34% { opacity: 0; transform: scale(0.4); }
-  39%, 78% { opacity: 1; transform: scale(1); }
-  88%, 100% { opacity: 0; transform: scale(0.94); }
+  0%, 51% { opacity: 0; transform: scale(0.4); }
+  57%, 86% { opacity: 1; transform: scale(1); }
+  92%, 100% { opacity: 0; transform: scale(0.94); }
 }
 @keyframes st-pop4 {
-  0%, 41% { opacity: 0; transform: scale(0.4); }
-  46%, 78% { opacity: 1; transform: scale(1); }
-  88%, 100% { opacity: 0; transform: scale(0.94); }
+  0%, 58% { opacity: 0; transform: scale(0.4); }
+  64%, 86% { opacity: 1; transform: scale(1); }
+  92%, 100% { opacity: 0; transform: scale(0.94); }
 }
 @keyframes st-pop5 {
-  0%, 48% { opacity: 0; transform: scale(0.4); }
-  53%, 78% { opacity: 1; transform: scale(1); }
-  88%, 100% { opacity: 0; transform: scale(0.94); }
+  0%, 65% { opacity: 0; transform: scale(0.4); }
+  71%, 86% { opacity: 1; transform: scale(1); }
+  92%, 100% { opacity: 0; transform: scale(0.94); }
 }
 @keyframes st-spark {
-  0%, 52% { opacity: 0; transform: scale(0.3) rotate(0deg); }
-  58%, 72% { opacity: 1; transform: scale(1) rotate(20deg); }
-  84%, 100% { opacity: 0; transform: scale(0.4) rotate(45deg); }
+  0%, 72% { opacity: 0; transform: scale(0.3) rotate(0deg); }
+  78%, 88% { opacity: 1; transform: scale(1) rotate(20deg); }
+  94%, 100% { opacity: 0; transform: scale(0.4) rotate(45deg); }
 }
 @media (max-width: 900px) {
   .project {
@@ -800,12 +861,6 @@ body.paused .reveal {
   }
 }
 @media (max-width: 600px) {
-  .preview-note {
-    font-size: 9px;
-    padding: 7px 20px;
-    flex-wrap: wrap;
-    gap: 2px 15px;
-  }
   .nav {
     padding: 15px 20px;
     gap: 15px;
@@ -1059,10 +1114,6 @@ body.paused .reveal {
   --paper: #1b2923;
   --ink: #f2ecdf;
   --orange: #ed926f;
-}
-.dark .preview-note {
-  background: #111d17;
-  color: #f2ecdf;
 }
 .dark .composition {
   background: #334338;

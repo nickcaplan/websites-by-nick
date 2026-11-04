@@ -21,6 +21,67 @@
     apply();
   });
 
+  // Hero title types out, then the underline swoosh draws. Without JS or
+  // with reduced motion the full title shows and the swoosh draws as before.
+  const heroTitle = document.getElementById("hero-title");
+  if (heroTitle && !reduced.matches) {
+    const chars = [];
+    const walk = (node) => {
+      [...node.childNodes].forEach((n) => {
+        if (n.nodeType === Node.TEXT_NODE) {
+          const frag = document.createDocumentFragment();
+          [...n.textContent].forEach((ch) => {
+            const s = document.createElement("span");
+            s.className = "hc";
+            s.textContent = ch;
+            frag.appendChild(s);
+            chars.push(s);
+          });
+          n.replaceWith(frag);
+        } else if (n.nodeType === Node.ELEMENT_NODE && !n.classList.contains("swoosh")) {
+          walk(n);
+        }
+      });
+    };
+    heroTitle.querySelectorAll(".line").forEach(walk);
+    if (chars.length) {
+      heroTitle.setAttribute("aria-label", [...heroTitle.querySelectorAll(".line")].map((l) => l.textContent.trim()).join(" "));
+      heroTitle.querySelectorAll(".line").forEach((l) => l.setAttribute("aria-hidden", "true"));
+      heroTitle.classList.add("will-type");
+      const caret = document.createElement("span");
+      caret.className = "hero-caret";
+      let i = 0;
+      chars[0].after(caret);
+      const finish = () => {
+        chars.forEach((s) => s.classList.add("on"));
+        caret.remove();
+        heroTitle.classList.add("typed");
+      };
+      const step = () => {
+        if (reduced.matches) return finish();
+        if (
+          document.body.classList.contains("paused") ||
+          document.body.classList.contains("hidden-page")
+        ) {
+          setTimeout(step, 180);
+          return;
+        }
+        if (i >= chars.length) {
+          setTimeout(() => {
+            caret.remove();
+            heroTitle.classList.add("typed");
+          }, 250);
+          return;
+        }
+        chars[i].classList.add("on");
+        chars[i].after(caret);
+        i += 1;
+        setTimeout(step, 65);
+      };
+      setTimeout(step, 350);
+    }
+  }
+
   // Pointer parallax on the composition: fine pointers only, transform-only,
   // rAF-throttled, respects the pause toggle and reduced-motion.
   const comp = document.querySelector(".composition");
