@@ -159,10 +159,10 @@
         reduced.matches;
       const vh = window.innerHeight;
       const stacked = desktop.matches;
-      const bands = 7;
       projects.forEach((card, i) => {
         const shot = card.querySelector(".project-image");
-        const img = shot && shot.querySelector("img");
+        const stage = shot && shot.querySelector(".cmp-stage");
+        const cmps = stage ? [...stage.querySelectorAll(".cmp")] : [];
         const next = projects[i + 1];
         if (off) {
           card.style.transform = "";
@@ -170,18 +170,21 @@
           card.style.pointerEvents = "";
           card.removeAttribute("tabindex");
           if (shot) shot.style.transform = "";
-          if (img) img.style.clipPath = "";
+          if (stage) stage.classList.remove("building");
           return;
         }
         if (shot) {
           const r = card.getBoundingClientRect();
           const g = Math.min(Math.max((vh - r.top) / (vh * 0.75), 0), 1);
           shot.style.transform = `scale(${(0.93 + g * 0.07).toFixed(4)})`;
-          // The screenshot builds top-down in bands, like being assembled live.
-          if (img) {
-            const step = Math.min(bands, Math.ceil(g * bands));
-            img.style.clipPath =
-              step >= bands ? "none" : `inset(0 0 ${(100 - (step / bands) * 100).toFixed(2)}% 0)`;
+          // Each real component of the screenshot arrives in turn as the card
+          // travels in - nav, hero, links, bio - like being assembled live.
+          if (stage) {
+            stage.classList.add("building");
+            const n = cmps.length;
+            cmps.forEach((m, k) =>
+              m.classList.toggle("on", g >= ((k + 1) / (n + 1)) * 0.92)
+            );
           }
         }
         if (next) {

@@ -178,9 +178,6 @@ h1.will-type.typed .swoosh {
     opacity: 0;
   }
 }
-.scrub-stacked .project-image img {
-  transition: clip-path 0.3s cubic-bezier(0.2, 0.7, 0.25, 1);
-}
 .hero-bottom {
   display: flex;
   justify-content: space-between;
@@ -468,8 +465,37 @@ h2 em {
   box-shadow: 0 8px 25px #20302715;
   transition: transform 0.5s;
 }
-.project:hover .project-image img {
+.cmp-stage {
+  position: relative;
+  aspect-ratio: 1280 / 713;
+  background: #f9f6ef;
+  box-shadow: 0 8px 25px #20302715;
+  transition: transform 0.5s;
+}
+.cmp-stage-foa {
+  background: #f6f1e7;
+}
+.project:hover .cmp-stage {
   transform: translateY(-5px) rotate(-1deg);
+}
+.project-image .cmp {
+  position: absolute;
+  left: var(--l);
+  top: var(--t);
+  width: var(--w);
+  height: var(--h);
+  box-shadow: none;
+  transition: opacity 0.45s ease, translate 0.45s cubic-bezier(0.2, 0.7, 0.25, 1), scale 0.45s ease;
+}
+.cmp-stage.building .cmp {
+  opacity: 0;
+  translate: 0 18px;
+  scale: 0.985;
+}
+.cmp-stage.building .cmp.on {
+  opacity: 1;
+  translate: 0 0;
+  scale: 1;
 }
 .project-foa .project-image {
   background: #e5ddc6;
