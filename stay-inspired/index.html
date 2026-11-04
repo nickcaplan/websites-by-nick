@@ -40,7 +40,7 @@
   nav a:focus-visible{outline:2px solid var(--primary);outline-offset:3px;border-radius:4px}
   .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:12px 22px;font-family:var(--font-head);font-weight:600;font-size:15px;letter-spacing:.5px;text-decoration:none;border:1px solid transparent;cursor:pointer}
   .btn-primary{background:var(--primary);color:var(--on-primary)}
-  .btn-primary:hover{background:var(--primary-deep);color:#fff}
+  .btn-primary:hover{background:var(--primary-deep);color:var(--on-primary)}
   .btn-primary:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
   .btn-ghost{background:transparent;color:var(--primary);border-color:var(--line-strong)}
   .btn-ghost:hover{background:var(--surface-tint)}
@@ -68,6 +68,7 @@
   .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start}
   .about-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px}
   .about-card h3{font-family:var(--font-head);font-weight:600;font-size:18px;letter-spacing:.5px;text-transform:uppercase;margin-bottom:12px}
+  .about-card h2.about-title{font-family:var(--font-head);font-weight:600;font-size:18px;letter-spacing:.5px;text-transform:uppercase;margin-bottom:12px}
   .about-card p{font-size:14.5px;color:var(--ink-soft);margin-bottom:10px}
   .fact-list{list-style:none;display:grid;gap:10px;margin-top:4px}
   .fact-list li{display:flex;gap:10px;font-size:14.5px;color:var(--ink-soft)}
@@ -150,7 +151,7 @@
   <section id="about">
     <div class="wrap about-grid">
       <div class="about-card">
-        <h3>About Ben</h3>
+        <h2 class="about-title">About Ben</h2>
         <p>Ben Ash is a professional guitarist and teacher based in Walton-on-Thames. He holds an MA in music, is a Dean Guitars artist and mentors the next generation of musicians at WaterBear college.</p>
         <p>As a performer he plays with Phobetor and Strigoi, and brings that real-world band experience into every lesson.</p>
         <p class="text-links"><a href="https://www.linkedin.com/in/benashguitar">LinkedIn</a><a href="https://linktr.ee/benashguitar">Hear his music via his official links</a></p>
