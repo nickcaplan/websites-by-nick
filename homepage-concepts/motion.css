@@ -178,6 +178,9 @@ h1.will-type.typed .swoosh {
     opacity: 0;
   }
 }
+.scrub-stacked .project-image img {
+  transition: clip-path 0.3s cubic-bezier(0.2, 0.7, 0.25, 1);
+}
 .hero-bottom {
   display: flex;
   justify-content: space-between;
