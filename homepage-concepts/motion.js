@@ -79,6 +79,50 @@
   );
   document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
 
+  // Scroll-scrubbed project showcase: each screenshot grows into view as it
+  // travels up, and the card it covers eases back and dims. Transform/opacity
+  // only, rAF-throttled; pause toggle, reduced motion and a hidden page all
+  // freeze it, and everything is full-size and fully visible without JS.
+  const projects = [...document.querySelectorAll(".work .project")];
+  if (projects.length && !reduced.matches) {
+    let raf2 = null;
+    const scrub = () => {
+      raf2 = null;
+      const off =
+        document.body.classList.contains("paused") ||
+        document.body.classList.contains("hidden-page") ||
+        reduced.matches;
+      const vh = window.innerHeight;
+      projects.forEach((card, i) => {
+        const shot = card.querySelector(".project-image");
+        const next = projects[i + 1];
+        if (off) {
+          card.style.transform = "";
+          card.style.opacity = "";
+          if (shot) shot.style.transform = "";
+          return;
+        }
+        if (shot) {
+          const r = card.getBoundingClientRect();
+          const g = Math.min(Math.max((vh - r.top) / (vh * 0.75), 0), 1);
+          shot.style.transform = `scale(${(0.93 + g * 0.07).toFixed(4)})`;
+        }
+        if (next) {
+          const nr = next.getBoundingClientRect();
+          const p = Math.min(Math.max((vh - nr.top) / vh, 0), 1);
+          card.style.transform = `scale(${(1 - p * 0.05).toFixed(4)})`;
+          card.style.opacity = (1 - p * 0.35).toFixed(3);
+        }
+      });
+    };
+    const kick2 = () => {
+      if (!raf2) raf2 = requestAnimationFrame(scrub);
+    };
+    addEventListener("scroll", kick2, { passive: true });
+    addEventListener("resize", kick2);
+    kick2();
+  }
+
   // Motion is decorative, finite and never moves navigation or page layout.
   // The complete composition and every route remain usable without JavaScript.
   const syncVisibility = () => {

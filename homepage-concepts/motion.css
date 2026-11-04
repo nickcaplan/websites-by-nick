@@ -280,7 +280,7 @@ h1 em {
   scale: 1.06;
 }
 .composer {
-  width: 54%;
+  width: 57%;
   left: 6%;
   top: 68px;
   z-index: 2;
@@ -291,7 +291,7 @@ h1 em {
   transform: rotate(-6deg);
 }
 .community {
-  width: 42%;
+  width: 45%;
   right: 5%;
   bottom: 50px;
   z-index: 3;
@@ -333,19 +333,6 @@ h1 em {
   position: absolute;
   bottom: 14px;
   right: 10px;
-}
-.sunburst {
-  position: absolute;
-  left: 49%;
-  top: 20px;
-  font-size: 150px;
-  line-height: 1;
-  color: var(--orange);
-  z-index: 4;
-  animation:
-    spin-in 1.7s 0.2s both,
-    turn 26s 2s linear infinite;
-  pointer-events: none;
 }
 .floating-note {
   position: absolute;
@@ -404,20 +391,17 @@ h2 em {
   color: var(--orange);
 }
 .work {
-  max-width: 1600px;
+  max-width: 1180px;
   margin: auto;
-  padding: 85px 4% 100px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 50px 5%;
+  padding: 85px 4% 60px;
   border-top: 1px solid #20302730;
 }
 .section-intro {
-  grid-column: 1/-1;
   display: grid;
   grid-template-columns: 1.7fr 1fr;
   align-items: end;
   gap: 15px 80px;
+  margin-bottom: 70px;
 }
 .section-intro .eyebrow {
   grid-column: 1/-1;
@@ -432,9 +416,21 @@ h2 em {
 }
 .project {
   display: block;
+  position: sticky;
+  top: 80px;
+  background: var(--paper);
+  border: 1px solid #20302722;
+  border-radius: 12px;
+  padding: 40px 44px 34px;
+  box-shadow: 0 34px 70px #20302726;
+  margin-bottom: clamp(60px, 16vh, 160px);
+  will-change: transform;
 }
-.project:nth-of-type(2) {
-  margin-top: 80px;
+.project:last-of-type {
+  margin-bottom: 40px;
+}
+.project .project-image {
+  will-change: transform;
 }
 .project-image {
   background: #e4e5db;
@@ -558,11 +554,10 @@ footer h2 em {
   opacity: 1;
   translate: 0 0;
 }
-.js-reveal .project-foa.reveal {
-  transition-delay: 0.12s;
-}
 .paused .composition *,
-.hidden-page .composition * {
+.hidden-page .composition *,
+.paused .studio *,
+.hidden-page .studio * {
   animation-play-state: paused !important;
 }
 .paused .wordmark-dot,
@@ -602,21 +597,6 @@ footer h2 em {
   }
   to {
     transform: translateY(12px) rotate(4deg);
-  }
-}
-@keyframes spin-in {
-  from {
-    opacity: 0;
-    transform: scale(0.5) rotate(-50deg);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) rotate(0);
-  }
-}
-@keyframes turn {
-  to {
-    transform: rotate(360deg);
   }
 }
 @keyframes rock {
@@ -664,6 +644,111 @@ footer h2 em {
     transform: translateY(0) rotate(9deg);
   }
 }
+/* Studio scene: cartoon designer typing while a website takes shape above the laptop. */
+.studio {
+  max-width: 1472px;
+  margin: 56px auto 0;
+  text-align: center;
+}
+.studio svg {
+  width: min(560px, 92%);
+  height: auto;
+}
+.studio figcaption {
+  margin-top: 10px;
+  font: italic 16px var(--serif);
+  color: #525d53;
+}
+.studio .st-hand-l {
+  animation: st-type-l 0.55s ease-in-out infinite alternate;
+}
+.studio .st-hand-r {
+  animation: st-type-r 0.55s 0.27s ease-in-out infinite alternate;
+}
+.studio .st-glow {
+  animation: st-glow 3.2s ease-in-out infinite alternate;
+}
+.studio .st-window {
+  transform-origin: 300px 71px;
+  animation: st-emerge 12s ease-in-out infinite;
+}
+.studio .st-block {
+  opacity: 1;
+  transform-origin: center;
+  animation: st-pop 12s ease-in-out infinite;
+}
+.studio .st-b1 { animation-name: st-pop1; }
+.studio .st-b2 { animation-name: st-pop2; }
+.studio .st-b3 { animation-name: st-pop3; }
+.studio .st-b4 { animation-name: st-pop4; }
+.studio .st-b5 { animation-name: st-pop5; }
+.studio .st-spark {
+  transform-origin: center;
+  animation: st-spark 12s ease-in-out infinite;
+}
+@keyframes st-type-l {
+  from { transform: translateY(0); }
+  to { transform: translateY(-3.5px); }
+}
+@keyframes st-type-r {
+  from { transform: translateY(-3.5px); }
+  to { transform: translateY(0); }
+}
+@keyframes st-glow {
+  from { opacity: 0.35; }
+  to { opacity: 0.75; }
+}
+@keyframes st-emerge {
+  0%, 6% { opacity: 0; transform: translateY(34px) scale(0.7); }
+  14%, 78% { opacity: 1; transform: translateY(0) scale(1); }
+  88%, 100% { opacity: 0; transform: translateY(-16px) scale(0.96); }
+}
+@keyframes st-pop1 {
+  0%, 20% { opacity: 0; transform: scale(0.4); }
+  25%, 78% { opacity: 1; transform: scale(1); }
+  88%, 100% { opacity: 0; transform: scale(0.94); }
+}
+@keyframes st-pop2 {
+  0%, 27% { opacity: 0; transform: scale(0.4); }
+  32%, 78% { opacity: 1; transform: scale(1); }
+  88%, 100% { opacity: 0; transform: scale(0.94); }
+}
+@keyframes st-pop3 {
+  0%, 34% { opacity: 0; transform: scale(0.4); }
+  39%, 78% { opacity: 1; transform: scale(1); }
+  88%, 100% { opacity: 0; transform: scale(0.94); }
+}
+@keyframes st-pop4 {
+  0%, 41% { opacity: 0; transform: scale(0.4); }
+  46%, 78% { opacity: 1; transform: scale(1); }
+  88%, 100% { opacity: 0; transform: scale(0.94); }
+}
+@keyframes st-pop5 {
+  0%, 48% { opacity: 0; transform: scale(0.4); }
+  53%, 78% { opacity: 1; transform: scale(1); }
+  88%, 100% { opacity: 0; transform: scale(0.94); }
+}
+@keyframes st-spark {
+  0%, 52% { opacity: 0; transform: scale(0.3) rotate(0deg); }
+  58%, 72% { opacity: 1; transform: scale(1) rotate(20deg); }
+  84%, 100% { opacity: 0; transform: scale(0.4) rotate(45deg); }
+}
+@media (max-width: 900px) {
+  .project {
+    position: static;
+    padding: 26px 22px 24px;
+    margin-bottom: 34px;
+  }
+  .section-intro {
+    grid-template-columns: 1fr;
+    gap: 15px;
+    margin-bottom: 48px;
+  }
+  .studio {
+    margin-top: 50px;
+  }
+}
+
 @media (min-width: 1600px) {
   .about,
   footer {
@@ -682,10 +767,7 @@ footer h2 em {
   .sketch-big {
     font-size: 46px;
   }
-  .sunburst {
-    font-size: 110px;
-  }
-  .floating-note {
+    .floating-note {
     font-size: 16px;
     padding: 20px;
   }
@@ -840,12 +922,7 @@ footer h2 em {
     width: 46px;
     bottom: 4px;
   }
-  .sunburst {
-    font-size: 90px;
-    left: 38%;
-    top: 9px;
-  }
-  .floating-note {
+    .floating-note {
     font-size: 12px;
     padding: 16px 18px;
     left: 4%;
@@ -1006,6 +1083,9 @@ footer h2 em {
 .dark .project-image {
   background: #344038;
   border-color: #ffffff25;
+}
+.dark .studio figcaption {
+  color: #b9c2b2;
 }
 .dark .project-foa .project-image {
   background: #423f2d;
