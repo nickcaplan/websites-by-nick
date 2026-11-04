@@ -88,6 +88,7 @@
   const projects = [...document.querySelectorAll(".work .project")];
   const desktop = window.matchMedia("(min-width: 901px)");
   if (projects.length && !reduced.matches) {
+    document.body.classList.add("scrub-stacked");
     let raf2 = null;
     const scrub = () => {
       raf2 = null;
@@ -119,7 +120,7 @@
           if (stacked) {
             card.style.transform = `scale(${(1 - p * 0.05).toFixed(4)})`;
             card.style.opacity = (1 - p * 0.35).toFixed(3);
-            const covered = p > 0.5;
+            const covered = nr.top <= 96;
             card.style.pointerEvents = covered ? "none" : "";
             if (covered) card.setAttribute("tabindex", "-1");
             else card.removeAttribute("tabindex");
