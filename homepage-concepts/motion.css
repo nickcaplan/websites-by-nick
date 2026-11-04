@@ -86,6 +86,7 @@ button:focus-visible {
   border-radius: 50%;
   background: var(--orange);
   margin-left: 6px;
+  animation: pulse 3.2s ease-in-out infinite;
 }
 .nav nav {
   display: flex;
@@ -188,6 +189,12 @@ h1 em {
   font-size: 23px;
   transition: transform 0.2s;
 }
+.cta {
+  transition: scale 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.35);
+}
+.cta:hover {
+  scale: 1.04;
+}
 .cta:hover span {
   transform: translate(3px, -3px);
 }
@@ -224,6 +231,7 @@ h1 em {
 }
 .browser-card {
   position: absolute;
+  transition: scale 0.45s cubic-bezier(0.2, 0.9, 0.3, 1.35), box-shadow 0.3s;
   background: #f9f6ef;
   box-shadow: 0 20px 50px #20302725;
   border: 1px solid #20302726;
@@ -263,6 +271,14 @@ h1 em {
   padding: 8px 12px;
   font-size: 10px;
 }
+.browser-card:hover {
+  scale: 1.045;
+  box-shadow: 0 22px 45px #20302733;
+  z-index: 5;
+}
+.sketch:hover {
+  scale: 1.06;
+}
 .composer {
   width: 54%;
   left: 6%;
@@ -271,7 +287,7 @@ h1 em {
   --rotation: -6deg;
   animation:
     enter-card 1.3s cubic-bezier(0.2, 0.75, 0.2, 1) both,
-    drift-left 8s 1.3s ease-in-out 2 alternate both;
+    drift-left 7s 1.3s ease-in-out infinite alternate;
   transform: rotate(-6deg);
 }
 .community {
@@ -282,7 +298,7 @@ h1 em {
   --rotation: 7deg;
   animation:
     enter-card 1.4s 0.15s cubic-bezier(0.2, 0.75, 0.2, 1) both,
-    drift-right 9s 1.6s ease-in-out 2 alternate both;
+    drift-right 8s 1.6s ease-in-out infinite alternate;
   transform: rotate(7deg);
 }
 .sketch {
@@ -297,7 +313,8 @@ h1 em {
   padding: 17px 25px;
   box-shadow: 0 12px 25px #20302718;
   z-index: 1;
-  animation: sketch-in 1.3s 0.3s both;
+  animation: sketch-in 1.3s 0.3s both, rock 7s 1.7s ease-in-out infinite alternate;
+  transition: scale 0.45s cubic-bezier(0.2, 0.9, 0.3, 1.35);
 }
 .sketch-small {
   font: italic 22px var(--serif);
@@ -327,7 +344,7 @@ h1 em {
   z-index: 4;
   animation:
     spin-in 1.7s 0.2s both,
-    turn 18s 2s linear 1 both;
+    turn 26s 2s linear infinite;
   pointer-events: none;
 }
 .floating-note {
@@ -337,6 +354,7 @@ h1 em {
   font: 20px/1.1 var(--serif);
   z-index: 4;
   transform: rotate(-7deg);
+  animation: note-in 1.2s 0.9s both, bob 5s 2.2s ease-in-out infinite alternate;
   background: var(--lime);
   border-radius: 50%;
   padding: 22px 25px;
@@ -531,8 +549,24 @@ footer h2 em {
 .footer-bottom p {
   margin: 0;
 }
+.js-reveal .reveal {
+  opacity: 0;
+  translate: 0 26px;
+  transition: opacity 0.8s ease, translate 0.8s cubic-bezier(0.2, 0.7, 0.25, 1);
+}
+.js-reveal .reveal.in {
+  opacity: 1;
+  translate: 0 0;
+}
+.js-reveal .project-foa.reveal {
+  transition-delay: 0.12s;
+}
 .paused .composition *,
 .hidden-page .composition * {
+  animation-play-state: paused !important;
+}
+.paused .wordmark-dot,
+.hidden-page .wordmark-dot {
   animation-play-state: paused !important;
 }
 .paused .swoosh,
@@ -582,7 +616,42 @@ footer h2 em {
 }
 @keyframes turn {
   to {
-    transform: rotate(110deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes rock {
+  from {
+    transform: rotate(7deg);
+  }
+  to {
+    transform: rotate(11deg);
+  }
+}
+@keyframes note-in {
+  from {
+    opacity: 0;
+    transform: translateY(30px) rotate(-16deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(-7deg);
+  }
+}
+@keyframes bob {
+  from {
+    transform: translateY(0) rotate(-7deg);
+  }
+  to {
+    transform: translateY(-8px) rotate(-5deg);
+  }
+}
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.4);
   }
 }
 @keyframes sketch-in {
