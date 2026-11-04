@@ -180,13 +180,18 @@ if (!settled.total || settled.total !== settled.on)
 if (settled.caret) throw Error("caret left after pause");
 if (settled.off !== "0px") throw Error("underline not settled on pause");
 await settle.getByRole("button", { name: "Pause motion", exact: true }).click();
-await settle.waitForTimeout(1700);
-const resumedOff = await settle.evaluate(
-  () =>
-    getComputedStyle(document.querySelector("#hero-title .swoosh"))
-      .strokeDashoffset,
-);
-if (resumedOff !== "0px") throw Error("underline redrew on resume");
+const resumed = await settle.evaluate(() => {
+  const sw = document.querySelector("#hero-title .swoosh");
+  return {
+    off: getComputedStyle(sw).strokeDashoffset,
+    running: sw
+      .getAnimations()
+      .filter((a) => a.playState === "running" || a.playState === "pending")
+      .length,
+  };
+});
+if (resumed.off !== "0px" || resumed.running)
+  throw Error("underline redrew on resume");
 console.log("PASS pause-settle");
 await settle.close();
 const asm = await b.newPage({ viewport: { width: 1280, height: 900 } });
