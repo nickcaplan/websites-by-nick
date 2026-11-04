@@ -12,7 +12,6 @@
   let refreshProjects = () => {};
   const apply = () => {
     document.body.classList.toggle("paused", paused);
-    button.textContent = paused ? "Resume motion" : "Pause motion";
     button.setAttribute("aria-pressed", String(paused));
     refreshProjects();
   };

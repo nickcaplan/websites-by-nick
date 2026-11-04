@@ -73,7 +73,7 @@ for (const width of [320, 390, 768, 1280, 1600]) {
   await p.getByRole("button", { name: "Pause motion", exact: true }).click();
   if (
     (await p
-      .getByRole("button", { name: "Resume motion" })
+      .getByRole("button", { name: "Pause motion", exact: true })
       .getAttribute("aria-pressed")) !== "true"
   )
     throw Error("pause");
@@ -87,7 +87,7 @@ for (const width of [320, 390, 768, 1280, 1600]) {
       );
   if ((await states()).some((s) => s === "running"))
     throw Error("motion not paused");
-  await p.getByRole("button", { name: "Resume motion" }).click();
+  await p.getByRole("button", { name: "Pause motion", exact: true }).click();
   if ((await states()).some((s) => s === "paused"))
     throw Error("motion not resumed");
   await p.evaluate(() => {
@@ -121,7 +121,7 @@ for (const width of [320, 390, 768, 1280, 1600]) {
   });
   if ((await states()).some((s) => s === "running"))
     throw Error("manual pause lost");
-  await p.getByRole("button", { name: "Resume motion" }).click();
+  await p.getByRole("button", { name: "Pause motion", exact: true }).click();
   if ((await states()).some((s) => s === "paused"))
     throw Error("motion stuck after visibility change");
   if (
