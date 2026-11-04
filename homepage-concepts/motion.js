@@ -84,6 +84,7 @@
   // only, rAF-throttled; pause toggle, reduced motion and a hidden page all
   // freeze it, and everything is full-size and fully visible without JS.
   const projects = [...document.querySelectorAll(".work .project")];
+  const desktop = window.matchMedia("(min-width: 901px)");
   if (projects.length && !reduced.matches) {
     let raf2 = null;
     const scrub = () => {
@@ -93,12 +94,15 @@
         document.body.classList.contains("hidden-page") ||
         reduced.matches;
       const vh = window.innerHeight;
+      const stacked = desktop.matches;
       projects.forEach((card, i) => {
         const shot = card.querySelector(".project-image");
         const next = projects[i + 1];
         if (off) {
           card.style.transform = "";
           card.style.opacity = "";
+          card.style.pointerEvents = "";
+          card.removeAttribute("tabindex");
           if (shot) shot.style.transform = "";
           return;
         }
@@ -110,8 +114,14 @@
         if (next) {
           const nr = next.getBoundingClientRect();
           const p = Math.min(Math.max((vh - nr.top) / vh, 0), 1);
-          card.style.transform = `scale(${(1 - p * 0.05).toFixed(4)})`;
-          card.style.opacity = (1 - p * 0.35).toFixed(3);
+          if (stacked) {
+            card.style.transform = `scale(${(1 - p * 0.05).toFixed(4)})`;
+            card.style.opacity = (1 - p * 0.35).toFixed(3);
+            const covered = p > 0.5;
+            card.style.pointerEvents = covered ? "none" : "";
+            if (covered) card.setAttribute("tabindex", "-1");
+            else card.removeAttribute("tabindex");
+          }
         }
       });
     };

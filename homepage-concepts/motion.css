@@ -669,11 +669,13 @@ footer h2 em {
   animation: st-glow 3.2s ease-in-out infinite alternate;
 }
 .studio .st-window {
-  transform-origin: 300px 71px;
+  transform-box: fill-box;
+  transform-origin: center;
   animation: st-emerge 12s ease-in-out infinite;
 }
 .studio .st-block {
   opacity: 1;
+  transform-box: fill-box;
   transform-origin: center;
   animation: st-pop 12s ease-in-out infinite;
 }
@@ -683,6 +685,7 @@ footer h2 em {
 .studio .st-b4 { animation-name: st-pop4; }
 .studio .st-b5 { animation-name: st-pop5; }
 .studio .st-spark {
+  transform-box: fill-box;
   transform-origin: center;
   animation: st-spark 12s ease-in-out infinite;
 }
@@ -701,7 +704,7 @@ footer h2 em {
 @keyframes st-emerge {
   0%, 6% { opacity: 0; transform: translateY(34px) scale(0.7); }
   14%, 78% { opacity: 1; transform: translateY(0) scale(1); }
-  88%, 100% { opacity: 0; transform: translateY(-16px) scale(0.96); }
+  88%, 100% { opacity: 0; transform: translateY(-10px) scale(0.96); }
 }
 @keyframes st-pop1 {
   0%, 20% { opacity: 0; transform: scale(0.4); }
