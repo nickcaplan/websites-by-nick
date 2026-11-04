@@ -496,7 +496,8 @@ h2 em {
   translate: 0 18px;
   scale: 0.985;
 }
-body.paused .cmp {
+body.paused .cmp,
+body.hidden-page .cmp {
   transition: none;
 }
 .cmp-stage.building .cmp.on {
@@ -629,6 +630,10 @@ body.paused .reveal {
 .paused .swoosh,
 .hidden-page .swoosh {
   animation-play-state: paused !important;
+}
+.paused h1 .swoosh {
+  animation: none !important;
+  stroke-dashoffset: 0 !important;
 }
 @keyframes draw {
   to {
@@ -1174,6 +1179,10 @@ body.paused .reveal {
   background: #1b2923;
   color: #f2ecdf;
   border-color: #ffffff50;
+}
+.dark .motion-toggle[aria-pressed="true"] {
+  background: var(--ink);
+  color: var(--paper);
 }
 .dark .project-image {
   background: #344038;

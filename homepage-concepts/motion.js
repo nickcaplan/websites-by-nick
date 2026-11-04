@@ -58,10 +58,8 @@
       };
       const step = () => {
         if (reduced.matches) return finish();
-        if (
-          document.body.classList.contains("paused") ||
-          document.body.classList.contains("hidden-page")
-        ) {
+        if (document.body.classList.contains("paused")) return finish();
+        if (document.body.classList.contains("hidden-page")) {
           setTimeout(step, 180);
           return;
         }
