@@ -156,6 +156,71 @@ for (const width of [320, 390, 768, 1280, 1600]) {
   console.log("PASS", width);
   await p.close();
 }
+const settle = await b.newPage({ viewport: { width: 1280, height: 1000 } });
+await settle.goto(base + "/homepage-concepts/", {
+  waitUntil: "domcontentloaded",
+});
+await settle.waitForTimeout(700);
+await settle.getByRole("button", { name: "Pause motion", exact: true }).click();
+await settle.waitForFunction(() => {
+  const h = document.getElementById("hero-title");
+  return h.classList.contains("typed") && h.classList.contains("drawn");
+});
+const settled = await settle.evaluate(() => {
+  const h = document.getElementById("hero-title");
+  return {
+    total: h.querySelectorAll(".hc").length,
+    on: h.querySelectorAll(".hc.on").length,
+    caret: !!h.querySelector(".hero-caret"),
+    off: getComputedStyle(h.querySelector(".swoosh")).strokeDashoffset,
+  };
+});
+if (!settled.total || settled.total !== settled.on)
+  throw Error("pause did not settle title");
+if (settled.caret) throw Error("caret left after pause");
+if (settled.off !== "0px") throw Error("underline not settled on pause");
+await settle.getByRole("button", { name: "Pause motion", exact: true }).click();
+await settle.waitForTimeout(1700);
+const resumedOff = await settle.evaluate(
+  () =>
+    getComputedStyle(document.querySelector("#hero-title .swoosh"))
+      .strokeDashoffset,
+);
+if (resumedOff !== "0px") throw Error("underline redrew on resume");
+console.log("PASS pause-settle");
+await settle.close();
+const asm = await b.newPage({ viewport: { width: 1280, height: 900 } });
+await asm.goto(base + "/homepage-concepts/", { waitUntil: "networkidle" });
+const seq = await asm.evaluate(async () => {
+  const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
+  const onCount = () =>
+    [...document.querySelectorAll(".project-sam .cmp")].filter((e) =>
+      e.classList.contains("on"),
+    ).length;
+  const el = document.querySelector(".project-sam .cmp-stage");
+  const abs = window.scrollY + el.getBoundingClientRect().top;
+  const counts = [];
+  window.scrollTo(0, Math.max(0, abs - innerHeight - 80));
+  await sleep(400);
+  counts.push(onCount());
+  window.scrollTo(0, abs - innerHeight * 0.55);
+  await sleep(400);
+  counts.push(onCount());
+  window.scrollTo(0, abs - 60);
+  await sleep(400);
+  counts.push(onCount());
+  return {
+    counts,
+    building: el.classList.contains("building"),
+  };
+});
+if (seq.counts[0] !== 0) throw Error("assembly started early " + seq.counts);
+if (!(seq.counts[1] > 0 && seq.counts[1] < 5))
+  throw Error("assembly did not stage " + seq.counts);
+if (seq.counts[2] !== 5) throw Error("assembly incomplete " + seq.counts);
+if (!seq.building) throw Error("assembly not marked building");
+console.log("PASS assembly");
+await asm.close();
 const r = await b.newPage({
   reducedMotion: "reduce",
   viewport: { width: 390, height: 844 },
