@@ -743,8 +743,6 @@ footer h2 em {
     margin-bottom: 34px;
   }
   .section-intro {
-    grid-template-columns: 1fr;
-    gap: 15px;
     margin-bottom: 48px;
   }
   .studio {

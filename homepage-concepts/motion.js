@@ -9,10 +9,12 @@
     theme.setAttribute("aria-pressed", String(dark));
   });
   let paused = false;
+  let refreshProjects = () => {};
   const apply = () => {
     document.body.classList.toggle("paused", paused);
     button.textContent = paused ? "Resume motion" : "Pause motion";
     button.setAttribute("aria-pressed", String(paused));
+    refreshProjects();
   };
   button.addEventListener("click", () => {
     paused = !paused;
@@ -121,6 +123,11 @@
             card.style.pointerEvents = covered ? "none" : "";
             if (covered) card.setAttribute("tabindex", "-1");
             else card.removeAttribute("tabindex");
+          } else {
+            card.style.transform = "";
+            card.style.opacity = "";
+            card.style.pointerEvents = "";
+            card.removeAttribute("tabindex");
           }
         }
       });
@@ -128,6 +135,7 @@
     const kick2 = () => {
       if (!raf2) raf2 = requestAnimationFrame(scrub);
     };
+    refreshProjects = kick2;
     addEventListener("scroll", kick2, { passive: true });
     addEventListener("resize", kick2);
     kick2();
@@ -137,6 +145,7 @@
   // The complete composition and every route remain usable without JavaScript.
   const syncVisibility = () => {
     document.body.classList.toggle("hidden-page", document.hidden);
+    refreshProjects();
   };
   syncVisibility();
   document.addEventListener("visibilitychange", syncVisibility);
