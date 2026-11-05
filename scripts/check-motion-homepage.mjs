@@ -177,6 +177,40 @@ const resumed = await settle.evaluate(() => {
 });
 if (resumed.off !== "0px" || resumed.running)
   throw Error("underline redrew on resume");
+
+// pausing after the title types but mid window-draw settles the window, and
+// resuming must leave it settled rather than clearing it for a fresh draw
+{
+  const midp = await b.newPage({ viewport: { width: 1280, height: 1000 } });
+  await midp.goto(base + "/homepage-concepts/", {
+    waitUntil: "domcontentloaded",
+  });
+  await midp.waitForFunction(() => {
+    const h = document.getElementById("hero-title");
+    return h.classList.contains("typed") && h.classList.contains("drawn");
+  });
+  await midp.waitForTimeout(500);
+  await midp.getByRole("button", { name: "Pause motion", exact: true }).click();
+  await midp.getByRole("button", { name: "Pause motion", exact: true }).click();
+  await midp.waitForTimeout(400);
+  const midState = await midp.evaluate(() => {
+    const f = document.querySelector(".pf-frame");
+    return {
+      off: getComputedStyle(f).strokeDashoffset,
+      vis: getComputedStyle(f).visibility,
+      running: f
+        .getAnimations()
+        .filter((a) => a.playState === "running" || a.playState === "pending")
+        .length,
+    };
+  });
+  if (midState.off !== "0px" || midState.vis !== "visible" || midState.running)
+    throw Error(
+      "window redrew after mid-draw pause/resume " + JSON.stringify(midState),
+    );
+  await midp.close();
+  console.log("PASS window-pause-resume");
+}
 // Nick asked for no face in the cartoon: the figure is drawn from behind, with
 // no eye, mouth or nose, and nothing in it follows the pointer.
 await settle.evaluate(() => document.querySelector(".studio svg").scrollIntoView({ block: "center" }));
@@ -188,14 +222,14 @@ const faceBits = await settle.evaluate(() => ({
 if (faceBits.eyes || faceBits.dark || faceBits.small) throw Error("cartoon shows a face again " + JSON.stringify(faceBits));
 await settle.getByRole("button", { name: "Pause motion", exact: true }).click();
 
-// the browser-chrome strokes must not be visible before they are drawn:
+// the sketched-window strokes must not be visible before they are drawn:
 // a dash offset alone cannot hide a stroke whose path outlives its dash
 {
   const pre = await b.newPage({ viewport: { width: 390, height: 844 } });
   await pre.goto(base + "/homepage-concepts/");
   await pre.waitForLoadState("domcontentloaded");
   await pre.waitForTimeout(400);
-  for (const sel of [".pf-dot", ".pf-bar", ".pf-rule"]) {
+  for (const sel of [".pf-frame", ".pf-head", ".pf-dot", ".pf-bar"]) {
     const vis = await pre
       .locator(sel)
       .first()
@@ -254,9 +288,9 @@ if (await r.locator(".motion-toggle").isVisible())
   throw Error("motion control not hidden");
 if (await r.locator(".composer").evaluate((e) => e.getAnimations().length))
   throw Error("animation reduced");
-// the sketched browser chrome must be fully drawn and static under reduced
+// the sketched browser window must be fully drawn and static under reduced
 // motion, not stuck hidden or at its undrawn dash offset
-for (const sel of [".pf-dot", ".pf-bar", ".pf-rule"]) {
+for (const sel of [".pf-frame", ".pf-head", ".pf-dot", ".pf-bar"]) {
   const st = await r.locator(sel).first().evaluate((e) => {
     const cs = getComputedStyle(e);
     return { off: cs.strokeDashoffset, vis: cs.visibility };

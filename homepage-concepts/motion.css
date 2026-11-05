@@ -183,18 +183,46 @@ h1.will-type.typed.drawn .swoosh {
   stroke-dashoffset: 0;
 }
 
-/* Red-pen browser chrome above the hero: the pen sketches the top of a
-   browser window (three dots, address pill, toolbar rule) after the title
-   and swoosh finish, so the hero reads as a web page being drawn. No box:
-   nothing crowds the title. Every stroke is hidden until drawn - base
-   dashoffset alone cannot hide a stroke whose path is longer than its
-   dasharray, so visibility gates the undrawn state too. */
-.browserbar {
-  width: 150px;
-  margin-bottom: 34px;
+/* Red-pen browser window around the title: the pen sketches a wobbly
+   window (outer frame, toolbar divider, three dots, address pill) after
+   the title and swoosh finish. The header band is part of the window's
+   top edge, spaced clear of the frame lines, and the frame stands well
+   off the title so nothing crowds it. Every stroke is hidden until
+   drawn - base dashoffset alone cannot hide a stroke whose path is
+   longer than its dasharray, so visibility gates the undrawn state. */
+h1 {
+  position: relative;
+  width: fit-content;
+}
+.penframe {
+  position: absolute;
+  inset: -110px -40px -48px -40px;
+  width: calc(100% + 80px);
+  height: calc(100% + 158px);
+  overflow: visible;
+  fill: none;
+  stroke: var(--orange);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+.penhead {
+  position: absolute;
+  top: -64px;
+  left: -36px;
+  width: calc(100% + 72px);
+  height: 10px;
+  overflow: visible;
+  fill: none;
+  stroke: var(--orange);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  pointer-events: none;
 }
 .penchrome {
-  display: block;
+  position: absolute;
+  top: -100px;
+  left: -24px;
   width: 150px;
   height: 30px;
   overflow: visible;
@@ -204,20 +232,15 @@ h1.will-type.typed.drawn .swoosh {
   stroke-linecap: round;
   pointer-events: none;
 }
-.penrule {
-  display: block;
-  width: calc(100vw - 300px);
-  min-width: 220px;
-  max-width: 620px;
-  height: 12px;
-  margin-top: 4px;
-  margin-left: 2px;
-  overflow: visible;
-  fill: none;
-  stroke: var(--orange);
-  stroke-width: 2.5;
-  stroke-linecap: round;
-  pointer-events: none;
+.pf-frame {
+  /* dash length must cover the rendered (transformed) path, not just the
+     user-space length - Chrome spaces dashes post-transform here */
+  stroke-dasharray: 3000;
+  stroke-dashoffset: 3000;
+}
+.pf-head {
+  stroke-dasharray: 1400;
+  stroke-dashoffset: 1400;
 }
 .pf-dot {
   /* r=6 -> circumference 37.7; dash must cover it exactly */
@@ -229,13 +252,10 @@ h1.will-type.typed.drawn .swoosh {
   stroke-dasharray: 190;
   stroke-dashoffset: 190;
 }
-.pf-rule {
-  stroke-dasharray: 1100;
-  stroke-dashoffset: 1100;
-}
+.pf-frame,
+.pf-head,
 .pf-dot,
-.pf-bar,
-.pf-rule {
+.pf-bar {
   visibility: hidden;
 }
 @keyframes pendraw {
@@ -247,66 +267,81 @@ h1.will-type.typed.drawn .swoosh {
     stroke-dashoffset: 0;
   }
 }
+.pf-frame {
+  animation: pendraw 1.4s 2.2s ease forwards;
+}
+.pf-head {
+  animation: pendraw 0.5s 3.7s ease forwards;
+}
 .pf-dot:nth-of-type(1) {
-  animation: pendraw 0.25s 3.6s ease forwards;
+  animation: pendraw 0.2s 4.3s ease forwards;
 }
 .pf-dot:nth-of-type(2) {
-  animation: pendraw 0.25s 3.8s ease forwards;
+  animation: pendraw 0.2s 4.5s ease forwards;
 }
 .pf-dot:nth-of-type(3) {
-  animation: pendraw 0.25s 4s ease forwards;
+  animation: pendraw 0.2s 4.7s ease forwards;
 }
 .pf-bar {
-  animation: pendraw 0.45s 4.2s ease forwards;
+  animation: pendraw 0.45s 4.95s ease forwards;
 }
-.pf-rule {
-  animation: pendraw 1.2s 4.7s ease forwards;
-}
-.browserbar.will-type .pf-dot,
-.browserbar.will-type .pf-bar,
-.browserbar.will-type .pf-rule {
+h1.will-type .pf-frame,
+h1.will-type .pf-head,
+h1.will-type .pf-dot,
+h1.will-type .pf-bar {
   animation: none;
 }
-.browserbar.will-type.typed.drawn .pf-dot:nth-of-type(1) {
-  animation: pendraw 0.25s ease forwards;
+h1.will-type.typed.drawn .pf-frame {
+  animation: pendraw 1.4s ease forwards;
 }
-.browserbar.will-type.typed.drawn .pf-dot:nth-of-type(2) {
-  animation: pendraw 0.25s 0.18s ease forwards;
+h1.will-type.typed.drawn .pf-head {
+  animation: pendraw 0.5s 1.5s ease forwards;
 }
-.browserbar.will-type.typed.drawn .pf-dot:nth-of-type(3) {
-  animation: pendraw 0.25s 0.36s ease forwards;
+h1.will-type.typed.drawn .pf-dot:nth-of-type(1) {
+  animation: pendraw 0.2s 2.1s ease forwards;
 }
-.browserbar.will-type.typed.drawn .pf-bar {
-  animation: pendraw 0.45s 0.55s ease forwards;
+h1.will-type.typed.drawn .pf-dot:nth-of-type(2) {
+  animation: pendraw 0.2s 2.3s ease forwards;
 }
-.browserbar.will-type.typed.drawn .pf-rule {
-  animation: pendraw 1.2s 1s ease forwards;
+h1.will-type.typed.drawn .pf-dot:nth-of-type(3) {
+  animation: pendraw 0.2s 2.5s ease forwards;
 }
-.browserbar.sketch-settled .pf-dot,
-.browserbar.sketch-settled .pf-bar,
-.browserbar.sketch-settled .pf-rule,
-.paused .browserbar .pf-dot,
-.paused .browserbar .pf-bar,
-.paused .browserbar .pf-rule,
-.hidden-page .browserbar .pf-dot,
-.hidden-page .browserbar .pf-bar,
-.hidden-page .browserbar .pf-rule {
+h1.will-type.typed.drawn .pf-bar {
+  animation: pendraw 0.45s 2.75s ease forwards;
+}
+h1.sketch-settled .pf-frame,
+h1.sketch-settled .pf-head,
+h1.sketch-settled .pf-dot,
+h1.sketch-settled .pf-bar,
+.paused h1 .pf-frame,
+.paused h1 .pf-head,
+.paused h1 .pf-dot,
+.paused h1 .pf-bar,
+.hidden-page h1 .pf-frame,
+.hidden-page h1 .pf-head,
+.hidden-page h1 .pf-dot,
+.hidden-page h1 .pf-bar {
   animation: none !important;
   visibility: visible !important;
   stroke-dashoffset: 0 !important;
 }
 @media (max-width: 760px) {
-  .browserbar {
-    width: 120px;
-    margin-bottom: 26px;
+  .penframe {
+    inset: -88px -20px -34px -20px;
+    width: calc(100% + 40px);
+    height: calc(100% + 122px);
+  }
+  .penhead {
+    top: -54px;
+    left: -17px;
+    width: calc(100% + 34px);
+    height: 8px;
   }
   .penchrome {
-    width: 120px;
-    height: 24px;
-  }
-  .penrule {
-    width: calc(100vw - 60px);
-    margin-top: 3px;
+    top: -82px;
+    left: -8px;
+    width: 112px;
+    height: 22px;
   }
 }
 .hero-caret {
@@ -1137,10 +1172,11 @@ body.paused .reveal {
   .swoosh {
     stroke-dashoffset: 0;
   }
-  /* the sketched browser chrome shows fully drawn, statically */
-  .browserbar .pf-dot,
-  .browserbar .pf-bar,
-  .browserbar .pf-rule {
+  /* the sketched browser window shows fully drawn, statically */
+  .pf-frame,
+  .pf-head,
+  .pf-dot,
+  .pf-bar {
     visibility: visible !important;
     stroke-dashoffset: 0 !important;
   }
