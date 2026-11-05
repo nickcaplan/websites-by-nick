@@ -170,14 +170,26 @@ for (const width of [320, 390, 768, 1280, 1600]) {
   if ((await pos()).includes("sticky")) fail("cards still sticky while paused");
   // Keyboard: every project link that gets focus must be the topmost element at its centre.
   await p.evaluate(() => document.querySelector(".project").scrollIntoView({ behavior: "instant" }));
-  await p.evaluate(() => document.querySelector(".project").focus?.());
-  const links = await p.$$(".project a[href]");
-  for (const l of links) {
-    await l.scrollIntoViewIfNeeded();
-    await l.focus();
-    const top = await l.evaluate((e) => { const r = e.getBoundingClientRect(); const x = r.left + r.width / 2, y = r.top + r.height / 2; const at = document.elementFromPoint(x, y); return !!at && (at === e || e.contains(at)); });
-    if (!top) fail("focused project link is covered while paused");
+  const hrefs = await p.$$eval("a.project[href]", (as) => as.map((a) => a.href));
+  if (hrefs.length !== 2) fail("expected exactly two project links, found " + hrefs.length);
+  const reached = new Set();
+  for (let i = 0; i < 60 && reached.size < hrefs.length; i++) {
+    await p.keyboard.press("Tab");
+    await p.waitForTimeout(500); // focus scrolls into view smoothly; measure once settled
+    const r = await p.evaluate(() => {
+      const e = document.activeElement;
+      if (!e || !e.matches("a.project[href]")) return null;
+      const q = e.getBoundingClientRect();
+      const x = Math.min(Math.max(q.left + q.width / 2, 1), innerWidth - 2);
+      const y = Math.min(Math.max(q.top + q.height / 2, 1), innerHeight - 2);
+      const at = document.elementFromPoint(x, y);
+      return { href: e.href, top: !!at && (at === e || e.contains(at)) };
+    });
+    if (!r) continue;
+    if (!r.top) fail("focused project link is covered while paused: " + r.href);
+    reached.add(r.href);
   }
+  if (reached.size !== hrefs.length) fail("Tab never reached every project link while paused");
   await t.click();
   if (!(await pos()).includes("sticky")) fail("stacking did not return after resume");
   await p.setViewportSize({ width: 800, height: 800 });
