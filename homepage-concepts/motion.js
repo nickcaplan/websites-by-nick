@@ -234,19 +234,21 @@
       hand = q(".sd-hand"),
       bodyG = q(".sd-body"),
       clip = q(".sd-clip");
-    const SH = { x: 334, y: 262 };
-    const REST = { x: 520, y: 330 };
-    // Shoulder, elbow, hand: the elbow always bends down a little, so it reads
-    // as an arm, not a stretched noodle. He leans toward the canvas as he reaches.
-    // Fixed-length upper arm and forearm: the elbow bends, the arm never stretches.
-    const L1 = 200, L2 = 215;
+    const SH = { x: 390, y: 262 };
+    const BASE = 56; // the figure stands close to the board
+    const REST = { x: 470, y: 310 };
+    // Shoulder, elbow, hand. The arm is short relative to the board, so he leans
+    // toward the canvas as he reaches, and the elbow always keeps a deep, visible
+    // bend: the reach never comes close to full extension, so the arm can never
+    // read as stretching even for a frame.
+    const L1 = 135, L2 = 160, MAX_REACH = 250;
     const pose = (P) => {
-      const dx = Math.max(0, Math.min(80, ((P.x - 480) / 340) * 80));
+      const dx = Math.max(0, Math.min(100, ((P.x - 500) / 220) * 100));
       const S = { x: SH.x + dx, y: SH.y };
       const H = { x: P.x - 20, y: P.y + 20 };
       const d = Math.hypot(H.x - S.x, H.y - S.y) || 1;
       const ux = (H.x - S.x) / d, uy = (H.y - S.y) / d;
-      const dc = Math.max(Math.abs(L1 - L2) + 4, Math.min(L1 + L2 - 6, d));
+      const dc = Math.max(Math.abs(L1 - L2) + 8, Math.min(MAX_REACH, d));
       const a = Math.acos(Math.max(-1, Math.min(1, (L1 * L1 + dc * dc - L2 * L2) / (2 * L1 * dc))));
       let nx = -uy, ny = ux;
       if (ny < 0) { nx = -nx; ny = -ny; } // elbow always bends downward
@@ -254,7 +256,7 @@
         ey = S.y + L1 * (Math.cos(a) * uy + Math.sin(a) * ny);
       arm.setAttribute("d", `M${S.x.toFixed(1)} ${S.y}L${ex.toFixed(1)} ${ey.toFixed(1)}L${H.x.toFixed(1)} ${H.y.toFixed(1)}`);
       hand.setAttribute("transform", `translate(${H.x.toFixed(1)} ${H.y.toFixed(1)})`);
-      bodyG.setAttribute("transform", `translate(${dx.toFixed(1)} 0)`);
+      bodyG.setAttribute("transform", `translate(${(BASE + dx).toFixed(1)} 0)`);
     };
     const strokeStep = (sel, dur, fillSel) => {
       const el = q(sel);
@@ -273,16 +275,17 @@
     };
     const steps = [
       {
-        dur: 1500,
+        dur: 1300,
         el: null,
-        pos: (t) => ({ x: 486 + 300 * t, y: 146 + Math.sin(t * 22) * 12 }),
-        show: (t) => clip.setAttribute("width", String(Math.max(0, 350 * t))),
+        pos: (t) => ({ x: 480 + 200 * t, y: 140 + Math.sin(t * 22) * 10 }),
+        show: (t) => clip.setAttribute("width", String(Math.max(0, 300 * t))),
       },
-      strokeStep(".sd-swoosh", 400),
-      strokeStep(".sd-btn", 500, ".sd-btn-fill"),
-      strokeStep(".sd-card1", 280, ".sd-card1-fill"),
-      strokeStep(".sd-card2", 280, ".sd-card2-fill"),
-      strokeStep(".sd-card3", 280, ".sd-card3-fill"),
+      strokeStep(".sd-swoosh", 380),
+      strokeStep(".sd-subline", 260),
+      strokeStep(".sd-btn", 420, ".sd-btn-fill"),
+      strokeStep(".sd-card1", 320, ".sd-card1-fill"),
+      strokeStep(".sd-card2", 320, ".sd-card2-fill"),
+      strokeStep(".sd-card3", 320, ".sd-card3-fill"),
     ];
     const reset = () => {
       studioSvg.classList.remove("done");

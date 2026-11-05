@@ -39,7 +39,8 @@ const studioState = (p) => p.evaluate(() => {
     hand: svg.querySelector(".sd-hand").getAttribute("transform"),
   };
 });
-const complete = (s) => s.left === 0 && s.fills.every((o) => o === "1") && s.clip >= 349;
+const CLIP_FULL = 300; // fully-open title wipe width for the current board
+const complete = (s) => s.left === 0 && s.fills.every((o) => o === "1") && s.clip >= CLIP_FULL - 1;
 
 for (const width of [320, 390, 768, 1280, 1600]) {
   const p = await b.newPage({ viewport: { width, height: width < 600 ? 844 : 1000 } });
@@ -105,7 +106,7 @@ for (const width of [320, 390, 768, 1280, 1600]) {
     const left = [...svg.querySelectorAll(".sd-ink")].reduce((n, el) => n + (parseFloat(getComputedStyle(el).strokeDashoffset) || 0), 0);
     const fills = [...svg.querySelectorAll(".sd-fill")].map((el) => getComputedStyle(el).opacity);
     const clip = parseFloat(svg.querySelector(".sd-clip").getAttribute("width"));
-    return Math.round(left) === 0 && fills.every((o) => o === "1") && clip >= 349;
+    return Math.round(left) === 0 && fills.every((o) => o === "1") && clip >= 299;
   }, null, { timeout: 5000 }).catch(() => {});
   const e = await studioState(p);
   if (!complete(e)) fail("studio did not finish " + JSON.stringify(e));
@@ -222,7 +223,7 @@ for (const mode of ["reduced", "nojs"]) {
   await p.goto(base + "/homepage-concepts/");
   await p.waitForLoadState("networkidle");
   const s = await studioState(p);
-  if (!(s.left === 0 && s.fills.every((o) => o === "1") && s.clip >= 349)) fail(mode + " drawing not complete " + JSON.stringify(s));
+  if (!(s.left === 0 && s.fills.every((o) => o === "1") && s.clip >= CLIP_FULL - 1)) fail(mode + " drawing not complete " + JSON.stringify(s));
   if (!/translate\(/.test(s.hand)) fail(mode + " arm missing");
   console.log("PASS", mode);
   await p.close();
