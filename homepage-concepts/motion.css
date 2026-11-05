@@ -468,6 +468,21 @@ h2 em {
 .project:last-of-type {
   margin-bottom: 40px;
 }
+/* The scroll deck dims the covered card towards the paper with an opaque
+   veil, never with the card's own opacity - a transparent card would let the
+   site behind it ghost through (two headers superimposed read as a bug). */
+.project {
+  position: relative;
+}
+.project::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 12px;
+  background: var(--paper);
+  opacity: var(--dim, 0);
+  pointer-events: none;
+}
 @media (min-width: 901px) {
   body.scrub-stacked .project {
     position: sticky;

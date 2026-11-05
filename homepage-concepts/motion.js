@@ -197,7 +197,7 @@
         const next = projects[i + 1];
         if (off) {
           card.style.transform = "";
-          card.style.opacity = "";
+          card.style.removeProperty("--dim");
           card.style.pointerEvents = "";
           card.removeAttribute("tabindex");
           if (shot) shot.style.transform = "";
@@ -223,14 +223,14 @@
           const p = Math.min(Math.max((vh - nr.top) / vh, 0), 1);
           if (stacked) {
             card.style.transform = `scale(${(1 - p * 0.05).toFixed(4)})`;
-            card.style.opacity = (1 - p * 0.35).toFixed(3);
+            card.style.setProperty("--dim", (p * 0.35).toFixed(3));
             const covered = nr.top <= 96;
             card.style.pointerEvents = covered ? "none" : "";
             if (covered) card.setAttribute("tabindex", "-1");
             else card.removeAttribute("tabindex");
           } else {
             card.style.transform = "";
-            card.style.opacity = "";
+            card.style.removeProperty("--dim");
             card.style.pointerEvents = "";
             card.removeAttribute("tabindex");
           }
