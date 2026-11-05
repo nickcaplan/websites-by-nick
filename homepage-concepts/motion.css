@@ -134,7 +134,7 @@ h1 {
   max-width: 1100px;
 }
 h1 .line {
-  display: inline-block;
+  display: block;
 }
 h1 .last {
   position: relative;
@@ -164,6 +164,9 @@ h1 em {
 }
 h1.will-type .hc {
   opacity: 0;
+}
+h1.will-type .hc-sp {
+  margin: 0 0.065em;
 }
 h1.will-type .hc.on {
   opacity: 1;
@@ -208,10 +211,10 @@ h1 {
 }
 .penchrome {
   position: absolute;
-  top: -26px;
-  left: -12px;
-  width: 96px;
-  height: 26px;
+  top: -31px;
+  left: -16px;
+  width: 150px;
+  height: 30px;
   overflow: visible;
   fill: none;
   stroke: var(--orange);
@@ -233,9 +236,9 @@ h1 {
   animation: draw 0.3s 4.15s ease forwards;
 }
 .pf-bar {
-  stroke-dasharray: 22;
-  stroke-dashoffset: 22;
-  animation: draw 0.3s 4.35s ease forwards;
+  stroke-dasharray: 160;
+  stroke-dashoffset: 160;
+  animation: draw 0.5s 4.35s ease forwards;
 }
 h1.will-type .penframe *,
 h1.will-type .penchrome * {
@@ -254,7 +257,7 @@ h1.will-type.typed.drawn .pf-dot:nth-of-type(3) {
   animation: draw 0.3s 1.95s ease forwards;
 }
 h1.will-type.typed.drawn .pf-bar {
-  animation: draw 0.3s 2.15s ease forwards;
+  animation: draw 0.5s 2.15s ease forwards;
 }
 h1.sketch-settled .penframe *,
 h1.sketch-settled .penchrome *,
@@ -272,10 +275,10 @@ h1.sketch-settled .penchrome *,
     height: calc(100% + 62px);
   }
   .penchrome {
-    top: -24px;
-    left: -4px;
-    width: 72px;
-    height: 20px;
+    top: -26px;
+    left: -8px;
+    width: 112px;
+    height: 22px;
   }
 }
 .hero-caret {
