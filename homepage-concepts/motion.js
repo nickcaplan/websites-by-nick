@@ -2,11 +2,18 @@
   const button = document.querySelector(".motion-toggle");
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   const theme = document.querySelector(".theme-toggle");
-  let dark = false;
+  const THEME_KEY = "wbn-theme";
+  const storedTheme = localStorage.getItem(THEME_KEY);
+  let dark = storedTheme
+    ? storedTheme === "dark"
+    : matchMedia("(prefers-color-scheme: dark)").matches;
+  document.body.classList.toggle("dark", dark);
+  theme.setAttribute("aria-pressed", String(dark));
   theme.addEventListener("click", () => {
     dark = !dark;
     document.body.classList.toggle("dark", dark);
     theme.setAttribute("aria-pressed", String(dark));
+    localStorage.setItem(THEME_KEY, dark ? "dark" : "light");
   });
   let paused = false;
   let refreshProjects = () => {};
@@ -311,6 +318,10 @@
       studioSvg.classList.add("done");
     };
     let state = "idle"; // idle | running | complete
+    const setState = (s) => {
+      state = s;
+      studioSvg.dataset.state = s;
+    };
     let step = 0,
       stepStart = 0,
       travelFrom = REST,
@@ -326,7 +337,7 @@
       raf3 = null;
       if (state !== "running") return;
       if (document.body.classList.contains("paused") || reduced.matches) {
-        state = "complete";
+        setState("complete");
         finish();
         return;
       }
@@ -351,9 +362,10 @@
           if (s.fill) s.fill.classList.add("on");
           travelFrom = s.pos(1);
           step += 1;
+          studioSvg.dataset.step = String(step);
           stepStart = clock;
           if (step >= steps.length) {
-            state = "ending";
+            setState("ending");
           }
         }
       }
@@ -363,7 +375,7 @@
         const wrap = (n) => {
           raf3 = null;
           if (document.body.classList.contains("paused") || reduced.matches) {
-            state = "complete";
+            setState("complete");
             finish();
             return;
           }
@@ -377,7 +389,7 @@
             y: travelFrom.y + (REST.y - travelFrom.y) * e,
           });
           if (k >= 1) {
-            state = "complete";
+            setState("complete");
             studioSvg.classList.add("done");
             return;
           }
@@ -392,8 +404,9 @@
       if (reduced.matches || document.body.classList.contains("paused")) return;
       studioSvg.classList.add("studio-live");
       reset();
-      state = "running";
+      setState("running");
       step = 0;
+      studioSvg.dataset.step = "0";
       clock = 0;
       stepStart = 0;
       travelFrom = REST;
@@ -406,11 +419,16 @@
     const sio = new IntersectionObserver(
       (entries) =>
         entries.forEach((en) => {
-          if (en.isIntersecting && en.intersectionRatio >= 0.45 && !seen && state !== "running") {
+          if (
+            en.isIntersecting &&
+            en.intersectionRatio >= 0.45 &&
+            !seen &&
+            (state === "idle" || state === "complete")
+          ) {
             seen = true;
             begin();
-          } else if (!en.isIntersecting && seen && state === "complete") {
-            seen = false; // replay next time it scrolls into view
+          } else if (!en.isIntersecting) {
+            seen = false; // replay next time it scrolls into view, even if it left mid-draw
           }
         }),
       { threshold: [0, 0.45] }
@@ -418,7 +436,7 @@
     sio.observe(studioSvg);
     const pauseWatch = new MutationObserver(() => {
       if (document.body.classList.contains("paused") && state === "running") {
-        state = "complete";
+        setState("complete");
         finish();
       }
     });

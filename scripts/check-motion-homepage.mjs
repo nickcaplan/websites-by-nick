@@ -33,7 +33,7 @@ const server = createServer(async (req, res) => {
     res.writeHead(404).end();
   }
 });
-await new Promise((r) => server.listen(0, r));
+await new Promise((r) => server.listen(0, "127.0.0.1", r));
 const base =
   process.env.MOTION_BASE || "http://localhost:" + server.address().port;
 const b = await chromium.launch({

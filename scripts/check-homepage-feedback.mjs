@@ -18,7 +18,7 @@ const server = createServer(async (req, res) => {
     res.end(await readFile(p));
   } catch { res.writeHead(404).end(); }
 });
-await new Promise((r) => server.listen(0, r));
+await new Promise((r) => server.listen(0, "127.0.0.1", r));
 const base = process.env.MOTION_BASE || "http://localhost:" + server.address().port;
 const b = await chromium.launch({
   executablePath: process.env.CHROME_PATH || (existsSync("/usr/bin/google-chrome") ? "/usr/bin/google-chrome" : undefined),
@@ -124,15 +124,33 @@ for (const width of [320, 390, 768, 1280, 1600]) {
   await p.goto(base + "/homepage-concepts/");
   await p.waitForLoadState("networkidle");
   await p.evaluate(() => document.querySelector(".studio svg").scrollIntoView({ block: "center", behavior: "instant" }));
+  // While the title step runs, the wipe must never lead the pen - including
+  // the fully-open-early case. Later steps and the return-to-rest wrap keep a
+  // fully open wipe by design, so only state=running + step=0 is asserted.
+  await p.waitForFunction(
+    () => {
+      const svg = document.querySelector(".studio svg");
+      return svg.dataset.state === "running" && svg.dataset.step === "0";
+    },
+    null,
+    { timeout: 10000 }
+  );
   let checked = 0;
   for (let i = 0; i < 24; i++) {
     const s = await p.evaluate(() => {
       const svg = document.querySelector(".studio svg");
       const m = /translate\(([-\d.]+)/.exec(svg.querySelector(".sd-hand").getAttribute("transform"));
-      return { clip: parseFloat(svg.querySelector(".sd-clip").getAttribute("width")), handX: m ? parseFloat(m[1]) : 0 };
+      return {
+        clip: parseFloat(svg.querySelector(".sd-clip").getAttribute("width")),
+        handX: m ? parseFloat(m[1]) : 0,
+        state: svg.dataset.state,
+        step: svg.dataset.step,
+      };
     });
+    if (s.state !== "running" || s.step !== "0") break; // title step over
     const penEnd = s.handX + 22;
-    if (s.clip < CLIP_FULL - 1 && penEnd < 704 && penEnd > 470) {
+    if (penEnd >= 704) break; // the whole headline is revealed from here on
+    if (penEnd > 470) {
       checked++;
       if (460 + s.clip > penEnd + 2) fail(`wipe leads pen: edge ${460 + s.clip} pen tip ${penEnd}`);
     }
@@ -140,6 +158,49 @@ for (const width of [320, 390, 768, 1280, 1600]) {
   }
   if (checked < 3) fail("too few mid-title samples " + checked);
   console.log("PASS wipe-tracks-pen");
+  await p.close();
+}
+
+// Leaving mid-draw and returning replays the drawing from the start, even
+// though the abandoned run finished off-screen.
+{
+  const p = await b.newPage({ viewport: { width: 1280, height: 900 } });
+  await p.goto(base + "/homepage-concepts/");
+  await p.waitForLoadState("networkidle");
+  await p.evaluate(() => document.querySelector(".studio svg").scrollIntoView({ block: "center", behavior: "instant" }));
+  await p.waitForTimeout(700); // mid-draw
+  await p.evaluate(() => window.scrollTo(0, 0)); // leave before it ends
+  await p.waitForFunction(() => document.querySelector(".studio svg").classList.contains("done"), null, { timeout: 25000 });
+  await p.evaluate(() => document.querySelector(".studio svg").scrollIntoView({ block: "center", behavior: "instant" }));
+  let restarted = false;
+  for (let i = 0; i < 15 && !restarted; i++) {
+    restarted = await p.evaluate(() => parseFloat(document.querySelector(".sd-clip").getAttribute("width")) < 100);
+    if (!restarted) await p.waitForTimeout(200);
+  }
+  if (!restarted) fail("drawing did not replay on re-entry after leaving mid-draw");
+  await p.waitForFunction(() => document.querySelector(".studio svg").classList.contains("done"), null, { timeout: 25000 });
+  console.log("PASS replay-after-leave");
+  await p.close();
+}
+
+// The theme choice persists across pages and reloads (motion.js and pages.js).
+{
+  const p = await b.newPage();
+  await p.goto(base + "/homepage-concepts/");
+  await p.waitForLoadState("networkidle");
+  await p.click(".theme-toggle");
+  if (!(await p.evaluate(() => document.body.classList.contains("dark")))) fail("dark not applied on home");
+  await p.goto(base + "/homepage-concepts/about/");
+  await p.waitForLoadState("networkidle");
+  if (!(await p.evaluate(() => document.body.classList.contains("dark")))) fail("dark did not persist to about");
+  if ((await p.getAttribute(".theme-toggle", "aria-pressed")) !== "true") fail("aria-pressed not restored on about");
+  await p.reload();
+  if (!(await p.evaluate(() => document.body.classList.contains("dark")))) fail("dark did not survive reload");
+  await p.click(".theme-toggle");
+  await p.reload();
+  if (await p.evaluate(() => document.body.classList.contains("dark"))) fail("light choice did not persist");
+  if ((await p.getAttribute(".theme-toggle", "aria-pressed")) !== "false") fail("aria-pressed not cleared");
+  console.log("PASS theme-persistence");
   await p.close();
 }
 // Pause mid-drawing settles the finished picture; resume does not redraw it.

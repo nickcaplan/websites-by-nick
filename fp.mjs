@@ -1,6 +1,10 @@
 import { chromium } from "@playwright/test";
-const B="https://deploy-preview-64--nickcaplan-profile.netlify.app";
-const b=await chromium.launch({executablePath:"/usr/bin/google-chrome",args:["--no-sandbox"]});
+import { existsSync } from "node:fs";
+const B = process.env.MOTION_BASE || "https://deploy-preview-64--nickcaplan-profile.netlify.app";
+const b = await chromium.launch({
+  executablePath: process.env.CHROME_PATH || (existsSync("/usr/bin/google-chrome") ? "/usr/bin/google-chrome" : undefined),
+  args: ["--no-sandbox"],
+});
 for(const [n,vp] of [["phone",{width:412,height:915}],["desk",{width:1280,height:800}]]){
  for(const pg of ["","about/","pricing/"]){
   const p=await (await b.newContext({viewport:vp})).newPage();
