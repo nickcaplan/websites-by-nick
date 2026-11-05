@@ -384,9 +384,6 @@ h1.sketch-settled .pf-bar,
    tiny website drawn stroke by stroke once the big window settles */
 .minipage {
   position: absolute;
-  top: -46px;
-  right: -316px;
-  width: 272px;
   height: auto;
   overflow: visible;
   fill: none;
@@ -451,9 +448,32 @@ h1.sketch-settled .mp-line, h1.sketch-settled .mp-img, h1.sketch-settled .mp-btn
   visibility: visible !important;
   stroke-dashoffset: 0 !important;
 }
-/* the mini page needs the wide hero canvas */
-@media (max-width: 1259px) {
-  .minipage { display: none; }
+/* the mini page lives inside a wider browser window on wide screens */
+.minipage { display: none; }
+@media (min-width: 1400px) {
+  /* the window widens to take in the mini page; its top edge drops a
+     touch so the widened frame never crosses the site nav text */
+  .penframe {
+    inset: -109px -318px -48px -40px;
+    width: calc(100% + 358px);
+    height: calc(100% + 157px);
+  }
+  .penchrome {
+    top: -101px;
+  }
+  .penhead {
+    top: -61px;
+    width: calc(100% + 358px);
+  }
+  .pf-nav {
+    top: -44px;
+  }
+  .minipage {
+    display: block;
+    top: 56px;
+    right: -278px;
+    width: 238px;
+  }
 }
 /* typed caption by the studio cartoon, echoing the hero typing */
 .tc-caret {
@@ -783,7 +803,7 @@ h2 em {
 .project-image {
   background: #e4e5db;
   border: 1px solid #20302720;
-  padding: 28px;
+  padding: 8px;
   overflow: hidden;
   border-radius: 3px;
 }
@@ -1020,15 +1040,35 @@ body.paused .reveal {
   max-width: 1472px;
   margin: 56px auto 0;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(28px, 4vw, 64px);
 }
 .studio svg {
-  width: min(560px, 92%);
+  width: min(560px, 58%);
   height: auto;
+  flex: none;
 }
 .studio figcaption {
-  margin-top: 10px;
-  font: 16px var(--serif);
+  max-width: 300px;
+  text-align: left;
+  font: 22px/1.4 var(--serif);
   color: #525d53;
+}
+@media (max-width: 900px) {
+  .studio {
+    flex-direction: column;
+    gap: 14px;
+  }
+  .studio svg {
+    width: min(560px, 92%);
+  }
+  .studio figcaption {
+    max-width: 92%;
+    text-align: center;
+    font-size: 17px;
+  }
 }
 @media (max-width: 900px) {
   .project {
@@ -1544,6 +1584,7 @@ body.paused .studio .sd-fill {
 
 /* Compass card: native-scale fragments of the plan and saved-plans pages, so the app stays readable at card size. Phones show the two clearest bands. */
 .cmp-stage-compass {
+  aspect-ratio: 1280 / 560;
   overflow: hidden;
   /* Dark captures on every theme, so the stage matches the app's dark
      background in the gaps between fragments. */
