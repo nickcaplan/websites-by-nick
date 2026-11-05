@@ -383,7 +383,6 @@ h1.will-type.typed.drawn .swoosh {
   display: block;
   margin-top: 12px;
 }
-}
 .motion-toggle[aria-pressed="true"] {
   background: var(--ink);
   color: var(--paper);
