@@ -48,8 +48,8 @@
     apply();
   });
 
-  // Hero title types out, then the underline swoosh draws. Without JS or
-  // with reduced motion the full title shows and the swoosh draws as before.
+  // Hero title types out, then the sketched browser window draws around it.
+  // Without JS or with reduced motion the full title and window show settled.
   const heroTitle = document.getElementById("hero-title");
   if (heroTitle && !reduced.matches) {
     const chars = [];
@@ -65,7 +65,7 @@
             chars.push(s);
           });
           n.replaceWith(frag);
-        } else if (n.nodeType === Node.ELEMENT_NODE && !n.classList.contains("swoosh")) {
+        } else if (n.nodeType === Node.ELEMENT_NODE) {
           walk(n);
         }
       });
@@ -94,14 +94,8 @@
         if (i >= chars.length) {
           setTimeout(() => {
             caret.remove();
-            heroTitle.classList.add("typed");
-            heroTitle
-              .querySelector(".swoosh")
-              .addEventListener(
-                "animationend",
-                () => heroTitle.classList.add("drawn"),
-                { once: true },
-              );
+            // the window starts drawing straight after the title types
+            heroTitle.classList.add("typed", "drawn");
           }, 250);
           return;
         }
@@ -112,6 +106,49 @@
       };
       setTimeout(step, 350);
     }
+  }
+
+  // the studio caption types itself out when it scrolls into view,
+  // echoing the hero headline typing; reduced motion and no-IO keep it static
+  const capText = document.querySelector(".type-caption .tc-text");
+  if (capText && "IntersectionObserver" in window) {
+    const capEl = capText.closest(".type-caption");
+    const finalHTML = capText.innerHTML;
+    const plain = capText.textContent;
+    const settleCap = () => {
+      capText.innerHTML = finalHTML;
+      capText.removeAttribute("aria-hidden");
+      capEl.classList.remove("typing");
+      capEl.classList.add("typed");
+    };
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (!entries[0].isIntersecting) return;
+        io.disconnect();
+        if (reduced.matches || document.body.classList.contains("paused")) return;
+        capEl.setAttribute("aria-label", plain);
+        capText.setAttribute("aria-hidden", "true");
+        capEl.classList.add("typing");
+        capText.textContent = "";
+        const caret = document.createElement("span");
+        caret.className = "tc-caret";
+        capText.after(caret);
+        let i = 0;
+        const tick = () => {
+          if (i >= plain.length || document.body.classList.contains("paused") || reduced.matches) {
+            caret.remove();
+            settleCap();
+            return;
+          }
+          capText.textContent += plain[i];
+          i += 1;
+          setTimeout(tick, 45);
+        };
+        setTimeout(tick, 250);
+      },
+      { threshold: 0.5 }
+    );
+    io.observe(capEl);
   }
 
   // Pointer parallax on the composition: fine pointers only, transform-only,

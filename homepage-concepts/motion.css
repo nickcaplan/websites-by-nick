@@ -151,37 +151,11 @@ h1 em {
   font-weight: 430;
   color: var(--orange);
 }
-.swoosh {
-  position: absolute;
-  bottom: -20px;
-  left: 0;
-  width: 100%;
-  height: 34px;
-  overflow: visible;
-  fill: none;
-  stroke: var(--orange);
-  stroke-width: 3;
-  stroke-linecap: round;
-  stroke-dasharray: 1500;
-  stroke-dashoffset: 1500;
-  animation: draw 1.4s 0.6s ease forwards;
-}
 h1.will-type .hc {
   opacity: 0;
 }
 h1.will-type .hc.on {
   opacity: 1;
-}
-h1.will-type .swoosh {
-  animation: none;
-  stroke-dashoffset: 1500;
-}
-h1.will-type.typed .swoosh {
-  animation: draw 1.4s ease forwards;
-}
-h1.will-type.typed.drawn .swoosh {
-  animation: none;
-  stroke-dashoffset: 0;
 }
 
 /* Red-pen browser window around the title: the pen sketches a wobbly
@@ -233,6 +207,54 @@ h1 {
   stroke-linecap: round;
   pointer-events: none;
 }
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+/* the retired eyebrow copy, now the sketched window's own nav row */
+.pf-nav {
+  position: absolute;
+  top: -50px;
+  left: 0;
+  display: flex;
+  gap: 26px;
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0.13em;
+  line-height: 1.4;
+  word-spacing: normal;
+  text-transform: uppercase;
+  color: var(--ink);
+  visibility: hidden;
+  animation: navin 0.5s 4.55s ease both;
+}
+.pf-nav span:first-child { color: var(--orange); }
+h1.will-type .pf-nav {
+  animation: none;
+}
+h1.will-type.typed.drawn .pf-nav {
+  animation: navin 0.5s 3.15s ease both;
+}
+h1.sketch-settled .pf-nav,
+.paused h1 .pf-nav,
+.hidden-page h1 .pf-nav {
+  visibility: visible !important;
+  animation: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+@keyframes navin {
+  from { visibility: visible; opacity: 0; transform: translateY(6px); }
+  to { visibility: visible; opacity: 1; transform: none; }
+}
 .pf-frame {
   /* dash length must cover the rendered (transformed) path, not just the
      user-space length - Chrome spaces dashes post-transform here */
@@ -258,6 +280,13 @@ h1 {
 .pf-dot,
 .pf-bar {
   visibility: hidden;
+}
+.pf-dot:nth-of-type(1) { fill: #ff5f57; }
+.pf-dot:nth-of-type(2) { fill: #febc2e; }
+.pf-dot:nth-of-type(3) { fill: #28c840; }
+.pf-dot { fill-opacity: 0; }
+@keyframes dotfill {
+  to { fill-opacity: 1; }
 }
 @keyframes pendraw {
   from {
@@ -299,16 +328,21 @@ h1.will-type.typed.drawn .pf-head {
   animation: pendraw 0.5s 1.5s ease forwards;
 }
 h1.will-type.typed.drawn .pf-dot:nth-of-type(1) {
-  animation: pendraw 0.2s 2.1s ease forwards;
+  animation: pendraw 0.2s 2.1s ease forwards, dotfill 0.3s 2.35s ease forwards;
 }
 h1.will-type.typed.drawn .pf-dot:nth-of-type(2) {
-  animation: pendraw 0.2s 2.3s ease forwards;
+  animation: pendraw 0.2s 2.3s ease forwards, dotfill 0.3s 2.55s ease forwards;
 }
 h1.will-type.typed.drawn .pf-dot:nth-of-type(3) {
-  animation: pendraw 0.2s 2.5s ease forwards;
+  animation: pendraw 0.2s 2.5s ease forwards, dotfill 0.3s 2.75s ease forwards;
 }
 h1.will-type.typed.drawn .pf-bar {
   animation: pendraw 0.45s 2.75s ease forwards;
+}
+h1.sketch-settled .pf-dot,
+.paused h1 .pf-dot,
+.hidden-page h1 .pf-dot {
+  fill-opacity: 1 !important;
 }
 h1.sketch-settled .pf-frame,
 h1.sketch-settled .pf-head,
@@ -344,6 +378,96 @@ h1.sketch-settled .pf-bar,
     width: 112px;
     height: 22px;
   }
+}
+
+/* the mini page sketched into the hero whitespace (desktop only): a whole
+   tiny website drawn stroke by stroke once the big window settles */
+.minipage {
+  position: absolute;
+  top: -46px;
+  right: -316px;
+  width: 272px;
+  height: auto;
+  overflow: visible;
+  fill: none;
+  stroke: var(--orange);
+  stroke-width: 2;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+.mp-frame { stroke-dasharray: 900; stroke-dashoffset: 900; }
+.mp-head { stroke-dasharray: 280; stroke-dashoffset: 280; }
+.mp-dot { stroke-dasharray: 32; stroke-dashoffset: 32; }
+.mp-line { stroke-dasharray: 260; stroke-dashoffset: 260; }
+.mp-img { stroke-dasharray: 430; stroke-dashoffset: 430; }
+.mp-btn { stroke-dasharray: 200; stroke-dashoffset: 200; }
+.mp-frame, .mp-head, .mp-dot, .mp-line, .mp-img, .mp-btn {
+  visibility: hidden;
+}
+.mp-dot:nth-of-type(1) { fill: #ff5f57; }
+.mp-dot:nth-of-type(2) { fill: #febc2e; }
+.mp-dot:nth-of-type(3) { fill: #28c840; }
+.mp-dot { fill-opacity: 0; }
+/* no-JS: the whole sequence plays on load, after the big window */
+.mp-frame { animation: pendraw 1s 5.6s ease forwards; }
+.mp-head { animation: pendraw 0.4s 6.7s ease forwards; }
+.mp-dot:nth-of-type(1) { animation: pendraw 0.15s 7.15s ease forwards, dotfill 0.3s 7.35s ease forwards; }
+.mp-dot:nth-of-type(2) { animation: pendraw 0.15s 7.35s ease forwards, dotfill 0.3s 7.55s ease forwards; }
+.mp-dot:nth-of-type(3) { animation: pendraw 0.15s 7.55s ease forwards, dotfill 0.3s 7.75s ease forwards; }
+.mp-img { animation: pendraw 0.5s 7.8s ease forwards; }
+.mp-l1 { animation: pendraw 0.25s 8.35s ease forwards; }
+.mp-l2 { animation: pendraw 0.25s 8.6s ease forwards; }
+.mp-l3 { animation: pendraw 0.25s 8.85s ease forwards; }
+.mp-l4 { animation: pendraw 0.25s 9.1s ease forwards; }
+.mp-l5 { animation: pendraw 0.25s 9.35s ease forwards; }
+.mp-btn { animation: pendraw 0.4s 9.6s ease forwards; }
+h1.will-type .mp-frame, h1.will-type .mp-head, h1.will-type .mp-dot,
+h1.will-type .mp-line, h1.will-type .mp-img, h1.will-type .mp-btn {
+  animation: none;
+}
+/* JS typing path: starts once the big window's address pill is done */
+h1.will-type.typed.drawn .mp-frame { animation: pendraw 1s 2.8s ease forwards; }
+h1.will-type.typed.drawn .mp-head { animation: pendraw 0.4s 3.7s ease forwards; }
+h1.will-type.typed.drawn .mp-dot:nth-of-type(1) { animation: pendraw 0.15s 4.05s ease forwards, dotfill 0.3s 4.25s ease forwards; }
+h1.will-type.typed.drawn .mp-dot:nth-of-type(2) { animation: pendraw 0.15s 4.2s ease forwards, dotfill 0.3s 4.4s ease forwards; }
+h1.will-type.typed.drawn .mp-dot:nth-of-type(3) { animation: pendraw 0.15s 4.35s ease forwards, dotfill 0.3s 4.55s ease forwards; }
+h1.will-type.typed.drawn .mp-img { animation: pendraw 0.5s 4.55s ease forwards; }
+h1.will-type.typed.drawn .mp-l1 { animation: pendraw 0.25s 5.0s ease forwards; }
+h1.will-type.typed.drawn .mp-l2 { animation: pendraw 0.25s 5.2s ease forwards; }
+h1.will-type.typed.drawn .mp-l3 { animation: pendraw 0.25s 5.4s ease forwards; }
+h1.will-type.typed.drawn .mp-l4 { animation: pendraw 0.25s 5.6s ease forwards; }
+h1.will-type.typed.drawn .mp-l5 { animation: pendraw 0.25s 5.8s ease forwards; }
+h1.will-type.typed.drawn .mp-btn { animation: pendraw 0.4s 6.0s ease forwards; }
+h1.sketch-settled .mp-dot, .paused h1 .mp-dot, .hidden-page h1 .mp-dot {
+  fill-opacity: 1 !important;
+}
+h1.sketch-settled .mp-frame, h1.sketch-settled .mp-head, h1.sketch-settled .mp-dot,
+h1.sketch-settled .mp-line, h1.sketch-settled .mp-img, h1.sketch-settled .mp-btn,
+.paused h1 .mp-frame, .paused h1 .mp-head, .paused h1 .mp-dot,
+.paused h1 .mp-line, .paused h1 .mp-img, .paused h1 .mp-btn,
+.hidden-page h1 .mp-frame, .hidden-page h1 .mp-head, .hidden-page h1 .mp-dot,
+.hidden-page h1 .mp-line, .hidden-page h1 .mp-img, .hidden-page h1 .mp-btn {
+  animation: none !important;
+  visibility: visible !important;
+  stroke-dashoffset: 0 !important;
+}
+/* the mini page needs the wide hero canvas */
+@media (max-width: 1259px) {
+  .minipage { display: none; }
+}
+/* typed caption by the studio cartoon, echoing the hero typing */
+.tc-caret {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 2px;
+  vertical-align: -0.12em;
+  background: var(--orange);
+  animation: caret-blink 0.9s steps(2) infinite;
+}
+.paused .tc-caret,
+.hidden-page .tc-caret {
+  animation: none;
 }
 .hero-caret {
   display: inline-block;
@@ -444,13 +568,13 @@ h1.sketch-settled .pf-bar,
   object-fit: cover;
 }
 .browser-chrome {
-  height: 25px;
+  height: 16px;
   background: #f9f6ef;
   display: flex;
   gap: 4px;
   align-items: center;
-  padding: 0 10px;
-  font-size: 8px;
+  padding: 0 8px;
+  font-size: 7px;
   color: #526153;
 }
 .browser-chrome i {
@@ -461,11 +585,6 @@ h1.sketch-settled .pf-bar,
 }
 .browser-chrome span {
   margin: auto;
-}
-.card-caption {
-  display: block;
-  padding: 8px 12px;
-  font-size: 10px;
 }
 .browser-card:hover {
   scale: 1.045;
@@ -838,14 +957,6 @@ body.paused .reveal {
 .hidden-page .hero-caret {
   animation-play-state: paused !important;
 }
-.paused .swoosh,
-.hidden-page .swoosh {
-  animation-play-state: paused !important;
-}
-.paused h1 .swoosh {
-  animation: none !important;
-  stroke-dashoffset: 0 !important;
-}
 @keyframes draw {
   to {
     stroke-dashoffset: 0;
@@ -1010,10 +1121,6 @@ body.paused .reveal {
   h1 .last {
     margin-left: 0;
   }
-  .swoosh {
-    height: 22px;
-    bottom: -14px;
-  }
   .hero-bottom {
     display: block;
     margin: 29px 0 24px;
@@ -1066,10 +1173,6 @@ body.paused .reveal {
   .browser-chrome i {
     width: 3px;
     height: 3px;
-  }
-  .card-caption {
-    font-size: 7px;
-    padding: 5px 8px;
   }
   .motion-toggle {
     font-size: 9px;
@@ -1170,10 +1273,18 @@ body.paused .reveal {
     transition: none !important;
     will-change: auto !important;
   }
-  .swoosh {
-    stroke-dashoffset: 0;
-  }
   /* the sketched browser window shows fully drawn, statically */
+  .pf-nav {
+    visibility: visible !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .pf-dot { fill-opacity: 1 !important; }
+  .mp-frame, .mp-head, .mp-dot, .mp-line, .mp-img, .mp-btn {
+    visibility: visible !important;
+    stroke-dashoffset: 0 !important;
+  }
+  .mp-dot { fill-opacity: 1 !important; }
   .pf-frame,
   .pf-head,
   .pf-dot,

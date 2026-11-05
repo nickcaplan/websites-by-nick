@@ -42,7 +42,7 @@ for (const width of [320, 390, 768, 1280, 1600]) {
   if (width === 390 || width === 1280)
     await p.screenshot({ path: output + "/motion-" + width + ".png" });
   await p.waitForFunction(() =>
-    [...document.querySelectorAll(".composition, .swoosh")]
+    [...document.querySelectorAll(".composition, .pf-frame")]
       .flatMap((e) => e.getAnimations({ subtree: true }))
       .some((a) => a.playState === "running"),
   );
@@ -55,7 +55,7 @@ for (const width of [320, 390, 768, 1280, 1600]) {
     throw Error("pause");
   const states = () =>
     p
-      .locator(".composition, .swoosh")
+      .locator(".composition, .pf-frame")
       .evaluateAll((elements) =>
         elements.flatMap((e) =>
           e.getAnimations({ subtree: true }).map((a) => a.playState),
@@ -157,26 +157,26 @@ const settled = await settle.evaluate(() => {
     total: h.querySelectorAll(".hc").length,
     on: h.querySelectorAll(".hc.on").length,
     caret: !!h.querySelector(".hero-caret"),
-    off: getComputedStyle(h.querySelector(".swoosh")).strokeDashoffset,
+    off: getComputedStyle(h.querySelector(".pf-frame")).strokeDashoffset,
   };
 });
 if (!settled.total || settled.total !== settled.on)
   throw Error("pause did not settle title");
 if (settled.caret) throw Error("caret left after pause");
-if (settled.off !== "0px") throw Error("underline not settled on pause");
+if (settled.off !== "0px") throw Error("window not settled on pause");
 await settle.getByRole("button", { name: "Pause motion", exact: true }).click();
 const resumed = await settle.evaluate(() => {
-  const sw = document.querySelector("#hero-title .swoosh");
+  const fr = document.querySelector("#hero-title .pf-frame");
   return {
-    off: getComputedStyle(sw).strokeDashoffset,
-    running: sw
+    off: getComputedStyle(fr).strokeDashoffset,
+    running: fr
       .getAnimations()
       .filter((a) => a.playState === "running" || a.playState === "pending")
       .length,
   };
 });
 if (resumed.off !== "0px" || resumed.running)
-  throw Error("underline redrew on resume");
+  throw Error("window redrew on resume");
 
 // pausing after the title types but mid window-draw settles the window, and
 // resuming must leave it settled rather than clearing it for a fresh draw
