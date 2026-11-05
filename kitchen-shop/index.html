@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="classic">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,19 +8,6 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <style>
   :root{
-    --bg:#faf6ef; --bg-tint:#f3ead9; --surface:#fffdf8;
-    --ink:#2b2118; --ink-soft:#5c4a38; --muted:#7d6850;
-    --primary:#a34d1c; --primary-deep:#7c3512; --on-primary:#fffaf2;
-    --line:rgba(124,53,18,.16); --line-strong:rgba(124,53,18,.32);
-    --radius:12px; --radius-card:10px;
-    --shadow:0 1px 2px rgba(84,44,14,.06),0 8px 24px rgba(84,44,14,.08);
-    --font-display:Georgia,"Iowan Old Style","Times New Roman",serif;
-    --font-body:"Segoe UI",system-ui,"Helvetica Neue",sans-serif;
-    --eyebrow-transform:uppercase; --eyebrow-spacing:.18em; --eyebrow-weight:700;
-    --h-weight:600; --h-letter:-0.01em;
-    --accent:#c98a3d;
-  }
-  html[data-theme="classic"]{
     --bg:#f2f4f9; --bg-tint:#e2e7f2; --surface:#ffffff;
     --ink:#16213c; --ink-soft:#3a4a6e; --muted:#586687;
     --primary:#1c2e6e; --primary-deep:#101d49; --on-primary:#f4f6fc;
@@ -68,8 +55,7 @@
   }
 
   /* Hero */
-  .hero{padding:64px 0 48px;background-image:repeating-linear-gradient(0deg,rgba(124,53,18,.05) 0 1px,transparent 1px 28px),repeating-linear-gradient(90deg,rgba(124,53,18,.05) 0 1px,transparent 1px 28px),linear-gradient(180deg,var(--bg-tint),var(--bg))}
-  html[data-theme="classic"] .hero{background-image:repeating-linear-gradient(0deg,rgba(28,46,110,.055) 0 1px,transparent 1px 28px),repeating-linear-gradient(90deg,rgba(28,46,110,.055) 0 1px,transparent 1px 28px),linear-gradient(180deg,var(--bg-tint),var(--bg))}
+  .hero{padding:64px 0 48px;background-image:repeating-linear-gradient(0deg,rgba(28,46,110,.055) 0 1px,transparent 1px 28px),repeating-linear-gradient(90deg,rgba(28,46,110,.055) 0 1px,transparent 1px 28px),linear-gradient(180deg,var(--bg-tint),var(--bg))}
   .hero h1{font-size:clamp(2rem,5.4vw,3.1rem);margin:.5rem 0 1rem;max-width:20ch}
   .hero .lead{margin-bottom:1.6rem}
   .hero-actions{display:flex;gap:12px;flex-wrap:wrap}
@@ -85,24 +71,19 @@
   .about-photo figcaption{margin-top:6px;font-size:.84rem;color:var(--muted)}
   .est-pill{display:inline-block;background:var(--surface);border:1px solid var(--line-strong);color:var(--primary-deep);font-size:.75rem;font-weight:700;letter-spacing:.1em;padding:5px 12px;border-radius:999px}
 
-  /* Header theme toggle */
-  .header-toggle{flex:none}
   @media (max-width:879px){
     section[id],#faq{scroll-margin-top:8rem}
     @media (max-width:359px){section[id],#faq{scroll-margin-top:11rem}}
     .header-inner{padding-left:14px;padding-right:14px;gap:10px}
-    .brand{font-size:1rem}
+    .brand{font-size:.92rem;gap:8px}
     .brand-mark{width:34px;height:34px}
-    .header-toggle{order:2;flex:none;margin-left:auto}
-    .call-header{order:3;flex-basis:100%;margin:2px 0 0}
+    .call-header{margin-left:auto;padding:10px 12px;font-size:.88rem;white-space:nowrap}
+    .brand{flex-wrap:nowrap;min-width:0}
+    @media (max-width:479px){.call-word{display:none}}
+    @media (max-width:379px){.header-inner{gap:8px;padding-left:10px;padding-right:10px}.brand{font-size:.84rem;gap:6px}.brand-mark{width:30px;height:30px}.call-header{padding:10px;font-size:.82rem}}
   }
 
-  /* Theme toggle */
-  .theme-toggle{display:inline-flex;border:1px solid var(--line-strong);border-radius:999px;overflow:hidden;background:var(--surface)}
-  .faq-q:focus-visible,.theme-toggle button:focus-visible{outline:2px solid var(--primary);outline-offset:-3px}
-  .theme-toggle button{appearance:none;border:0;background:transparent;color:var(--ink-soft);font:600 .8rem/1 var(--font-body);padding:10px 14px;min-height:44px;display:inline-flex;align-items:center;cursor:pointer;transition:background .15s ease,color .15s ease}
-  .theme-toggle button[aria-pressed="true"]{background:var(--primary-deep);color:var(--on-primary)}
-  .theme-toggle button[aria-pressed="true"]:focus-visible{outline-color:var(--on-primary)}
+  .faq-q:focus-visible{outline:2px solid var(--primary);outline-offset:-3px}
 
   /* Highlights */
   .highlights{padding:8px 0 40px}
@@ -156,6 +137,11 @@
   .visit-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);padding:22px;box-shadow:var(--shadow);min-width:0}
   .visit-card h3{margin-bottom:10px}
   .visit-card p{font-size:.94rem;color:var(--ink-soft);margin-bottom:8px}
+  .hours-h{font-size:.95rem;margin:14px 0 6px;font-family:var(--font-body)}
+  .hours{font-size:.94rem;color:var(--ink-soft);margin-bottom:12px;max-width:340px}
+  .hours div{display:flex;justify-content:space-between;gap:16px;padding:5px 0;border-bottom:1px solid var(--line)}
+  .hours dt{font-weight:600;color:var(--ink)}
+  .hours dd{margin:0;white-space:nowrap}
   .visit-card .big-link{display:block;font-size:1.15rem;font-weight:700;margin:10px 0 2px;text-decoration:none;overflow-wrap:anywhere}
   .visit-card .big-link:hover{text-decoration:underline}
 
@@ -181,11 +167,7 @@
       <a href="#faq">FAQ</a>
       <a href="#visit">Visit us</a>
     </nav>
-    <span class="theme-toggle header-toggle" role="group" aria-label="Colour theme">
-      <button type="button" data-set-theme="warm" aria-pressed="false">Warm</button>
-      <button type="button" data-set-theme="classic" aria-pressed="true">Classic</button>
-    </span>
-    <a class="btn call-header" href="tel:+441932840426">Call 01932 840 426</a>
+    <a class="btn call-header" href="tel:+441932840426" aria-label="Call 01932 840 426"><span class="call-word">Call </span>01932 840 426</a>
   </div>
 </header>
 
@@ -198,12 +180,12 @@
         <h1>An Aladdin's Cave of cookware in the heart of Weybridge</h1>
         <p class="lead">For over 30 years we have supplied fine cookware, renowned brands and honest, friendly advice to cooking enthusiasts and professional chefs alike.</p>
         <div class="hero-actions">
-          <a class="btn" href="tel:+441932840426">Call 01932 840 426</a>
-          <a class="btn btn-ghost" href="#visit">Plan your visit</a>
+          <a class="btn" href="#visit">Plan your visit</a>
+          <a class="btn btn-ghost" href="#ranges">Browse our ranges</a>
         </div>
       </div>
       <figure class="hero-photo">
-        <img src="assets/site/shop-photo.jpg" alt="The Kitchen Shop's blue storefront and awning on the Ship Yard in Weybridge" width="355" height="266">
+        <img src="assets/site/shop-photo-3x.jpg" alt="The Kitchen Shop's blue storefront and awning on the Ship Yard in Weybridge" width="355" height="266">
         <figcaption>Our shop on the Ship Yard, just off the High Street</figcaption>
       </figure>
     </div>
@@ -227,10 +209,10 @@
       <span class="eyebrow">Inside the shop</span>
       <h2>The Aladdin's Cave, shelf by shelf</h2>
       <div class="photo-grid">
-        <figure class="ph"><img src="assets/site/shop-211_360.jpg" alt="The main aisle of the shop, stocked from floor to ceiling" loading="lazy" width="360" height="270"><figcaption>The main aisle</figcaption></figure>
-        <figure class="ph"><img src="assets/site/shop-166_355.jpg" alt="Pots and pans hanging above the shop floor" loading="lazy" width="355" height="266"><figcaption>Pots and pans overhead</figcaption></figure>
-        <figure class="ph"><img src="assets/site/shop-040_355.jpg" alt="Shelves of cookware and kitchen storage" loading="lazy" width="355" height="266"><figcaption>Cookware and storage shelves</figcaption></figure>
-        <figure class="ph"><img src="assets/site/shop-257_355.jpg" alt="China and tableware shelves with gingham trim" loading="lazy" width="355" height="266"><figcaption>China and tableware</figcaption></figure>
+        <figure class="ph"><img src="assets/site/shop-211_360-3x.jpg" alt="The main aisle of the shop, stocked from floor to ceiling" loading="lazy" width="360" height="270"><figcaption>The main aisle</figcaption></figure>
+        <figure class="ph"><img src="assets/site/shop-166_355-3x.jpg" alt="Pots and pans hanging above the shop floor" loading="lazy" width="355" height="266"><figcaption>Pots and pans overhead</figcaption></figure>
+        <figure class="ph"><img src="assets/site/shop-040_355-3x.jpg" alt="Shelves of cookware and kitchen storage" loading="lazy" width="355" height="266"><figcaption>Cookware and storage shelves</figcaption></figure>
+        <figure class="ph"><img src="assets/site/shop-257_355-3x.jpg" alt="China and tableware shelves with gingham trim" loading="lazy" width="355" height="266"><figcaption>China and tableware</figcaption></figure>
       </div>
     </div>
   </section>
@@ -311,7 +293,7 @@
         <p>Our staff are experienced and friendly: happy to give help and advice, or to simply let you browse.</p>
         <p>Nick, Gemma and the team look forward to welcoming you.</p>
         <figure class="about-photo">
-          <img src="assets/site/shop-128_360.jpg" alt="Behind the counter at The Kitchen Shop" loading="lazy" width="360" height="270">
+          <img src="assets/site/shop-128_360-3x.jpg" alt="Behind the counter at The Kitchen Shop" loading="lazy" width="360" height="270">
           <figcaption>Behind the counter</figcaption>
         </figure>
       </div>
@@ -342,6 +324,8 @@
         <div class="visit-card">
           <h3>The shop</h3>
           <p>The Kitchen Shop<br>11/14 Ship Yard<br>High Street, Weybridge<br>Surrey KT13 8BH</p>
+          <h4 class="hours-h">Opening hours</h4>
+          <dl class="hours"><div><dt>Monday to Saturday</dt><dd>9:30am - 5:30pm</dd></div><div><dt>Sunday</dt><dd>Closed</dd></div></dl>
           <p>Free customer parking in the Ship Yard, and a children's play area inside.</p>
           <a class="big-link" href="https://www.google.com/maps/search/?api=1&amp;query=The+Kitchen+Shop+Ship+Yard+Weybridge+KT13+8BH" rel="noopener">Open in Google Maps</a>
         </div>
@@ -367,25 +351,6 @@
 
 <script>
 (function(){
-  var root=document.documentElement;
-  function setTheme(name){
-    if(name!=="warm"&&name!=="classic"){name="classic";}
-    root.setAttribute("data-theme",name);
-    try{localStorage.setItem("kitchen-shop-preview-theme-v2",name);}catch(e){}
-    var btns=document.querySelectorAll("[data-set-theme]");
-    for(var i=0;i<btns.length;i++){btns[i].setAttribute("aria-pressed",btns[i].getAttribute("data-set-theme")===name?"true":"false");}
-  }
-  var initial="classic";
-  try{
-    var m=/[?&]theme=(warm|classic|a|b)(?:&|$)/.exec(location.search);
-    if(m){initial=(m[1]==="classic"||m[1]==="b")?"classic":"warm";}
-    else if(/[?&]theme=/.test(location.search)){initial="classic";}
-    else{var saved=localStorage.getItem("kitchen-shop-preview-theme-v2");if(saved){initial=saved;}}
-  }catch(e){}
-  setTheme(initial);
-  var btns=document.querySelectorAll("[data-set-theme]");
-  for(var i=0;i<btns.length;i++){btns[i].addEventListener("click",function(){setTheme(this.getAttribute("data-set-theme"));});}
-
   var items=document.querySelectorAll(".faq-item");
   for(var j=0;j<items.length;j++){
     (function(item){
