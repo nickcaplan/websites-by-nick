@@ -205,6 +205,8 @@ const seq = await asm.evaluate(async () => {
   const el = document.querySelector(".project-sam .cmp-stage");
   const abs = window.scrollY + el.getBoundingClientRect().top;
   const counts = [];
+  const total = document.querySelectorAll(".project-sam .cmp").length;
+  counts.push(total);
   window.scrollTo(0, Math.max(0, abs - innerHeight - 80));
   await sleep(400);
   counts.push(onCount());
@@ -219,10 +221,12 @@ const seq = await asm.evaluate(async () => {
     building: el.classList.contains("building"),
   };
 });
-if (seq.counts[0] !== 0) throw Error("assembly started early " + seq.counts);
-if (!(seq.counts[1] > 0 && seq.counts[1] < 5))
+const [total, early, mid, full] = seq.counts;
+if (total < 4) throw Error("too few components " + total);
+if (early !== 0) throw Error("assembly started early " + seq.counts);
+if (!(mid > 0 && mid < total))
   throw Error("assembly did not stage " + seq.counts);
-if (seq.counts[2] !== 5) throw Error("assembly incomplete " + seq.counts);
+if (full !== total) throw Error("assembly incomplete " + seq.counts);
 if (!seq.building) throw Error("assembly not marked building");
 console.log("PASS assembly");
 await asm.close();

@@ -221,6 +221,193 @@
     kick2();
   }
 
+
+  // Studio scene: Nick draws a small website by hand as the scene scrolls in.
+  // The pen follows the real strokes; the arm is a stretchy cartoon arm from
+  // his shoulder to the pen. Without JS, with reduced motion or while motion
+  // is paused the finished drawing is shown instead. Replays when re-entered.
+  const studioSvg = document.querySelector(".studio svg");
+  if (studioSvg) {
+    const q = (sel) => studioSvg.querySelector(sel);
+    const arm = q(".sd-arm"),
+      hand = q(".sd-hand"),
+      bodyG = q(".sd-body"),
+      clip = q(".sd-clip");
+    const SH = { x: 330, y: 262 };
+    const REST = { x: 520, y: 330 };
+    const pose = (P) => {
+      const dx = Math.max(0, Math.min(40, ((P.x - 480) / 340) * 40));
+      const S = { x: SH.x + dx, y: SH.y };
+      const H = { x: P.x - 22, y: P.y + 22 };
+      const d = Math.hypot(H.x - S.x, H.y - S.y);
+      const cx = (S.x + H.x) / 2,
+        cy = (S.y + H.y) / 2 + d * 0.2;
+      arm.setAttribute("d", `M${S.x} ${S.y}Q${cx} ${cy} ${H.x} ${H.y}`);
+      hand.setAttribute("transform", `translate(${H.x} ${H.y})`);
+      bodyG.setAttribute("transform", `translate(${dx} 0)`);
+    };
+    const strokeStep = (sel, dur, fillSel) => {
+      const el = q(sel);
+      const len = el.getTotalLength();
+      return {
+        dur,
+        len,
+        el,
+        fill: fillSel ? q(fillSel) : null,
+        pos: (t) => el.getPointAtLength(len * t),
+        show: (t) => {
+          el.style.strokeDasharray = len;
+          el.style.strokeDashoffset = len * (1 - t);
+        },
+      };
+    };
+    const steps = [
+      {
+        dur: 2800,
+        el: null,
+        pos: (t) => ({ x: 486 + 300 * t, y: 116 + Math.sin(t * 22) * 15 }),
+        show: (t) => clip.setAttribute("width", String(Math.max(0, 350 * t))),
+      },
+      strokeStep(".sd-underline", 750),
+      strokeStep(".sd-line1", 450),
+      strokeStep(".sd-line2", 400),
+      strokeStep(".sd-btn", 950, ".sd-btn-fill"),
+      strokeStep(".sd-pic", 1000, ".sd-pic-fill"),
+      strokeStep(".sd-sun", 800),
+      strokeStep(".sd-hill", 600),
+    ];
+    const reset = () => {
+      studioSvg.classList.remove("done");
+      clip.setAttribute("width", "0");
+      steps.forEach((s) => {
+        s.show(0);
+        if (s.fill) s.fill.classList.remove("on");
+      });
+    };
+    const finish = () => {
+      steps.forEach((s) => {
+        s.show(1);
+        if (s.fill) s.fill.classList.add("on");
+      });
+      pose(REST);
+      studioSvg.classList.add("done");
+    };
+    let state = "idle"; // idle | running | complete
+    let step = 0,
+      stepStart = 0,
+      travelFrom = REST,
+      raf3 = null,
+      last = 0,
+      clock = 0;
+    const TRAVEL = 380;
+    const isOff = () =>
+      document.body.classList.contains("paused") ||
+      document.body.classList.contains("hidden-page");
+    const ease = (t) => t * t * (3 - 2 * t);
+    const frame = (now) => {
+      raf3 = null;
+      if (state !== "running") return;
+      if (document.body.classList.contains("paused") || reduced.matches) {
+        state = "complete";
+        finish();
+        return;
+      }
+      const dt = isOff() ? 0 : Math.min(now - last, 64);
+      last = now;
+      clock += dt;
+      const s = steps[step];
+      const since = clock - stepStart;
+      const startPt = s.el ? s.pos(0) : s.pos(0);
+      if (since < TRAVEL) {
+        const k = ease(since / TRAVEL);
+        pose({
+          x: travelFrom.x + (startPt.x - travelFrom.x) * k,
+          y: travelFrom.y + (startPt.y - travelFrom.y) * k,
+        });
+      } else {
+        const t = Math.min((since - TRAVEL) / s.dur, 1);
+        const tt = ease(t) * 0.35 + t * 0.65;
+        s.show(tt);
+        pose(s.pos(tt));
+        if (t >= 1) {
+          if (s.fill) s.fill.classList.add("on");
+          travelFrom = s.pos(1);
+          step += 1;
+          stepStart = clock;
+          if (step >= steps.length) {
+            state = "ending";
+          }
+        }
+      }
+      if (state === "ending") {
+        const t0 = clock;
+        const endStart = t0;
+        const wrap = (n) => {
+          raf3 = null;
+          if (document.body.classList.contains("paused") || reduced.matches) {
+            state = "complete";
+            finish();
+            return;
+          }
+          const d2 = isOff() ? 0 : Math.min(n - last, 64);
+          last = n;
+          clock += d2;
+          const k = Math.min((clock - endStart) / 700, 1);
+          const e = ease(k);
+          pose({
+            x: travelFrom.x + (REST.x - travelFrom.x) * e,
+            y: travelFrom.y + (REST.y - travelFrom.y) * e,
+          });
+          if (k >= 1) {
+            state = "complete";
+            studioSvg.classList.add("done");
+            return;
+          }
+          raf3 = requestAnimationFrame(wrap);
+        };
+        raf3 = requestAnimationFrame(wrap);
+        return;
+      }
+      raf3 = requestAnimationFrame(frame);
+    };
+    const begin = () => {
+      if (reduced.matches || document.body.classList.contains("paused")) return;
+      studioSvg.classList.add("studio-live");
+      reset();
+      state = "running";
+      step = 0;
+      clock = 0;
+      stepStart = 0;
+      travelFrom = REST;
+      last = performance.now();
+      pose(REST);
+      raf3 = requestAnimationFrame(frame);
+    };
+    // Keep the finished drawing visible until the scene scrolls into view.
+    let seen = false;
+    const sio = new IntersectionObserver(
+      (entries) =>
+        entries.forEach((en) => {
+          if (en.isIntersecting && en.intersectionRatio >= 0.45 && !seen && state !== "running") {
+            seen = true;
+            begin();
+          } else if (!en.isIntersecting && seen && state === "complete") {
+            seen = false; // replay next time it scrolls into view
+          }
+        }),
+      { threshold: [0, 0.45] }
+    );
+    sio.observe(studioSvg);
+    const pauseWatch = new MutationObserver(() => {
+      if (document.body.classList.contains("paused") && state === "running") {
+        state = "complete";
+        finish();
+      }
+    });
+    pauseWatch.observe(document.body, { attributes: true, attributeFilter: ["class"] });
+    pose(REST);
+  }
+
   // Motion is decorative, finite and never moves navigation or page layout.
   // The complete composition and every route remain usable without JavaScript.
   const syncVisibility = () => {
