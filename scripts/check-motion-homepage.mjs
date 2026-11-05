@@ -202,13 +202,13 @@ const seq = await asm.evaluate(async () => {
   const counts = [];
   const total = document.querySelectorAll(".project-sam .cmp").length;
   counts.push(total);
-  window.scrollTo(0, Math.max(0, abs - innerHeight - 80));
+  window.scrollTo({ top: Math.max(0, abs - innerHeight - 80), behavior: "instant" });
   await sleep(400);
   counts.push(onCount());
-  window.scrollTo(0, abs - innerHeight * 0.55);
+  window.scrollTo({ top: abs - innerHeight * 0.55, behavior: "instant" });
   await sleep(400);
   counts.push(onCount());
-  window.scrollTo(0, abs - 60);
+  window.scrollTo({ top: abs - 60, behavior: "instant" });
   await sleep(400);
   counts.push(onCount());
   return {
