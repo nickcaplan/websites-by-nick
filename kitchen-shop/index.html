@@ -37,7 +37,7 @@
   .header-inner{display:flex;align-items:center;gap:14px;padding:12px 20px;max-width:1080px;margin:0 auto;flex-wrap:wrap}
   .brand{display:inline-flex;align-items:center;gap:10px;flex-wrap:wrap;font-family:var(--font-display);font-weight:var(--h-weight);font-size:1.12rem;color:var(--ink);text-decoration:none;letter-spacing:var(--h-letter)}
   .brand small{font-size:.68rem;letter-spacing:.08em;color:var(--muted);font-family:var(--font-body);font-weight:500}
-  .brand-mark{display:inline-flex;align-items:center;justify-content:center;background:var(--primary-deep);border-radius:8px;width:38px;height:38px;flex:none;overflow:hidden}
+  .brand-mark{display:inline-flex;align-items:center;justify-content:center;background:var(--primary-deep);border-radius:10px;width:64px;height:64px;flex:none;overflow:hidden}
   .brand-mark img{width:100%;height:100%;object-fit:cover;display:block}
   .brand-mark svg{width:22px;height:22px;display:block}
   .nav{display:none;gap:14px;margin-left:auto}
@@ -72,15 +72,15 @@
   .est-pill{display:inline-block;background:var(--surface);border:1px solid var(--line-strong);color:var(--primary-deep);font-size:.75rem;font-weight:700;letter-spacing:.1em;padding:5px 12px;border-radius:999px}
 
   @media (max-width:879px){
-    section[id],#faq{scroll-margin-top:8rem}
+    section[id],#faq{scroll-margin-top:9rem}
     @media (max-width:359px){section[id],#faq{scroll-margin-top:11rem}}
     .header-inner{padding-left:14px;padding-right:14px;gap:10px}
     .brand{font-size:.92rem;gap:8px}
-    .brand-mark{width:34px;height:34px}
+    .brand-mark{width:52px;height:52px}
     .call-header{margin-left:auto;padding:10px 12px;font-size:.88rem;white-space:nowrap}
     .brand{flex-wrap:nowrap;min-width:0}
     @media (max-width:479px){.call-word{display:none}}
-    @media (max-width:379px){.header-inner{gap:8px;padding-left:10px;padding-right:10px}.brand{font-size:.84rem;gap:6px}.brand-mark{width:30px;height:30px}.call-header{padding:10px;font-size:.82rem}}
+    @media (max-width:379px){.header-inner{gap:8px;padding-left:10px;padding-right:10px}.brand{font-size:.84rem;gap:6px}.brand-mark{width:46px;height:46px}.call-header{padding:10px;font-size:.82rem}}
   }
 
   .faq-q:focus-visible{outline:2px solid var(--primary);outline-offset:-3px}
@@ -193,7 +193,7 @@
 <header class="site-header">
   <div class="header-inner">
     <a class="brand" href="#top" aria-label="The Kitchen Shop - back to top">
-      <span class="brand-mark" aria-hidden="true"><img src="assets/site/pot-logo-square.png" alt="" width="38" height="38"></span>
+      <span class="brand-mark" aria-hidden="true"><img src="assets/site/pot-logo-square.png" alt="" width="64" height="64"></span>
       The Kitchen Shop<small>Fine cookware - Weybridge</small>
     </a>
     <nav class="nav" aria-label="Sections">
