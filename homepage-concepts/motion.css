@@ -1409,28 +1409,6 @@ h1 .last {
   }
 }
 
-.studio .sd-eyeball {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: sd-blink 5.2s infinite;
-}
-.studio .sd-eye {
-  transition: translate 0.18s ease-out;
-}
-.paused .studio .sd-eye,
-.hidden-page .studio .sd-eye {
-  transition: none;
-}
-@keyframes sd-blink {
-  0%,
-  92%,
-  100% {
-    transform: scaleY(1);
-  }
-  95% {
-    transform: scaleY(0.1);
-  }
-}
 
 /* Compass card: plan screenshot with the saved-plans page layered on top. */
 .cmp-stage-compass {
@@ -1469,4 +1447,35 @@ h1 .last {
 }
 .dark .cmp-stage-compass {
   background: #121214;
+}
+
+/* Work cards: the screenshot is the hero of the card. No tinted mat around it
+   and a slimmer card margin, so there is no large frame. */
+.project {
+  padding: 22px 22px 26px;
+}
+.project .project-image,
+.project-foa .project-image,
+.dark .project-image,
+.dark .project-foa .project-image {
+  background: none;
+  padding: 0;
+  border-radius: 6px;
+}
+.project-title {
+  padding-inline: 4px;
+}
+.project > p {
+  padding-inline: 4px;
+}
+.project:hover .cmp-stage {
+  transform: scale(1.012);
+}
+@media (max-width: 900px) {
+  .project {
+    padding: 14px 14px 20px;
+  }
+  .project .project-image {
+    padding: 0;
+  }
 }

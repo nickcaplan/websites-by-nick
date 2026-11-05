@@ -234,18 +234,22 @@
       hand = q(".sd-hand"),
       bodyG = q(".sd-body"),
       clip = q(".sd-clip");
-    const SH = { x: 330, y: 262 };
+    const SH = { x: 334, y: 262 };
     const REST = { x: 520, y: 330 };
+    // Shoulder, elbow, hand: the elbow always bends down a little, so it reads
+    // as an arm, not a stretched noodle. He leans toward the canvas as he reaches.
     const pose = (P) => {
-      const dx = Math.max(0, Math.min(40, ((P.x - 480) / 340) * 40));
+      const dx = Math.max(0, Math.min(60, ((P.x - 480) / 340) * 60));
       const S = { x: SH.x + dx, y: SH.y };
-      const H = { x: P.x - 22, y: P.y + 22 };
-      const d = Math.hypot(H.x - S.x, H.y - S.y);
-      const cx = (S.x + H.x) / 2,
-        cy = (S.y + H.y) / 2 + d * 0.2;
-      arm.setAttribute("d", `M${S.x} ${S.y}Q${cx} ${cy} ${H.x} ${H.y}`);
-      hand.setAttribute("transform", `translate(${H.x} ${H.y})`);
-      bodyG.setAttribute("transform", `translate(${dx} 0)`);
+      const H = { x: P.x - 20, y: P.y + 20 };
+      const d = Math.hypot(H.x - S.x, H.y - S.y) || 1;
+      const l = d * 0.53;
+      const bend = Math.sqrt(Math.max(0, l * l - (d / 2) * (d / 2)));
+      const ex = (S.x + H.x) / 2 - ((H.y - S.y) / d) * bend,
+        ey = (S.y + H.y) / 2 + ((H.x - S.x) / d) * bend;
+      arm.setAttribute("d", `M${S.x.toFixed(1)} ${S.y}L${ex.toFixed(1)} ${ey.toFixed(1)}L${H.x.toFixed(1)} ${H.y.toFixed(1)}`);
+      hand.setAttribute("transform", `translate(${H.x.toFixed(1)} ${H.y.toFixed(1)})`);
+      bodyG.setAttribute("transform", `translate(${dx.toFixed(1)} 0)`);
     };
     const strokeStep = (sel, dur, fillSel) => {
       const el = q(sel);
@@ -264,18 +268,18 @@
     };
     const steps = [
       {
-        dur: 2800,
+        dur: 1500,
         el: null,
         pos: (t) => ({ x: 486 + 300 * t, y: 116 + Math.sin(t * 22) * 15 }),
         show: (t) => clip.setAttribute("width", String(Math.max(0, 350 * t))),
       },
-      strokeStep(".sd-underline", 750),
-      strokeStep(".sd-line1", 450),
-      strokeStep(".sd-line2", 400),
-      strokeStep(".sd-btn", 950, ".sd-btn-fill"),
-      strokeStep(".sd-pic", 1000, ".sd-pic-fill"),
-      strokeStep(".sd-sun", 800),
-      strokeStep(".sd-hill", 600),
+      strokeStep(".sd-underline", 400),
+      strokeStep(".sd-line1", 240),
+      strokeStep(".sd-line2", 210),
+      strokeStep(".sd-btn", 500, ".sd-btn-fill"),
+      strokeStep(".sd-pic", 520, ".sd-pic-fill"),
+      strokeStep(".sd-sun", 420),
+      strokeStep(".sd-hill", 320),
     ];
     const reset = () => {
       studioSvg.classList.remove("done");
@@ -300,7 +304,7 @@
       raf3 = null,
       last = 0,
       clock = 0;
-    const TRAVEL = 380;
+    const TRAVEL = 200;
     const isOff = () =>
       document.body.classList.contains("paused") ||
       document.body.classList.contains("hidden-page");
@@ -353,7 +357,7 @@
           const d2 = isOff() ? 0 : Math.min(n - last, 64);
           last = n;
           clock += d2;
-          const k = Math.min((clock - endStart) / 700, 1);
+          const k = Math.min((clock - endStart) / 400, 1);
           const e = ease(k);
           pose({
             x: travelFrom.x + (REST.x - travelFrom.x) * e,
@@ -407,29 +411,6 @@
     });
     pauseWatch.observe(document.body, { attributes: true, attributeFilter: ["class"] });
     pose(REST);
-
-    // Nick's eye follows the pointer (fine pointers only, never while motion
-    // is paused or the tab is hidden) and blinks via CSS.
-    const eye = q(".sd-eye");
-    if (eye && matchMedia("(pointer: fine)").matches && !reduced.matches) {
-      let eraf = null;
-      document.addEventListener("pointermove", (e) => {
-        if (eraf) return;
-        const { clientX, clientY } = e;
-        eraf = requestAnimationFrame(() => {
-          eraf = null;
-          // Paused or hidden: leave the eye where it is, no jump back.
-          if (isOff()) return;
-          const r = studioSvg.getBoundingClientRect();
-          const k = r.width / 880;
-          const dx = clientX - (r.left + 338 * k);
-          const dy = clientY - (r.top + 158 * k);
-          const d = Math.hypot(dx, dy) || 1;
-          const m = Math.min(4.5, d / 90);
-          eye.style.translate = `${((dx / d) * m).toFixed(2)}px ${((dy / d) * m).toFixed(2)}px`;
-        });
-      });
-    }
   }
 
   // Motion is decorative, finite and never moves navigation or page layout.

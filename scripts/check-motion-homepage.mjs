@@ -201,18 +201,15 @@ const resumed = await settle.evaluate(() => {
 });
 if (resumed.off !== "0px" || resumed.running)
   throw Error("underline redrew on resume");
-// The eye must stay put while motion is paused, not jump or follow.
-await settle.evaluate(() => document.querySelector(".sd-eye").scrollIntoView({ block: "center" }));
-await settle.mouse.move(200, 120);
-await settle.mouse.move(260, 160);
-await settle.waitForTimeout(400);
-await settle.getByRole("button", { name: "Pause motion", exact: true }).click();
-const eyeBefore = await settle.evaluate(() => getComputedStyle(document.querySelector(".sd-eye")).translate);
-await settle.mouse.move(1100, 700);
-await settle.mouse.move(1000, 80);
-await settle.waitForTimeout(400);
-const eyeAfter = await settle.evaluate(() => getComputedStyle(document.querySelector(".sd-eye")).translate);
-if (eyeBefore !== eyeAfter) throw Error("eye moved while motion paused: " + eyeBefore + " -> " + eyeAfter);
+// Nick asked for no face in the cartoon: the figure is drawn from behind, with
+// no eye, mouth or nose, and nothing in it follows the pointer.
+await settle.evaluate(() => document.querySelector(".studio svg").scrollIntoView({ block: "center" }));
+const faceBits = await settle.evaluate(() => ({
+  eyes: document.querySelectorAll(".studio .sd-eye, .studio .sd-eyeball").length,
+  dark: [...document.querySelectorAll(".studio .sd-head [stroke='#203027'], .studio .sd-head [fill='#203027'], .studio .sd-head [fill='#fffdf6']")].length,
+  small: [...document.querySelectorAll(".studio .sd-head circle")].filter((c) => +c.getAttribute("r") < 40).length,
+}));
+if (faceBits.eyes || faceBits.dark || faceBits.small) throw Error("cartoon shows a face again " + JSON.stringify(faceBits));
 await settle.getByRole("button", { name: "Pause motion", exact: true }).click();
 console.log("PASS pause-settle");
 await settle.close();

@@ -144,31 +144,25 @@ for (const width of [320, 390, 768, 1280, 1600]) {
   console.log("PASS hidden-freeze");
   await p.close();
 }
-// Nick's eye follows the pointer and blinks; it freezes where it is while paused.
+// No face in the cartoon: no eye or mouth to follow the pointer or blink.
 {
   const p = await b.newPage({ viewport: { width: 1280, height: 900 } });
   await p.goto(base + "/homepage-concepts/");
   await p.waitForLoadState("networkidle");
   await p.evaluate(() => document.querySelector(".studio svg").scrollIntoView({ block: "center", behavior: "instant" }));
-  await p.waitForTimeout(500);
-  const eyeT = () => p.locator(".sd-eye").evaluate((e) => e.style.translate);
-  await p.mouse.move(5, 450);
   await p.waitForTimeout(300);
-  const left = await eyeT();
+  const bits = await p.evaluate(() => ({
+    eyes: document.querySelectorAll(".studio .sd-eye, .studio .sd-eyeball").length,
+    dark: document.querySelectorAll(".studio .sd-head [stroke='#203027'], .studio .sd-head [fill='#203027'], .studio .sd-head [fill='#fffdf6']").length,
+    small: [...document.querySelectorAll(".studio .sd-head circle")].filter((c) => +c.getAttribute("r") < 40).length,
+  }));
+  if (bits.eyes || bits.dark || bits.small) fail("cartoon shows a face " + JSON.stringify(bits));
+  const head0 = await p.locator(".sd-head").evaluate((e) => e.outerHTML);
+  await p.mouse.move(5, 450);
   await p.mouse.move(1275, 450);
   await p.waitForTimeout(300);
-  const right = await eyeT();
-  if (!left || !right || left === right) fail("eye does not follow the pointer " + left + " / " + right);
-  if (parseFloat(left) >= 0 || parseFloat(right) <= 0) fail("eye looks the wrong way " + left + " / " + right);
-  const blink = await p.locator(".sd-eyeball").evaluate((e) => e.getAnimations().some((a) => a.animationName === "sd-blink"));
-  if (!blink) fail("eye does not blink");
-  await p.getByRole("button", { name: "Pause motion", exact: true }).click();
-  const frozen = await eyeT();
-  if (frozen !== right) fail("eye jumped on pause " + right + " -> " + frozen);
-  await p.mouse.move(640, 5);
-  await p.waitForTimeout(300);
-  if ((await eyeT()) !== frozen) fail("eye moved while paused");
-  console.log("PASS eye");
+  if ((await p.locator(".sd-head").evaluate((e) => e.outerHTML)) !== head0) fail("head reacts to the pointer");
+  console.log("PASS no-face");
   await p.close();
 }
 // Paused on desktop: project cards stop stacking, so none is covered while
