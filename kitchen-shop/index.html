@@ -87,11 +87,29 @@
 
   /* Highlights */
   .highlights{padding:8px 0 40px}
-  .hl-grid{display:grid;gap:12px;grid-template-columns:repeat(2,1fr)}
+  .highlights h2{margin:4px 0 16px}
+  .hl-grid{display:grid;gap:14px;grid-template-columns:repeat(2,1fr)}
   @media (min-width:760px){.hl-grid{grid-template-columns:repeat(3,1fr)}}
-  .hl-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);padding:16px 18px;box-shadow:var(--shadow)}
-  .hl-card h3{font-size:.95rem;margin-bottom:4px}
+  .hl-card{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);padding:16px 16px 14px;box-shadow:var(--shadow)}
+  .hl-card h3{font-size:.95rem;margin:10px 0 4px}
   .hl-card p{font-size:.86rem;color:var(--ink-soft)}
+  .hl-ico{width:44px;height:44px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:var(--bg-tint);color:var(--primary)}
+  .hl-ico svg{width:24px;height:24px}
+  .hl-ico .hl-p{font-weight:800;font-size:1.15rem;font-family:var(--font-display)}
+  /* the parking sign is a real navy roundel, like the one at the Ship Yard */
+  .hl-parking .hl-ico{background:var(--primary-deep);color:var(--on-primary)}
+  /* the gift card is the navy accent card, with a ribbon down one side */
+  .hl-gift{background:var(--primary-deep);border-color:var(--primary-deep);overflow:hidden;padding-right:52px}
+  .hl-gift h3{color:var(--on-primary)}
+  .hl-gift p{color:#c3cde9}
+  .hl-gift .hl-ico{background:rgba(244,246,252,.14);color:var(--on-primary)}
+  .hl-gift::before{content:"";position:absolute;top:0;bottom:0;right:24px;width:14px;background:rgba(244,246,252,.16)}
+  @media (min-width:760px){
+    .hl-card{transition:transform .18s ease}
+    .hl-card:nth-child(odd){transform:rotate(-.7deg)}
+    .hl-card:nth-child(even){transform:rotate(.6deg)}
+    .hl-card:hover{transform:rotate(0deg) translateY(-2px)}
+  }
 
   /* Ranges */
   .ranges{background:var(--bg-tint)}
@@ -248,13 +266,15 @@
 
   <section class="highlights">
     <div class="wrap">
+      <span class="eyebrow">Shop services</span>
+      <h2>More than pots and pans</h2>
       <div class="hl-grid">
-        <div class="hl-card"><h3>Professional knife sharpening</h3><p>Professional sharpening for well-loved kitchen knives.</p></div>
-        <div class="hl-card"><h3>Wedding list service</h3><p>Build a list with us and let guests choose from the whole shop.</p></div>
-        <div class="hl-card"><h3>Gift vouchers and wrapping</h3><p>Gift vouchers, plus a wrapping service for presents.</p></div>
-        <div class="hl-card"><h3>Free local delivery</h3><p>We deliver locally at no charge, including assembled kitchen trolleys.</p></div>
-        <div class="hl-card"><h3>Free customer parking</h3><p>Park right by us in the Ship Yard, just off the High Street.</p></div>
-        <div class="hl-card"><h3>Children's play area</h3><p>Browse at your own pace while little ones are entertained.</p></div>
+        <div class="hl-card"><span class="hl-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21l7-7"/><path d="M10 14L20 4c.8 2.6-.4 5.5-2.7 7.2S12.7 13.2 10 14z"/><path d="M8.6 12.6l2.8 2.8"/></svg></span><h3>Professional knife sharpening</h3><p>Professional sharpening for well-loved kitchen knives.</p></div>
+        <div class="hl-card"><span class="hl-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7.2-4.7-9.2-9.2A5.2 5.2 0 0 1 12 6.4a5.2 5.2 0 0 1 9.2 4.4C19.2 15.3 12 20 12 20z"/></svg></span><h3>Wedding list service</h3><p>Build a list with us and let guests choose from the whole shop.</p></div>
+        <div class="hl-card hl-gift"><span class="hl-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="1"/><path d="M3 6.8h18V10H3z"/><path d="M12 6.8V20"/><path d="M12 6.8s-4.2.2-4.2-2.4S12 2.6 12 6.8s4.2.2 4.2-2.4S12 2.6 12 6.8z"/></svg></span><h3>Gift vouchers and wrapping</h3><p>Gift vouchers, plus a wrapping service for presents.</p></div>
+        <div class="hl-card"><span class="hl-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.5H13V16H2.5z"/><path d="M13 9.5h4.6l3.4 3.4v3.1H13"/><circle cx="6.7" cy="17.6" r="1.7"/><circle cx="16.9" cy="17.6" r="1.7"/></svg></span><h3>Free local delivery</h3><p>We deliver locally at no charge, including assembled kitchen trolleys.</p></div>
+        <div class="hl-card hl-parking"><span class="hl-ico" aria-hidden="true"><span class="hl-p">P</span></span><h3>Free customer parking</h3><p>Park right by us in the Ship Yard, just off the High Street.</p></div>
+        <div class="hl-card"><span class="hl-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="12.5" width="8" height="8" rx="1"/><rect x="13" y="12.5" width="8" height="8" rx="1"/><path d="M8.5 4l3.5 5.5H5z"/></svg></span><h3>Children's play area</h3><p>Browse at your own pace while little ones are entertained.</p></div>
       </div>
     </div>
   </section>
