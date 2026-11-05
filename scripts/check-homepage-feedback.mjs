@@ -144,7 +144,7 @@ for (const width of [320, 390, 768, 1280, 1600]) {
   console.log("PASS hidden-freeze");
   await p.close();
 }
-// Nick's eye follows the pointer and blinks; it stays still while paused.
+// Nick's eye follows the pointer and blinks; it freezes where it is while paused.
 {
   const p = await b.newPage({ viewport: { width: 1280, height: 900 } });
   await p.goto(base + "/homepage-concepts/");
@@ -163,9 +163,11 @@ for (const width of [320, 390, 768, 1280, 1600]) {
   const blink = await p.locator(".sd-eyeball").evaluate((e) => e.getAnimations().some((a) => a.animationName === "sd-blink"));
   if (!blink) fail("eye does not blink");
   await p.getByRole("button", { name: "Pause motion", exact: true }).click();
+  const frozen = await eyeT();
+  if (frozen !== right) fail("eye jumped on pause " + right + " -> " + frozen);
   await p.mouse.move(640, 5);
   await p.waitForTimeout(300);
-  if ((await eyeT()) !== "") fail("eye moved while paused");
+  if ((await eyeT()) !== frozen) fail("eye moved while paused");
   console.log("PASS eye");
   await p.close();
 }
