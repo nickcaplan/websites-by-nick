@@ -132,6 +132,31 @@ for (const width of [320, 390, 768, 1280, 1600]) {
   console.log("PASS hidden-freeze");
   await p.close();
 }
+// Nick's eye follows the pointer and blinks; it stays still while paused.
+{
+  const p = await b.newPage({ viewport: { width: 1280, height: 900 } });
+  await p.goto(base + "/homepage-concepts/");
+  await p.waitForLoadState("networkidle");
+  await p.evaluate(() => document.querySelector(".studio svg").scrollIntoView({ block: "center", behavior: "instant" }));
+  await p.waitForTimeout(500);
+  const eyeT = () => p.locator(".sd-eye").evaluate((e) => e.style.translate);
+  await p.mouse.move(5, 450);
+  await p.waitForTimeout(300);
+  const left = await eyeT();
+  await p.mouse.move(1275, 450);
+  await p.waitForTimeout(300);
+  const right = await eyeT();
+  if (!left || !right || left === right) fail("eye does not follow the pointer " + left + " / " + right);
+  if (parseFloat(left) >= 0 || parseFloat(right) <= 0) fail("eye looks the wrong way " + left + " / " + right);
+  const blink = await p.locator(".sd-eye").evaluate((e) => e.getAnimations().some((a) => a.animationName === "sd-blink"));
+  if (!blink) fail("eye does not blink");
+  await p.getByRole("button", { name: "Pause motion", exact: true }).click();
+  await p.mouse.move(640, 5);
+  await p.waitForTimeout(300);
+  if ((await eyeT()) !== "") fail("eye moved while paused");
+  console.log("PASS eye");
+  await p.close();
+}
 // Reduced motion and no JS show the finished picture, arm included.
 for (const mode of ["reduced", "nojs"]) {
   const p = await b.newPage(mode === "reduced" ? { reducedMotion: "reduce", viewport: { width: 390, height: 844 } } : { javaScriptEnabled: false, viewport: { width: 390, height: 844 } });

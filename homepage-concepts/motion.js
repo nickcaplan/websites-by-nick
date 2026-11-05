@@ -406,6 +406,31 @@
     });
     pauseWatch.observe(document.body, { attributes: true, attributeFilter: ["class"] });
     pose(REST);
+
+    // Nick's eye follows the pointer (fine pointers only, never while motion
+    // is paused or the tab is hidden) and blinks via CSS.
+    const eye = q(".sd-eye");
+    if (eye && matchMedia("(pointer: fine)").matches && !reduced.matches) {
+      let eraf = null;
+      document.addEventListener("pointermove", (e) => {
+        if (eraf) return;
+        const { clientX, clientY } = e;
+        eraf = requestAnimationFrame(() => {
+          eraf = null;
+          if (isOff()) {
+            eye.style.translate = "";
+            return;
+          }
+          const r = studioSvg.getBoundingClientRect();
+          const k = r.width / 880;
+          const dx = clientX - (r.left + 338 * k);
+          const dy = clientY - (r.top + 158 * k);
+          const d = Math.hypot(dx, dy) || 1;
+          const m = Math.min(3, d / 120);
+          eye.style.translate = `${((dx / d) * m).toFixed(2)}px ${((dy / d) * m).toFixed(2)}px`;
+        });
+      });
+    }
   }
 
   // Motion is decorative, finite and never moves navigation or page layout.

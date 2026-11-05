@@ -1398,3 +1398,20 @@ h1 .last {
     margin-top: 40px;
   }
 }
+
+.studio .sd-eye {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: sd-blink 5.2s infinite;
+  transition: translate 0.18s ease-out;
+}
+@keyframes sd-blink {
+  0%,
+  92%,
+  100% {
+    transform: scaleY(1);
+  }
+  95% {
+    transform: scaleY(0.1);
+  }
+}
