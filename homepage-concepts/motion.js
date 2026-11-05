@@ -57,7 +57,7 @@
             chars.push(s);
           });
           n.replaceWith(frag);
-        } else if (n.nodeType === Node.ELEMENT_NODE && !n.classList.contains("swoosh")) {
+        } else if (n.nodeType === Node.ELEMENT_NODE && !n.classList.contains("swoosh") && !n.classList.contains("penframe")) {
           walk(n);
         }
       });
@@ -74,7 +74,7 @@
       const finish = () => {
         chars.forEach((s) => s.classList.add("on"));
         caret.remove();
-        heroTitle.classList.add("typed", "drawn");
+        heroTitle.classList.add("typed", "drawn", "sketch-settled");
       };
       const step = () => {
         if (reduced.matches) return finish();
