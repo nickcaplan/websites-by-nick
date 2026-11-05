@@ -455,6 +455,10 @@ h2 em {
     position: sticky;
     top: 80px;
   }
+  /* Paused: no stacking, so a card can never sit covered but still focusable. */
+  body.scrub-stacked.paused .project {
+    position: static;
+  }
 }
 .project .project-image {
   will-change: transform;

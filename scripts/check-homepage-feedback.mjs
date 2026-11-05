@@ -157,6 +157,36 @@ for (const width of [320, 390, 768, 1280, 1600]) {
   console.log("PASS eye");
   await p.close();
 }
+// Paused on desktop: project cards stop stacking, so none is covered while
+// still focusable; resuming restores stacking; resizing clears stale styles.
+{
+  const p = await b.newPage({ viewport: { width: 1280, height: 800 } });
+  await p.goto(base + "/homepage-concepts/");
+  await p.waitForLoadState("networkidle");
+  const pos = () => p.evaluate(() => [...document.querySelectorAll(".project")].map((e) => getComputedStyle(e).position).join());
+  if (!(await pos()).includes("sticky")) fail("desktop cards should stack when motion is on");
+  const t = p.getByRole("button", { name: /motion/i });
+  await t.click();
+  if ((await pos()).includes("sticky")) fail("cards still sticky while paused");
+  // Keyboard: every project link that gets focus must be the topmost element at its centre.
+  await p.evaluate(() => document.querySelector(".project").scrollIntoView({ behavior: "instant" }));
+  await p.evaluate(() => document.querySelector(".project").focus?.());
+  const links = await p.$$(".project a[href]");
+  for (const l of links) {
+    await l.scrollIntoViewIfNeeded();
+    await l.focus();
+    const top = await l.evaluate((e) => { const r = e.getBoundingClientRect(); const x = r.left + r.width / 2, y = r.top + r.height / 2; const at = document.elementFromPoint(x, y); return !!at && (at === e || e.contains(at)); });
+    if (!top) fail("focused project link is covered while paused");
+  }
+  await t.click();
+  if (!(await pos()).includes("sticky")) fail("stacking did not return after resume");
+  await p.setViewportSize({ width: 800, height: 800 });
+  await p.waitForTimeout(400);
+  const stale = await p.evaluate(() => { const e = document.querySelector(".project"); return e.style.pointerEvents || e.getAttribute("tabindex") || e.style.opacity || e.style.transform; });
+  if (stale) fail("stale stacked styles after resize " + stale);
+  console.log("PASS paused-desktop");
+  await p.close();
+}
 // Reduced motion and no JS show the finished picture, arm included.
 for (const mode of ["reduced", "nojs"]) {
   const p = await b.newPage(mode === "reduced" ? { reducedMotion: "reduce", viewport: { width: 390, height: 844 } } : { javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
