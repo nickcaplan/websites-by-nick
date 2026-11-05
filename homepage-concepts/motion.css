@@ -1378,6 +1378,12 @@ h1 .last {
 .dark .studio .sd-title {
   fill: #203027;
 }
+.dark .studio .sd-legs {
+  stroke: #f2ecdf66;
+}
+.dark .studio .sd-floor {
+  fill: #f2ecdf33;
+}
 .dark .studio .studio-eyebrow {
   color: #f2ecdf;
 }
