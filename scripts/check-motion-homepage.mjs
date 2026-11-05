@@ -235,6 +235,12 @@ if (await r.locator(".motion-toggle").isVisible())
   throw Error("motion control not hidden");
 if (await r.locator(".composer").evaluate((e) => e.getAnimations().length))
   throw Error("animation reduced");
+// the sketched browser frame must be fully drawn and static under reduced
+// motion, not stuck at its undrawn dash offset
+const pfOffset = await r
+  .locator(".pf-frame")
+  .evaluate((e) => getComputedStyle(e).strokeDashoffset);
+if (pfOffset !== "0px") throw Error("reduced pen frame not settled: " + pfOffset);
 await r.screenshot({ path: output + "/motion-reduced.png" });
 console.log("PASS reduced");
 const hidden = await b.newPage();

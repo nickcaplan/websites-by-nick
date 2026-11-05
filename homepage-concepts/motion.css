@@ -1109,6 +1109,11 @@ body.paused .reveal {
   .swoosh {
     stroke-dashoffset: 0;
   }
+  /* the sketched browser frame shows fully drawn, statically */
+  .penframe *,
+  .penchrome * {
+    stroke-dashoffset: 0 !important;
+  }
   .motion-toggle {
     display: none;
   }
