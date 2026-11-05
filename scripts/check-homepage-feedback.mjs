@@ -56,6 +56,18 @@ for (const width of [320, 390, 768, 1280, 1600]) {
   const srcs = await p.evaluate(() => [...document.querySelectorAll(".composer img, .community img, .project img")].map((i) => i.getAttribute("src")));
   if (!srcs.length || srcs.some((s) => /3-sam-home|foa-fundraising/.test(s))) fail("old matching screenshots " + srcs);
   if (!srcs.some((s) => /sam-watch-desk-dark/.test(s)) || !srcs.some((s) => /foa-fireworks-desk/.test(s))) fail("new screenshots missing");
+  // Compass card: real captures load, and only the current theme's pair shows
+  await p.evaluate(() => document.querySelector(".project-cmp").scrollIntoView({ behavior: "instant" }));
+  await p.waitForTimeout(600);
+  const cp = await p.evaluate(() => {
+    const a = document.querySelector("a.project-cmp");
+    const vis = [...a.querySelectorAll("img")].filter((i) => getComputedStyle(i).display !== "none");
+    return { href: a.href, h3: a.querySelector("h3").textContent, vis: vis.length, loaded: vis.every((i) => i.complete && i.naturalWidth > 0) };
+  });
+  if (cp.h3 !== "Compass" || !/compass-demo\.websitesbynick\.co\.uk/.test(cp.href)) fail("compass card wrong " + JSON.stringify(cp));
+  if (cp.vis !== 2 || !cp.loaded) fail("compass screenshots not shown/loaded " + JSON.stringify(cp));
+  await p.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+  await p.waitForTimeout(400);
   // sticker fully visible, not covered by a card
   await p.waitForTimeout(2200);
   const sticker = await p.evaluate(() => {
@@ -171,7 +183,7 @@ for (const width of [320, 390, 768, 1280, 1600]) {
   // Keyboard: every project link that gets focus must be the topmost element at its centre.
   await p.evaluate(() => document.querySelector(".project").scrollIntoView({ behavior: "instant" }));
   const hrefs = await p.$$eval("a.project[href]", (as) => as.map((a) => a.href));
-  if (hrefs.length !== 2) fail("expected exactly two project links, found " + hrefs.length);
+  if (hrefs.length !== 3) fail("expected exactly three project links, found " + hrefs.length);
   const reached = new Set();
   for (let i = 0; i < 60 && reached.size < hrefs.length; i++) {
     await p.keyboard.press("Tab");

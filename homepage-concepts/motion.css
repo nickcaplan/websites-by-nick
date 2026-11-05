@@ -1427,3 +1427,42 @@ h1 .last {
     transform: scaleY(0.1);
   }
 }
+
+/* Compass card: plan screenshot with the saved-plans page layered on top. */
+.cmp-stage-compass {
+  overflow: hidden;
+  background: #f5f3ec;
+}
+.project-image .cmp-stage-compass img {
+  position: absolute;
+  height: auto;
+  border-radius: 6px;
+  box-shadow: 0 10px 30px #20302726;
+}
+.project-image .cp-main {
+  left: 0;
+  top: 0;
+  width: 78%;
+}
+.project-image .cp-side {
+  right: 0;
+  bottom: 0;
+  width: 58%;
+  border: 1px solid #20302733;
+  transition: transform 0.5s;
+}
+.project:hover .cp-side {
+  transform: translateY(-6px) rotate(1deg);
+}
+.project-image .cp-dark {
+  display: none;
+}
+.dark .project-image .cp-dark {
+  display: block;
+}
+.dark .project-image .cp-light {
+  display: none;
+}
+.dark .cmp-stage-compass {
+  background: #121214;
+}
