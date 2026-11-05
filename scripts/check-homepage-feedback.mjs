@@ -98,6 +98,15 @@ for (const width of [320, 390, 768, 1280, 1600]) {
   if (complete(a) && width === 1280) fail("studio did not start drawing");
   if (m.hand === a.hand && m.left === a.left && m.clip === a.clip) fail("studio is not moving");
   await p.waitForFunction(() => document.querySelector(".studio svg").classList.contains("done"), null, { timeout: 25000 });
+  // done can land while the last fill's 0.5s fade is still running; the fill
+  // must still reach full opacity, so wait for it rather than sampling early.
+  await p.waitForFunction(() => {
+    const svg = document.querySelector(".studio svg");
+    const left = [...svg.querySelectorAll(".sd-ink")].reduce((n, el) => n + (parseFloat(getComputedStyle(el).strokeDashoffset) || 0), 0);
+    const fills = [...svg.querySelectorAll(".sd-fill")].map((el) => getComputedStyle(el).opacity);
+    const clip = parseFloat(svg.querySelector(".sd-clip").getAttribute("width"));
+    return Math.round(left) === 0 && fills.every((o) => o === "1") && clip >= 349;
+  }, null, { timeout: 5000 }).catch(() => {});
   const e = await studioState(p);
   if (!complete(e)) fail("studio did not finish " + JSON.stringify(e));
   if (errors.length) fail(errors.join());

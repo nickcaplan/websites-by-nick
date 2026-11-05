@@ -132,6 +132,9 @@ h1 .last {
   position: relative;
   margin-left: 0.15em;
 }
+em {
+  font-style: normal;
+}
 h1 em {
   font-weight: 430;
   color: var(--orange);
@@ -336,7 +339,7 @@ h1.will-type.typed.drawn .swoosh {
   transition: scale 0.45s cubic-bezier(0.2, 0.9, 0.3, 1.35);
 }
 .sketch-small {
-  font: italic 22px var(--serif);
+  font: 22px var(--serif);
 }
 .sketch-big {
   font: 750 62px/0.88 var(--sans);
@@ -731,7 +734,7 @@ body.paused .reveal {
 }
 .studio figcaption {
   margin-top: 10px;
-  font: italic 16px var(--serif);
+  font: 16px var(--serif);
   color: #525d53;
 }
 .studio .st-hand-l {
@@ -1321,10 +1324,12 @@ h1 .last {
 }
 .studio .sd-title {
   font-family: var(--serif);
-  font-style: italic;
-  font-weight: 500;
-  letter-spacing: -0.02em;
+  font-weight: 450;
+  letter-spacing: -0.04em;
   fill: #203027;
+}
+.studio .sd-title-em {
+  fill: #be492b;
 }
 .studio .sd-fill {
   transition: opacity 0.5s ease;

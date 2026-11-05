@@ -146,7 +146,7 @@
 .steps li::before {
   content: "0" counter(s);
   display: block;
-  font: italic 36px var(--serif);
+  font: 36px var(--serif);
   color: var(--orange);
 }
 .steps strong {

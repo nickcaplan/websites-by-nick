@@ -223,9 +223,9 @@
   }
 
 
-  // Studio scene: Nick draws a small website by hand as the scene scrolls in.
-  // The pen follows the real strokes; the arm is a stretchy cartoon arm from
-  // his shoulder to the pen. Without JS, with reduced motion or while motion
+  // Studio scene: Nick draws this very homepage by hand as the scene scrolls in.
+  // The pen follows the real strokes; the arm is a fixed-length two-bone arm
+  // from his shoulder to the pen. It bends at the elbow, it never stretches. Without JS, with reduced motion or while motion
   // is paused the finished drawing is shown instead. Replays when re-entered.
   const studioSvg = document.querySelector(".studio svg");
   if (studioSvg) {
@@ -238,15 +238,20 @@
     const REST = { x: 520, y: 330 };
     // Shoulder, elbow, hand: the elbow always bends down a little, so it reads
     // as an arm, not a stretched noodle. He leans toward the canvas as he reaches.
+    // Fixed-length upper arm and forearm: the elbow bends, the arm never stretches.
+    const L1 = 200, L2 = 215;
     const pose = (P) => {
-      const dx = Math.max(0, Math.min(60, ((P.x - 480) / 340) * 60));
+      const dx = Math.max(0, Math.min(80, ((P.x - 480) / 340) * 80));
       const S = { x: SH.x + dx, y: SH.y };
       const H = { x: P.x - 20, y: P.y + 20 };
       const d = Math.hypot(H.x - S.x, H.y - S.y) || 1;
-      const l = d * 0.53;
-      const bend = Math.sqrt(Math.max(0, l * l - (d / 2) * (d / 2)));
-      const ex = (S.x + H.x) / 2 - ((H.y - S.y) / d) * bend,
-        ey = (S.y + H.y) / 2 + ((H.x - S.x) / d) * bend;
+      const ux = (H.x - S.x) / d, uy = (H.y - S.y) / d;
+      const dc = Math.max(Math.abs(L1 - L2) + 4, Math.min(L1 + L2 - 6, d));
+      const a = Math.acos(Math.max(-1, Math.min(1, (L1 * L1 + dc * dc - L2 * L2) / (2 * L1 * dc))));
+      let nx = -uy, ny = ux;
+      if (ny < 0) { nx = -nx; ny = -ny; } // elbow always bends downward
+      const ex = S.x + L1 * (Math.cos(a) * ux + Math.sin(a) * nx),
+        ey = S.y + L1 * (Math.cos(a) * uy + Math.sin(a) * ny);
       arm.setAttribute("d", `M${S.x.toFixed(1)} ${S.y}L${ex.toFixed(1)} ${ey.toFixed(1)}L${H.x.toFixed(1)} ${H.y.toFixed(1)}`);
       hand.setAttribute("transform", `translate(${H.x.toFixed(1)} ${H.y.toFixed(1)})`);
       bodyG.setAttribute("transform", `translate(${dx.toFixed(1)} 0)`);
@@ -270,16 +275,14 @@
       {
         dur: 1500,
         el: null,
-        pos: (t) => ({ x: 486 + 300 * t, y: 116 + Math.sin(t * 22) * 15 }),
+        pos: (t) => ({ x: 486 + 300 * t, y: 146 + Math.sin(t * 22) * 12 }),
         show: (t) => clip.setAttribute("width", String(Math.max(0, 350 * t))),
       },
-      strokeStep(".sd-underline", 400),
-      strokeStep(".sd-line1", 240),
-      strokeStep(".sd-line2", 210),
+      strokeStep(".sd-swoosh", 400),
       strokeStep(".sd-btn", 500, ".sd-btn-fill"),
-      strokeStep(".sd-pic", 520, ".sd-pic-fill"),
-      strokeStep(".sd-sun", 420),
-      strokeStep(".sd-hill", 320),
+      strokeStep(".sd-card1", 280, ".sd-card1-fill"),
+      strokeStep(".sd-card2", 280, ".sd-card2-fill"),
+      strokeStep(".sd-card3", 280, ".sd-card3-fill"),
     ];
     const reset = () => {
       studioSvg.classList.remove("done");
