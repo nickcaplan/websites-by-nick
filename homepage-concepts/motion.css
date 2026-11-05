@@ -1040,26 +1040,28 @@ body.paused .reveal {
   max-width: 1472px;
   margin: 56px auto 0;
   text-align: center;
+}
+.studio .studio-row {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: clamp(28px, 4vw, 64px);
+  gap: clamp(32px, 5vw, 88px);
 }
 .studio svg {
-  width: min(560px, 58%);
+  width: min(620px, 52%);
   height: auto;
   flex: none;
 }
 .studio figcaption {
-  max-width: 300px;
+  max-width: 400px;
   text-align: left;
-  font: 22px/1.4 var(--serif);
+  font: 26px/1.42 var(--serif);
   color: #525d53;
 }
 @media (max-width: 900px) {
-  .studio {
+  .studio .studio-row {
     flex-direction: column;
-    gap: 14px;
+    gap: 16px;
   }
   .studio svg {
     width: min(560px, 92%);
@@ -1067,7 +1069,7 @@ body.paused .reveal {
   .studio figcaption {
     max-width: 92%;
     text-align: center;
-    font-size: 17px;
+    font-size: 18px;
   }
 }
 @media (max-width: 900px) {
@@ -1480,9 +1482,7 @@ h1 .last {
 .cmp-stage-foa {
   background: #f6f1e7;
 }
-.studio {
-  max-width: 1000px;
-}
+
 .studio .studio-eyebrow {
   text-align: center;
   margin-bottom: 8px;
