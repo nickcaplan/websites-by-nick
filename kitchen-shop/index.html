@@ -161,12 +161,21 @@
   .hours dd{margin:0;white-space:nowrap}
   .visit-card .big-link{display:block;font-size:1.15rem;font-weight:700;margin:10px 0 2px;text-decoration:none;overflow-wrap:anywhere}
   .visit-card .big-link:hover{text-decoration:underline}
-  .visit-card .maps-link{display:inline-flex;align-items:center;gap:8px;margin-top:12px;min-height:44px;padding:10px 16px;border:1.5px solid var(--primary);border-radius:var(--radius);background:var(--surface);color:var(--primary);font-weight:700;font-size:1rem;text-decoration:none}
-  .visit-card .maps-link svg{flex:none}
-  .visit-card .maps-link .arr{transition:transform .15s}
-  .visit-card .maps-link:hover{background:var(--primary);color:var(--on-primary)}
-  .visit-card .maps-link:hover .arr{transform:translate(2px,-2px)}
-  .visit-card .maps-link:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+  .maps-link{display:inline-flex;align-items:center;gap:8px;margin-top:12px;min-height:44px;padding:10px 16px;border:1.5px solid var(--primary);border-radius:var(--radius);background:var(--surface);color:var(--primary);font-weight:700;font-size:1rem;text-decoration:none}
+  .maps-link svg{flex:none}
+  .maps-link .arr{transition:transform .15s}
+  .maps-link:hover{background:var(--primary);color:var(--on-primary)}
+  .maps-link:hover .arr{transform:translate(2px,-2px)}
+  .maps-link:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+  /* Hours and address strip under the hero */
+  .visit-strip{padding:0 0 8px}
+  .vs-card{display:grid;grid-template-columns:1fr 1fr auto;gap:18px 28px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);box-shadow:var(--shadow);padding:18px 22px}
+  .vs-card .maps-link{margin-top:0}
+  .vs-k{display:block;font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+  .vs-v{display:block;font-weight:700;color:var(--ink)}
+  .vs-s{display:block;color:var(--ink-soft);font-size:.92rem}
+  @media (max-width:760px){.vs-card{grid-template-columns:1fr;padding:16px 18px}.vs-card .maps-link{justify-content:center}}
 
   /* Footer */
   .site-footer{border-top:1px solid var(--line);padding:28px 0 40px;background:var(--surface)}
@@ -214,6 +223,16 @@
     </div>
   </section>
 
+  <section class="visit-strip" aria-label="Opening hours and address">
+    <div class="wrap">
+      <div class="vs-card">
+        <div><span class="vs-k">Opening hours</span><span class="vs-v">Mon-Sat 9:30am - 5:30pm</span><span class="vs-s">Closed Sunday</span></div>
+        <div><span class="vs-k">Find us</span><span class="vs-v">11/14 Ship Yard, High Street</span><span class="vs-s">Weybridge KT13 8BH</span></div>
+        <a class="maps-link" href="https://www.google.com/maps/search/?api=1&amp;query=The+Kitchen+Shop+Ship+Yard+Weybridge+KT13+8BH" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><span>Get directions</span><svg class="arr" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+      </div>
+    </div>
+  </section>
+
   <section class="highlights">
     <div class="wrap">
       <div class="hl-grid">
@@ -223,19 +242,6 @@
         <div class="hl-card"><h3>Free local delivery</h3><p>We deliver locally at no charge, including assembled kitchen trolleys.</p></div>
         <div class="hl-card"><h3>Free customer parking</h3><p>Park right by us in the Ship Yard, just off the High Street.</p></div>
         <div class="hl-card"><h3>Children's play area</h3><p>Browse at your own pace while little ones are entertained.</p></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section" id="inside" style="padding-top:0">
-    <div class="wrap">
-      <span class="eyebrow">Inside the shop</span>
-      <h2>The Aladdin's Cave, shelf by shelf</h2>
-      <div class="photo-grid">
-        <figure class="ph"><img src="assets/site/shop-211_360-2x.jpg" alt="The main aisle of the shop, stocked from floor to ceiling" loading="lazy" width="360" height="270"><figcaption>The main aisle</figcaption></figure>
-        <figure class="ph"><img src="assets/site/shop-166_355-2x.jpg" alt="Pots and pans hanging above the shop floor" loading="lazy" width="355" height="266"><figcaption>Pots and pans overhead</figcaption></figure>
-        <figure class="ph"><img src="assets/site/shop-040_355-2x.jpg" alt="Shelves of cookware and kitchen storage" loading="lazy" width="355" height="266"><figcaption>Cookware and storage shelves</figcaption></figure>
-        <figure class="ph"><img src="assets/site/shop-257_355-2x.jpg" alt="China and tableware shelves with gingham trim" loading="lazy" width="355" height="266"><figcaption>China and tableware</figcaption></figure>
       </div>
     </div>
   </section>
@@ -303,6 +309,19 @@
         <figure class="logo-card"><img class="inv" src="assets/logos/silverwood-white.png" alt="Alan Silverwood logo" loading="lazy"><figcaption>Alan Silverwood</figcaption></figure>
       </div>
       <p class="brand-rest"><strong>Also stocked:</strong> Chasseur, SKK, Mermaid, La Cafetiere, Mauviel and TG Green.</p>
+    </div>
+  </section>
+
+  <section class="section" id="inside" style="padding-top:0">
+    <div class="wrap">
+      <span class="eyebrow">Inside the shop</span>
+      <h2>The Aladdin's Cave, shelf by shelf</h2>
+      <div class="photo-grid">
+        <figure class="ph"><img src="assets/site/shop-211_360-2x.jpg" alt="The main aisle of the shop, stocked from floor to ceiling" loading="lazy" width="360" height="270"><figcaption>The main aisle</figcaption></figure>
+        <figure class="ph"><img src="assets/site/shop-166_355-2x.jpg" alt="Pots and pans hanging above the shop floor" loading="lazy" width="355" height="266"><figcaption>Pots and pans overhead</figcaption></figure>
+        <figure class="ph"><img src="assets/site/shop-040_355-2x.jpg" alt="Shelves of cookware and kitchen storage" loading="lazy" width="355" height="266"><figcaption>Cookware and storage shelves</figcaption></figure>
+        <figure class="ph"><img src="assets/site/shop-257_355-2x.jpg" alt="China and tableware shelves with gingham trim" loading="lazy" width="355" height="266"><figcaption>China and tableware</figcaption></figure>
+      </div>
     </div>
   </section>
 
