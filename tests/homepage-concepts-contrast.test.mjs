@@ -79,7 +79,16 @@ test('skip link text contrasts its background in both themes', () => {
   const bg = rule => rule.match(/background: var\(--ink\)/) && rule.match(/color: var\(--paper\)/);
   const skip = motionCss.match(/\.skip \{([^}]*)\}/s)[1];
   assert.ok(bg(skip), 'skip link should use paper text on ink background');
-  assert.ok(contrast('#1b2923', '#f2ecdf') >= 4.5 && contrast('#f1eee5', '#203027') >= 4.5);
+  assert.ok(contrast(lightVar('--paper'), lightVar('--ink')) >= 4.5, 'light skip link');
+  assert.ok(contrast(DARK_PAPER, DARK_INK) >= 4.5, 'dark skip link');
+});
+
+test('footer focus ring contrasts the ink footer', () => {
+  const rule = motionCss.match(/footer a:focus-visible \{([^}]*)\}/);
+  assert.ok(rule, 'footer focus override missing');
+  const ring = rule[1].match(/outline-color: (#[0-9a-f]{6})/)[1];
+  assert.ok(contrast(ring, lightVar('--ink')) >= 3, 'light footer');
+  assert.ok(contrast(ring, '#111d17') >= 3, 'dark footer');
 });
 
 test('subpage wordmark dot does not animate without a pause control', () => {

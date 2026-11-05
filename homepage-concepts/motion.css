@@ -577,6 +577,11 @@ footer {
   background: var(--ink);
   color: var(--paper);
 }
+/* The orange focus ring is 2.8:1 on the ink footer; cream is 13:1. The
+   dark-mode two-tone rule still wins in dark mode. */
+footer a:focus-visible {
+  outline-color: #f2ecdf;
+}
 footer > h2 {
   font-size: clamp(44px, 6.5vw, 95px);
   margin-bottom: 25px;
@@ -674,10 +679,10 @@ body.paused .reveal {
 }
 @keyframes rock {
   from {
-    transform: rotate(7deg);
+    transform: rotate(9deg);
   }
   to {
-    transform: rotate(11deg);
+    transform: rotate(12deg);
   }
 }
 @keyframes pulse {
