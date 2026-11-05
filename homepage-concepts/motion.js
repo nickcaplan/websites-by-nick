@@ -277,8 +277,15 @@
       {
         dur: 1300,
         el: null,
-        pos: (t) => ({ x: 480 + 200 * t, y: 140 + Math.sin(t * 22) * 10 }),
-        show: (t) => clip.setAttribute("width", String(Math.max(0, 300 * t))),
+        // The wipe chases the pen tip with a fixed 22px lag, so no letter
+        // appears before the pen reaches it. Once the tip passes the measured
+        // headline end (x=704, t=0.888) the wipe catches up over the remaining
+        // blank board, opening fully (300) as the step ends.
+        pos: (t) => ({ x: 480 + 250 * t, y: 140 + Math.sin(t * 22) * 10 }),
+        show: (t) => {
+          const w = t <= 0.888 ? 250 * t : 222 + ((t - 0.888) / 0.112) * 78;
+          clip.setAttribute("width", String(Math.max(0, Math.min(300, w))));
+        },
       },
       strokeStep(".sd-swoosh", 380),
       strokeStep(".sd-subline", 260),

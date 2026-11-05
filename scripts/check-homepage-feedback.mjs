@@ -115,6 +115,33 @@ for (const width of [320, 390, 768, 1280, 1600]) {
   await p.close();
 }
 
+// The title wipe never reveals text ahead of the pen tip: while the pen is
+// still left of the measured headline end (x=704), the wipe's right edge
+// must not pass the pen tip. Later steps keep the wipe fully open and are
+// excluded by the clip < CLIP_FULL - 1 condition.
+{
+  const p = await b.newPage({ viewport: { width: 1280, height: 900 } });
+  await p.goto(base + "/homepage-concepts/");
+  await p.waitForLoadState("networkidle");
+  await p.evaluate(() => document.querySelector(".studio svg").scrollIntoView({ block: "center", behavior: "instant" }));
+  let checked = 0;
+  for (let i = 0; i < 24; i++) {
+    const s = await p.evaluate(() => {
+      const svg = document.querySelector(".studio svg");
+      const m = /translate\(([-\d.]+)/.exec(svg.querySelector(".sd-hand").getAttribute("transform"));
+      return { clip: parseFloat(svg.querySelector(".sd-clip").getAttribute("width")), handX: m ? parseFloat(m[1]) : 0 };
+    });
+    const penEnd = s.handX + 22;
+    if (s.clip < CLIP_FULL - 1 && penEnd < 704 && penEnd > 470) {
+      checked++;
+      if (460 + s.clip > penEnd + 2) fail(`wipe leads pen: edge ${460 + s.clip} pen tip ${penEnd}`);
+    }
+    await p.waitForTimeout(90);
+  }
+  if (checked < 3) fail("too few mid-title samples " + checked);
+  console.log("PASS wipe-tracks-pen");
+  await p.close();
+}
 // Pause mid-drawing settles the finished picture; resume does not redraw it.
 {
   const p = await b.newPage({ viewport: { width: 1280, height: 900 } });
