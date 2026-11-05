@@ -118,22 +118,27 @@
       cy = 0,
       raf = null;
     const tick = () => {
-      cx += (tx - cx) * 0.08;
-      cy += (ty - cy) * 0.08;
       const off =
         document.body.classList.contains("paused") ||
         document.body.classList.contains("hidden-page") ||
         reduced.matches
           ? 0
           : 1;
+      // While motion is off the layers sit at neutral; ease the tracked
+      // position back to neutral as well, so resuming never snaps to
+      // wherever the pointer happened to wander.
+      const gx = off ? tx : 0;
+      const gy = off ? ty : 0;
+      cx += (gx - cx) * 0.08;
+      cy += (gy - cy) * 0.08;
       layers.forEach((el) => {
         const d = parseFloat(el.dataset.depth);
         el.style.translate = `${(cx * d * off).toFixed(2)}px ${(cy * d * off).toFixed(2)}px`;
       });
-      // Stop the loop when motion is off or the layers have settled; the next
-      // pointer move restarts it.
+      // Stop the loop once the layers have settled; the next pointer move
+      // restarts it.
       raf =
-        off === 1 && (Math.abs(tx - cx) > 0.05 || Math.abs(ty - cy) > 0.05)
+        Math.abs(gx - cx) > 0.05 || Math.abs(gy - cy) > 0.05
           ? requestAnimationFrame(tick)
           : null;
     };
@@ -463,9 +468,16 @@
   };
   syncVisibility();
   document.addEventListener("visibilitychange", syncVisibility);
+  let pausedBeforeReduced = null;
   reduced.addEventListener("change", () => {
     if (reduced.matches) {
+      pausedBeforeReduced = paused;
       paused = true;
+      apply();
+    } else if (pausedBeforeReduced !== null) {
+      // Restore the visitor's own pause choice, not a blanket unpause.
+      paused = pausedBeforeReduced;
+      pausedBeforeReduced = null;
       apply();
     }
   });

@@ -1,7 +1,6 @@
 import { chromium } from "@playwright/test";
-import { createServer } from "node:http";
-import { readFile } from "node:fs/promises";
-import { resolve, extname, sep } from "node:path";
+import { resolve } from "node:path";
+import { startStaticServer } from "./lib/static-server.mjs";
 import { fileURLToPath } from "node:url";
 import { tmpdir } from "node:os";
 import { mkdir } from "node:fs/promises";
@@ -10,30 +9,7 @@ const root = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const output =
   process.env.MOTION_SCREENSHOTS || resolve(tmpdir(), "wbn-motion");
 await mkdir(output, { recursive: true });
-const server = createServer(async (req, res) => {
-  let p = resolve(root, "." + new URL(req.url, "http://localhost").pathname);
-  if (p !== root && !p.startsWith(root + sep)) {
-    res.writeHead(403).end();
-    return;
-  }
-  if (!extname(p)) p += "/index.html";
-  try {
-    res.setHeader(
-      "content-type",
-      {
-        ".html": "text/html",
-        ".css": "text/css",
-        ".js": "text/javascript",
-        ".woff2": "font/woff2",
-        ".webp": "image/webp",
-      }[extname(p)] || "application/octet-stream",
-    );
-    res.end(await readFile(p));
-  } catch {
-    res.writeHead(404).end();
-  }
-});
-await new Promise((r) => server.listen(0, "127.0.0.1", r));
+const server = await startStaticServer(root);
 const base =
   process.env.MOTION_BASE || "http://localhost:" + server.address().port;
 const b = await chromium.launch({
@@ -301,5 +277,52 @@ const n = await b.newPage({ javaScriptEnabled: false });
 await n.goto(base + "/homepage-concepts/");
 if (!(await n.locator("h1").isVisible())) throw Error("noJS");
 console.log("PASS noJS");
+
+// Flipping reduced motion on forces pause, and flipping it back off restores
+// the visitor's own pause choice rather than unpausing unconditionally.
+{
+  const p = await b.newPage({ viewport: { width: 1280, height: 900 } });
+  await p.goto(base + "/homepage-concepts/", { waitUntil: "networkidle" });
+  await p.waitForTimeout(400);
+  const before = await p.evaluate(() => document.body.classList.contains("paused"));
+  await p.emulateMedia({ reducedMotion: "reduce" });
+  await p.waitForTimeout(300);
+  const during = await p.evaluate(() => document.body.classList.contains("paused"));
+  await p.emulateMedia({ reducedMotion: "no-preference" });
+  await p.waitForTimeout(300);
+  const after = await p.evaluate(() => document.body.classList.contains("paused"));
+  if (before || !during || after) throw Error(`pause not preserved across reduced flip: ${before}/${during}/${after}`);
+  console.log("PASS reduced-flip-restores-pause");
+  await p.close();
+}
+
+// Moving the pointer while paused must not build up parallax offset: on
+// resume the layers ease from neutral, they do not snap to the pointer.
+{
+  const p = await b.newPage({ viewport: { width: 1280, height: 900 } });
+  await p.goto(base + "/homepage-concepts/", { waitUntil: "networkidle" });
+  await p.evaluate(() => document.querySelector(".composition").scrollIntoView({ block: "center", behavior: "instant" }));
+  await p.waitForTimeout(400);
+  await p.getByRole("button", { name: "Pause motion", exact: true }).click();
+  const box = await p.locator(".composition").boundingBox();
+  for (let i = 0; i < 12; i++) {
+    await p.mouse.move(box.x + box.width - 5, box.y + 5);
+    await p.waitForTimeout(30);
+  }
+  await p.getByRole("button", { name: "Pause motion", exact: true }).click();
+  await p.mouse.move(box.x + box.width - 5, box.y + 5);
+  await p.waitForTimeout(60);
+  const snap = await p.evaluate(() => {
+    const el = document.querySelector('[data-depth="26"]');
+    const m = /([-\d.]+)px ([-\d.]+)px/.exec(el.style.translate || "0px 0px");
+    return m ? Math.max(Math.abs(parseFloat(m[1])), Math.abs(parseFloat(m[2]))) : 0;
+  });
+  // A snap would show the full offset (0.5 * 26 = 13px); easing from neutral
+  // after ~60ms stays well under half that.
+  if (snap > 6.5) throw Error(`parallax snapped to pointer on resume: ${snap}px`);
+  console.log("PASS parallax-no-snap");
+  await p.close();
+}
+
 await b.close();
 server.close();

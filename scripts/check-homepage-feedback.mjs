@@ -2,23 +2,12 @@
 // message, removed lines, distinct screenshots, visible sticker, large drawing
 // studio (draws, pauses, settles) and the theme on the About and Pricing pages.
 import { chromium } from "@playwright/test";
-import { createServer } from "node:http";
-import { readFile } from "node:fs/promises";
-import { resolve, extname, sep } from "node:path";
+import { resolve } from "node:path";
+import { startStaticServer } from "./lib/static-server.mjs";
 import { fileURLToPath } from "node:url";
 import { existsSync } from "node:fs";
 const root = resolve(fileURLToPath(new URL("..", import.meta.url)));
-const types = { ".html": "text/html", ".css": "text/css", ".js": "text/javascript", ".woff2": "font/woff2", ".webp": "image/webp", ".svg": "image/svg+xml", ".png": "image/png" };
-const server = createServer(async (req, res) => {
-  let p = resolve(root, "." + new URL(req.url, "http://x").pathname);
-  if (p !== root && !p.startsWith(root + sep)) return res.writeHead(403).end();
-  if (!extname(p)) p += "/index.html";
-  try {
-    res.setHeader("content-type", types[extname(p)] || "application/octet-stream");
-    res.end(await readFile(p));
-  } catch { res.writeHead(404).end(); }
-});
-await new Promise((r) => server.listen(0, "127.0.0.1", r));
+const server = await startStaticServer(root);
 const base = process.env.MOTION_BASE || "http://localhost:" + server.address().port;
 const b = await chromium.launch({
   executablePath: process.env.CHROME_PATH || (existsSync("/usr/bin/google-chrome") ? "/usr/bin/google-chrome" : undefined),
