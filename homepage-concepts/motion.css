@@ -1245,20 +1245,11 @@ body.paused .studio .sd-fill {
 /* Compass card: native-scale fragments of the plan and saved-plans pages, so the app stays readable at card size. Phones show the two clearest bands. */
 .cmp-stage-compass {
   overflow: hidden;
-  background: #f5f3ec;
-}
-.project-image .cp-dark {
-  display: none;
-}
-.dark .project-image .cp-dark {
-  display: block;
-}
-.dark .project-image .cp-light {
-  display: none;
-}
-.dark .cmp-stage-compass {
+  /* Dark captures on every theme, so the stage matches the app's dark
+     background in the gaps between fragments. */
   background: #121214;
 }
+
 
 @media (max-width: 600px) {
   /* Compass card on phones: two big readable bands; fine detail stays on larger screens */

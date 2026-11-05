@@ -59,10 +59,9 @@ for (const width of [320, 390, 768, 1280, 1600]) {
   });
   const cpWant = width <= 600 ? 2 : 4;
   if (cp.h3 !== "Compass" || !/compass-demo\.websitesbynick\.co\.uk/.test(cp.href)) fail("compass card wrong " + JSON.stringify(cp));
-  if (cp.total !== 8) fail("compass fragments missing " + JSON.stringify(cp));
+  if (cp.total !== 4) fail("compass fragments missing " + JSON.stringify(cp));
   if (cp.vis !== cpWant || !cp.loaded) fail("compass fragments not shown/loaded " + JSON.stringify(cp));
-  if (!cp.srcs.every((s) => /hp-compass-(plan|plans)-desk(-dark)?-c[1-4]\.webp$/.test(s))) fail("compass fragment sources wrong " + cp.srcs);
-  if (cp.srcs.some((s) => s.includes("-dark-")) !== cp.dark) fail("compass theme mismatch " + cp.srcs);
+  if (!cp.srcs.every((s) => /hp-compass-(plan|plans)-desk-dark-c[1-4]\.webp$/.test(s))) fail("compass fragment sources wrong " + cp.srcs);
   await p.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
   await p.waitForTimeout(400);
   // sticker fully visible, not covered by a card
