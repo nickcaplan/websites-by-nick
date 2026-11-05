@@ -192,9 +192,9 @@ h1 {
 }
 .penframe {
   position: absolute;
-  inset: -34px -26px -36px -26px;
+  inset: -40px -26px -36px -26px;
   width: calc(100% + 52px);
-  height: calc(100% + 70px);
+  height: calc(100% + 76px);
   overflow: visible;
   fill: none;
   stroke: var(--orange);
@@ -211,8 +211,8 @@ h1 {
 }
 .penchrome {
   position: absolute;
-  top: -31px;
-  left: -16px;
+  top: -33px;
+  left: -11px;
   width: 150px;
   height: 30px;
   overflow: visible;
@@ -270,13 +270,13 @@ h1.sketch-settled .penchrome *,
 }
 @media (max-width: 760px) {
   .penframe {
-    inset: -30px -10px -32px -10px;
-    width: calc(100% + 20px);
-    height: calc(100% + 62px);
+    inset: -34px -13px -32px -13px;
+    width: calc(100% + 26px);
+    height: calc(100% + 66px);
   }
   .penchrome {
-    top: -26px;
-    left: -8px;
+    top: -28px;
+    left: -4px;
     width: 112px;
     height: 22px;
   }
