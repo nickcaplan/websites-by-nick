@@ -13,6 +13,16 @@
     <link rel="stylesheet" href="/homepage-concepts/pages.css" />
   </head>
   <body>
+    <script>
+      // apply the saved/system theme before first paint, so a dark visitor
+      // never sees a flash of the light theme; pages.js/motion.js keep the toggle
+      (function () {
+        var theme = null;
+        try { theme = window.localStorage.getItem('nick-theme'); } catch (error) {}
+        var dark = theme ? theme === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.body.classList.toggle('dark', dark);
+      })();
+    </script>
     <a class="skip" href="#main">Skip to content</a>
     <header class="nav">
       <a class="wordmark" href="/homepage-concepts/"
@@ -35,7 +45,7 @@
       <h2 class="sr-only">Guide prices</h2>
       <div class="cards">
         <article class="card lime">
-          <h3>Starter</h3>
+          <h2>Starter</h2>
           <p class="price">from £500</p>
           <p class="for">For sole traders, consultants and local businesses who need a proper online presence.</p>
           <ul>
@@ -49,7 +59,7 @@
           <a class="go" href="/contact/">Start a project <span aria-hidden="true">→</span></a>
         </article>
         <article class="card">
-          <h3>Content &amp; growth</h3>
+          <h2>Content &amp; growth</h2>
           <p class="price">from £2,200</p>
           <p class="for">For creatives, schools, non-profits and established businesses with more to say and show.</p>
           <ul>
@@ -63,7 +73,7 @@
           <a class="go" href="/contact/">Start a project <span aria-hidden="true">→</span></a>
         </article>
         <article class="card ink">
-          <h3>Bespoke</h3>
+          <h2>Bespoke</h2>
           <p class="price sm">Priced per project</p>
           <p class="for">For startups, platforms and specialist workflows that need more than a website.</p>
           <ul>

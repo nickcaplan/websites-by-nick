@@ -27,6 +27,16 @@
     <link rel="stylesheet" href="/homepage-concepts/motion.css" />
   </head>
   <body>
+    <script>
+      // apply the saved/system theme before first paint, so a dark visitor
+      // never sees a flash of the light theme; pages.js/motion.js keep the toggle
+      (function () {
+        var theme = null;
+        try { theme = window.localStorage.getItem('nick-theme'); } catch (error) {}
+        var dark = theme ? theme === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.body.classList.toggle('dark', dark);
+      })();
+    </script>
     <a class="skip" href="#main">Skip to content</a>
     <header class="nav">
       <a class="wordmark" href="/homepage-concepts/"

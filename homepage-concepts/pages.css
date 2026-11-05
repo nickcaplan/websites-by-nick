@@ -83,6 +83,7 @@
 .card.orange a:focus-visible {
   outline-color: #fff4da;
 }
+.card h2,
 .card h3 {
   font-family: var(--serif);
   font-size: 28px;

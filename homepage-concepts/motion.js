@@ -96,6 +96,10 @@
             caret.remove();
             // the window starts drawing straight after the title types
             heroTitle.classList.add("typed", "drawn");
+            // a pause or tab-hide landing in this gap must still settle the
+            // window, so resume does not erase and redraw it
+            if (document.body.classList.contains("paused") || document.body.classList.contains("hidden-page"))
+              heroTitle.classList.add("sketch-settled");
           }, 250);
           return;
         }
