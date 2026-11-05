@@ -213,6 +213,37 @@ if (faceBits.eyes || faceBits.dark || faceBits.small) throw Error("cartoon shows
 await settle.getByRole("button", { name: "Pause motion", exact: true }).click();
 console.log("PASS pause-settle");
 await settle.close();
+
+// Option F ("A little surprise"): tapping the eyebrow asterisk releases one
+// small, finite burst of marks that remove themselves; keyboard works too;
+// the pause toggle suppresses the burst entirely.
+{
+  const f = await b.newPage({ viewport: { width: 1280, height: 1000 } });
+  await f.goto(base + "/homepage-concepts/", { waitUntil: "networkidle" });
+  const star = f.getByRole("button", { name: "A little surprise", exact: true });
+  const count = () => document.querySelectorAll(".burst-mark").length;
+  await star.click();
+  await f.waitForFunction(() => document.querySelectorAll(".burst-mark").length >= 5);
+  const animating = await f.evaluate(() =>
+    [...document.querySelectorAll(".burst-mark")].every((m) =>
+      m.getAnimations().some((a) => a.playState === "running" || a.playState === "pending")));
+  if (!animating) throw Error("burst marks are not animating");
+  await star.click(); // mid-burst taps are ignored: still one burst
+  const during = await f.evaluate(count);
+  await f.waitForFunction(() => document.querySelectorAll(".burst-mark").length === 0);
+  if (during > 7) throw Error("second tap doubled the burst " + during);
+  await star.focus();
+  await f.keyboard.press("Enter");
+  await f.waitForFunction(() => document.querySelectorAll(".burst-mark").length >= 5);
+  await f.waitForFunction(() => document.querySelectorAll(".burst-mark").length === 0);
+  await f.getByRole("button", { name: "Pause motion", exact: true }).click();
+  await star.click({ force: true });
+  await f.waitForTimeout(400);
+  const suppressed = await f.evaluate(count);
+  if (suppressed) throw Error("burst fired while paused " + suppressed);
+  console.log("PASS option-f-burst");
+  await f.close();
+}
 const asm = await b.newPage({ viewport: { width: 1280, height: 900 } });
 await asm.goto(base + "/homepage-concepts/", { waitUntil: "networkidle" });
 const seq = await asm.evaluate(async () => {

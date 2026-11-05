@@ -89,6 +89,42 @@
   }
 
   // Pointer parallax on the composition: fine pointers only, transform-only,
+  // Option F ("A little surprise"): tapping the eyebrow asterisk releases
+  // one small, finite burst of marks. Decorative only: the pause toggle and
+  // reduced motion suppress it, and each tap costs a handful of spans that
+  // remove themselves when the burst ends.
+  const star = document.querySelector(".eyebrow-star");
+  if (star) {
+    const MARKS = ["✳", "✦", "·", "✳", "✦", "✳", "·"];
+    let bursting = false;
+    star.addEventListener("click", () => {
+      if (bursting) return;
+      if (reduced.matches) return;
+      if (document.body.classList.contains("paused")) return;
+      bursting = true;
+      const host = star;
+      let left = MARKS.length;
+      MARKS.forEach((ch, i) => {
+        const m = document.createElement("i");
+        m.className = "burst-mark";
+        m.setAttribute("aria-hidden", "true");
+        m.textContent = ch;
+        const a = (i / MARKS.length) * Math.PI * 2 - Math.PI / 2;
+        const d = 26 + (i % 3) * 9;
+        m.style.setProperty("--dx", Math.cos(a) * d + "px");
+        m.style.setProperty("--dy", Math.sin(a) * d + "px");
+        m.style.setProperty("--r", (i % 2 ? -1 : 1) * (30 + i * 12) + "deg");
+        const off = () => {
+          m.remove();
+          if (--left === 0) bursting = false;
+        };
+        m.addEventListener("animationend", off, { once: true });
+        m.addEventListener("animationcancel", off, { once: true });
+        host.appendChild(m);
+      });
+    });
+  }
+
   // rAF-throttled, respects the pause toggle and reduced-motion.
   const comp = document.querySelector(".composition");
   const layers = [...document.querySelectorAll("[data-depth]")];
