@@ -50,7 +50,7 @@ for (const width of [320, 390, 768, 1280, 1600]) {
   await p.evaluate(() => document.fonts.ready);
   const text = await p.evaluate(() => document.body.innerText);
   const h1 = await p.evaluate(() => document.getElementById("hero-title").getAttribute("aria-label") || document.getElementById("hero-title").textContent);
-  if (!/I design cool,\s*playful websites\./.test(h1.replace(/\s+/g, " "))) fail("hero message " + h1);
+  if (!/Websites worth\s*poking at\./.test(h1.replace(/\s+/g, " "))) fail("hero message " + h1);
   for (const re of banned) if (re.test(text)) fail("removed line is back: " + re + " at " + width);
   // screenshots must differ from the previous same-looking pair
   const srcs = await p.evaluate(() => [...document.querySelectorAll(".composer img, .community img, .project img")].map((i) => i.getAttribute("src")));
@@ -71,7 +71,7 @@ for (const width of [320, 390, 768, 1280, 1600]) {
   });
   if (sticker.covered) fail("sticker covered at " + width);
   if (!sticker.inside) fail("sticker clipped at " + width);
-  if (!/PLAYED WITH\./.test(sticker.text)) fail("sticker text " + sticker.text);
+  if (!/POKE IT\./.test(sticker.text)) fail("sticker text " + sticker.text);
   if (await p.evaluate(() => document.documentElement.scrollWidth > innerWidth)) fail("overflow " + width);
   // the drawing studio is large and draws live
   await p.locator(".studio svg").scrollIntoViewIfNeeded();
