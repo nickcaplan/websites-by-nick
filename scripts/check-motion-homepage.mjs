@@ -189,6 +189,108 @@ if (faceBits.eyes || faceBits.dark || faceBits.small) throw Error("cartoon shows
 await settle.getByRole("button", { name: "Pause motion", exact: true }).click();
 console.log("PASS pause-settle");
 await settle.close();
+
+// Option E ("Remember it"): hovering, tapping or pressing Enter/Space on
+// "remember." redraws the underline with a wobble; the pause toggle
+// suppresses the redraw entirely.
+const opt = await b.newPage({ viewport: { width: 1280, height: 1000 } });
+await opt.goto(base + "/homepage-concepts/", { waitUntil: "networkidle" });
+await opt.waitForFunction(() => {
+  const h = document.getElementById("hero-title");
+  return h.classList.contains("typed") && h.classList.contains("drawn");
+});
+const word = opt.locator("#hero-title .line.last em");
+const redrawRunning = () => {
+  const sw = document.querySelector("#hero-title .swoosh");
+  const names = sw.getAnimations()
+    .filter((a) => a.playState === "running" || a.playState === "pending")
+    .map((a) => a.animationName);
+  return names.includes("swoosh-redraw") && names.includes("swoosh-wobble");
+};
+const redrawSettled = () =>
+  getComputedStyle(document.querySelector("#hero-title .swoosh"))
+    .strokeDashoffset === "0px" &&
+  !document.querySelector("#hero-title .swoosh").classList.contains("redraw");
+// The remember. button must not sit inside an aria-hidden subtree (the
+// typing effect hides the per-char spans, not the line).
+await opt.waitForFunction(() => {
+  const em = document.querySelector("#hero-title .line.last em");
+  return em && !em.closest('[aria-hidden="true"]');
+});
+await word.hover();
+await opt.waitForFunction(redrawRunning);
+await opt.waitForFunction(redrawSettled);
+await word.click();
+await opt.waitForFunction(redrawRunning);
+await opt.waitForFunction(redrawSettled);
+await word.focus();
+await opt.keyboard.press("Enter");
+await opt.waitForFunction(redrawRunning);
+await opt.waitForFunction(redrawSettled);
+await opt.getByRole("button", { name: "Pause motion", exact: true }).click();
+await word.click({ force: true });
+await opt.waitForTimeout(400);
+const suppressed = await opt.evaluate(() => {
+  const sw = document.querySelector("#hero-title .swoosh");
+  return {
+    off: getComputedStyle(sw).strokeDashoffset,
+    running: sw
+      .getAnimations()
+      .filter(
+        (a) =>
+          a.animationName === "swoosh-redraw" &&
+          (a.playState === "running" || a.playState === "pending"),
+      ).length,
+  };
+});
+if (suppressed.off !== "0px" || suppressed.running)
+  throw Error("underline redrew while paused " + JSON.stringify(suppressed));
+console.log("PASS option-e-redraw");
+await opt.close();
+
+// Reduced motion: the word gets no button semantics at all.
+{
+  const r = await b.newPage({ viewport: { width: 1280, height: 1000 } });
+  await r.emulateMedia({ reducedMotion: "reduce" });
+  await r.goto(base + "/homepage-concepts/", { waitUntil: "networkidle" });
+  await r.waitForTimeout(600);
+  const bare = await r.evaluate(() => {
+    const em = document.querySelector("#hero-title .line.last em");
+    return em && !em.hasAttribute("tabindex") && !em.hasAttribute("role");
+  });
+  if (!bare) throw Error("reduced-motion visitor gets a dead button");
+  console.log("PASS option-e-reduced");
+  await r.close();
+}
+
+// Turning reduced motion on mid-visit strips the replay control's button
+// semantics, so keyboard focus can never land on the suppressed control.
+{
+  const r = await b.newPage({ viewport: { width: 1280, height: 1000 } });
+  await r.goto(base + "/homepage-concepts/", { waitUntil: "networkidle" });
+  await r.waitForTimeout(600);
+  const wired = await r.evaluate(() => {
+    const em = document.querySelector("#hero-title .line.last em");
+    return em && em.getAttribute("tabindex") === "0" && em.getAttribute("role") === "button";
+  });
+  if (!wired) throw Error("replay control missing before the flip");
+  await r.emulateMedia({ reducedMotion: "reduce" });
+  await r.waitForTimeout(300);
+  const stripped = await r.evaluate(() => {
+    const em = document.querySelector("#hero-title .line.last em");
+    return em && !em.hasAttribute("tabindex") && !em.hasAttribute("role") && !em.hasAttribute("aria-label");
+  });
+  if (!stripped) throw Error("replay control keeps button semantics after reduced motion turns on");
+  await r.emulateMedia({ reducedMotion: "no-preference" });
+  await r.waitForTimeout(300);
+  const restored = await r.evaluate(() => {
+    const em = document.querySelector("#hero-title .line.last em");
+    return em && em.getAttribute("tabindex") === "0" && em.getAttribute("role") === "button";
+  });
+  if (!restored) throw Error("replay control did not come back when reduced motion turned off");
+  console.log("PASS option-e-reduced-flip");
+  await r.close();
+}
 const asm = await b.newPage({ viewport: { width: 1280, height: 900 } });
 await asm.goto(base + "/homepage-concepts/", { waitUntil: "networkidle" });
 const seq = await asm.evaluate(async () => {

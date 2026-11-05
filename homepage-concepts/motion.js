@@ -65,10 +65,11 @@
     heroTitle.querySelectorAll(".line").forEach(walk);
     if (chars.length) {
       heroTitle.setAttribute("aria-label", [...heroTitle.querySelectorAll(".line")].map((l) => l.textContent.trim()).join(" "));
-      heroTitle.querySelectorAll(".line").forEach((l) => l.setAttribute("aria-hidden", "true"));
+      chars.forEach((s) => s.setAttribute("aria-hidden", "true"));
       heroTitle.classList.add("will-type");
       const caret = document.createElement("span");
       caret.className = "hero-caret";
+      caret.setAttribute("aria-hidden", "true");
       let i = 0;
       chars[0].after(caret);
       const finish = () => {
@@ -107,6 +108,60 @@
   }
 
   // Pointer parallax on the composition: fine pointers only, transform-only,
+  // Option E ("Remember it"): after the first draw settles, hovering,
+  // tapping or pressing Enter/Space on "remember." redraws the underline
+  // with a small wobble. Decorative only: the pause toggle and reduced
+  // motion suppress it, and it never interrupts the first draw.
+  const rememberWord = heroTitle && heroTitle.querySelector(".line.last em");
+  const heroSwoosh = heroTitle && heroTitle.querySelector(".swoosh");
+  let replayWired = false;
+  const wireReplay = () => {
+    if (replayWired || !rememberWord || !heroSwoosh || reduced.matches) return;
+    replayWired = true;
+    rememberWord.setAttribute("tabindex", "0");
+    rememberWord.setAttribute("role", "button");
+    rememberWord.setAttribute("aria-label", "remember. Replay the underline");
+  };
+  const unwireReplay = () => {
+    if (!replayWired) return;
+    replayWired = false;
+    rememberWord.removeAttribute("tabindex");
+    rememberWord.removeAttribute("role");
+    rememberWord.removeAttribute("aria-label");
+  };
+  if (rememberWord && heroSwoosh) {
+    let redrawing = false;
+    const endRedraw = () => {
+      heroSwoosh.classList.remove("redraw");
+      redrawing = false;
+    };
+    heroSwoosh.addEventListener("animationend", (e) => {
+      if (e.animationName === "swoosh-redraw") endRedraw();
+    });
+    heroSwoosh.addEventListener("animationcancel", (e) => {
+      if (e.animationName === "swoosh-redraw") endRedraw();
+    });
+    const redraw = () => {
+      if (redrawing) return;
+      if (reduced.matches) return;
+      if (document.body.classList.contains("paused")) return;
+      if (!heroTitle.classList.contains("drawn")) return;
+      redrawing = true;
+      heroSwoosh.classList.add("redraw");
+    };
+    wireReplay();
+    rememberWord.addEventListener("pointerenter", (e) => {
+      if (e.pointerType === "mouse") redraw();
+    });
+    rememberWord.addEventListener("click", redraw);
+    rememberWord.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        redraw();
+      }
+    });
+  }
+
   // rAF-throttled, respects the pause toggle and reduced-motion.
   const comp = document.querySelector(".composition");
   const layers = [...document.querySelectorAll("[data-depth]")];
@@ -481,11 +536,15 @@
       pausedBeforeReduced = paused;
       paused = true;
       apply();
+      // The replay control is suppressed under reduced motion; drop its
+      // button semantics so keyboard users never land on a dead control.
+      unwireReplay();
     } else if (pausedBeforeReduced !== null) {
       // Restore the visitor's own pause choice, not a blanket unpause.
       paused = pausedBeforeReduced;
       pausedBeforeReduced = null;
       apply();
+      wireReplay(); // bring the replay control back
     }
   });
 })();
