@@ -1,0 +1,222 @@
+/* The homepage-concept theme carried onto the About and Pricing pages. */
+.pg {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 4% 90px;
+}
+.pg h1 {
+  font-size: clamp(54px, 8vw, 118px);
+  max-width: none;
+  margin-bottom: 26px;
+}
+.pg h1 em {
+  color: var(--orange);
+}
+.pg .lede {
+  font-size: clamp(18px, 1.8vw, 24px);
+  max-width: 760px;
+  line-height: 1.5;
+}
+.pg h2 {
+  font-family: var(--serif);
+  font-weight: 450;
+  letter-spacing: -0.04em;
+  font-size: clamp(34px, 4vw, 56px);
+  line-height: 1;
+  margin: 90px 0 30px;
+}
+.pg h2 em {
+  color: var(--orange);
+}
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 26px;
+  margin-top: 44px;
+}
+.card {
+  padding: 28px 26px 30px;
+  border-radius: 10px;
+  border: 1px solid #20302726;
+  background: #f9f6ef;
+  color: #203027;
+  box-shadow: 0 14px 34px #20302715;
+  transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.35), box-shadow 0.3s;
+}
+.card:nth-child(odd) {
+  transform: rotate(-1.2deg);
+}
+.card:nth-child(even) {
+  transform: rotate(1deg);
+}
+.card:hover {
+  transform: rotate(0) translateY(-5px);
+  box-shadow: 0 22px 44px #20302722;
+}
+.card.lime {
+  background: #d5df91;
+}
+.card.orange {
+  background: var(--orange);
+  color: #fff4da;
+}
+.card.ink {
+  background: #203027;
+  color: #f2ecdf;
+}
+/* The orange focus outline is 2.8:1 on the ink card and invisible on the
+   orange card; cream contrasts both (and the dark-mode halo still applies). */
+.card.ink a:focus-visible,
+.card.orange a:focus-visible {
+  outline-color: #fff4da;
+}
+.card h3 {
+  font-family: var(--serif);
+  font-size: 28px;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  margin: 0 0 12px;
+}
+.card p {
+  margin: 0;
+  line-height: 1.5;
+}
+.card .price {
+  font: 750 44px/1 var(--sans);
+  letter-spacing: -0.05em;
+  margin: 4px 0 6px;
+}
+.card .for {
+  font-size: 15px;
+  margin-bottom: 18px;
+}
+.card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px;
+  display: grid;
+  gap: 10px;
+}
+.card li {
+  padding-left: 22px;
+  position: relative;
+  font-size: 15px;
+  line-height: 1.4;
+}
+.card li::before {
+  content: "✳";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: currentColor;
+  opacity: 0.8;
+  font-size: 13px;
+}
+.card .go {
+  display: inline-flex;
+  gap: 10px;
+  border-bottom: 1px solid;
+  padding-bottom: 3px;
+  font-weight: 650;
+}
+.band {
+  margin-top: 90px;
+  padding: 44px 4% 48px;
+  background: #e5e3d8;
+  border-radius: 8px;
+}
+.band h2 {
+  margin-top: 0;
+}
+.band p {
+  max-width: 760px;
+  font-size: 18px;
+  line-height: 1.55;
+}
+.band .cta {
+  margin-top: 14px;
+}
+.steps {
+  counter-reset: s;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 26px;
+  padding: 0;
+  list-style: none;
+}
+.steps li {
+  counter-increment: s;
+  border-top: 2px solid var(--ink);
+  padding-top: 16px;
+}
+.steps li::before {
+  content: "0" counter(s);
+  display: block;
+  font: 36px var(--serif);
+  color: var(--orange);
+}
+.steps.plain li::before {
+  content: none;
+}
+.steps strong {
+  display: block;
+  font-size: 20px;
+  margin: 4px 0 6px;
+}
+.pg-enter {
+  animation: pg-in 0.8s cubic-bezier(0.2, 0.75, 0.2, 1) both;
+}
+@keyframes pg-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+/* Subpages have no pause control, so the brand dot stays still here; the
+   homepage keeps its pulse because it offers a pause button. */
+.wordmark-dot {
+  animation: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pg-enter {
+    animation: none;
+  }
+  .card,
+  .card:hover {
+    transition: none;
+  }
+}
+.dark .band {
+  background: #29362e;
+}
+.dark .pg h1 em,
+.dark .pg h2 em {
+  color: #ed926f;
+}
+.dark .card.ink {
+  background: #111d17;
+  border-color: #ffffff30;
+}
+.dark .card.orange {
+  /* The dark-mode orange is a light salmon; cream text on it is 2.1:1. */
+  color: #203027;
+}
+.dark .steps li {
+  border-color: #f2ecdf;
+}
+@media (max-width: 600px) {
+  .pg {
+    padding: 28px 20px 70px;
+  }
+  .pg h2 {
+    margin-top: 64px;
+  }
+  .card:nth-child(odd),
+  .card:nth-child(even) {
+    transform: none;
+  }
+}
+.card .price.sm {
+  font-size: 30px;
+  padding: 7px 0 7px;
+}
