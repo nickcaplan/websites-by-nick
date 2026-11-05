@@ -58,6 +58,8 @@
   .hero{padding:64px 0 48px;background:linear-gradient(180deg,var(--bg-tint),var(--bg))}
   .hero h1{font-size:clamp(2rem,5.4vw,3.1rem);margin:.5rem 0 1rem;max-width:20ch}
   .hero .lead{margin-bottom:1.6rem}
+  .squiggle{position:relative;display:inline-block;padding-bottom:.28em;margin-bottom:-.1em}
+  .squiggle-line{position:absolute;left:0;right:0;bottom:0;width:100%;height:.28em;color:var(--accent)}
   .hero-actions{display:flex;gap:12px;flex-wrap:wrap}
   .hero-grid{display:grid;gap:32px;align-items:center}
   @media (min-width:880px){.hero-grid{grid-template-columns:1.05fr .95fr}}
@@ -252,7 +254,7 @@
     <div class="wrap hero-grid">
       <div>
         <span class="est-pill">Est. 1973 - family-run</span>
-        <h1>An Aladdin's Cave of cookware in the heart of Weybridge</h1>
+        <h1>An <span class="squiggle">Aladdin's Cave<svg class="squiggle-line" viewBox="0 0 220 14" preserveAspectRatio="none" aria-hidden="true"><path d="M4 8 C 28 2, 58 13, 86 7 S 138 2, 164 8 S 202 12, 216 6" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/></svg></span> of cookware in the heart of Weybridge</h1>
         <p class="lead">For over 30 years we have supplied fine cookware, renowned brands and honest, friendly advice to cooking enthusiasts and professional chefs alike.</p>
         <div class="hero-actions">
           <a class="btn" href="#visit">Plan your visit</a>
