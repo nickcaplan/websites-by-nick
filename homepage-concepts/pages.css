@@ -64,6 +64,12 @@
   background: #203027;
   color: #f2ecdf;
 }
+/* The orange focus outline is 2.8:1 on the ink card and invisible on the
+   orange card; cream contrasts both (and the dark-mode halo still applies). */
+.card.ink a:focus-visible,
+.card.orange a:focus-visible {
+  outline-color: #fff4da;
+}
 .card h3 {
   font-family: var(--serif);
   font-size: 28px;

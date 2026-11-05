@@ -3,7 +3,14 @@
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   const theme = document.querySelector(".theme-toggle");
   const THEME_KEY = "wbn-theme";
-  const storedTheme = localStorage.getItem(THEME_KEY);
+  const readTheme = () => {
+    try {
+      return localStorage.getItem(THEME_KEY);
+    } catch {
+      return null; // storage blocked: fall back to the system scheme
+    }
+  };
+  const storedTheme = readTheme();
   let dark = storedTheme
     ? storedTheme === "dark"
     : matchMedia("(prefers-color-scheme: dark)").matches;
@@ -13,7 +20,11 @@
     dark = !dark;
     document.body.classList.toggle("dark", dark);
     theme.setAttribute("aria-pressed", String(dark));
-    localStorage.setItem(THEME_KEY, dark ? "dark" : "light");
+    try {
+      localStorage.setItem(THEME_KEY, dark ? "dark" : "light");
+    } catch {
+      // storage blocked: keep the toggle working for this page
+    }
   });
   let paused = false;
   let refreshProjects = () => {};

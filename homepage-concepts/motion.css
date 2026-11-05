@@ -49,7 +49,7 @@ button:focus-visible {
   top: -100px;
   left: 20px;
   background: var(--ink);
-  color: white;
+  color: var(--paper);
   padding: 12px;
   z-index: 20;
 }
@@ -363,19 +363,6 @@ h1.will-type.typed.drawn .swoosh {
   position: absolute;
   bottom: 14px;
   right: 10px;
-}
-.floating-note {
-  position: absolute;
-  left: 15%;
-  bottom: 30px;
-  font: 20px/1.1 var(--serif);
-  z-index: 4;
-  transform: rotate(-7deg);
-  animation: note-in 1.2s 0.9s both, bob 5s 2.2s ease-in-out 6 alternate forwards;
-  background: var(--lime);
-  border-radius: 50%;
-  padding: 22px 25px;
-  text-align: center;
 }
 .motion-toggle[aria-pressed="true"] {
   background: var(--ink);
@@ -693,24 +680,6 @@ body.paused .reveal {
     transform: rotate(11deg);
   }
 }
-@keyframes note-in {
-  from {
-    opacity: 0;
-    transform: translateY(30px) rotate(-16deg);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) rotate(-7deg);
-  }
-}
-@keyframes bob {
-  from {
-    transform: translateY(0) rotate(-7deg);
-  }
-  to {
-    transform: translateY(-8px) rotate(-5deg);
-  }
-}
 @keyframes pulse {
   0%,
   100% {
@@ -745,125 +714,6 @@ body.paused .reveal {
   font: 16px var(--serif);
   color: #525d53;
 }
-.studio .st-hand-l {
-  animation: st-type-l 0.55s ease-in-out infinite alternate;
-}
-.studio .st-hand-r {
-  animation: st-type-r 0.55s 0.27s ease-in-out infinite alternate;
-}
-.studio .st-glow {
-  animation: st-glow 3.2s ease-in-out infinite alternate;
-}
-.studio .st-window {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: st-emerge 12s ease-in-out infinite;
-}
-.studio .st-title {
-  font: 700 15px var(--serif);
-  fill: #203027;
-  clip-path: inset(0 0 0 0);
-  animation: st-title 12s linear infinite;
-}
-.studio .st-caret {
-  opacity: 0;
-  transform-box: fill-box;
-  transform-origin: left center;
-  animation: st-caret 12s linear infinite;
-}
-.studio .st-underline {
-  transform-box: fill-box;
-  transform-origin: left center;
-  animation: st-underline 12s ease-in-out infinite;
-}
-.studio .st-code {
-  transform-box: fill-box;
-  transform-origin: left center;
-}
-.studio .st-code-1 { animation: st-code1 12s ease-in-out infinite; }
-.studio .st-code-2 { animation: st-code2 12s ease-in-out infinite; }
-.studio .st-block {
-  opacity: 1;
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: st-pop 12s ease-in-out infinite;
-}
-.studio .st-b2 { animation-name: st-pop2; }
-.studio .st-b3 { animation-name: st-pop3; }
-.studio .st-b4 { animation-name: st-pop4; }
-.studio .st-b5 { animation-name: st-pop5; }
-.studio .st-spark {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: st-spark 12s ease-in-out infinite;
-}
-@keyframes st-type-l {
-  from { transform: translateY(0); }
-  to { transform: translateY(-3.5px); }
-}
-@keyframes st-type-r {
-  from { transform: translateY(-3.5px); }
-  to { transform: translateY(0); }
-}
-@keyframes st-glow {
-  from { opacity: 0.35; }
-  to { opacity: 0.75; }
-}
-@keyframes st-emerge {
-  0%, 6% { opacity: 0; transform: translateY(34px) scale(0.7); }
-  14%, 78% { opacity: 1; transform: translateY(0) scale(1); }
-  88%, 100% { opacity: 0; transform: translateY(-10px) scale(0.96); }
-}
-@keyframes st-code1 {
-  0%, 3% { transform: scaleX(0.15); }
-  10%, 88% { transform: scaleX(1); }
-  94%, 100% { transform: scaleX(0.15); }
-}
-@keyframes st-code2 {
-  0%, 9% { transform: scaleX(0.15); }
-  16%, 88% { transform: scaleX(1); }
-  94%, 100% { transform: scaleX(0.15); }
-}
-@keyframes st-title {
-  0% { clip-path: inset(0 100% 0 0); }
-  16% { clip-path: inset(0 100% 0 0); animation-timing-function: steps(11); }
-  34%, 100% { clip-path: inset(0 0 0 0); }
-}
-@keyframes st-caret {
-  0%, 16% { opacity: 0; transform: translateX(0); }
-  16.5% { opacity: 1; animation-timing-function: steps(11); }
-  34% { opacity: 1; transform: translateX(90px); }
-  36%, 100% { opacity: 0; transform: translateX(90px); }
-}
-@keyframes st-underline {
-  0%, 35% { transform: scaleX(0); }
-  41%, 100% { transform: scaleX(1); }
-}
-@keyframes st-pop2 {
-  0%, 44% { opacity: 0; transform: scale(0.4); }
-  50%, 86% { opacity: 1; transform: scale(1); }
-  92%, 100% { opacity: 0; transform: scale(0.94); }
-}
-@keyframes st-pop3 {
-  0%, 51% { opacity: 0; transform: scale(0.4); }
-  57%, 86% { opacity: 1; transform: scale(1); }
-  92%, 100% { opacity: 0; transform: scale(0.94); }
-}
-@keyframes st-pop4 {
-  0%, 58% { opacity: 0; transform: scale(0.4); }
-  64%, 86% { opacity: 1; transform: scale(1); }
-  92%, 100% { opacity: 0; transform: scale(0.94); }
-}
-@keyframes st-pop5 {
-  0%, 65% { opacity: 0; transform: scale(0.4); }
-  71%, 86% { opacity: 1; transform: scale(1); }
-  92%, 100% { opacity: 0; transform: scale(0.94); }
-}
-@keyframes st-spark {
-  0%, 72% { opacity: 0; transform: scale(0.3) rotate(0deg); }
-  78%, 88% { opacity: 1; transform: scale(1) rotate(20deg); }
-  94%, 100% { opacity: 0; transform: scale(0.4) rotate(45deg); }
-}
 @media (max-width: 900px) {
   .project {
     position: static;
@@ -895,10 +745,6 @@ body.paused .reveal {
   }
   .sketch-big {
     font-size: 46px;
-  }
-    .floating-note {
-    font-size: 16px;
-    padding: 20px;
   }
   .about-grid {
     grid-template-columns: 1fr 1fr;
@@ -1045,12 +891,6 @@ body.paused .reveal {
     width: 46px;
     bottom: 4px;
   }
-    .floating-note {
-    font-size: 12px;
-    padding: 16px 18px;
-    left: 4%;
-    bottom: 33px;
-  }
   .motion-toggle {
     font-size: 9px;
     right: 10px;
@@ -1186,9 +1026,6 @@ body.paused .reveal {
     linear-gradient(90deg, #ffffff08 1px, transparent 1px);
 }
 .dark .browser-card {
-  color: #203027;
-}
-.dark .floating-note {
   color: #203027;
 }
 .dark .sketch {
@@ -1421,7 +1258,6 @@ h1 .last {
     margin-top: 40px;
   }
 }
-
 
 /* Compass card: plan screenshot with the saved-plans page layered on top. */
 .cmp-stage-compass {
