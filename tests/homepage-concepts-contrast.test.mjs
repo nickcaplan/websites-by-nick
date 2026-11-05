@@ -32,10 +32,10 @@ function lightVar(name) {
   const block = motionCss.match(/:root \{([^}]*)\}/)[1];
   return block.match(new RegExp(`${name}: (#[0-9a-f]{6})`))[1];
 }
-function pagesColor(selector) {
-  const re = new RegExp(selector.replace(/[.\-]/g, "\\$&") + " \\{([^}]*)\\}");
-  const block = pagesCss.match(re)[1];
-  return block.match(/(?:background|color): (#[0-9a-f]{6})/)[1];
+function pagesColor(selector, prop) {
+  const sel = selector.replace(/[.\-]/g, "\\$&");
+  const block = pagesCss.match(new RegExp(`(?:^|\\})\\s*${sel} \\{([^}]*)\\}`))[1];
+  return block.match(new RegExp(`(?<![-\\w])${prop}: (#[0-9a-f]{6})`))[1];
 }
 
 const DARK_ORANGE = darkVar('--orange');
@@ -44,7 +44,7 @@ const DARK_INK = darkVar('--ink');
 
 test('orange card text: cream on light-mode orange is AA', () => {
   const orange = lightVar('--orange');
-  const text = pagesColor('.card.orange');
+  const text = pagesColor('.card.orange', 'color');
   assert.ok(contrast(text, orange) >= 4.5, contrast(text, orange).toFixed(2));
 });
 
@@ -60,7 +60,7 @@ test('dark-mode focus ring is two-tone: each tone contrasts cards and page', () 
   assert.ok(rule, 'dark focus override missing');
   const ring = rule[1].match(/outline: 3px solid (#[0-9a-f]{6})/)[1];
   const halo = rule[1].match(/box-shadow: 0 0 0 5px (#[0-9a-f]{6})/)[1];
-  const backdrops = [DARK_PAPER, pagesColor('.card'), pagesColor('.card.lime'), pagesColor('.card.ink')];
+  const backdrops = [DARK_PAPER, pagesColor('.card', 'background'), pagesColor('.card.lime', 'background'), pagesColor('.card.ink', 'background')];
   for (const bg of backdrops) {
     const ok = contrast(ring, bg) >= 3 || contrast(halo, bg) >= 3;
     assert.ok(ok, `ring ${ring} halo ${halo} vs ${bg}`);
@@ -71,7 +71,7 @@ test('card focus override: cream ring contrasts ink and orange cards', () => {
   const rule = pagesCss.match(/\.card\.ink a:focus-visible,\s*\.card\.orange a:focus-visible \{([^}]*)\}/s);
   assert.ok(rule, 'card focus override missing');
   const ring = rule[1].match(/outline-color: (#[0-9a-f]{6})/)[1];
-  assert.ok(contrast(ring, pagesColor('.card.ink')) >= 3, 'ink card');
+  assert.ok(contrast(ring, pagesColor('.card.ink', 'background')) >= 3, 'ink card');
   assert.ok(contrast(ring, lightVar('--orange')) >= 3, 'orange card');
 });
 
