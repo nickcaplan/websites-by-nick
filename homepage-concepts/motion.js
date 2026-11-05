@@ -2,7 +2,7 @@
   const button = document.querySelector(".motion-toggle");
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   const theme = document.querySelector(".theme-toggle");
-  const THEME_KEY = "wbn-theme";
+  const THEME_KEY = "nick-theme";
   const readTheme = () => {
     try {
       return localStorage.getItem(THEME_KEY);
@@ -118,22 +118,23 @@
       cy = 0,
       raf = null;
     const tick = () => {
-      const off =
+      const active = !(
         document.body.classList.contains("paused") ||
         document.body.classList.contains("hidden-page") ||
         reduced.matches
-          ? 0
-          : 1;
+      );
       // While motion is off the layers sit at neutral; ease the tracked
       // position back to neutral as well, so resuming never snaps to
-      // wherever the pointer happened to wander.
-      const gx = off ? tx : 0;
-      const gy = off ? ty : 0;
+      // wherever the pointer happened to wander. The factor keeps the
+      // settle immediate: no drift while paused.
+      const on = active ? 1 : 0;
+      const gx = active ? tx : 0;
+      const gy = active ? ty : 0;
       cx += (gx - cx) * 0.08;
       cy += (gy - cy) * 0.08;
       layers.forEach((el) => {
         const d = parseFloat(el.dataset.depth);
-        el.style.translate = `${(cx * d * off).toFixed(2)}px ${(cy * d * off).toFixed(2)}px`;
+        el.style.translate = `${(cx * d * on).toFixed(2)}px ${(cy * d * on).toFixed(2)}px`;
       });
       // Stop the loop once the layers have settled; the next pointer move
       // restarts it.

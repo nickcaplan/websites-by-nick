@@ -46,16 +46,23 @@ for (const width of [320, 390, 768, 1280, 1600]) {
   const srcs = await p.evaluate(() => [...document.querySelectorAll(".composer img, .community img, .project img")].map((i) => i.getAttribute("src")));
   if (!srcs.length || srcs.some((s) => /3-sam-home|foa-fundraising/.test(s))) fail("old matching screenshots " + srcs);
   if (!srcs.some((s) => /sam-watch-desk-dark/.test(s)) || !srcs.some((s) => /foa-fireworks-desk/.test(s))) fail("new screenshots missing");
-  // Compass card: real captures load, and only the current theme's pair shows
+  // Compass card: every native-scale fragment loads, only the current theme's
+  // pieces show, and phones keep the two clearest bands
   await p.evaluate(() => document.querySelector(".project-cmp").scrollIntoView({ behavior: "instant" }));
   await p.waitForFunction(() => [...document.querySelectorAll("a.project-cmp img")].filter((i) => getComputedStyle(i).display !== "none").every((i) => i.complete && i.naturalWidth > 0), null, { timeout: 15000 });
   const cp = await p.evaluate(() => {
     const a = document.querySelector("a.project-cmp");
-    const vis = [...a.querySelectorAll("img")].filter((i) => getComputedStyle(i).display !== "none");
-    return { href: a.href, h3: a.querySelector("h3").textContent, vis: vis.length, loaded: vis.every((i) => i.complete && i.naturalWidth > 0) };
+    const imgs = [...a.querySelectorAll("img")];
+    const vis = imgs.filter((i) => getComputedStyle(i).display !== "none");
+    const dark = document.documentElement.classList.contains("dark") || document.body.classList.contains("dark");
+    return { href: a.href, h3: a.querySelector("h3").textContent, total: imgs.length, vis: vis.length, dark, srcs: vis.map((i) => i.getAttribute("src")), loaded: vis.every((i) => i.complete && i.naturalWidth > 0) };
   });
+  const cpWant = width <= 600 ? 2 : 4;
   if (cp.h3 !== "Compass" || !/compass-demo\.websitesbynick\.co\.uk/.test(cp.href)) fail("compass card wrong " + JSON.stringify(cp));
-  if (cp.vis !== 2 || !cp.loaded) fail("compass screenshots not shown/loaded " + JSON.stringify(cp));
+  if (cp.total !== 8) fail("compass fragments missing " + JSON.stringify(cp));
+  if (cp.vis !== cpWant || !cp.loaded) fail("compass fragments not shown/loaded " + JSON.stringify(cp));
+  if (!cp.srcs.every((s) => /hp-compass-(plan|plans)-desk(-dark)?-c[1-4]\.webp$/.test(s))) fail("compass fragment sources wrong " + cp.srcs);
+  if (cp.srcs.some((s) => s.includes("-dark-")) !== cp.dark) fail("compass theme mismatch " + cp.srcs);
   await p.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
   await p.waitForTimeout(400);
   // sticker fully visible, not covered by a card
@@ -73,7 +80,7 @@ for (const width of [320, 390, 768, 1280, 1600]) {
   });
   if (sticker.covered) fail("sticker covered at " + width);
   if (!sticker.inside) fail("sticker clipped at " + width);
-  if (!/HELLO\./.test(sticker.text)) fail("sticker text " + sticker.text);
+  if (!/made by hand/.test(sticker.text)) fail("sticker text " + sticker.text);
   if (await p.evaluate(() => document.documentElement.scrollWidth > innerWidth)) fail("overflow " + width);
   // the drawing studio is large and draws live
   await p.locator(".studio svg").scrollIntoViewIfNeeded();

@@ -155,6 +155,9 @@
   font: 36px var(--serif);
   color: var(--orange);
 }
+.steps.plain li::before {
+  content: none;
+}
 .steps strong {
   display: block;
   font-size: 20px;

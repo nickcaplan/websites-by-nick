@@ -335,34 +335,54 @@ h1.will-type.typed.drawn .swoosh {
   position: absolute;
   right: 8%;
   top: 35px;
-  background: var(--orange);
-  color: #fff4da;
+  background: #fdf3d9;
+  color: #203027;
   width: 200px;
-  height: 240px;
   transform: rotate(9deg);
-  padding: 17px 25px;
-  box-shadow: 0 12px 25px #20302718;
+  padding: 28px 18px 14px;
+  box-shadow: 0 12px 25px #20302722;
   z-index: 1;
   animation: sketch-in 1.3s 0.3s both, rock 7s 1.7s ease-in-out 4 alternate forwards;
   transition: scale 0.45s cubic-bezier(0.2, 0.9, 0.3, 1.35);
 }
-.sketch-small {
-  font: 22px var(--serif);
-}
-.sketch-big {
-  font: 750 62px/0.88 var(--sans);
-  letter-spacing: -0.07em;
-  display: block;
-  margin-top: 8px;
+.sketch::before {
+  content: "";
+  position: absolute;
+  top: -9px;
+  left: 50%;
+  width: 64px;
+  height: 18px;
+  margin-left: -32px;
+  background: color-mix(in srgb, var(--orange) 55%, transparent);
+  transform: rotate(-3deg);
 }
 .sketch svg {
-  width: 85px;
+  width: 100%;
+  display: block;
   fill: none;
-  stroke: #fff4da;
-  stroke-width: 2;
-  position: absolute;
-  bottom: 14px;
-  right: 10px;
+  stroke: #203027;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.sketch svg circle,
+.sketch svg .sketch-star {
+  fill: #203027;
+  stroke: none;
+}
+.sketch svg .sketch-btn {
+  stroke: var(--orange);
+}
+.sketch svg .sketch-star {
+  fill: var(--orange);
+}
+.sketch-note {
+  font: 17px var(--serif);
+  color: #203027;
+  text-align: center;
+  display: block;
+  margin-top: 12px;
+}
 }
 .motion-toggle[aria-pressed="true"] {
   background: var(--ink);
@@ -744,13 +764,6 @@ body.paused .reveal {
   .composition {
     height: 450px;
   }
-  .sketch {
-    width: 160px;
-    height: 190px;
-  }
-  .sketch-big {
-    font-size: 46px;
-  }
   .about-grid {
     grid-template-columns: 1fr 1fr;
     gap: 30px;
@@ -877,24 +890,6 @@ body.paused .reveal {
   .card-caption {
     font-size: 7px;
     padding: 5px 8px;
-  }
-  .sketch {
-    width: 93px;
-    height: 118px;
-    right: 6%;
-    top: 34px;
-    padding: 12px 13px;
-  }
-  .sketch-small {
-    font-size: 13px;
-  }
-  .sketch-big {
-    font-size: 30px;
-    margin-top: 4px;
-  }
-  .sketch svg {
-    width: 46px;
-    bottom: 4px;
   }
   .motion-toggle {
     font-size: 9px;
@@ -1034,7 +1029,7 @@ body.paused .reveal {
   color: #203027;
 }
 .dark .sketch {
-  background: #bc492f;
+  background: #f0e3c0;
 }
 .dark .motion-toggle {
   background: #1b2923;
@@ -1137,21 +1132,7 @@ h1 .last {
   top: 26px;
   right: 3%;
   width: 190px;
-  height: 150px;
-  padding: 14px 20px;
-}
-.sketch-small {
-  font-size: 19px;
-}
-.sketch-big {
-  font-size: 40px;
-  line-height: 0.92;
-  margin-top: 6px;
-}
-.sketch svg {
-  width: 52px;
-  bottom: 8px;
-  right: 8px;
+  padding: 24px 16px 12px;
 }
 .cmp-stage-sam {
   background: #0d0d0d;
@@ -1189,6 +1170,9 @@ h1 .last {
 }
 .studio svg.studio-live .sd-fill.on {
   opacity: 1;
+}
+body.paused .studio .sd-fill {
+  transition: none;
 }
 .studio svg.studio-live .sd-sparks {
   opacity: 0;
@@ -1244,51 +1228,24 @@ h1 .last {
 }
 @media (max-width: 600px) {
   .sketch {
-    width: 150px;
-    height: 120px;
-    padding: 10px 14px;
+    width: 140px;
+    padding: 16px 12px 10px;
     right: 4%;
     top: 16px;
   }
-  .sketch-small {
-    font-size: 15px;
-  }
-  .sketch-big {
-    font-size: 30px;
-  }
-  .sketch svg {
-    width: 38px;
+  .sketch-note {
+    font-size: 12px;
+    margin-top: 8px;
   }
   .studio {
     margin-top: 40px;
   }
 }
 
-/* Compass card: plan screenshot with the saved-plans page layered on top. */
+/* Compass card: native-scale fragments of the plan and saved-plans pages, so the app stays readable at card size. Phones show the two clearest bands. */
 .cmp-stage-compass {
   overflow: hidden;
   background: #f5f3ec;
-}
-.project-image .cmp-stage-compass img {
-  position: absolute;
-  height: auto;
-  border-radius: 6px;
-  box-shadow: 0 10px 30px #20302726;
-}
-.project-image .cp-main {
-  left: 0;
-  top: 0;
-  width: 78%;
-}
-.project-image .cp-side {
-  right: 0;
-  bottom: 0;
-  width: 58%;
-  border: 1px solid #20302733;
-  transition: transform 0.5s;
-}
-.project:hover .cp-side {
-  transform: translateY(-6px) rotate(1deg);
 }
 .project-image .cp-dark {
   display: none;
@@ -1301,6 +1258,25 @@ h1 .last {
 }
 .dark .cmp-stage-compass {
   background: #121214;
+}
+
+@media (max-width: 600px) {
+  /* Compass card on phones: two big readable bands; fine detail stays on larger screens */
+  .cmp-stage-compass .cp-phone-hide {
+    display: none !important;
+  }
+  .cmp-stage-compass .cp-p1 {
+    --l: 6% !important;
+    --t: 8% !important;
+    --w: 88% !important;
+    --h: 40.68% !important;
+  }
+  .cmp-stage-compass .cp-p2 {
+    --l: 6% !important;
+    --t: 54% !important;
+    --w: 88% !important;
+    --h: 40.59% !important;
+  }
 }
 
 /* Work cards: the screenshot is the hero of the card. No tinted mat around it

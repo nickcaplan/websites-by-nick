@@ -1,7 +1,7 @@
 (() => {
   const theme = document.querySelector(".theme-toggle");
   if (!theme) return;
-  const KEY = "wbn-theme";
+  const KEY = "nick-theme";
   const readTheme = () => {
     try {
       return localStorage.getItem(KEY);
