@@ -64,8 +64,20 @@
   .hero-photo img{width:100%;height:auto;display:block;border-radius:var(--radius-card);border:1px solid var(--line);box-shadow:var(--shadow)}
   .hero-photo figcaption{margin-top:8px;font-size:.84rem;color:var(--muted)}
   .photo-grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:24px}
-  .ph img{width:100%;height:auto;display:block;border-radius:var(--radius-card);border:1px solid var(--line)}
-  .ph figcaption{margin-top:6px;font-size:.84rem;color:var(--muted)}
+  .ph{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow);padding:8px 8px 30px;margin:0}
+  .ph img{width:100%;height:auto;display:block;border-radius:2px;border:1px solid var(--line)}
+  .ph figcaption{position:absolute;left:8px;right:8px;bottom:7px;text-align:center;font-size:.74rem;letter-spacing:.05em;color:var(--muted)}
+  @media (min-width:760px){
+    /* shelf-by-shelf display: one big aisle photo with smaller shelves around
+       it, each framed like a labelled photo on the counter */
+    .photo-grid{grid-template-columns:repeat(4,1fr);grid-auto-rows:190px}
+    .ph:nth-child(1){grid-column:span 2;grid-row:span 2}
+    .ph:nth-child(odd){transform:rotate(-.8deg)}
+    .ph:nth-child(even){transform:rotate(.7deg)}
+    .ph{transition:transform .18s ease}
+    .ph:hover{transform:rotate(0deg) translateY(-2px)}
+    .ph img{height:100%;object-fit:cover}
+  }
   .about-photo{margin-top:18px}
   .about-photo img{width:100%;max-width:420px;height:auto;display:block;border-radius:var(--radius-card);border:1px solid var(--line)}
   .about-photo figcaption{margin-top:6px;font-size:.84rem;color:var(--muted)}
@@ -349,10 +361,11 @@
       <span class="eyebrow">Inside the shop</span>
       <h2>The Aladdin's Cave, shelf by shelf</h2>
       <div class="photo-grid">
-        <figure class="ph"><img src="assets/site/shop-211_360-2x.jpg" alt="The main aisle of the shop, stocked from floor to ceiling" loading="lazy" width="360" height="270"></figure>
-        <figure class="ph"><img src="assets/site/shop-166_355-2x.jpg" alt="Pots and pans hanging above the shop floor" loading="lazy" width="355" height="266"></figure>
-        <figure class="ph"><img src="assets/site/shop-040_355-2x.jpg" alt="Shelves of cookware and kitchen storage" loading="lazy" width="355" height="266"></figure>
-        <figure class="ph"><img src="assets/site/shop-257_355-2x.jpg" alt="China and tableware shelves with gingham trim" loading="lazy" width="355" height="266"></figure>
+        <figure class="ph"><img src="assets/site/shop-211_360-2x.jpg" alt="The main aisle of the shop, stocked from floor to ceiling" loading="lazy" width="360" height="270"><figcaption>The main aisle</figcaption></figure>
+        <figure class="ph"><img src="assets/site/shop-166_355-2x.jpg" alt="Pots and pans hanging above the shop floor" loading="lazy" width="355" height="266"><figcaption>Pots overhead</figcaption></figure>
+        <figure class="ph"><img src="assets/site/shop-089_355.jpg" alt="Shelves of grinders, mills and coffee makers with gingham trim" loading="lazy" width="355" height="266"><figcaption>Mills and grinders</figcaption></figure>
+        <figure class="ph"><img src="assets/site/shop-040_355-2x.jpg" alt="Shelves of cookware and kitchen storage" loading="lazy" width="355" height="266"><figcaption>Cookware shelves</figcaption></figure>
+        <figure class="ph"><img src="assets/site/shop-257_355-2x.jpg" alt="China and tableware shelves with gingham trim" loading="lazy" width="355" height="266"><figcaption>China and gingham</figcaption></figure>
       </div>
     </div>
   </section>
