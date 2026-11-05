@@ -168,6 +168,9 @@
   .maps-link:hover .arr{transform:translate(2px,-2px)}
   .maps-link:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 
+  /* Phone: hours, address and directions come before the shop photo */
+  .hero-photo-phone{display:none;padding:0 0 8px}
+  @media (max-width:879px){.hero-photo-wide{display:none}.hero-photo-phone{display:block}.hero-photo-phone .hero-photo{max-width:560px;margin:0 auto}.hero{padding-bottom:20px}}
   /* Hours and address strip under the hero */
   .visit-strip{padding:0 0 8px}
   .vs-card{display:grid;grid-template-columns:1fr 1fr auto;gap:18px 28px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);box-shadow:var(--shadow);padding:18px 22px}
@@ -216,7 +219,7 @@
           <a class="btn btn-ghost" href="#ranges">Browse our ranges</a>
         </div>
       </div>
-      <figure class="hero-photo">
+      <figure class="hero-photo hero-photo-wide">
         <img src="assets/site/shop-photo-3x.jpg" alt="The Kitchen Shop's blue storefront and awning on the Ship Yard in Weybridge" width="355" height="266">
         <figcaption>Our shop on the Ship Yard, just off the High Street</figcaption>
       </figure>
@@ -230,6 +233,15 @@
         <div><span class="vs-k">Find us</span><span class="vs-v">11/14 Ship Yard, High Street</span><span class="vs-s">Weybridge KT13 8BH</span></div>
         <a class="maps-link" href="https://www.google.com/maps/search/?api=1&amp;query=The+Kitchen+Shop+Ship+Yard+Weybridge+KT13+8BH" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><span>Get directions</span><svg class="arr" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
       </div>
+    </div>
+  </section>
+
+  <section class="hero-photo-phone" aria-label="The shop">
+    <div class="wrap">
+      <figure class="hero-photo">
+        <img src="assets/site/shop-photo-3x.jpg" alt="The Kitchen Shop's blue storefront and awning on the Ship Yard in Weybridge" width="355" height="266" loading="lazy">
+        <figcaption>Our shop on the Ship Yard, just off the High Street</figcaption>
+      </figure>
     </div>
   </section>
 
