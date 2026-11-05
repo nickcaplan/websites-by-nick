@@ -60,6 +60,9 @@
   .hero .lead{margin-bottom:1.6rem}
   .squiggle{position:relative;display:inline-block;padding-bottom:.28em;margin-bottom:-.1em}
   .squiggle-line{position:absolute;left:0;right:0;bottom:0;width:100%;height:.28em;color:var(--accent)}
+  .squiggle-line path{stroke-dasharray:230;stroke-dashoffset:230;animation:squiggle-draw 1.1s ease-out .25s forwards}
+  @keyframes squiggle-draw{to{stroke-dashoffset:0}}
+  @media (prefers-reduced-motion:reduce){.squiggle-line path{animation:none;stroke-dashoffset:0}}
   .hero-actions{display:flex;gap:12px;flex-wrap:wrap}
   .hero-grid{display:grid;gap:32px;align-items:center}
   @media (min-width:880px){.hero-grid{grid-template-columns:1.05fr .95fr}}
@@ -110,14 +113,9 @@
   .hl-ico{width:44px;height:44px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:var(--bg-tint);color:var(--primary);flex:none}
   .hl-ico svg{width:24px;height:24px}
   .hl-ico .hl-p{font-weight:800;font-size:1.15rem;font-family:var(--font-display)}
-  /* the parking sign is a real navy roundel, like the one at the Ship Yard */
-  .hl-parking .hl-ico{background:var(--primary-deep);color:var(--on-primary)}
-  /* the gift card is the navy accent card, with a ribbon down one side */
-  .hl-gift{background:var(--primary-deep);border-color:var(--primary-deep);overflow:hidden;padding-right:56px}
-  .hl-gift h3{color:var(--on-primary)}
-  .hl-gift p{color:#c3cde9}
-  .hl-gift .hl-ico{background:rgba(244,246,252,.14);color:var(--on-primary)}
-  .hl-gift::before{content:"";position:absolute;top:0;bottom:0;right:22px;width:14px;background:rgba(244,246,252,.16)}
+  /* the gift card keeps just a soft ribbon down one side */
+  .hl-gift{overflow:hidden;padding-right:56px}
+  .hl-gift::before{content:"";position:absolute;top:0;bottom:0;right:22px;width:14px;background:rgba(74,104,184,.16)}
   @media (min-width:760px){
     .hl-grid{grid-template-columns:repeat(4,1fr);gap:16px}
     .hl-card{flex-direction:column;align-items:flex-start;gap:0;padding:16px 16px 14px;transition:transform .18s ease}
