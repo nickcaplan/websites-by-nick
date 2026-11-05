@@ -201,6 +201,19 @@ const resumed = await settle.evaluate(() => {
 });
 if (resumed.off !== "0px" || resumed.running)
   throw Error("underline redrew on resume");
+// The eye must stay put while motion is paused, not jump or follow.
+await settle.evaluate(() => document.querySelector(".sd-eye").scrollIntoView({ block: "center" }));
+await settle.mouse.move(200, 120);
+await settle.mouse.move(260, 160);
+await settle.waitForTimeout(400);
+await settle.getByRole("button", { name: "Pause motion", exact: true }).click();
+const eyeBefore = await settle.evaluate(() => getComputedStyle(document.querySelector(".sd-eye")).translate);
+await settle.mouse.move(1100, 700);
+await settle.mouse.move(1000, 80);
+await settle.waitForTimeout(400);
+const eyeAfter = await settle.evaluate(() => getComputedStyle(document.querySelector(".sd-eye")).translate);
+if (eyeBefore !== eyeAfter) throw Error("eye moved while motion paused: " + eyeBefore + " -> " + eyeAfter);
+await settle.getByRole("button", { name: "Pause motion", exact: true }).click();
 console.log("PASS pause-settle");
 await settle.close();
 const asm = await b.newPage({ viewport: { width: 1280, height: 900 } });

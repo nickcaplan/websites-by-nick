@@ -1417,6 +1417,10 @@ h1 .last {
 .studio .sd-eye {
   transition: translate 0.18s ease-out;
 }
+.paused .studio .sd-eye,
+.hidden-page .studio .sd-eye {
+  transition: none;
+}
 @keyframes sd-blink {
   0%,
   92%,

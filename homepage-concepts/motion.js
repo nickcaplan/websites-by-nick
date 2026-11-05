@@ -418,10 +418,8 @@
         const { clientX, clientY } = e;
         eraf = requestAnimationFrame(() => {
           eraf = null;
-          if (isOff()) {
-            eye.style.translate = "";
-            return;
-          }
+          // Paused or hidden: leave the eye where it is, no jump back.
+          if (isOff()) return;
           const r = studioSvg.getBoundingClientRect();
           const k = r.width / 880;
           const dx = clientX - (r.left + 338 * k);
