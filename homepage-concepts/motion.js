@@ -31,7 +31,11 @@
   const apply = () => {
     document.body.classList.toggle("paused", paused);
     const typedTitle = document.querySelector("h1.will-type.typed");
-    if (paused && typedTitle) typedTitle.classList.add("drawn");
+    if (paused && typedTitle) {
+      typedTitle.classList.add("drawn");
+      const pausedBar = document.querySelector(".browserbar.will-type.typed");
+      if (pausedBar) pausedBar.classList.add("drawn");
+    }
     button.setAttribute("aria-pressed", String(paused));
     refreshProjects();
   };
@@ -57,7 +61,7 @@
             chars.push(s);
           });
           n.replaceWith(frag);
-        } else if (n.nodeType === Node.ELEMENT_NODE && !n.classList.contains("swoosh") && !n.classList.contains("penframe")) {
+        } else if (n.nodeType === Node.ELEMENT_NODE && !n.classList.contains("swoosh")) {
           walk(n);
         }
       });
@@ -67,6 +71,8 @@
       heroTitle.setAttribute("aria-label", [...heroTitle.querySelectorAll(".line")].map((l) => l.textContent.trim()).join(" "));
       heroTitle.querySelectorAll(".line").forEach((l) => l.setAttribute("aria-hidden", "true"));
       heroTitle.classList.add("will-type");
+      const bar = document.querySelector(".browserbar");
+      if (bar) bar.classList.add("will-type");
       const caret = document.createElement("span");
       caret.className = "hero-caret";
       let i = 0;
@@ -75,6 +81,7 @@
         chars.forEach((s) => s.classList.add("on"));
         caret.remove();
         heroTitle.classList.add("typed", "drawn", "sketch-settled");
+        if (bar) bar.classList.add("typed", "drawn", "sketch-settled");
       };
       const step = () => {
         if (reduced.matches) return finish();
@@ -87,11 +94,15 @@
           setTimeout(() => {
             caret.remove();
             heroTitle.classList.add("typed");
+            if (bar) bar.classList.add("typed");
             heroTitle
               .querySelector(".swoosh")
               .addEventListener(
                 "animationend",
-                () => heroTitle.classList.add("drawn"),
+                () => {
+                  heroTitle.classList.add("drawn");
+                  if (bar) bar.classList.add("drawn");
+                },
                 { once: true },
               );
           }, 250);

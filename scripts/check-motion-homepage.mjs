@@ -187,6 +187,25 @@ const faceBits = await settle.evaluate(() => ({
 }));
 if (faceBits.eyes || faceBits.dark || faceBits.small) throw Error("cartoon shows a face again " + JSON.stringify(faceBits));
 await settle.getByRole("button", { name: "Pause motion", exact: true }).click();
+
+// the browser-chrome strokes must not be visible before they are drawn:
+// a dash offset alone cannot hide a stroke whose path outlives its dash
+{
+  const pre = await b.newPage({ viewport: { width: 390, height: 844 } });
+  await pre.goto(base + "/homepage-concepts/");
+  await pre.waitForLoadState("domcontentloaded");
+  await pre.waitForTimeout(400);
+  for (const sel of [".pf-dot", ".pf-bar", ".pf-rule"]) {
+    const vis = await pre
+      .locator(sel)
+      .first()
+      .evaluate((e) => getComputedStyle(e).visibility);
+    if (vis !== "hidden")
+      throw Error(`chrome stroke visible before draw on ${sel}: ${vis}`);
+  }
+  await pre.close();
+  console.log("PASS chrome-hidden-predraw");
+}
 console.log("PASS pause-settle");
 await settle.close();
 const asm = await b.newPage({ viewport: { width: 1280, height: 900 } });
@@ -235,12 +254,16 @@ if (await r.locator(".motion-toggle").isVisible())
   throw Error("motion control not hidden");
 if (await r.locator(".composer").evaluate((e) => e.getAnimations().length))
   throw Error("animation reduced");
-// the sketched browser frame must be fully drawn and static under reduced
-// motion, not stuck at its undrawn dash offset
-const pfOffset = await r
-  .locator(".pf-frame")
-  .evaluate((e) => getComputedStyle(e).strokeDashoffset);
-if (pfOffset !== "0px") throw Error("reduced pen frame not settled: " + pfOffset);
+// the sketched browser chrome must be fully drawn and static under reduced
+// motion, not stuck hidden or at its undrawn dash offset
+for (const sel of [".pf-dot", ".pf-bar", ".pf-rule"]) {
+  const st = await r.locator(sel).first().evaluate((e) => {
+    const cs = getComputedStyle(e);
+    return { off: cs.strokeDashoffset, vis: cs.visibility };
+  });
+  if (st.off !== "0px" || st.vis !== "visible")
+    throw Error(`reduced chrome not settled on ${sel}: ` + JSON.stringify(st));
+}
 await r.screenshot({ path: output + "/motion-reduced.png" });
 console.log("PASS reduced");
 const hidden = await b.newPage();
