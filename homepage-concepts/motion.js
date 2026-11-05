@@ -112,11 +112,12 @@
         const d = parseFloat(el.dataset.depth);
         el.style.translate = `${(cx * d * off).toFixed(2)}px ${(cy * d * off).toFixed(2)}px`;
       });
+      // Stop the loop when motion is off or the layers have settled; the next
+      // pointer move restarts it.
       raf =
-        Math.abs(tx - cx) > 0.05 || Math.abs(ty - cy) > 0.05 || off === 0
+        off === 1 && (Math.abs(tx - cx) > 0.05 || Math.abs(ty - cy) > 0.05)
           ? requestAnimationFrame(tick)
           : null;
-      if (off === 0 && cx === 0 && cy === 0) raf = null;
     };
     const kick = () => {
       if (!raf) raf = requestAnimationFrame(tick);
