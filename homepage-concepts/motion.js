@@ -51,7 +51,7 @@
           const frag = document.createDocumentFragment();
           [...n.textContent].forEach((ch) => {
             const s = document.createElement("span");
-            s.className = "hc";
+            s.className = ch === " " ? "hc hc-sp" : "hc";
             s.textContent = ch;
             frag.appendChild(s);
             chars.push(s);
