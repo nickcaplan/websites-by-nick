@@ -246,10 +246,11 @@
   }
 
 
-  // Studio scene: Nick draws this very homepage by hand as the scene scrolls in.
-  // The pen follows the real strokes; the arm is a fixed-length two-bone arm
-  // from his shoulder to the pen. It bends at the elbow, it never stretches. Without JS, with reduced motion or while motion
-  // is paused the finished drawing is shown instead. Replays when re-entered.
+  // Studio scene: Nick draws this very homepage by hand as the scene scrolls
+  // in. The pen follows the real strokes; the arm runs from his shoulder to
+  // the pen with a natural bend at the elbow that stays out at his side, and
+  // it never stretches. Without JS, with reduced motion or while motion is
+  // paused the finished drawing is shown instead. Replays when re-entered.
   const studioSvg = document.querySelector(".studio svg");
   if (studioSvg) {
     const q = (sel) => studioSvg.querySelector(sel);
@@ -261,22 +262,27 @@
     const BASE = 56; // the figure stands close to the board
     const REST = { x: 470, y: 310 };
     // Shoulder, elbow, hand. The arm is short relative to the board, so he leans
-    // toward the canvas as he reaches, and the elbow always keeps a deep, visible
-    // bend: the reach never comes close to full extension, so the arm can never
-    // read as stretching even for a frame.
-    const L1 = 135, L2 = 160, MAX_REACH = 250;
+    // toward the canvas as he reaches. The upper arm blends between hanging at
+    // his side (hand near the body) and pointing at the pen (hand far away),
+    // always angling down and out to his right: the elbow never crosses his
+    // torso and the arm never reads as two crossed arms or as stretching.
+    const L1 = 135;
     const pose = (P) => {
       const dx = Math.max(0, Math.min(100, ((P.x - 500) / 220) * 100));
       const S = { x: SH.x + dx, y: SH.y };
       const H = { x: P.x - 20, y: P.y + 20 };
       const d = Math.hypot(H.x - S.x, H.y - S.y) || 1;
       const ux = (H.x - S.x) / d, uy = (H.y - S.y) / d;
-      const dc = Math.max(Math.abs(L1 - L2) + 8, Math.min(MAX_REACH, d));
-      const a = Math.acos(Math.max(-1, Math.min(1, (L1 * L1 + dc * dc - L2 * L2) / (2 * L1 * dc))));
-      let nx = -uy, ny = ux;
-      if (ny < 0) { nx = -nx; ny = -ny; } // elbow always bends downward
-      const ex = S.x + L1 * (Math.cos(a) * ux + Math.sin(a) * nx),
-        ey = S.y + L1 * (Math.cos(a) * uy + Math.sin(a) * ny);
+      // 0 when the hand is at his side, 1 at full reach; a floor keeps a
+      // slight outward angle even at full stretch, so the elbow always reads.
+      const w = Math.max(0.18, 1 - Math.pow(Math.max(0, Math.min(1, (d - 60) / 200)), 0.8));
+      let d1x = ux + (0.35 - ux) * w,
+        d1y = uy + (0.94 - uy) * w;
+      const dn = Math.hypot(d1x, d1y) || 1;
+      d1x /= dn;
+      d1y /= dn;
+      const ex = S.x + L1 * d1x,
+        ey = S.y + L1 * d1y;
       arm.setAttribute("d", `M${S.x.toFixed(1)} ${S.y}L${ex.toFixed(1)} ${ey.toFixed(1)}L${H.x.toFixed(1)} ${H.y.toFixed(1)}`);
       hand.setAttribute("transform", `translate(${H.x.toFixed(1)} ${H.y.toFixed(1)})`);
       bodyG.setAttribute("transform", `translate(${(BASE + dx).toFixed(1)} 0)`);
