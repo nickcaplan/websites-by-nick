@@ -140,7 +140,16 @@ for (const width of [320, 390, 768, 1280, 1600]) {
   );
   await p
     .locator(".project img")
-    .evaluateAll((a) => Promise.all(a.map((i) => i.decode())));
+    .evaluateAll((a) =>
+      Promise.all(
+        a
+          .filter((i) => getComputedStyle(i).display !== "none")
+          .map((i) => {
+            i.loading = "eager";
+            return i.decode();
+          }),
+      ),
+    );
   if (width === 390 || width === 1280)
     await p.screenshot({ path: output + "/motion-work-" + width + ".png" });
   await p.getByRole("button", { name: "Dark mode", exact: true }).click();

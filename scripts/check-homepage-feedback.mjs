@@ -58,7 +58,7 @@ for (const width of [320, 390, 768, 1280, 1600]) {
   if (!srcs.some((s) => /sam-watch-desk-dark/.test(s)) || !srcs.some((s) => /foa-fireworks-desk/.test(s))) fail("new screenshots missing");
   // Compass card: real captures load, and only the current theme's pair shows
   await p.evaluate(() => document.querySelector(".project-cmp").scrollIntoView({ behavior: "instant" }));
-  await p.waitForTimeout(600);
+  await p.waitForFunction(() => [...document.querySelectorAll("a.project-cmp img")].filter((i) => getComputedStyle(i).display !== "none").every((i) => i.complete && i.naturalWidth > 0), null, { timeout: 15000 });
   const cp = await p.evaluate(() => {
     const a = document.querySelector("a.project-cmp");
     const vis = [...a.querySelectorAll("img")].filter((i) => getComputedStyle(i).display !== "none");
