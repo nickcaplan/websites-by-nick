@@ -1399,10 +1399,12 @@ h1 .last {
   }
 }
 
-.studio .sd-eye {
+.studio .sd-eyeball {
   transform-box: fill-box;
   transform-origin: center;
   animation: sd-blink 5.2s infinite;
+}
+.studio .sd-eye {
   transition: translate 0.18s ease-out;
 }
 @keyframes sd-blink {

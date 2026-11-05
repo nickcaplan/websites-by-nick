@@ -426,7 +426,7 @@
           const dx = clientX - (r.left + 338 * k);
           const dy = clientY - (r.top + 158 * k);
           const d = Math.hypot(dx, dy) || 1;
-          const m = Math.min(3, d / 120);
+          const m = Math.min(4.5, d / 90);
           eye.style.translate = `${((dx / d) * m).toFixed(2)}px ${((dy / d) * m).toFixed(2)}px`;
         });
       });

@@ -148,7 +148,7 @@ for (const width of [320, 390, 768, 1280, 1600]) {
   const right = await eyeT();
   if (!left || !right || left === right) fail("eye does not follow the pointer " + left + " / " + right);
   if (parseFloat(left) >= 0 || parseFloat(right) <= 0) fail("eye looks the wrong way " + left + " / " + right);
-  const blink = await p.locator(".sd-eye").evaluate((e) => e.getAnimations().some((a) => a.animationName === "sd-blink"));
+  const blink = await p.locator(".sd-eyeball").evaluate((e) => e.getAnimations().some((a) => a.animationName === "sd-blink"));
   if (!blink) fail("eye does not blink");
   await p.getByRole("button", { name: "Pause motion", exact: true }).click();
   await p.mouse.move(640, 5);
