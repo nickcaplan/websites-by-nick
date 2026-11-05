@@ -106,14 +106,15 @@
   .source-note strong{display:block;font-family:var(--font-display);font-size:1.3rem;font-weight:var(--h-weight);letter-spacing:var(--h-letter);margin-bottom:4px}
 
   /* Brands */
-  .logo-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:22px}
-  @media (min-width:640px){.logo-grid{grid-template-columns:repeat(3,1fr)}}
-  @media (min-width:880px){.logo-grid{grid-template-columns:repeat(4,1fr)}}
-  .logo-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius-card);box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:18px 14px 12px;margin:0}
-  .logo-card img{height:40px;width:auto;max-width:100%;object-fit:contain;display:block}
-  .logo-card img.tall{height:54px}
+  .logo-cloud{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:16px 22px;margin-top:26px}
+  .logo-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius-card);box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center;padding:14px 20px;margin:0}
+  .logo-card img{height:32px;width:auto;max-width:150px;object-fit:contain;display:block}
+  .logo-card img.tall{height:44px}
   .logo-card img.inv{filter:invert(1) grayscale(1)}
-  .logo-card figcaption{font-size:.78rem;color:var(--muted);font-weight:600;text-align:center}
+  .logo-cloud .logo-card:nth-child(4n+1){transform:rotate(-1.6deg) translateY(4px)}
+  .logo-cloud .logo-card:nth-child(4n+2){transform:rotate(1.2deg) translateY(-5px)}
+  .logo-cloud .logo-card:nth-child(4n+3){transform:rotate(-0.9deg) translateY(2px)}
+  .logo-cloud .logo-card:nth-child(4n){transform:rotate(1.7deg) translateY(-3px)}
   .brand-rest{margin-top:16px;font-size:.9rem;color:var(--ink-soft)}
   .brand-rest strong{color:var(--ink);font-weight:650}
 
@@ -141,8 +142,10 @@
     .photo-grid{grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px}
     .range-grid,.visit-grid{gap:12px;margin-top:16px}
     .range-card,.visit-card{padding:16px}
-    .logo-grid{gap:8px;margin-top:16px}
-    .logo-card{padding:12px 10px 8px}
+    .logo-cloud{gap:10px 12px;margin-top:18px}
+    .logo-card{padding:9px 13px}
+    .logo-card img{height:26px;max-width:118px}
+    .logo-card img.tall{height:34px}
     .source-note{margin-top:16px;padding:18px 18px 18px 16px;font-size:1rem}
     .source-note strong{font-size:1.15rem}
     .about-grid{gap:18px}
@@ -192,7 +195,7 @@
 <header class="site-header">
   <div class="header-inner">
     <a class="brand" href="#top" aria-label="The Kitchen Shop - back to top">
-      <span class="brand-mark" aria-hidden="true"><img src="assets/site/pot-logo.gif" alt="" width="38" height="38"></span>
+      <span class="brand-mark" aria-hidden="true"><img src="assets/site/pot-logo-square.png" alt="" width="38" height="38"></span>
       The Kitchen Shop<small>Fine cookware - Weybridge</small>
     </a>
     <nav class="nav" aria-label="Sections">
@@ -221,7 +224,7 @@
       </div>
       <figure class="hero-photo hero-photo-wide">
         <img src="assets/site/shop-photo-3x.jpg" alt="The Kitchen Shop's blue storefront and awning on the Ship Yard in Weybridge" width="355" height="266">
-        <figcaption>Our shop on the Ship Yard, just off the High Street</figcaption>
+        
       </figure>
     </div>
   </section>
@@ -240,7 +243,7 @@
     <div class="wrap">
       <figure class="hero-photo">
         <img src="assets/site/shop-photo-3x.jpg" alt="The Kitchen Shop's blue storefront and awning on the Ship Yard in Weybridge" width="355" height="266" loading="lazy">
-        <figcaption>Our shop on the Ship Yard, just off the High Street</figcaption>
+        
       </figure>
     </div>
   </section>
@@ -304,21 +307,21 @@
     <div class="wrap">
       <span class="eyebrow">Leading brands</span>
       <h2>Names you know, in stock to see and hold</h2>
-      <div class="logo-grid">
-        <figure class="logo-card"><img src="assets/logos/kitchenaid.svg" alt="KitchenAid logo" loading="lazy"><figcaption>KitchenAid</figcaption></figure>
-        <figure class="logo-card"><img src="assets/logos/magimix.png" alt="Magimix logo" loading="lazy"><figcaption>Magimix</figcaption></figure>
-        <figure class="logo-card"><img src="assets/logos/cuisinart.svg" alt="Cuisinart logo" loading="lazy"><figcaption>Cuisinart</figcaption></figure>
-        <figure class="logo-card"><img src="assets/logos/dualit.png" alt="Dualit logo" loading="lazy"><figcaption>Dualit</figcaption></figure>
-        <figure class="logo-card"><img class="tall" src="assets/logos/gaggia.svg" alt="Gaggia Milano logo" loading="lazy"><figcaption>Gaggia</figcaption></figure>
-        <figure class="logo-card"><img class="tall" src="assets/logos/nespresso.svg" alt="Nespresso logo" loading="lazy"><figcaption>Nespresso</figcaption></figure>
-        <figure class="logo-card"><img src="assets/logos/demeyere.png" alt="Demeyere logo" loading="lazy"><figcaption>Demeyere</figcaption></figure>
-        <figure class="logo-card"><img class="tall" src="assets/logos/peugeot.svg" alt="Peugeot logo" loading="lazy"><figcaption>Peugeot</figcaption></figure>
-        <figure class="logo-card"><img class="inv" src="assets/logos/cole-mason-white.png" alt="Cole &amp; Mason logo" loading="lazy"><figcaption>Cole &amp; Mason</figcaption></figure>
-        <figure class="logo-card"><img src="assets/logos/guzzini.png" alt="Guzzini logo" loading="lazy"><figcaption>Guzzini</figcaption></figure>
-        <figure class="logo-card"><img class="tall" src="assets/logos/pillivuyt.jpg" alt="Pillivuyt logo" loading="lazy"><figcaption>Pillivuyt</figcaption></figure>
-        <figure class="logo-card"><img src="assets/logos/simplehuman.png" alt="Simplehuman logo" loading="lazy"><figcaption>Simplehuman</figcaption></figure>
-        <figure class="logo-card"><img class="tall" src="assets/logos/vacuvin.png" alt="Vacu Vin logo" loading="lazy"><figcaption>Vacu Vin</figcaption></figure>
-        <figure class="logo-card"><img class="inv" src="assets/logos/silverwood-white.png" alt="Alan Silverwood logo" loading="lazy"><figcaption>Alan Silverwood</figcaption></figure>
+      <div class="logo-cloud">
+        <figure class="logo-card"><img src="assets/logos/kitchenaid.svg" alt="KitchenAid logo" loading="lazy"></figure>
+        <figure class="logo-card"><img src="assets/logos/magimix.png" alt="Magimix logo" loading="lazy"></figure>
+        <figure class="logo-card"><img src="assets/logos/cuisinart.svg" alt="Cuisinart logo" loading="lazy"></figure>
+        <figure class="logo-card"><img src="assets/logos/dualit.png" alt="Dualit logo" loading="lazy"></figure>
+        <figure class="logo-card"><img class="tall" src="assets/logos/gaggia.svg" alt="Gaggia Milano logo" loading="lazy"></figure>
+        <figure class="logo-card"><img class="tall" src="assets/logos/nespresso.svg" alt="Nespresso logo" loading="lazy"></figure>
+        <figure class="logo-card"><img src="assets/logos/demeyere.png" alt="Demeyere logo" loading="lazy"></figure>
+        <figure class="logo-card"><img class="tall" src="assets/logos/peugeot.svg" alt="Peugeot logo" loading="lazy"></figure>
+        <figure class="logo-card"><img class="inv" src="assets/logos/cole-mason-white.png" alt="Cole &amp; Mason logo" loading="lazy"></figure>
+        <figure class="logo-card"><img src="assets/logos/guzzini.png" alt="Guzzini logo" loading="lazy"></figure>
+        <figure class="logo-card"><img class="tall" src="assets/logos/pillivuyt.jpg" alt="Pillivuyt logo" loading="lazy"></figure>
+        <figure class="logo-card"><img src="assets/logos/simplehuman.png" alt="Simplehuman logo" loading="lazy"></figure>
+        <figure class="logo-card"><img class="tall" src="assets/logos/vacuvin.png" alt="Vacu Vin logo" loading="lazy"></figure>
+        <figure class="logo-card"><img class="inv" src="assets/logos/silverwood-white.png" alt="Alan Silverwood logo" loading="lazy"></figure>
       </div>
       <p class="brand-rest"><strong>Also stocked:</strong> Chasseur, SKK, Mermaid, La Cafetiere, Mauviel and TG Green.</p>
     </div>
@@ -329,10 +332,10 @@
       <span class="eyebrow">Inside the shop</span>
       <h2>The Aladdin's Cave, shelf by shelf</h2>
       <div class="photo-grid">
-        <figure class="ph"><img src="assets/site/shop-211_360-2x.jpg" alt="The main aisle of the shop, stocked from floor to ceiling" loading="lazy" width="360" height="270"><figcaption>The main aisle</figcaption></figure>
-        <figure class="ph"><img src="assets/site/shop-166_355-2x.jpg" alt="Pots and pans hanging above the shop floor" loading="lazy" width="355" height="266"><figcaption>Pots and pans overhead</figcaption></figure>
-        <figure class="ph"><img src="assets/site/shop-040_355-2x.jpg" alt="Shelves of cookware and kitchen storage" loading="lazy" width="355" height="266"><figcaption>Cookware and storage shelves</figcaption></figure>
-        <figure class="ph"><img src="assets/site/shop-257_355-2x.jpg" alt="China and tableware shelves with gingham trim" loading="lazy" width="355" height="266"><figcaption>China and tableware</figcaption></figure>
+        <figure class="ph"><img src="assets/site/shop-211_360-2x.jpg" alt="The main aisle of the shop, stocked from floor to ceiling" loading="lazy" width="360" height="270"></figure>
+        <figure class="ph"><img src="assets/site/shop-166_355-2x.jpg" alt="Pots and pans hanging above the shop floor" loading="lazy" width="355" height="266"></figure>
+        <figure class="ph"><img src="assets/site/shop-040_355-2x.jpg" alt="Shelves of cookware and kitchen storage" loading="lazy" width="355" height="266"></figure>
+        <figure class="ph"><img src="assets/site/shop-257_355-2x.jpg" alt="China and tableware shelves with gingham trim" loading="lazy" width="355" height="266"></figure>
       </div>
     </div>
   </section>
@@ -348,7 +351,7 @@
         <p>Nick, Gemma and the team look forward to welcoming you.</p>
         <figure class="about-photo">
           <img src="assets/site/shop-128_360-3x.jpg" alt="Behind the counter at The Kitchen Shop" loading="lazy" width="360" height="270">
-          <figcaption>Behind the counter</figcaption>
+          
         </figure>
       </div>
       <div id="faq">
