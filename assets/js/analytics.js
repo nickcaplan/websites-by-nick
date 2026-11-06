@@ -25,7 +25,7 @@
   try { channel = new BroadcastChannel(storageKey); } catch (error) {}
   var returnFocus = null;
   function restoreFocus() {
-    var target = returnFocus || document.querySelector('[data-cookie-preferences]') || document.querySelector('header a, header button');
+    var target = returnFocus || document.querySelector('[data-cookie-preferences]') || document.querySelector('header a, header button') || document.querySelector('nav[aria-label] a');
     if (target) target.focus();
     returnFocus = null;
   }

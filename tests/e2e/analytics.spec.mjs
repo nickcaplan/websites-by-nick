@@ -306,3 +306,14 @@ test('homepage decorative arrows are absent from link names',async({page})=>{
  await expect(page.getByRole('link',{name:"Contact",exact:true})).toHaveCount(1);
  await expect(page.getByRole('link',{name:'A little about me',exact:true})).toHaveCount(1);
 });
+
+for (const route of ['/', '/contact/']) {
+ test(`unsaved Allow warning restores main navigation focus on ${route}`,async({page})=>{
+  await page.goto(route);
+  await page.evaluate(()=>{Storage.prototype.setItem=Storage.prototype.removeItem=function(){throw Error('blocked writes')}});
+  await page.locator('[data-cookie-choice="analytics"]').click();
+  const dismiss=page.getByRole('button',{name:'Dismiss warning',exact:true});await dismiss.focus();await page.keyboard.press('Enter');
+  await expect(page.locator('#cookie-consent-panel')).toBeHidden();
+  await expect(page.locator('nav[aria-label] a').first()).toBeFocused();
+ });
+}
