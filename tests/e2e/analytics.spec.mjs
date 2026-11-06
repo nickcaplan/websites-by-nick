@@ -305,7 +305,7 @@ test('homepage decorative arrows are absent from link names',async({page})=>{
  await page.goto('/homepage-concepts/');
  await expect(page.locator('a.cta span').first()).toHaveText('↗');
  await expect(page.getByRole('link',{name:"Let's make yours",exact:true})).toHaveCount(1);
- await expect(page.locator('a[href="/experience/"] span')).toHaveText('↗');
+ await expect(page.locator('a[href="/homepage-concepts/experience/"] span')).toHaveText('↗');
  await expect(page.getByRole('link',{name:'A little about me',exact:true})).toHaveCount(1);
 });
 
