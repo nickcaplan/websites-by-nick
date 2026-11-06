@@ -1729,3 +1729,25 @@ body.paused .studio .sd-fill {
     padding: 0;
   }
 }
+
+/* Text-only zoom must reflow rather than create a second horizontal viewport.
+   Keep normal headline sizing and the drawn frame, but allow long words to
+   wrap when enlarged text can no longer fit a narrow screen. */
+h1 { min-width: 0; max-width: 100%; overflow-wrap: anywhere; }
+h2 { overflow-wrap: anywhere; }
+.nav { flex-wrap: wrap; }
+.nav nav { flex-wrap: wrap; }
+.nav nav a { flex-shrink: 0; }
+.pf-nav { max-width: 100%; flex-wrap: wrap; top: calc(-2.8em - 6px); row-gap: 0; }
+.about-grid > *, .section-intro > *, .project-title > * { min-width: 0; }
+.about-grid > *, .project-title > *, footer a { overflow-wrap: anywhere; }
+.project-title { min-width: 0; flex-wrap: wrap; }
+.entrance-end, .entrance-end a { flex-wrap: wrap; min-width: 0; }
+.entrance-end a { max-width: 100%; }
+.footer-cta { max-width: 100%; flex-wrap: wrap; }
+@media (max-width: 900px) {
+  .penframe, .penhead { left: -20px; width: calc(100% + 40px); }
+}
+@media (max-width: 600px) {
+  .nav nav { gap: 0 8px; }
+}
