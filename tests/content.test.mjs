@@ -124,7 +124,7 @@ for (const page of pages) {
     assert.ok(chips, 'nav-chips block exists');
     assert.ok(!/<small/.test(chips[0]), 'chips carry no subtitles on any page');
     const labels = [...chips[0].matchAll(/<a\b[^>]*>([^<]+)<\/a>/g)].map((m) => m[1].trim());
-    assert.deepEqual(labels, ['Work', 'Experience', 'Pricing', 'Contact']);
+    assert.deepEqual(labels, ['Work', 'Experience', 'Pricing', 'Charity', 'Contact']);
   });
 
   test(`${page}: aria reference attributes resolve to existing ids`, () => {
