@@ -285,6 +285,21 @@ test('pricing page: three tiers with guide prices, inclusions and a route to the
   assert.doesNotMatch(html, /guarantee|no obligation to buy|limited time offer/i, 'no pressure tactics or invented promises');
 });
 
+test('pricing page: charity offer is a plain panel, not a fourth paid tier, with honest limits', () => {
+  const html = read('pricing/index.html');
+  const block = (html.match(/<section class="charity" aria-labelledby="charity-heading">[\s\S]*?<\/section>/) || [])[0];
+  assert.ok(block, 'a charity offer panel exists below the paid tiers');
+  assert.match(block, /<h2 id="charity-heading">Free websites for small local charities<\/h2>/, 'the offer has a clear heading');
+  assert.match(block, /small registered charity/, 'eligibility is a registered charity');
+  assert.match(block, /free of charge each year/, 'the build itself is free');
+  assert.match(block, /keeps ownership of its domain and hosting/, 'the charity owns its domain and hosting');
+  assert.match(block, /agreed in writing before anything starts/, 'running costs are agreed in writing first');
+  assert.match(block, /paid client work comes first/, 'the limit against paid work is stated');
+  assert.match(block, /registration number/, 'applications name the charity and registration number');
+  assert.match(block, /href="\.\.\/contact\/"/, 'the panel routes to the contact page');
+  assert.doesNotMatch(block, /free hosting|hosting forever|unlimited/i, 'no invented hosting or scope promises');
+});
+
 test('web manifest icons exist in the repo', () => {
   const manifest = JSON.parse(read('site.webmanifest'));
   assert.ok(manifest.icons.length >= 2, '192 and 512 icons declared');

@@ -82,3 +82,16 @@ body[data-mobile="true"] .steps-list li { grid-template-columns: 44px 1fr; }
   .included-list { grid-template-columns: minmax(0, 1fr); }
   .steps-list li { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* Free charity tier: a plain panel below the paid tiers, deliberately not a
+   fourth pricing card - it reads as a note about the offer, not a product. */
+.charity { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); margin-top: 18px; padding: 26px 23px 24px; }
+.charity h2 { font-size: 22px; letter-spacing: -.03em; margin: 0 0 10px; }
+.charity-lede { margin: 0 0 14px; max-width: 62ch; }
+.charity-list { border-top: 1px solid var(--line); display: grid; gap: 10px; list-style: none; margin: 0 0 14px; padding: 16px 0 0; }
+.charity-list li { color: var(--muted); font-size: 14.5px; line-height: 1.45; padding-left: 18px; position: relative; }
+.charity-list li::before { background: var(--accent-2); border-radius: 50%; content: ""; height: 6px; left: 0; position: absolute; top: 7px; width: 6px; }
+.charity-apply { font-size: 15px; margin: 0; }
+@media (max-width: 480px) {
+  .charity { padding: 22px 18px 20px; }
+}
