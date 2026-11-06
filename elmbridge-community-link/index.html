@@ -30,6 +30,9 @@
   .logo{display:block;height:64px;width:auto}
   body.dark .logo-chip{background:#fff;border-radius:14px;padding:4px 10px}
   .theme-toggle{border:2px solid var(--line);background:var(--surface);color:var(--ink);min-height:46px;padding:0 18px;border-radius:999px;font:700 16px var(--sans);cursor:pointer}
+  .theme-toggle::after{content:"Off";margin-left:10px;padding:2px 10px;border-radius:999px;background:var(--mint);color:var(--green-ink);font-size:14px}
+  .theme-toggle[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+  .theme-toggle[aria-pressed="true"]::after{content:"On";background:var(--green);color:#0b2a3a}
   nav ul{list-style:none;display:flex;gap:8px;flex-wrap:wrap;margin:0 0 6px;padding:8px;background:var(--green);border-radius:999px;justify-content:center}
   nav a{display:inline-block;padding:10px 18px;border-radius:999px;color:#0b2a3a;font-weight:700;text-decoration:none;font-size:16px;min-height:44px}
   nav a:hover{background:rgba(255,255,255,.55)}
