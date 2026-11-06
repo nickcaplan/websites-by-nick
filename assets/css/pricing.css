@@ -94,6 +94,7 @@ body[data-mobile="true"] .steps-list li { grid-template-columns: 44px 1fr; }
 .charity-list li { color: var(--muted); font-size: 14.5px; line-height: 1.45; padding-left: 18px; position: relative; }
 .charity-list li::before { background: var(--accent-2); border-radius: 50%; content: ""; height: 6px; left: 0; position: absolute; top: 7px; width: 6px; }
 .charity-apply { font-size: 15px; margin: 0; }
+.charity-apply a { text-decoration: underline; text-underline-offset: .2em; }
 @media (max-width: 480px) {
   .charity { padding: 22px 18px 20px; }
 }
