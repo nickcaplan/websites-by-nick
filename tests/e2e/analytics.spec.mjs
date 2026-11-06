@@ -39,7 +39,10 @@ test('blocked storage still permits an in-page choice', async ({ page }) => {
   await page.addInitScript(() => { Storage.prototype.getItem = Storage.prototype.setItem = function () { throw Error('blocked'); }; });
   await page.goto('/');
   await page.locator('[data-cookie-choice="analytics"]').click();
-  await expect(page.locator('#cookie-consent-panel')).toBeHidden();
+  await expect(page.locator('#cookie-consent-panel')).toBeVisible();
+  await expect(page.locator('#cookie-save-warning')).toContainText('could not save your Allow analytics choice');
+  await expect(page.locator('#cookie-save-warning')).toContainText('Analytics stays off on this preview');
+  await expect(page.locator('[data-google-analytics]')).toHaveCount(0);
 });
 
 test('production loader configures only this stream after consent and unloads on withdrawal', async ({ page }) => {
@@ -82,7 +85,8 @@ test('production loader configures only this stream after consent and unloads on
   await page.getByRole('button', { name: 'Cookie preferences', exact: true }).click();
   await page.locator('[data-cookie-choice="analytics"]').click();
   expect(await page.evaluate(() => window['ga-disable-G-TESTONLY123'])).toBe(false);
-  await expect(page.locator('#cookie-consent-panel')).toBeHidden();
+  await expect(page.locator('#cookie-consent-panel')).toBeVisible();
+  await expect(page.locator('#cookie-save-warning')).toContainText('Analytics is allowed for this page only');
   await expect(page.locator('[data-google-analytics]')).toHaveCount(1);
   expect(await page.evaluate(() => window.dataLayer.length)).toBe(queueLength);
   expect(requests).toHaveLength(2);
