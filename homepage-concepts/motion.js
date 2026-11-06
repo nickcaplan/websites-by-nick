@@ -102,7 +102,7 @@
   const cycleUrl = () => {
     if (urlStopNow()) return settleUrl();
     // only two rewrites: initial address, wave, rewrite, wave, rewrite, done
-    if (urlRewrites >= 2) return;
+    if (urlRewrites >= 2) return settleUrl();
     urlRewrites += 1;
     waveDots(() => {
       if (urlStopNow()) return settleUrl();

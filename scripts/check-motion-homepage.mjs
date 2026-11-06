@@ -477,5 +477,18 @@ for (const javaScriptEnabled of [true, false]) {
 }
 console.log("PASS independent-frame-copy");
 
+// A completed finite URL cycle leaves no blinking caret or later restart.
+{
+  const p = await b.newPage({ viewport: { width: 390, height: 844 } });
+  await p.goto(base + "/homepage-concepts/");
+  await p.waitForFunction(() => document.querySelector('.pf-url').textContent === 'www.yourshop.co.uk' && !document.querySelector('.penurl').classList.contains('url-typing'), null, { timeout: 16000 });
+  const caret = () => p.locator('.pf-caret').evaluate(e => ({ opacity: getComputedStyle(e).opacity, animation: getComputedStyle(e).animationName }));
+  const settled = await caret();
+  if (settled.opacity !== '0' || settled.animation !== 'none') throw Error('URL caret still blinking after final rewrite');
+  await p.waitForTimeout(1800);
+  if (JSON.stringify(await caret()) !== JSON.stringify(settled)) throw Error('URL caret restarted');
+  await p.close(); console.log('PASS finite-url-caret');
+}
+
 await b.close();
 server.close();
