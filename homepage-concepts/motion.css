@@ -458,13 +458,13 @@ h1.sketch-settled .pf-url .pfc,
   animation: pendraw 0.4s 2.65s ease forwards;
 }
 .pf-dot:nth-of-type(1) {
-  animation: pendraw 0.2s 3.05s ease forwards;
+  animation: pendraw 0.2s 3.05s ease forwards, dotfill 0.22s 3.25s ease forwards;
 }
 .pf-dot:nth-of-type(2) {
-  animation: pendraw 0.2s 3.2s ease forwards;
+  animation: pendraw 0.2s 3.2s ease forwards, dotfill 0.22s 3.4s ease forwards;
 }
 .pf-dot:nth-of-type(3) {
-  animation: pendraw 0.2s 3.35s ease forwards;
+  animation: pendraw 0.2s 3.35s ease forwards, dotfill 0.22s 3.55s ease forwards;
 }
 .pf-bar {
   animation: pendraw 0.35s 3.5s ease forwards;
