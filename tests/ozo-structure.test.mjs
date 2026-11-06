@@ -12,6 +12,7 @@ test("Ozo theme initializes on the root before visible content", () => {
   const head = html.slice(0, html.indexOf("</head>"));
   assert.match(head, /localStorage.getItem\("ozo-theme"\)/);
   assert.match(head, /document.documentElement.classList.toggle\("dark"/);
-  assert.match(head, /:root\.dark/);
+  assert.match(head, /:root\.dark \.find/);
+  assert.doesNotMatch(html, /body\.dark/);
   assert.doesNotMatch(html, /document.body.classList.toggle\("dark"/);
 });
