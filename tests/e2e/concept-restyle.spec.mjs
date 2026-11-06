@@ -10,6 +10,7 @@ for(const name of ['contact','experience','privacy']) for(const width of [320,39
   await page.evaluate(()=>document.fonts.ready);
   await page.evaluate(()=>{const es=[...document.querySelectorAll('body *')].filter(e=>!e.closest('svg'));const sz=es.map(e=>parseFloat(getComputedStyle(e).fontSize));es.forEach((e,i)=>e.style.fontSize=sz[i]*2+'px')});
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+  expect(await page.locator('.cookie-banner').evaluate(e=>e.scrollWidth<=e.clientWidth)).toBe(true);
  });
 }
 test('saved light survives nav, reload and early bootstrap without page script',async({page})=>{
@@ -93,3 +94,9 @@ for(const route of ['experience','privacy']) {
   expect(gap).toBeLessThanOrEqual(1);
  });
 }
+
+test('banner overflow measurement detects an oversized child',async({page})=>{
+ await page.goto('/homepage-concepts/contact/');
+ await page.locator('.cookie-banner').evaluate(e=>{const child=document.createElement('div');child.style.width='3000px';child.textContent='Synthetic overflow';e.appendChild(child)});
+ expect(await page.locator('.cookie-banner').evaluate(e=>e.scrollWidth>e.clientWidth)).toBe(true);
+});
