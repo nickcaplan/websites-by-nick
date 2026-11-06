@@ -265,3 +265,13 @@ test('storage removal preserves rejection when tab messaging and cookies are una
   await expect(other.locator('[data-google-analytics]')).toHaveCount(0);
   await other.close();
 });
+
+test('unsaved Allow cannot revive an older saved Allow after failed withdrawal and recovery',async({page})=>{
+ await page.route('https://websitesbynick.co.uk/**',route=>route.fulfill({contentType:route.request().url().endsWith('analytics.js')?'text/javascript':'text/html',body:route.request().url().endsWith('analytics.js')?source:'<button data-cookie-preferences>Cookie preferences</button><script defer src="/assets/js/analytics.js" data-measurement-id="G-TESTONLY123"></script>'}));
+ const requests=[];await page.route('https://www.googletagmanager.com/**',r=>{requests.push(r.request().url());return r.fulfill({body:''})});
+ await page.goto('https://websitesbynick.co.uk/');await page.locator('[data-cookie-choice="analytics"]').click();await expect.poll(()=>requests.length).toBe(1);
+ await page.evaluate(()=>{window.restoreStores={set:Storage.prototype.setItem,remove:Storage.prototype.removeItem};Storage.prototype.setItem=function(k,v){if(this===localStorage)throw Error('blocked');return window.restoreStores.set.call(this,k,v)};Storage.prototype.removeItem=function(k){if(this===localStorage)throw Error('blocked');return window.restoreStores.remove.call(this,k)}});
+ await page.getByRole('button',{name:'Cookie preferences',exact:true}).click();await page.locator('[data-cookie-choice="essential"]').click();await page.locator('[data-cookie-choice="analytics"]').click();await expect(page.locator('#cookie-save-warning')).toContainText('page only');await page.locator('#cookie-warning-dismiss').click();await expect(page.locator('#cookie-consent-panel')).toBeHidden();
+ expect(await page.evaluate(()=>window['ga-disable-G-TESTONLY123'])).toBe(false);
+ await page.evaluate(()=>{Storage.prototype.setItem=window.restoreStores.set;Storage.prototype.removeItem=window.restoreStores.remove});await page.reload();expect(requests).toHaveLength(1);await expect(page.locator('[data-google-analytics]')).toHaveCount(0);
+});

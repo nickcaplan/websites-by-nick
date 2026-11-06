@@ -68,6 +68,18 @@
       warning.className = 'cookie-save-warning';
       warning.setAttribute('role', 'status');
       panel.insertBefore(warning, panel.firstChild);
+      var dismiss = document.createElement('button');
+      dismiss.type = 'button';
+      dismiss.className = 'button button-secondary';
+      dismiss.id = 'cookie-warning-dismiss';
+      dismiss.textContent = 'Dismiss warning';
+      dismiss.addEventListener('click', function () {
+        panel.hidden = true;
+        reserveSpace();
+        if (returnFocus) returnFocus.focus();
+        returnFocus = null;
+      });
+      panel.appendChild(dismiss);
     }
       warning.textContent = message || 'Your browser could not save your cookie choice normally. Analytics is off here. If you block all browser storage, close other tabs and check your choice when you return.';
       panel.hidden = false;
@@ -111,10 +123,17 @@
       if (returnFocus) returnFocus.focus();
       returnFocus = null;
       if (preference === 'analytics') {
-        try { sessionStorage.removeItem(storageKey); } catch (error) {}
-        document.cookie = rejectionCookie + '=; Max-Age=0; path=/; SameSite=Lax; Secure';
+        if (preferenceStored) {
+          try { sessionStorage.removeItem(storageKey); } catch (error) {}
+          document.cookie = rejectionCookie + '=; Max-Age=0; path=/; SameSite=Lax; Secure';
+        } else {
+          // Never let an older saved Allow outlive a page-only choice.
+          rememberRejection();
+        }
         var warning = document.getElementById('cookie-save-warning');
         if (warning) warning.remove();
+        var dismiss = document.getElementById("cookie-warning-dismiss");
+        if (dismiss) dismiss.remove();
         loadAnalytics();
         if (!preferenceStored) showSaveWarning(canTrack
           ? 'Your browser could not save your Allow analytics choice. Analytics is allowed for this page only. Check your choice when you return.'
