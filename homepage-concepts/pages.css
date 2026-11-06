@@ -1,5 +1,5 @@
-/* Screen-reader-only heading: keeps the outline h1 -> h2 -> h3 without a
-   visible heading above the price cards. */
+/* Screen-reader-only heading: gives the price cards a "Guide prices" h2
+   (sibling to the tier h2s) without a visible heading above them. */
 .sr-only {
   position: absolute;
   width: 1px;
