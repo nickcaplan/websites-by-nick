@@ -11,7 +11,7 @@ import { dirname, join } from 'node:path';
 import vm from 'node:vm';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const pages = ['index.html', 'experience/index.html', 'pricing/index.html', 'contact/index.html', 'privacy/index.html'];
+const pages = ['index.html', 'experience/index.html', 'pricing/index.html', 'pricing/charity/index.html', 'contact/index.html', 'privacy/index.html'];
 const read = (page) => readFileSync(join(root, page), 'utf8');
 
 function attr(tag, name) {
@@ -124,7 +124,7 @@ for (const page of pages) {
     assert.ok(chips, 'nav-chips block exists');
     assert.ok(!/<small/.test(chips[0]), 'chips carry no subtitles on any page');
     const labels = [...chips[0].matchAll(/<a\b[^>]*>([^<]+)<\/a>/g)].map((m) => m[1].trim());
-    assert.deepEqual(labels, ['Work', 'Experience', 'Pricing', 'Contact']);
+    assert.deepEqual(labels, ['Work', 'Experience', 'Pricing', 'Charity', 'Contact']);
   });
 
   test(`${page}: aria reference attributes resolve to existing ids`, () => {
@@ -225,7 +225,7 @@ test('pages carry no inline behaviour beyond the shared first-paint bootstrap', 
 test('every public page uses the approved portfolio stream, never the FOA stream', () => {
   for (const page of pages) {
     const html = read(page);
-    assert.match(html, /<script src="(?:\.\.\/)?assets\/js\/analytics\.js" defer data-measurement-id="G-J3J3NS19ZS"><\/script>/);
+    assert.match(html, /<script src="(?:\.\.\/)*assets\/js\/analytics\.js" defer data-measurement-id="G-J3J3NS19ZS"><\/script>/);
     assert.doesNotMatch(html, /G-V2X8ZMQ5XZ/);
   }
 });
@@ -283,6 +283,44 @@ test('pricing page: three tiers with guide prices, inclusions and a route to the
   assert.match(html, /quoted individually/, 'every project is quoted individually');
   assert.match(html, /free 20-minute chat/, 'the free consultation is the first step');
   assert.doesNotMatch(html, /guarantee|no obligation to buy|limited time offer/i, 'no pressure tactics or invented promises');
+});
+
+test('pricing page: charity banner points to the dedicated charity page without repeating the offer', () => {
+  const html = read('pricing/index.html');
+  const block = (html.match(/<section class="charity" aria-labelledby="charity-heading">[\s\S]*?<\/section>/) || [])[0];
+  assert.ok(block, 'a charity banner exists below the paid tiers');
+  assert.match(block, /<h2 id="charity-heading">Free websites for small local charities<\/h2>/, 'the banner keeps a clear heading');
+  assert.match(block, /small registered charities/, 'the banner names who the offer is for');
+  assert.match(block, /free of charge each year/, 'the banner states the build is free');
+  assert.match(block, /href="\.\/charity\/"/, 'the banner routes to the dedicated charity page');
+  assert.doesNotMatch(block, /charity-list/, 'the full offer lives on the charity page, not buried here');
+  assert.doesNotMatch(block, /[\u2013\u2014]/, 'no en or em dashes');
+});
+
+test('charity page: the offer is a dedicated page with honest limits', () => {
+  const html = read('pricing/charity/index.html');
+  assert.match(html, /<h1>Free websites for <em>small local charities\.<\/em><\/h1>/, 'the offer has its own page with a clear heading');
+  assert.match(html, /small registered charity/, 'eligibility is a registered charity');
+  assert.match(html, /new website or a repair/, 'repairs are offered alongside new builds');
+  assert.match(html, /Repairs to your existing website/, 'the repair option is explicit');
+  assert.doesNotMatch(html, /[\u2013\u2014]/, 'no en or em dashes');
+  assert.match(html, /free of charge each year/, 'the build itself is free');
+  assert.match(html, /keeps ownership of its domain and hosting/, 'the charity owns its domain and hosting');
+  assert.match(html, /agreed in writing before anything starts/, 'running costs are agreed in writing first');
+  assert.match(html, /paid client work comes first/, 'the limit against paid work is stated');
+  assert.match(html, /registration number/, 'applications name the charity and registration number');
+  assert.match(html, /href="\.\.\/\.\.\/contact\/"/, 'the page routes to the contact page');
+  assert.doesNotMatch(html, /free hosting|hosting forever|unlimited/i, 'no invented hosting or scope promises');
+  assert.match(html, /<ul class="charity-list" role="list">/, 'the list keeps its semantics in Safari');
+  assert.match(html, /assets\/css\/pricing\.css/, 'the page loads the stylesheet that carries the charity rules');
+});
+
+test('charity offer text meets the 16px phone readability rule', () => {
+  const css = readFileSync(join(root, 'assets/css/pricing.css'), 'utf8');
+  const mobileRules = [...css.matchAll(/body\[data-mobile="true"\][^{]*\{[^}]*font-size: 16px;[^}]*\}/g)].map((m) => m[0]);
+  const all = mobileRules.join('\n');
+  assert.ok(all.includes('.charity-list li'), 'charity list items are 16px on phones');
+  assert.ok(all.includes('.charity-apply'), 'charity apply line is 16px on phones');
 });
 
 test('web manifest icons exist in the repo', () => {
