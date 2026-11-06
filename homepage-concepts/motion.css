@@ -1148,7 +1148,7 @@ body.paused .reveal {
 }
 @media (max-width: 900px) {
   .project {
-    position: static;
+    position: relative;
     padding: 26px 22px 24px;
     margin-bottom: 34px;
   }
@@ -1751,3 +1751,9 @@ h2 { overflow-wrap: anywhere; }
 @media (max-width: 600px) {
   .nav nav { gap: 0 8px; }
 }
+
+/* A container cap keeps complete hero words legible under text enlargement.
+   Body text still enlarges normally; the display heading uses the space it has. */
+.hero-copy { container-type: inline-size; }
+#hero-title .line { font-size: min(1em, 23cqw) !important; }
+#hero-title .line em, #hero-title .hc { font-size: inherit !important; }

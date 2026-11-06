@@ -16,6 +16,27 @@ try {
       const sizes = elements.map(e => parseFloat(getComputedStyle(e).fontSize));
       elements.forEach((e, i) => { e.style.fontSize = sizes[i] * 2 + 'px'; });
     });
+    // Inspect character line boxes: complete words must never split mid-word.
+    const brokenWords = await page.locator('#hero-title').evaluate(el => {
+      const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+      const chars = [];
+      while (walker.nextNode()) {
+        const node = walker.currentNode;
+        if (node.parentElement.closest('svg')) continue;
+        for (let i = 0; i < node.length; i++) {
+          const range = document.createRange(); range.setStart(node, i); range.setEnd(node, i + 1);
+          const r = range.getBoundingClientRect(); chars.push({ char: node.textContent[i], top: Math.round(r.top), line: node.parentElement.closest('.line') });
+        }
+      }
+      let previous = null, broken = false;
+      for (const item of chars) {
+        if (/\s/.test(item.char)) { previous = null; continue; }
+        if (previous && item.line === previous.line && Math.abs(item.top - previous.top) > 5) broken = true;
+        previous = item;
+      }
+      return broken;
+    });
+    assert.equal(brokenWords, false, `hero splits a word: ${width} ${theme}`);
     assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `200% text overflow: ${width} ${theme}`);
     for (const el of await page.locator('.nav nav a, .nav nav button, .cta, .entrance-end a, .footer-cta').all()) {
       const rect = await el.boundingBox();
@@ -23,5 +44,12 @@ try {
     }
     await page.close();
     console.log('PASS text200', width, theme);
+  }
+  for (const width of [320, 390, 768, 900]) {
+    const page = await browser.newPage({ viewport: { width, height: 900 }, reducedMotion: 'reduce' });
+    await page.goto(`http://localhost:${server.address().port}/homepage-concepts/`);
+    assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `reduced motion overflow: ${width}`);
+    assert.ok(await page.locator('.project').evaluateAll(es => es.every(e => getComputedStyle(e).position === 'relative')));
+    await page.close(); console.log('PASS reduced containment', width);
   }
 } finally { await browser.close(); server.close(); }
