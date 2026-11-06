@@ -94,8 +94,16 @@ button:focus-visible {
 .nav nav a {
   padding: 10px 0;
 }
-.nav nav a:last-of-type {
-  border-bottom: 1px solid;
+/* Underlines identify the actual page, never the contact position in the row. */
+.nav nav a[aria-current="page"] {
+  text-decoration: underline;
+  text-underline-offset: 6px;
+}
+@media (hover: hover) {
+  .nav nav a:hover {
+    text-decoration: underline;
+    text-underline-offset: 6px;
+  }
 }
 .entrance {
   max-width: 1600px;
