@@ -6,6 +6,14 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Ozo Coffee House - Weybridge</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
+<script>
+  (() => {
+    let theme = null;
+    try { theme = localStorage.getItem("ozo-theme"); } catch {}
+    if (theme !== "dark" && theme !== "light") theme = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    document.documentElement.classList.toggle("dark", theme === "dark");
+  })();
+</script>
 <style>
   :root{
     --cream:#f6efe3; --cream-deep:#efe4d0; --espresso:#241a12; --espresso-soft:#4a3a2c;
@@ -14,7 +22,7 @@
     --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
     --sans:"Avenir Next",Avenir,"Segoe UI",system-ui,sans-serif;
   }
-  body.dark{
+  :root.dark{
     --cream:#1d1510; --cream-deep:#251b14; --espresso:#f2e7d7; --espresso-soft:#d8c8b2;
     --muted:#a89880; --orange:#f07f3c; --orange-deep:#ff9a5c; --orange-ink:#f07f3c;
     --card:#282017; --line:rgba(242,231,215,.16); --line-strong:rgba(242,231,215,.34);
@@ -153,6 +161,7 @@
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" aria-pressed="false">&#9681;</button>
   </header>
 
+  <main>
   <section class="hero">
     <p class="kicker"><svg class="flag" viewBox="0 0 900 600" aria-hidden="true" focusable="false">
         <rect width="900" height="600" fill="#E30A17"/>
@@ -188,7 +197,7 @@
 
   <div class="menu">
     <div class="card">
-      <div class="dot">&#9728;</div>
+      <div class="dot" aria-hidden="true">&#9728;</div>
       <h2>Breakfast &amp; brunch</h2>
       <ul>
         <li>Menemen and leafy green shakshuka</li>
@@ -198,7 +207,7 @@
       </ul>
     </div>
     <div class="card">
-      <div class="dot">&#10070;</div>
+      <div class="dot" aria-hidden="true">&#10070;</div>
       <h2>Lunch &amp; sharing</h2>
       <ul>
         <li>Sharing platters for the table</li>
@@ -208,7 +217,7 @@
       </ul>
     </div>
     <div class="card">
-      <div class="dot">&#9749;</div>
+      <div class="dot" aria-hidden="true">&#9749;</div>
       <h2>Cakes, coffee &amp; tea</h2>
       <ul>
         <li>Homemade cakes</li>
@@ -217,7 +226,7 @@
       </ul>
     </div>
     <div class="card">
-      <div class="dot">&#9733;</div>
+      <div class="dot" aria-hidden="true">&#9733;</div>
       <h2>Evenings</h2>
       <ul>
         <li>Wine and cocktails</li>
@@ -236,6 +245,7 @@
     <a class="map-btn" href="https://www.google.com/maps/search/?api=1&amp;query=Ozo+Cafe%2C+Unit+A+St+Martin%27s+Court%2C+37+Queen%27s+Road%2C+Weybridge+KT13+9UQ" rel="noopener">Open in Google Maps &#8599;</a>
   </section>
 
+  </main>
   <footer>
     <span>Ozo Coffee House, Weybridge</span>
     <span>Concept design - not the business&rsquo;s live website. Photos: the business&rsquo;s public listing photos via <a href="https://ozo-cafe.wheree.com/" rel="noopener" style="color:inherit">wheree.com</a></span>
@@ -245,15 +255,11 @@
   (() => {
     const KEY = "ozo-theme";
     const btn = document.getElementById("themeToggle");
-    let dark = null;
-    try { dark = localStorage.getItem(KEY); } catch {}
-    if (dark !== "dark" && dark !== "light") dark = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-    dark = dark === "dark";
-    document.body.classList.toggle("dark", dark);
+    let dark = document.documentElement.classList.contains("dark");
     btn.setAttribute("aria-pressed", String(dark));
     btn.addEventListener("click", () => {
       dark = !dark;
-      document.body.classList.toggle("dark", dark);
+      document.documentElement.classList.toggle("dark", dark);
       btn.setAttribute("aria-pressed", String(dark));
       try { localStorage.setItem(KEY, dark ? "dark" : "light"); } catch {}
     });
