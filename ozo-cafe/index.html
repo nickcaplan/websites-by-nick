@@ -39,6 +39,19 @@
     font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
     color:var(--orange-ink);margin:0 0 14px;
   }
+  .flag{
+    width:30px;height:20px;vertical-align:-4px;margin-right:9px;border-radius:2px;
+    box-shadow:0 1px 3px rgba(0,0,0,.28);transform-origin:0% 50%;
+    animation:flagwave 1.8s .3s ease both;
+  }
+  @keyframes flagwave{
+    0%{opacity:0;transform:scaleX(.08) rotate(-10deg)}
+    25%{opacity:1;transform:scaleX(1.06) rotate(4deg) skewY(3deg)}
+    45%{transform:scaleX(1) rotate(-3deg) skewY(-2.5deg)}
+    65%{transform:rotate(2deg) skewY(1.5deg)}
+    85%{transform:rotate(-1deg)}
+    100%{transform:none}
+  }
   h1{
     font-family:var(--serif);font-weight:700;
     font-size:clamp(52px,9vw,110px);line-height:.98;margin:0 0 18px;letter-spacing:-.01em;
@@ -111,6 +124,7 @@
   }
   @media (prefers-reduced-motion: reduce){
     .squiggle{animation:none;visibility:visible;stroke-dashoffset:0}
+    .flag{animation:none}
   }
   @media (max-width:760px){
     .strip{flex-direction:column}
@@ -132,7 +146,12 @@
   </header>
 
   <section class="hero">
-    <p class="kicker">Turkish &amp; Mediterranean kitchen &middot; Weybridge</p>
+    <p class="kicker"><svg class="flag" viewBox="0 0 900 600" aria-hidden="true" focusable="false">
+        <rect width="900" height="600" fill="#E30A17"/>
+        <circle cx="300" cy="300" r="150" fill="#fff"/>
+        <circle cx="337.5" cy="300" r="120" fill="#E30A17"/>
+        <polygon fill="#fff" points="462.5,300.0 514.3,316.8 514.3,371.3 546.4,327.2 598.2,344.1 566.1,300.0 598.2,255.9 546.4,272.8 514.3,228.7 514.3,283.2"/>
+      </svg>Turkish &amp; Mediterranean kitchen &middot; Weybridge</p>
     <h1 id="heroTitle">Good coffee,<br><em>proper welcome.</em>
       <svg class="squiggle" viewBox="0 0 420 26" aria-hidden="true">
         <path d="M6 18 Q60 6 110 15 T210 14 T310 12 T414 14" />
