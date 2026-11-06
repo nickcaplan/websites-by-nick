@@ -11,15 +11,16 @@
     <link rel="stylesheet" href="/assets/css/fonts.css" />
     <link rel="stylesheet" href="/homepage-concepts/motion.css" />
     <link rel="stylesheet" href="/homepage-concepts/pages.css" />
+    <link rel="stylesheet" href="/homepage-concepts/restyled.css" />
   </head>
-  <body>
+  <body class="dark">
     <script>
       // apply the saved/system theme before first paint, so a dark visitor
       // never sees a flash of the light theme; pages.js/motion.js keep the toggle
       (function () {
         var theme = null;
         try { theme = window.localStorage.getItem('nick-theme'); } catch (error) {}
-        var dark = theme ? theme === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var dark = theme !== 'light';
         document.body.classList.toggle('dark', dark);
       })();
     </script>
@@ -30,7 +31,7 @@
       >
       <nav aria-label="Main">
         <a href="/homepage-concepts/#work">Work</a><a href="/homepage-concepts/about/" aria-current="page">About</a
-        ><a href="/homepage-concepts/pricing/">Pricing</a><a href="/contact/">Let's talk ↗</a
+        ><a href="/homepage-concepts/pricing/">Pricing</a><a href="/homepage-concepts/contact/">Let's talk ↗</a
         ><button type="button" class="theme-toggle" aria-label="Dark mode" aria-pressed="false">◐</button>
       </nav>
     </header>
@@ -60,17 +61,17 @@
           high-traffic websites and banking platforms goes into your site: clear communication,
           dependable delivery and code that is straightforward to maintain.
         </p>
-        <a class="cta" href="/experience/">See the career history <span aria-hidden="true">↗</span></a>
+        <a class="cta" href="/homepage-concepts/experience/">See the career history <span aria-hidden="true">↗</span></a>
       </section>
     </main>
     <footer>
       <p class="eyebrow">YOUR WEBSITE DOESN'T HAVE TO BLEND IN.</p>
       <h2>Let's make something you're <em>proud of.</em></h2>
-      <a class="footer-cta" href="/contact/">Say hello <span aria-hidden="true">↗</span></a>
+      <a class="footer-cta" href="/homepage-concepts/contact/">Say hello <span aria-hidden="true">↗</span></a>
       <div class="footer-bottom">
         <a class="wordmark" href="/homepage-concepts/">Nick Caplan</a>
         <p>© Websites by Nick</p>
-        <a href="/privacy/">Privacy</a>
+        <a href="/homepage-concepts/privacy/">Privacy</a>
       </div>
     </footer>
     <script src="/homepage-concepts/pages.js"></script>

@@ -30,7 +30,7 @@
   panel.className = 'cookie-banner';
   panel.hidden = true;
   panel.setAttribute('aria-labelledby', 'cookie-banner-title');
-  var privacyURL = new URL('../../privacy/', script.src).href;
+  var privacyURL = script.dataset.privacyUrl ? new URL(script.dataset.privacyUrl, location.origin).href : new URL('../../privacy/', script.src).href;
   panel.innerHTML = '<div><h2 id="cookie-banner-title">Analytics cookies</h2><p>Optional Google Analytics stays off unless you allow it. <a href="' + privacyURL + '">Privacy notice</a></p></div><div class="cookie-actions"><button type="button" class="button button-primary" data-cookie-choice="analytics">Allow analytics</button><button type="button" class="button button-secondary" data-cookie-choice="essential">Reject analytics</button></div>';
   document.body.appendChild(panel);
   /** Keep footer controls scrollable above the visible consent panel. */

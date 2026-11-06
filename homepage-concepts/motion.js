@@ -11,9 +11,7 @@
     }
   };
   const storedTheme = readTheme();
-  let dark = storedTheme
-    ? storedTheme === "dark"
-    : matchMedia("(prefers-color-scheme: dark)").matches;
+  let dark = storedTheme !== "light";
   document.body.classList.toggle("dark", dark);
   theme.setAttribute("aria-pressed", String(dark));
   theme.addEventListener("click", () => {

@@ -102,7 +102,7 @@ test('theme toggle persists the choice in localStorage', () => {
   for (const file of ['homepage-concepts/motion.js', 'homepage-concepts/pages.js']) {
     const src = readFileSync(join(root, file), 'utf8');
     assert.match(src, /localStorage\.setItem\((?:KEY|THEME_KEY), dark \? "dark" : "light"\)/, file);
-    assert.match(src, /prefers-color-scheme: dark/, file);
+    assert.match(src, /(?:stored|storedTheme) !== "light"/, file + ': dark default must preserve a saved light choice');
   }
 });
 
