@@ -182,9 +182,10 @@
     scheduleUrl(urlStep, 120);
   };
   let refreshProjects = () => {};
+  let resetParallax = () => {};
   const apply = () => {
     document.body.classList.toggle("paused", paused);
-    if (paused) settleIntro();
+    if (paused) { settleIntro(); resetParallax(); }
     button.setAttribute("aria-pressed", String(paused));
     refreshProjects();
   };
@@ -323,6 +324,12 @@
       cx = 0,
       cy = 0,
       raf = null;
+    resetParallax = () => {
+      if (raf) cancelAnimationFrame(raf);
+      raf = null;
+      tx = ty = cx = cy = 0;
+      layers.forEach(el => { el.style.translate = "0px 0px"; });
+    };
     const tick = () => {
       const active = !(
         document.body.classList.contains("paused") ||
@@ -366,6 +373,7 @@
   }
 
   // One-time scroll reveals; content is fully visible without JavaScript.
+  if ("IntersectionObserver" in window) {
   document.body.classList.add("js-reveal");
   const io = new IntersectionObserver(
     (entries) =>
@@ -378,6 +386,7 @@
     { threshold: 0.18 }
   );
   document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+  }
 
   // Scroll-scrubbed project showcase: each screenshot grows into view as it
   // travels up, and the card it covers eases back and dims. Transform/opacity
@@ -393,7 +402,7 @@
       const off =
         document.body.classList.contains("paused") ||
         document.body.classList.contains("hidden-page") ||
-        reduced.matches;
+        reduced.matches || document.body.classList.contains("project-focus");
       const vh = window.innerHeight;
       const stacked = desktop.matches;
       projects.forEach((card, i) => {
@@ -432,8 +441,7 @@
             card.style.setProperty("--dim", (p * 0.35).toFixed(3));
             const covered = nr.top <= 96;
             card.style.pointerEvents = covered ? "none" : "";
-            if (covered) card.setAttribute("tabindex", "-1");
-            else card.removeAttribute("tabindex");
+            card.removeAttribute("tabindex");
           } else {
             card.style.transform = "";
             card.style.removeProperty("--dim");
@@ -446,6 +454,17 @@
     const kick2 = () => {
       if (!raf2) raf2 = requestAnimationFrame(scrub);
     };
+    const work = document.querySelector(".work");
+    work.addEventListener("focusin", () => {
+      document.body.classList.add("project-focus");
+      scrub();
+    });
+    work.addEventListener("focusout", event => {
+      if (!work.contains(event.relatedTarget)) {
+        document.body.classList.remove("project-focus");
+        kick2();
+      }
+    });
     refreshProjects = kick2;
     addEventListener("scroll", kick2, { passive: true });
     addEventListener("resize", kick2);
@@ -459,7 +478,7 @@
   // it never stretches. Without JS, with reduced motion or while motion is
   // paused the finished drawing is shown instead. Replays when re-entered.
   const studioSvg = document.querySelector(".studio svg");
-  if (studioSvg) {
+  if (studioSvg && "IntersectionObserver" in window) {
     const q = (sel) => studioSvg.querySelector(sel);
     const arm = q(".sd-arm"),
       hand = q(".sd-hand"),
@@ -674,7 +693,7 @@
   // The complete composition and every route remain usable without JavaScript.
   const syncVisibility = () => {
     document.body.classList.toggle("hidden-page", document.hidden);
-    if (document.hidden) settleIntro();
+    if (document.hidden) { settleIntro(); resetParallax(); }
     refreshProjects();
   };
   syncVisibility();
@@ -684,6 +703,7 @@
     if (reduced.matches) {
       if (pausedBeforeReduced === null) pausedBeforeReduced = paused;
       paused = true;
+      resetParallax();
       apply();
     } else if (pausedBeforeReduced !== null) {
       // Restore the visitor's own pause choice, not a blanket unpause.

@@ -15,6 +15,9 @@ for (const suffix of ['', '/', '///']) test(`static server normalizes root ${JSO
   await writeFile(join(root, '.git', 'config'), 'synthetic secret');
   await writeFile(join(root, '.env.local'), 'synthetic secret');
   await writeFile(join(root, 'package.json'), '{}');
+  await mkdir(join(root, 'scripts'));
+  await writeFile(join(root, 'scripts', 'private.js'), 'private');
+  await symlink(join(root, 'scripts', 'private.js'), join(root, 'linked.js'));
   const outside = await mkdtemp(join(tmpdir(), 'static-outside-'));
   await writeFile(join(outside, 'secret.html'), 'synthetic outside');
   await symlink(join(outside, 'secret.html'), join(root, 'escape.html'));
@@ -26,7 +29,7 @@ for (const suffix of ['', '/', '///']) test(`static server normalizes root ${JSO
     }); req.on('error', reject); req.end();
   });
   try {
-    for (const path of ['/.git/config','/.env.local','/package.json','/escape.html','/disguised.css']) assert.equal((await read(path)).status,403,path);
+    for (const path of ['/.git/config','/.env.local','/package.json','/escape.html','/disguised.css','/scripts/private.js','/linked.js']) assert.equal((await read(path)).status,403,path);
     assert.equal((await read('/', {host:'attacker.invalid:'+server.address().port})).status,403);
     assert.equal((await read('/', {host:'localhost:1'})).status,403);
     assert.deepEqual(await read('/'), { status: 200, body: 'root index' });
