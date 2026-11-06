@@ -21,3 +21,12 @@ for(const path of ['contact/','experience/','privacy/'])for(const width of[320,3
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
  });
 }
+
+for(const route of ['/homepage-concepts/','/homepage-concepts/about/','/homepage-concepts/pricing/']) {
+ test(`theme button uses an action name without pressed state on ${route}`,async({page})=>{
+  await page.addInitScript(()=>localStorage.setItem('nick-theme','dark'));
+  await page.goto(route);const button=page.locator('.theme-toggle');
+  await expect(button).toHaveAttribute('aria-label','Switch to light mode');await expect(button).not.toHaveAttribute('aria-pressed');
+  await button.click();await expect(button).toHaveAttribute('aria-label','Switch to dark mode');await expect(button).not.toHaveAttribute('aria-pressed');
+ });
+}
