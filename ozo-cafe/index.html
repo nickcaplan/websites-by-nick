@@ -82,6 +82,14 @@
   }
   .card h2{font-family:var(--serif);font-size:22px;margin:0 0 8px}
   .card p{margin:0;color:var(--espresso-soft);font-size:15px}
+  /* photos */
+  .photos{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:14px;margin:0 0 30px}
+  .photos figure{margin:0;border-radius:14px;overflow:hidden;border:1.5px solid var(--line)}
+  .photos img{width:100%;height:100%;object-fit:cover;display:block;aspect-ratio:4/3}
+  /* menu cards */
+  .menu{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:0 0 30px}
+  .menu .card ul{margin:10px 0 0;padding-left:18px;color:var(--espresso-soft);font-size:15px}
+  .menu .card ul li{margin-bottom:4px}
   /* find us */
   .find{
     background:var(--espresso);color:var(--cream);border-radius:18px;
@@ -108,6 +116,8 @@
     .strip{flex-direction:column}
     .strip > div{border-right:0;border-bottom:1.5px solid var(--line);padding:13px 4px}
     .strip > div:last-child{border-bottom:0}
+    .photos{grid-template-columns:1fr}
+    .menu{grid-template-columns:1fr}
     .cards{grid-template-columns:1fr}
     .find{grid-template-columns:1fr;padding:26px 22px}
     .find .map-btn{justify-self:start}
@@ -122,40 +132,69 @@
   </header>
 
   <section class="hero">
-    <p class="kicker">Coffee house &middot; Weybridge</p>
+    <p class="kicker">Turkish &amp; Mediterranean kitchen &middot; Weybridge</p>
     <h1 id="heroTitle">Good coffee,<br><em>proper welcome.</em>
       <svg class="squiggle" viewBox="0 0 420 26" aria-hidden="true">
         <path d="M6 18 Q60 6 110 15 T210 14 T310 12 T414 14" />
       </svg>
     </h1>
-    <p class="lede">A neighbourhood coffee house on Queen&rsquo;s Road - somewhere to sit in, catch up, and take away when the day won&rsquo;t slow down.</p>
+    <p class="lede">A neighbourhood cafe on the St Martin&rsquo;s Court parade - Turkish breakfasts, Mediterranean lunches, homemade cakes, and evening tapas with wine and cocktails.</p>
     <div class="hero-cta">
       <a class="btn primary" href="tel:+441932924342">Call the shop</a>
       <a class="btn ghost" href="https://www.google.com/maps/place/Ozo+Coffee+House,+78+Queen's+Road,+Weybridge,+Surrey/data=!4m2!3m1!1s0x487675c9c9248a19:0x8ec35f179f4529a9" rel="noopener">Find us on the map</a>
     </div>
   </section>
 
+  <div class="photos">
+    <figure><img src="interior.jpg" width="1000" height="753" loading="lazy" decoding="async" alt="Inside the cafe - banquette seating, bar stools at a marble counter and hanging plants"></figure>
+    <figure><img src="breakfast.jpg" width="1000" height="1333" loading="lazy" decoding="async" alt="A Turkish breakfast plate with fried eggs, sausage, olives, tomatoes, cucumber and sourdough"></figure>
+    <figure><img src="tea.jpg" width="1000" height="1239" loading="lazy" decoding="async" alt="A glass cup of tea on a marble table"></figure>
+  </div>
+
   <div class="strip">
     <div><b>Sit in</b><span>Dine in, take your time</span></div>
-    <div><b>Take away</b><span>Coffee to go</span></div>
+    <div><b>Takeaway</b><span>Food and coffee to go</span></div>
+    <div><b>Families</b><span>Kids&rsquo; menu, high chairs</span></div>
     <div><b>Where</b><span>St Martin&rsquo;s Court</span></div>
   </div>
 
-  <div class="cards">
+  <div class="menu">
+    <div class="card">
+      <div class="dot">&#9728;</div>
+      <h2>Breakfast &amp; brunch</h2>
+      <ul>
+        <li>Menemen and leafy green shakshuka</li>
+        <li>Chilbir Turkish eggs</li>
+        <li>The full Turkish breakfast</li>
+        <li>Pancakes, classic or high-protein</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="dot">&#10070;</div>
+      <h2>Lunch &amp; sharing</h2>
+      <ul>
+        <li>Sharing platters for the table</li>
+        <li>Halloumi and falafel bowls</li>
+        <li>Courgette patties</li>
+        <li>Plenty of vegetarian and vegan choices</li>
+      </ul>
+    </div>
     <div class="card">
       <div class="dot">&#9749;</div>
-      <h2>Coffee, done properly</h2>
-      <p>Coffee made to order, whether you&rsquo;re staying for one or grabbing one on the way through.</p>
+      <h2>Cakes, coffee &amp; tea</h2>
+      <ul>
+        <li>Homemade cakes</li>
+        <li>Coffee made to order</li>
+        <li>A proper tea selection</li>
+      </ul>
     </div>
     <div class="card">
-      <div class="dot">&#9998;</div>
-      <h2>Room to linger</h2>
-      <p>Dine in and take your time - a corner for a catch-up or ten quiet minutes alone.</p>
-    </div>
-    <div class="card">
-      <div class="dot">&#8962;</div>
-      <h2>Part of the parade</h2>
-      <p>On the St Martin&rsquo;s Court parade just off Queen&rsquo;s Road, in the heart of Weybridge.</p>
+      <div class="dot">&#9733;</div>
+      <h2>Evenings</h2>
+      <ul>
+        <li>Wine and cocktails</li>
+        <li>Evening tapas events</li>
+      </ul>
     </div>
   </div>
 
@@ -164,13 +203,14 @@
       <h2>Come and find us</h2>
       <p class="addr">Unit A, St Martin&rsquo;s Court, 37 Queen&rsquo;s Road,<br>Weybridge KT13 9UQ</p>
       <p>Call ahead: <a href="tel:+441932924342">01932 924342</a></p>
+      <p>Step-free access, with free street parking nearby.</p>
     </div>
     <a class="map-btn" href="https://www.google.com/maps/place/Ozo+Coffee+House,+78+Queen's+Road,+Weybridge,+Surrey/data=!4m2!3m1!1s0x487675c9c9248a19:0x8ec35f179f4529a9" rel="noopener">Open in Google Maps &#8599;</a>
   </section>
 
   <footer>
     <span>Ozo Coffee House, Weybridge</span>
-    <span>Concept design - not the business&rsquo;s live website</span>
+    <span>Concept design - not the business&rsquo;s live website. Photos: the business&rsquo;s public listing photos via <a href="https://ozo-cafe.wheree.com/" rel="noopener" style="color:inherit">wheree.com</a></span>
   </footer>
 </div>
 <script>
