@@ -1535,6 +1535,18 @@ h1 .last {
   margin: 0 auto;
   overflow: visible;
 }
+/* side by side (901px up): the drawing shrinks to share the row with the
+   caption instead of holding 100% width and pushing the page sideways */
+@media (min-width: 901px) {
+  .studio .studio-row svg {
+    flex: 1 1 0;
+    min-width: 0;
+    max-width: 880px;
+  }
+  .studio .studio-row figcaption {
+    flex: 0 0 clamp(200px, 24vw, 400px);
+  }
+}
 .studio .sd-title {
   font-family: var(--serif);
   font-weight: 450;
