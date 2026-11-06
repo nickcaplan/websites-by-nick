@@ -291,6 +291,9 @@ test('pricing page: charity offer is a plain panel, not a fourth paid tier, with
   assert.ok(block, 'a charity offer panel exists below the paid tiers');
   assert.match(block, /<h2 id="charity-heading">Free websites for small local charities<\/h2>/, 'the offer has a clear heading');
   assert.match(block, /small registered charity/, 'eligibility is a registered charity');
+  assert.match(block, /new website or a repair/, 'repairs are offered alongside new builds');
+  assert.match(block, /Repairs to your existing website/, 'the repair option is explicit');
+  assert.doesNotMatch(block, /[\u2013\u2014]/, 'no en or em dashes');
   assert.match(block, /free of charge each year/, 'the build itself is free');
   assert.match(block, /keeps ownership of its domain and hosting/, 'the charity owns its domain and hosting');
   assert.match(block, /agreed in writing before anything starts/, 'running costs are agreed in writing first');
