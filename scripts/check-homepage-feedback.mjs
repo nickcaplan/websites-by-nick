@@ -327,7 +327,7 @@ for (const [path, h1re] of [["/homepage-concepts/about/", /Websites are what I b
     const text = await p.evaluate(() => document.body.innerText);
     for (const re of banned) if (re.test(text)) fail(path + " has removed line " + re);
     if (await p.evaluate(() => document.documentElement.scrollWidth > innerWidth)) fail("overflow " + path + width);
-    await p.getByRole("button", { name: "Dark mode", exact: true }).click();
+    await p.locator(".theme-toggle").click();
     if (!(await p.locator("body").evaluate((e) => e.classList.contains("dark")))) fail("theme " + path);
     if (errors.length) fail(errors.join());
     await p.close();
