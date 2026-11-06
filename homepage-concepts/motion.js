@@ -71,8 +71,35 @@
     try { urlCaret.setAttribute("x", String(15 + w + 1)); } catch (e) { /* keep the caret where it is */ }
   };
   const urlStopNow = () => reduced.matches || document.body.classList.contains("paused") || document.body.classList.contains("hidden-page");
+  // the dots hop in turn, once: small, quick, then back where they were
+  const waveDots = (done) => {
+    const all = document.querySelectorAll(".penchrome .pf-dot");
+    all.forEach((d, i) => {
+      if (!d.animate) return;
+      d.animate(
+        [
+          { transform: "translateY(0) scale(1)", offset: 0 },
+          { transform: "translateY(-4.5px) scale(1.25)", offset: 0.4 },
+          { transform: "translateY(0.8px) scale(0.95)", offset: 0.7 },
+          { transform: "translateY(0) scale(1)", offset: 1 },
+        ],
+        { duration: 550, delay: i * 130, easing: "ease" }
+      );
+    });
+    setTimeout(done, 550 + 2 * 130 + 120);
+  };
+  let urlRewrites = 0;
   const cycleUrl = () => {
     if (urlStopNow()) return settleUrl();
+    // only two rewrites: initial address, wave, rewrite, wave, rewrite, done
+    if (urlRewrites >= 2) return;
+    urlRewrites += 1;
+    waveDots(() => {
+      if (urlStopNow()) return settleUrl();
+      rewriteUrl();
+    });
+  };
+  const rewriteUrl = () => {
     let on = urlChars.length;
     const typeNext = () => {
       urlWordIx = (urlWordIx + 1) % urlWords.length;
@@ -83,15 +110,15 @@
         if (urlStopNow()) return settleUrl();
         if (k >= urlChars.length) {
           moveUrlCaret();
-          setTimeout(cycleUrl, 3200);
+          setTimeout(cycleUrl, 450);
           return;
         }
         urlChars[k].classList.add("on");
         k += 1;
         moveUrlCaret();
-        setTimeout(typ, 55);
+        setTimeout(typ, 26);
       };
-      setTimeout(typ, 450);
+      setTimeout(typ, 120);
     };
     const del = () => {
       if (urlStopNow()) return settleUrl();
@@ -102,7 +129,7 @@
       on -= 1;
       urlChars[on].classList.remove("on");
       moveUrlCaret();
-      setTimeout(del, 28);
+      setTimeout(del, 14);
     };
     del();
   };
@@ -131,7 +158,7 @@
       if (urlStopNow()) return settleUrl();
       if (i >= urlChars.length) {
         moveUrlCaret();
-        setTimeout(cycleUrl, 2600);
+        setTimeout(cycleUrl, 700);
         return;
       }
       urlChars[i].classList.add("on");
