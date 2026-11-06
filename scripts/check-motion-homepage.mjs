@@ -419,5 +419,27 @@ console.log("PASS noJS");
   await p.close();
 }
 
+// A quick pause/resume must not let pending URL callbacks restart rewriting.
+{
+  const p = await b.newPage({ viewport: { width: 390, height: 844 } });
+  await p.goto(base + "/homepage-concepts/");
+  await p.waitForTimeout(4700);
+  await p.locator(".motion-toggle").click();
+  const frozen = await p.locator(".pf-url").textContent();
+  await p.locator(".motion-toggle").click();
+  await p.waitForTimeout(5000);
+  if (await p.locator(".pf-url").textContent() !== frozen)
+    throw Error("URL restarted after pause/resume");
+  await p.locator(".studio").scrollIntoViewIfNeeded();
+  await p.waitForTimeout(700);
+  const caption = p.locator(".type-caption");
+  if (await caption.getAttribute("aria-label") !== null ||
+      await caption.locator(".tc-text").getAttribute("aria-hidden") !== "true" ||
+      await caption.locator(".sr-only").textContent() !== "Thoughtful websites for small businesses, designed and built by Nick.")
+    throw Error("Typed caption lacks a stable complete accessible copy");
+  console.log("PASS frozen-url-and-accessible-caption");
+  await p.close();
+}
+
 await b.close();
 server.close();

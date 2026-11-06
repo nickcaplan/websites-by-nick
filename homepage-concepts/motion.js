@@ -44,6 +44,16 @@
   const urlCaret = chromeSvg ? chromeSvg.querySelector(".pf-caret") : null;
   let urlChars = [];
   let urlStarted = false;
+  let urlFrozen = false;
+  const urlTimers = new Set();
+  const scheduleUrl = (fn, ms) => {
+    if (urlFrozen) return;
+    const id = setTimeout(() => {
+      urlTimers.delete(id);
+      if (!urlFrozen) fn();
+    }, ms);
+    urlTimers.add(id);
+  };
   const urlSettled = () => !urlText || !urlText.querySelector(".pfc");
   // The address keeps playing after the first typing: it holds, backspaces to
   // the "www.your" stem, then types the next option. Settle paths freeze whatever
@@ -86,7 +96,7 @@
         { duration: 550, delay: i * 130, easing: "ease" }
       );
     });
-    setTimeout(done, 550 + 2 * 130 + 120);
+    scheduleUrl(done, 550 + 2 * 130 + 120);
   };
   let urlRewrites = 0;
   const cycleUrl = () => {
@@ -110,15 +120,15 @@
         if (urlStopNow()) return settleUrl();
         if (k >= urlChars.length) {
           moveUrlCaret();
-          setTimeout(cycleUrl, 450);
+          scheduleUrl(cycleUrl, 450);
           return;
         }
         urlChars[k].classList.add("on");
         k += 1;
         moveUrlCaret();
-        setTimeout(typ, 26);
+        scheduleUrl(typ, 26);
       };
-      setTimeout(typ, 120);
+      scheduleUrl(typ, 120);
     };
     const del = () => {
       if (urlStopNow()) return settleUrl();
@@ -129,11 +139,14 @@
       on -= 1;
       urlChars[on].classList.remove("on");
       moveUrlCaret();
-      setTimeout(del, 14);
+      scheduleUrl(del, 14);
     };
     del();
   };
   const settleUrl = () => {
+    urlFrozen = true;
+    urlTimers.forEach(clearTimeout);
+    urlTimers.clear();
     if (!urlText) return;
     urlChars.forEach((s) => s.classList.add("on"));
     if (chromeSvg) chromeSvg.classList.remove("url-typing");
@@ -158,15 +171,15 @@
       if (urlStopNow()) return settleUrl();
       if (i >= urlChars.length) {
         moveUrlCaret();
-        setTimeout(cycleUrl, 700);
+        scheduleUrl(cycleUrl, 700);
         return;
       }
       urlChars[i].classList.add("on");
       i += 1;
       moveUrlCaret();
-      setTimeout(urlStep, 32);
+      scheduleUrl(urlStep, 32);
     };
-    setTimeout(urlStep, 120);
+    scheduleUrl(urlStep, 120);
   };
   let refreshProjects = () => {};
   const apply = () => {
@@ -257,7 +270,6 @@
     const plain = capText.textContent;
     const settleCap = () => {
       capText.innerHTML = finalHTML;
-      capText.removeAttribute("aria-hidden");
       capEl.classList.remove("typing");
       capEl.classList.add("typed");
     };
@@ -266,7 +278,11 @@
         if (!entries[0].isIntersecting) return;
         io.disconnect();
         if (reduced.matches || document.body.classList.contains("paused")) return;
-        capEl.setAttribute("aria-label", plain);
+        // Keep a complete, stable caption available while the visual copy types.
+        const accessible = document.createElement("span");
+        accessible.className = "sr-only";
+        accessible.textContent = plain;
+        capEl.prepend(accessible);
         capText.setAttribute("aria-hidden", "true");
         capEl.classList.add("typing");
         capText.textContent = "";
