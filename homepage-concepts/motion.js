@@ -510,12 +510,12 @@
       bodyG = q(".sd-body"),
       clip = q(".sd-clip");
     const BASE = 24; // the figure stands a step back from the board
-    const SH = { x: BASE + 352, y: 262 }; // his right shoulder, on the torso's edge
-    const REST = { x: 470, y: 310 };
+    const SH = { x: BASE + 366, y: 260 }; // his right shoulder, on the torso's edge
+    const REST = { x: 540, y: 290 };
     // Two bones of fixed length, so the arm never stretches or shrinks as the
     // pen moves. The elbow always bends down, away from his body, and he leans
     // toward the board (dx) as the pen travels right.
-    const L = 135;
+    const L = 110;
     const pose = (P) => {
       const dx = Math.max(0, Math.min(110, ((P.x - 480) / 220) * 110));
       const S = { x: SH.x + dx, y: SH.y };
@@ -533,6 +533,7 @@
         ey = S.y + uy * a + py * h;
       arm.setAttribute("d", `M${S.x.toFixed(1)} ${S.y}L${ex.toFixed(1)} ${ey.toFixed(1)}L${H.x.toFixed(1)} ${H.y.toFixed(1)}`);
       hand.setAttribute("transform", `translate(${H.x.toFixed(1)} ${H.y.toFixed(1)})`);
+      q(".sd-shoulder-seam").setAttribute("transform", `translate(${(BASE + dx - 56).toFixed(1)} 0)`);
       bodyG.setAttribute("transform", `translate(${(BASE + dx).toFixed(1)} 0)`);
     };
     const strokeStep = (sel, dur, fillSel) => {
