@@ -141,14 +141,15 @@
     };
     setTimeout(urlStep, 120);
   };
-  // the surprise nav's payoff: tap swaps the words to "Told you." briefly,
-  // then they come back. Hover and keyboard focus do it through CSS.
+  // the surprise nav's payoff: tap or Enter pulls the tag and a paper note
+  // unfolds with "Told you.", then folds away again. Hover and keyboard
+  // focus wiggle the tag through CSS.
   const surprise = document.querySelector(".pf-surprise");
   if (surprise) {
     let swapTimer = null;
     const status = document.querySelector(".pf-sr-status");
     surprise.addEventListener("click", () => {
-      surprise.classList.add("pf-swap");
+      surprise.classList.add("pf-open");
       if (swapTimer) clearTimeout(swapTimer);
       if (status) {
         // clear first so a repeated tap still announces, then name the payoff
@@ -156,9 +157,9 @@
         requestAnimationFrame(() => { status.textContent = "Told you."; });
       }
       swapTimer = setTimeout(() => {
-        surprise.classList.remove("pf-swap");
+        surprise.classList.remove("pf-open");
         if (status) status.textContent = "";
-      }, 1200);
+      }, 1600);
     });
   }
   let refreshProjects = () => {};
