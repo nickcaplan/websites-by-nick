@@ -303,6 +303,14 @@ test('pricing page: charity offer is a plain panel, not a fourth paid tier, with
   assert.doesNotMatch(block, /free hosting|hosting forever|unlimited/i, 'no invented hosting or scope promises');
 });
 
+test('pricing page: charity panel text meets the 16px phone readability rule', () => {
+  const css = readFileSync(join(root, 'assets/css/pricing.css'), 'utf8');
+  const mobileRules = [...css.matchAll(/body\[data-mobile="true"\][^{]*\{[^}]*font-size: 16px;[^}]*\}/g)].map((m) => m[0]);
+  const all = mobileRules.join('\n');
+  assert.ok(all.includes('.charity-list li'), 'charity list items are 16px on phones');
+  assert.ok(all.includes('.charity-apply'), 'charity apply line is 16px on phones');
+});
+
 test('web manifest icons exist in the repo', () => {
   const manifest = JSON.parse(read('site.webmanifest'));
   assert.ok(manifest.icons.length >= 2, '192 and 512 icons declared');
