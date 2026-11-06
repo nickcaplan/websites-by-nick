@@ -6,7 +6,7 @@ for(const name of ['contact','experience','privacy']) for(const width of [320,39
   await page.setViewportSize({width,height:900}); await page.goto(prefix+name+'/');
   await expect(page.locator('body')).toHaveClass(/dark/);
   await expect(page.locator('h1')).toHaveCount(1);
-  for(const a of await page.locator('header a,footer a').all()) {const href=await a.getAttribute('href');expect(href).toMatch(/^\/homepage-concepts\//)}
+  for(const a of await page.locator('header a,footer a').all()) {const href=await a.getAttribute('href');expect(href).toMatch(name==='contact'?/^(\/homepage-concepts\/|#contact-form$)/:/^\/homepage-concepts\//)}
   await page.evaluate(()=>document.fonts.ready);
   await page.evaluate(()=>{const es=[...document.querySelectorAll('body *')].filter(e=>!e.closest('svg'));const sz=es.map(e=>parseFloat(getComputedStyle(e).fontSize));es.forEach((e,i)=>e.style.fontSize=sz[i]*2+'px')});
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
@@ -47,3 +47,7 @@ for(const path of ['', 'contact/', 'experience/', 'privacy/']) {
   await page.goto(prefix+path); await expect(page.locator('body')).not.toHaveClass(/dark/);
  });
 }
+
+test('Contact footer preserves an unfinished message',async({page})=>{
+ await page.goto(prefix+'contact/');await page.locator('[data-cookie-choice="essential"]').click();await page.getByLabel('Message',{exact:true}).fill('An unfinished message');await page.locator('.footer-cta').click();await expect(page).toHaveURL(/#contact-form$/);await expect(page.getByLabel('Message',{exact:true})).toHaveValue('An unfinished message');
+});
