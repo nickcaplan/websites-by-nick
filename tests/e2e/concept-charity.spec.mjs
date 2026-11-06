@@ -14,3 +14,7 @@ test('Charity saved light bootstrap without page script and noJS readable',async
  await page.addInitScript(()=>localStorage.setItem('nick-theme','light'));await page.route('**/pages.js',r=>r.abort());await page.goto(root+'charity/');await expect(page.locator('body')).not.toHaveClass(/dark/);await page.reload();await expect(page.locator('body')).not.toHaveClass(/dark/);
  const c=await browser.newContext({javaScriptEnabled:false});const p=await c.newPage();await p.goto(baseURL+root+'charity/');await expect(p.locator('body')).toHaveClass(/dark/);await expect(p.locator('.charity-list li')).toHaveCount(4);await c.close();
 });
+
+test('Charity theme toggle saves a choice across navigation',async({page})=>{
+ await page.goto(root+'charity/');await page.locator('.theme-toggle').click();expect(await page.evaluate(()=>localStorage.getItem('nick-theme'))).toBe('light');await page.locator('.charity-apply a').click();await expect(page).toHaveURL(/\/homepage-concepts\/contact\/$/);await expect(page.locator('body')).not.toHaveClass(/dark/);await page.getByRole('navigation',{name:'Main',exact:true}).getByRole('link',{name:'Charity',exact:true}).click();await expect(page.locator('body')).not.toHaveClass(/dark/);
+});
