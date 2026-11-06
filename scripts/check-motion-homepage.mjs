@@ -423,15 +423,22 @@ console.log("PASS noJS");
 {
   const p = await b.newPage({ viewport: { width: 390, height: 844 } });
   await p.goto(base + "/homepage-concepts/");
-  await p.waitForTimeout(4700);
+  await p.locator(".penurl.url-typing").waitFor({ state: "attached" });
+  await p.locator(".pf-url .pfc.on").first().waitFor({ state: "attached" });
   await p.locator(".motion-toggle").click();
-  const frozen = await p.locator(".pf-url").textContent();
+  const urlState = () => p.locator(".pf-url .pfc").evaluateAll((chars) =>
+    chars.map((c) => ({ text: c.textContent, on: c.classList.contains("on") })));
+  const frozen = JSON.stringify(await urlState());
   await p.locator(".motion-toggle").click();
-  await p.waitForTimeout(5000);
-  if (await p.locator(".pf-url").textContent() !== frozen)
-    throw Error("URL restarted after pause/resume");
+  // Watch the visible character state, not just the prebuilt full text.
+  const until = Date.now() + 5000;
+  while (Date.now() < until) {
+    if (JSON.stringify(await urlState()) !== frozen)
+      throw Error("URL restarted after pause/resume");
+    await p.waitForTimeout(75);
+  }
   await p.locator(".studio").scrollIntoViewIfNeeded();
-  await p.waitForTimeout(700);
+  await p.locator(".type-caption .sr-only").waitFor({ state: "attached" });
   const caption = p.locator(".type-caption");
   if (await caption.getAttribute("aria-label") !== null ||
       await caption.locator(".tc-text").getAttribute("aria-hidden") !== "true" ||
