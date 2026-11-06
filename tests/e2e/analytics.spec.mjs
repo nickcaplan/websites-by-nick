@@ -39,7 +39,10 @@ test('blocked storage still permits an in-page choice', async ({ page }) => {
   await page.addInitScript(() => { Storage.prototype.getItem = Storage.prototype.setItem = function () { throw Error('blocked'); }; });
   await page.goto('/');
   await page.locator('[data-cookie-choice="analytics"]').click();
-  await expect(page.locator('#cookie-consent-panel')).toBeHidden();
+  await expect(page.locator('#cookie-consent-panel')).toBeVisible();
+  await expect(page.locator('#cookie-save-warning')).toContainText('could not save your Allow analytics choice');
+  await expect(page.locator('#cookie-save-warning')).toContainText('Analytics stays off on this preview');
+  await expect(page.locator('[data-google-analytics]')).toHaveCount(0);
 });
 
 test('production loader configures only this stream after consent and unloads on withdrawal', async ({ page }) => {
@@ -82,7 +85,8 @@ test('production loader configures only this stream after consent and unloads on
   await page.getByRole('button', { name: 'Cookie preferences', exact: true }).click();
   await page.locator('[data-cookie-choice="analytics"]').click();
   expect(await page.evaluate(() => window['ga-disable-G-TESTONLY123'])).toBe(false);
-  await expect(page.locator('#cookie-consent-panel')).toBeHidden();
+  await expect(page.locator('#cookie-consent-panel')).toBeVisible();
+  await expect(page.locator('#cookie-save-warning')).toContainText('Analytics is allowed for this page only');
   await expect(page.locator('[data-google-analytics]')).toHaveCount(1);
   expect(await page.evaluate(() => window.dataLayer.length)).toBe(queueLength);
   expect(requests).toHaveLength(2);
@@ -261,3 +265,57 @@ test('storage removal preserves rejection when tab messaging and cookies are una
   await expect(other.locator('[data-google-analytics]')).toHaveCount(0);
   await other.close();
 });
+
+test('unsaved Allow cannot revive an older saved Allow after failed withdrawal and recovery',async({page})=>{
+ await page.route('https://websitesbynick.co.uk/**',route=>route.fulfill({contentType:route.request().url().endsWith('analytics.js')?'text/javascript':'text/html',body:route.request().url().endsWith('analytics.js')?source:'<button data-cookie-preferences>Cookie preferences</button><script defer src="/assets/js/analytics.js" data-measurement-id="G-TESTONLY123"></script>'}));
+ const requests=[];await page.route('https://www.googletagmanager.com/**',r=>{requests.push(r.request().url());return r.fulfill({body:''})});
+ await page.goto('https://websitesbynick.co.uk/');await page.locator('[data-cookie-choice="analytics"]').click();await expect.poll(()=>requests.length).toBe(1);
+ await page.evaluate(()=>{window.restoreStores={set:Storage.prototype.setItem,remove:Storage.prototype.removeItem};Storage.prototype.setItem=function(k,v){if(this===localStorage)throw Error('blocked');return window.restoreStores.set.call(this,k,v)};Storage.prototype.removeItem=function(k){if(this===localStorage)throw Error('blocked');return window.restoreStores.remove.call(this,k)}});
+ await page.getByRole('button',{name:'Cookie preferences',exact:true}).click();await page.locator('[data-cookie-choice="essential"]').click();await page.locator('[data-cookie-choice="analytics"]').click();await expect(page.locator('#cookie-save-warning')).toContainText('page only');await page.locator('#cookie-warning-dismiss').click();await expect(page.locator('#cookie-consent-panel')).toBeHidden();
+ expect(await page.evaluate(()=>window['ga-disable-G-TESTONLY123'])).toBe(false);
+ await page.evaluate(()=>{Storage.prototype.setItem=window.restoreStores.set;Storage.prototype.removeItem=window.restoreStores.remove});await page.reload();expect(requests).toHaveLength(1);await expect(page.locator('[data-google-analytics]')).toHaveCount(0);
+});
+
+for (const reopened of [false,true]) for(const choice of ['analytics','essential']) {
+ test(`unsaved ${choice} warning restores visible focus (${reopened?'reopened':'initial'})`,async({page})=>{
+  await page.goto('/privacy/');
+  const control=page.getByRole('button',{name:'Cookie preferences',exact:true});
+  if(reopened){await page.locator('[data-cookie-choice="essential"]').click();await control.click()}
+  await page.evaluate(()=>{Storage.prototype.setItem=Storage.prototype.removeItem=function(){throw Error('blocked writes')}});
+  await page.locator(`[data-cookie-choice="${choice}"]`).click();
+  const dismiss=page.getByRole('button',{name:'Dismiss warning',exact:true});await dismiss.focus();await page.keyboard.press('Enter');
+  await expect(page.locator('#cookie-consent-panel')).toBeHidden();await expect(control).toBeFocused();
+ });
+}
+
+test('failed Allow alone records rejection despite an older saved Allow and no earlier rejection',async({page})=>{
+ await page.route('https://websitesbynick.co.uk/**',route=>route.fulfill({contentType:route.request().url().endsWith('analytics.js')?'text/javascript':'text/html',body:route.request().url().endsWith('analytics.js')?source:'<button data-cookie-preferences>Cookie preferences</button><script defer src="/assets/js/analytics.js" data-measurement-id="G-TESTONLY123"></script>'}));
+ const requests=[];await page.route('https://www.googletagmanager.com/**',r=>{requests.push(r.request().url());return r.fulfill({body:''})});
+ await page.goto('https://websitesbynick.co.uk/');await page.locator('[data-cookie-choice="analytics"]').click();await expect.poll(()=>requests.length).toBe(1);
+ expect(await page.evaluate(()=>sessionStorage.getItem('websites-by-nick-cookie-preferences'))).toBeNull();expect(await page.evaluate(()=>document.cookie)).not.toContain('analytics-rejected');
+ // Keep session storage working but fail both ways to change the old local Allow.
+ await page.evaluate(()=>{const set=Storage.prototype.setItem,remove=Storage.prototype.removeItem;Storage.prototype.setItem=function(k,v){if(this===localStorage)throw Error('blocked');return set.call(this,k,v)};Storage.prototype.removeItem=function(k){if(this===localStorage)throw Error('blocked');return remove.call(this,k)}});
+ await page.getByRole('button',{name:'Cookie preferences',exact:true}).click();await page.locator('[data-cookie-choice="analytics"]').click();await expect(page.locator('#cookie-save-warning')).toContainText('page only');
+ expect(await page.evaluate(()=>localStorage.getItem('websites-by-nick-cookie-preferences'))).toBe('analytics');expect(await page.evaluate(()=>sessionStorage.getItem('websites-by-nick-cookie-preferences'))).toBe('essential');expect(await page.evaluate(()=>document.cookie)).toContain('analytics-rejected=1');
+ const before=requests.length;await page.reload();await expect(page.locator('[data-google-analytics]')).toHaveCount(0);expect(requests).toHaveLength(before);
+});
+
+
+test('homepage decorative arrows are absent from link names',async({page})=>{
+ await page.goto('/homepage-concepts/');
+ await expect(page.locator('a.cta span').first()).toHaveText('↗');
+ await expect(page.getByRole('link',{name:"Let's make yours",exact:true})).toHaveCount(1);
+ await expect(page.locator('a[href="/experience/"] span')).toHaveText('↗');
+ await expect(page.getByRole('link',{name:'A little about me',exact:true})).toHaveCount(1);
+});
+
+for (const route of ['/', '/contact/']) {
+ test(`unsaved Allow warning restores main navigation focus on ${route}`,async({page})=>{
+  await page.goto(route);
+  await page.evaluate(()=>{Storage.prototype.setItem=Storage.prototype.removeItem=function(){throw Error('blocked writes')}});
+  await page.locator('[data-cookie-choice="analytics"]').click();
+  const dismiss=page.getByRole('button',{name:'Dismiss warning',exact:true});await dismiss.focus();await page.keyboard.press('Enter');
+  await expect(page.locator('#cookie-consent-panel')).toBeHidden();
+  await expect(page.locator('nav[aria-label] a').first()).toBeFocused();
+ });
+}

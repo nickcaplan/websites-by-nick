@@ -24,6 +24,11 @@
   var channel = null;
   try { channel = new BroadcastChannel(storageKey); } catch (error) {}
   var returnFocus = null;
+  function restoreFocus() {
+    var target = returnFocus || document.querySelector('[data-cookie-preferences]') || document.querySelector('header a, header button') || document.querySelector('nav[aria-label] a');
+    if (target) target.focus();
+    returnFocus = null;
+  }
   var loaded = false;
   var panel = document.createElement('aside');
   panel.id = 'cookie-consent-panel';
@@ -60,18 +65,29 @@
     return saved || document.cookie.split(';').some(function (cookie) { return cookie.trim() === rejectionCookie + '=1'; });
   }
   /** Explain a failed save without suggesting that every browser store worked. */
-  function showSaveWarning() {
+  function showSaveWarning(message) {
     var warning = document.getElementById('cookie-save-warning');
     if (!warning) {
       warning = document.createElement('p');
       warning.id = 'cookie-save-warning';
       warning.className = 'cookie-save-warning';
       warning.setAttribute('role', 'status');
-      warning.textContent = 'Your browser could not save your cookie choice normally. Analytics is off here. If you block all browser storage, close other tabs and check your choice when you return.';
       panel.insertBefore(warning, panel.firstChild);
+      var dismiss = document.createElement('button');
+      dismiss.type = 'button';
+      dismiss.className = 'button button-secondary';
+      dismiss.id = 'cookie-warning-dismiss';
+      dismiss.textContent = 'Dismiss warning';
+      dismiss.addEventListener('click', function () {
+        panel.hidden = true;
+        reserveSpace();
+        restoreFocus();
+      });
+      panel.appendChild(dismiss);
+    }
+      warning.textContent = message || 'Your browser could not save your cookie choice normally. Analytics is off here. If you block all browser storage, close other tabs and check your choice when you return.';
       panel.hidden = false;
       reserveSpace();
-    }
   }
   /** Enable this production stream after opt-in, loading the tag only once. */
   function loadAnalytics() {
@@ -108,14 +124,23 @@
       } catch (error) {}
       panel.hidden = true;
       reserveSpace();
-      if (returnFocus) returnFocus.focus();
-      returnFocus = null;
+      if (preferenceStored) restoreFocus();
       if (preference === 'analytics') {
-        try { sessionStorage.removeItem(storageKey); } catch (error) {}
-        document.cookie = rejectionCookie + '=; Max-Age=0; path=/; SameSite=Lax; Secure';
+        if (preferenceStored) {
+          try { sessionStorage.removeItem(storageKey); } catch (error) {}
+          document.cookie = rejectionCookie + '=; Max-Age=0; path=/; SameSite=Lax; Secure';
+        } else {
+          // Never let an older saved Allow outlive a page-only choice.
+          rememberRejection();
+        }
         var warning = document.getElementById('cookie-save-warning');
         if (warning) warning.remove();
+        var dismiss = document.getElementById("cookie-warning-dismiss");
+        if (dismiss) dismiss.remove();
         loadAnalytics();
+        if (!preferenceStored) showSaveWarning(canTrack
+          ? 'Your browser could not save your Allow analytics choice. Analytics is allowed for this page only. Check your choice when you return.'
+          : 'Your browser could not save your Allow analytics choice. Analytics stays off on this preview. Check your choice when you return.');
       }
       else {
         if (measurementId) window['ga-disable-' + measurementId] = true;
