@@ -283,12 +283,17 @@
         accessible.className = "sr-only";
         accessible.textContent = plain;
         capEl.prepend(accessible);
+        const reserve = document.createElement("span");
+        reserve.className = "tc-reserve";
+        reserve.innerHTML = finalHTML;
+        reserve.setAttribute("aria-hidden", "true");
+        capEl.append(reserve);
         capText.setAttribute("aria-hidden", "true");
         capEl.classList.add("typing");
         capText.textContent = "";
         const caret = document.createElement("span");
         caret.className = "tc-caret";
-        capText.after(caret);
+        capText.append(caret);
         let i = 0;
         const tick = () => {
           if (i >= plain.length || document.body.classList.contains("paused") || reduced.matches) {
@@ -296,7 +301,7 @@
             settleCap();
             return;
           }
-          capText.textContent += plain[i];
+          caret.before(document.createTextNode(plain[i]));
           i += 1;
           setTimeout(tick, 45);
         };
