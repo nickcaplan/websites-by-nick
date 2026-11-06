@@ -81,3 +81,7 @@ body.dark { --surface: #29362e; --surface-strong: #344038; --line: #f2ecdf55; --
 }
 /* Preserve visible spaces at display sizes with the serif's tight tracking. */
 .pg h1, footer h2 { word-spacing: .14em; }
+
+/* Keep the header-to-content gap compact and consistent across restyled pages. */
+.restyled-page { padding-top: 24px; }
+@media (max-width: 600px) { .restyled-page { padding-top: 12px; } }

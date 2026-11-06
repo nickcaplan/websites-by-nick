@@ -67,3 +67,10 @@ for(const width of [320,390,1280]) for(const theme of ['dark','light']) {
   }
  });
 }
+
+for(const name of ['contact','experience','privacy']) for(const width of [390,1280]) {
+ test(`${name} compact header spacing at ${width}`,async({page})=>{
+  await page.setViewportSize({width,height:900});await page.goto(prefix+name+'/');
+  expect(await page.locator('main').evaluate(e=>parseFloat(getComputedStyle(e).paddingTop))).toBe(width<600?12:24);
+ });
+}
