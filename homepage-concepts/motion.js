@@ -453,9 +453,11 @@
       if (!raf2) raf2 = requestAnimationFrame(scrub);
     };
     const work = document.querySelector(".work");
-    work.addEventListener("focusin", () => {
+    work.addEventListener("focusin", event => {
       document.body.classList.add("project-focus");
       scrub();
+      const focused = event.target.closest(".project");
+      if (focused) focused.scrollIntoView({ block: "center", behavior: "instant" });
     });
     work.addEventListener("focusout", event => {
       if (!work.contains(event.relatedTarget)) {
