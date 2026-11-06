@@ -181,6 +181,7 @@ for (const width of [320, 390, 768, 901, 961, 1024, 1280, 1400, 1600]) {
 // The theme choice persists across pages and reloads (motion.js and pages.js).
 {
   const p = await b.newPage();
+  await p.addInitScript(() => { if (!localStorage.getItem("nick-theme")) localStorage.setItem("nick-theme", "light"); });
   await p.goto(base + "/homepage-concepts/");
   await p.waitForLoadState("networkidle");
   await p.click(".theme-toggle");
@@ -315,6 +316,7 @@ for (const mode of ["reduced", "nojs"]) {
 for (const [path, h1re] of [["/homepage-concepts/about/", /Websites are what I build\./], ["/homepage-concepts/pricing/", /What a website costs\./]]) {
   for (const width of [320, 390, 1280]) {
     const p = await b.newPage({ viewport: { width, height: 900 } });
+    await p.addInitScript(() => localStorage.setItem("nick-theme", "light"));
     const errors = [];
     p.on("pageerror", (e) => errors.push(e.message));
     await p.goto(base + path);
