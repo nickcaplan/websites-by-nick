@@ -74,3 +74,12 @@ for(const name of ['contact','experience','privacy']) for(const width of [390,12
   expect(await page.locator('main').evaluate(e=>parseFloat(getComputedStyle(e).paddingTop))).toBe(width<600?12:24);
  });
 }
+
+
+test('Contact starts with the headline, without an empty eyebrow gap', async ({ page }) => {
+  await page.goto('/homepage-concepts/contact/');
+  await expect(page.locator('.page-hero > :first-child')).toHaveJSProperty('tagName', 'H1');
+  await expect(page.locator('.page-hero .eyebrow')).toHaveCount(0);
+  const gap = await page.locator('.page-hero').evaluate(hero => hero.querySelector('h1').getBoundingClientRect().top - hero.getBoundingClientRect().top);
+  expect(gap).toBeLessThanOrEqual(1);
+});
