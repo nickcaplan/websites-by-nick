@@ -303,6 +303,6 @@ test('failed Allow alone records rejection despite an older saved Allow and no e
 
 test('homepage decorative arrows are absent from link names',async({page})=>{
  await page.goto('/homepage-concepts/');
- await expect(page.getByRole('link',{name:"Let's talk",exact:true})).toHaveCount(1);
+ await expect(page.getByRole('link',{name:"Contact",exact:true})).toHaveCount(1);
  await expect(page.getByRole('link',{name:'A little about me',exact:true})).toHaveCount(1);
 });

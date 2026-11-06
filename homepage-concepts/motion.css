@@ -1777,3 +1777,15 @@ h2 { overflow-wrap: anywhere; }
 
 /* A short desktop must show the whole project, including its title. */
 .project-unstacked .work .project { position: relative; top: auto; }
+
+/* Match the live site's sun/moon control, kept on the wordmark row. */
+.nav > .theme-toggle { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 44px; width: 44px; height: 44px; min-width: 44px; min-height: 44px; padding: 8px; border: 1px solid var(--theme-line, #20302740); border-radius: 999px; background: transparent; color: inherit; cursor: pointer; }
+.dark .nav > .theme-toggle { --theme-line: #f2ecdf55; }
+.theme-icon { font-size: 17px; line-height: 1; }
+.nav > nav { margin-left: auto; }
+@media (max-width: 600px) {
+ .nav { display: grid; grid-template-columns: minmax(0,1fr) 44px; align-items: center; gap: 6px 16px; }
+ .nav > .wordmark { grid-column: 1; grid-row: 1; }
+ .nav > .theme-toggle { grid-column: 2; grid-row: 1; }
+ .nav > nav { grid-column: 1 / -1; grid-row: 2; margin-left: 0; }
+}
