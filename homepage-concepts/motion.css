@@ -245,118 +245,6 @@ h1 {
   animation: navin 0.45s 3.3s ease forwards;
 }
 .pf-nav > span:first-child { color: var(--orange-text); }
-/* the surprise earns its name: once the window is drawn, the pen hangs a
-   little "pull" tag under the words. A tap, click or Enter pulls it and a
-   paper note unfolds with the payoff. The button keeps the nav row's
-   hand-lettered look; only the tag and the note move. */
-.pf-surprise {
-  position: relative;
-  background: none;
-  border: 0;
-  padding: 0;
-  margin: 0;
-  font: inherit;
-  letter-spacing: inherit;
-  word-spacing: inherit;
-  text-transform: inherit;
-  color: inherit;
-  cursor: pointer;
-}
-.pf-surprise:focus-visible {
-  outline: 2px solid var(--orange);
-  outline-offset: 3px;
-  border-radius: 2px;
-}
-/* the pull tag dangles from the words on a short pen-drawn string. It draws
-   in where the old loop used to, wiggles when hovered or focused, and swings
-   when pulled. Generous dash lengths, same lesson as the window frame. */
-.pf-tag {
-  position: absolute;
-  top: calc(100% - 3px);
-  left: 50%;
-  width: 26px;
-  height: 31px;
-  overflow: visible;
-  fill: none;
-  stroke: var(--orange);
-  stroke-width: 2;
-  stroke-linecap: round;
-  pointer-events: none;
-  transform: translateX(-50%) rotate(0deg);
-  transform-origin: 50% 0;
-  transition: transform 0.3s ease;
-}
-.pf-tag-string { stroke-dasharray: 24; stroke-dashoffset: 24; }
-.pf-tag-body { stroke-dasharray: 130; stroke-dashoffset: 130; }
-.pf-tag-hole { stroke-dasharray: 16; stroke-dashoffset: 16; }
-.pf-tag-word {
-  fill: var(--orange-text);
-  stroke: none;
-  font-size: 9px;
-  letter-spacing: 0.04em;
-  opacity: 0;
-}
-.pf-tag-string { animation: pendraw 0.25s 3.9s ease forwards; }
-.pf-tag-body { animation: pendraw 0.45s 4.1s ease forwards; }
-.pf-tag-hole { animation: pendraw 0.2s 4.45s ease forwards; }
-.pf-tag-word { animation: tagword 0.3s 4.55s ease forwards; }
-@keyframes tagword { to { opacity: 1; } }
-h1.will-type .pf-tag-string,
-h1.will-type .pf-tag-body,
-h1.will-type .pf-tag-hole,
-h1.will-type .pf-tag-word {
-  animation: none;
-}
-h1.will-type.typed.drawn .pf-tag-string { animation: pendraw 0.25s 2.9s ease forwards; }
-h1.will-type.typed.drawn .pf-tag-body { animation: pendraw 0.45s 3.1s ease forwards; }
-h1.will-type.typed.drawn .pf-tag-hole { animation: pendraw 0.2s 3.45s ease forwards; }
-h1.will-type.typed.drawn .pf-tag-word { animation: tagword 0.3s 3.55s ease forwards; }
-h1.sketch-settled .pf-tag-string, h1.sketch-settled .pf-tag-body,
-h1.sketch-settled .pf-tag-hole, h1.sketch-settled .pf-tag-word,
-.paused h1 .pf-tag-string, .paused h1 .pf-tag-body,
-.paused h1 .pf-tag-hole, .paused h1 .pf-tag-word,
-.hidden-page h1 .pf-tag-string, .hidden-page h1 .pf-tag-body,
-.hidden-page h1 .pf-tag-hole, .hidden-page h1 .pf-tag-word {
-  visibility: visible !important;
-  stroke-dashoffset: 0 !important;
-  opacity: 1 !important;
-  animation: none !important;
-}
-@media (hover: hover) {
-  .pf-surprise:hover .pf-tag { animation: tagwig 0.5s ease; }
-}
-.pf-surprise:focus-visible .pf-tag { animation: tagwig 0.5s ease; }
-@keyframes tagwig {
-  0%, 100% { transform: translateX(-50%) rotate(0deg); }
-  25% { transform: translateX(-50%) rotate(7deg); }
-  70% { transform: translateX(-50%) rotate(-6deg); }
-}
-.pf-surprise.pf-open .pf-tag { transform: translateX(-50%) rotate(13deg); }
-/* the paper note: light paper in both themes, unfolded from the tag */
-.pf-note {
-  position: absolute;
-  /* beside the tag, in the empty strip under the words, so it never covers
-     the headline or the nav labels */
-  top: calc(100% - 1px);
-  right: calc(50% + 20px);
-  transform: scaleX(0.05) rotate(-4deg);
-  transform-origin: 100% 50%;
-  opacity: 0;
-  transition: transform 0.38s ease, opacity 0.22s ease;
-  background: #f7f3e8;
-  color: #a83f24;
-  border: 2px solid var(--orange);
-  border-radius: 9px 11px 10px 12px / 11px 9px 12px 10px;
-  padding: 4px 12px;
-  white-space: nowrap;
-  box-shadow: 0 3px 8px rgba(20, 16, 8, 0.22);
-  z-index: 6;
-  pointer-events: none;
-}
-.pf-surprise.pf-open .pf-note {
-  transform: scaleX(1) rotate(-1.5deg);
-  opacity: 1;
-}
 h1.will-type .pf-nav {
   animation: none;
 }
@@ -447,6 +335,17 @@ h1.sketch-settled .pf-url .pfc,
 .pf-dot:nth-of-type(2) { fill: #febc2e; }
 .pf-dot:nth-of-type(3) { fill: #28c840; }
 .pf-dot { fill-opacity: 0; }
+/* the surprise: right after the nav labels appear, the three window dots
+   hop in turn, a small wave, then settle back where they were. One pass. */
+.pf-dot {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+}
+@keyframes dotwave {
+  0%, 100% { transform: translateY(0) scale(1); }
+  40% { transform: translateY(-4.5px) scale(1.25); }
+  70% { transform: translateY(0.8px) scale(0.95); }
+}
 @keyframes dotfill {
   to { fill-opacity: 1; }
 }
@@ -466,13 +365,13 @@ h1.sketch-settled .pf-url .pfc,
   animation: pendraw 0.4s 2.65s ease forwards;
 }
 .pf-dot:nth-of-type(1) {
-  animation: pendraw 0.2s 3.05s ease forwards, dotfill 0.22s 3.25s ease forwards;
+  animation: pendraw 0.2s 3.05s ease forwards, dotfill 0.22s 3.25s ease forwards, dotwave 0.55s 4.0s ease;
 }
 .pf-dot:nth-of-type(2) {
-  animation: pendraw 0.2s 3.2s ease forwards, dotfill 0.22s 3.4s ease forwards;
+  animation: pendraw 0.2s 3.2s ease forwards, dotfill 0.22s 3.4s ease forwards, dotwave 0.55s 4.14s ease;
 }
 .pf-dot:nth-of-type(3) {
-  animation: pendraw 0.2s 3.35s ease forwards, dotfill 0.22s 3.55s ease forwards;
+  animation: pendraw 0.2s 3.35s ease forwards, dotfill 0.22s 3.55s ease forwards, dotwave 0.55s 4.28s ease;
 }
 .pf-bar {
   animation: pendraw 0.35s 3.5s ease forwards;
@@ -490,13 +389,13 @@ h1.will-type.typed.drawn .pf-head {
   animation: pendraw 0.4s 1.05s ease forwards;
 }
 h1.will-type.typed.drawn .pf-dot:nth-of-type(1) {
-  animation: pendraw 0.18s 1.45s ease forwards, dotfill 0.22s 1.63s ease forwards;
+  animation: pendraw 0.18s 1.45s ease forwards, dotfill 0.22s 1.63s ease forwards, dotwave 0.55s 3.0s ease;
 }
 h1.will-type.typed.drawn .pf-dot:nth-of-type(2) {
-  animation: pendraw 0.18s 1.57s ease forwards, dotfill 0.22s 1.75s ease forwards;
+  animation: pendraw 0.18s 1.57s ease forwards, dotfill 0.22s 1.75s ease forwards, dotwave 0.55s 3.14s ease;
 }
 h1.will-type.typed.drawn .pf-dot:nth-of-type(3) {
-  animation: pendraw 0.18s 1.69s ease forwards, dotfill 0.22s 1.87s ease forwards;
+  animation: pendraw 0.18s 1.69s ease forwards, dotfill 0.22s 1.87s ease forwards, dotwave 0.55s 3.28s ease;
 }
 h1.will-type.typed.drawn .pf-bar {
   animation: pendraw 0.35s 1.82s ease forwards;
@@ -1484,13 +1383,6 @@ body.paused .reveal {
     will-change: auto !important;
   }
   /* the sketched browser window shows fully drawn, statically */
-  .pf-tag-string, .pf-tag-body, .pf-tag-hole {
-    visibility: visible !important;
-    stroke-dashoffset: 0 !important;
-  }
-  .pf-tag-word { opacity: 1 !important; }
-  .pf-note { transition: none !important; }
-  .pf-tag { transition: none !important; }
   .pf-nav {
     visibility: visible !important;
     opacity: 1 !important;

@@ -141,44 +141,6 @@
     };
     setTimeout(urlStep, 120);
   };
-  // the surprise nav's payoff: once the tag has drawn in, it pulls itself and a
-  // paper note unfolds with "Told you.", holds, then folds away - no touch
-  // needed. Tap or Enter still replays it, and hover and keyboard focus wiggle
-  // the tag through CSS. Paused, reduced-motion and hidden-tab visitors get the
-  // still tag, never the automatic play.
-  const surprise = document.querySelector(".pf-surprise");
-  if (surprise) {
-    let swapTimer = null;
-    const status = document.querySelector(".pf-sr-status");
-    const playNote = (holdMs, announce) => {
-      surprise.classList.add("pf-open");
-      if (swapTimer) clearTimeout(swapTimer);
-      if (announce && status) {
-        // clear first so a repeated tap still announces, then name the payoff
-        status.textContent = "";
-        requestAnimationFrame(() => { status.textContent = "Told you."; });
-      }
-      swapTimer = setTimeout(() => {
-        surprise.classList.remove("pf-open");
-        if (status) status.textContent = "";
-      }, holdMs);
-    };
-    surprise.addEventListener("click", () => playNote(1600, true));
-    const tagWord = surprise.querySelector(".pf-tag-word");
-    if (tagWord) {
-      let autoPlayed = false;
-      tagWord.addEventListener("animationend", (e) => {
-        if (autoPlayed || e.animationName !== "tagword") return;
-        autoPlayed = true;
-        const b = document.body.classList;
-        if (reduced.matches || b.contains("paused") || b.contains("hidden-page")) return;
-        setTimeout(() => {
-          if (reduced.matches || b.contains("paused") || b.contains("hidden-page")) return;
-          playNote(2400, false);
-        }, 500);
-      });
-    }
-  }
   let refreshProjects = () => {};
   const apply = () => {
     document.body.classList.toggle("paused", paused);
