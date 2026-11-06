@@ -83,3 +83,13 @@ test('Contact starts with the headline, without an empty eyebrow gap', async ({ 
   const gap = await page.locator('.page-hero').evaluate(hero => hero.querySelector('h1').getBoundingClientRect().top - hero.getBoundingClientRect().top);
   expect(gap).toBeLessThanOrEqual(1);
 });
+
+for(const route of ['experience','privacy','charity']) {
+ test(`restyled ${route} starts with headline without an eyebrow gap`,async({page})=>{
+  await page.goto(`/homepage-concepts/${route}/`);
+  await expect(page.locator('.page-hero > :first-child')).toHaveJSProperty('tagName','H1');
+  await expect(page.locator('.page-hero .eyebrow')).toHaveCount(0);
+  const gap=await page.locator('.page-hero').evaluate(e=>e.querySelector('h1').getBoundingClientRect().top-e.getBoundingClientRect().top);
+  expect(gap).toBeLessThanOrEqual(1);
+ });
+}
