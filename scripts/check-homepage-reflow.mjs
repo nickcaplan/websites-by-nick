@@ -65,7 +65,8 @@ try {
     await page.goto(`http://localhost:${server.address().port}/homepage-concepts/`);
     await page.getByRole('button', { name: 'Pause motion', exact: true }).click();
     await page.emulateMedia({ reducedMotion: 'reduce' });
-    assert.ok(await page.locator('.project').evaluateAll(es => es.length > 0 && es.every(e => getComputedStyle(e).position === 'relative' && getComputedStyle(e).top === 'auto')));
+    await page.waitForFunction(() => [...document.querySelectorAll('.project')].every(e => getComputedStyle(e).position === 'relative' && ['auto', '0px'].includes(getComputedStyle(e).top)));
+    assert.ok(await page.locator('.project').count() > 0);
     assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
     assert.equal(await page.locator('.pf-nav').evaluate(e => getComputedStyle(e).top), '-44px');
     await page.close(); console.log('PASS late reduced-motion and wide frame caption');
