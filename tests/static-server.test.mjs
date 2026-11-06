@@ -1,32 +1,44 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { request } from 'node:http';
-import { mkdtemp, writeFile, rm, mkdir } from 'node:fs/promises';
+import { mkdtemp, writeFile, rm, mkdir, symlink } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { startStaticServer } from '../scripts/lib/static-server.mjs';
 for (const suffix of ['', '/', '///']) test(`static server normalizes root ${JSON.stringify(suffix)}, decodes files and rejects traversal`, async () => {
   const root = await mkdtemp(join(tmpdir(), 'static.test-'));
-  await writeFile(join(root, 'hello world.txt'), 'hello');
+  await writeFile(join(root, 'hello world.css'), 'hello');
   await writeFile(join(root, 'index.html'), 'root index');
-  await mkdir(join(root, 'folder.name'));
-  await writeFile(join(root, 'folder.name', 'index.html'), 'dotted index');
+  await mkdir(join(root, 'homepage-concepts', 'folder.name'), {recursive:true});
+  await writeFile(join(root, 'homepage-concepts', 'folder.name', 'index.html'), 'dotted index');
+  await mkdir(join(root, '.git'));
+  await writeFile(join(root, '.git', 'config'), 'synthetic secret');
+  await writeFile(join(root, '.env.local'), 'synthetic secret');
+  await writeFile(join(root, 'package.json'), '{}');
+  const outside = await mkdtemp(join(tmpdir(), 'static-outside-'));
+  await writeFile(join(outside, 'secret.html'), 'synthetic outside');
+  await symlink(join(outside, 'secret.html'), join(root, 'escape.html'));
+  await symlink(join(root, '.env.local'), join(root, 'disguised.css'));
   const server = await startStaticServer(root + suffix);
-  const read = (path) => new Promise((resolve, reject) => {
-    const req = request({ hostname: '127.0.0.1', port: server.address().port, path }, (res) => {
+  const read = (path, headers={}) => new Promise((resolve, reject) => {
+    const req = request({ hostname: '127.0.0.1', port: server.address().port, path, headers }, (res) => {
       let body = ''; res.on('data', (x) => body += x); res.on('end', () => resolve({ status: res.statusCode, body }));
     }); req.on('error', reject); req.end();
   });
   try {
+    for (const path of ['/.git/config','/.env.local','/package.json','/escape.html','/disguised.css']) assert.equal((await read(path)).status,403,path);
+    assert.equal((await read('/', {host:'attacker.invalid:'+server.address().port})).status,403);
+    assert.equal((await read('/', {host:'localhost:1'})).status,403);
     assert.deepEqual(await read('/'), { status: 200, body: 'root index' });
-    assert.deepEqual(await read('/folder.name/'), { status: 200, body: 'dotted index' });
-    assert.deepEqual(await read('/hello%20world.txt'), { status: 200, body: 'hello' });
+    assert.deepEqual(await read('/homepage-concepts/folder.name/'), { status: 200, body: 'dotted index' });
+    assert.deepEqual(await read('/hello%20world.css'), { status: 200, body: 'hello' });
     assert.equal((await read('/%2e%2e%2foutside.txt')).status, 403);
     assert.equal((await read('/%')).status, 404);
     assert.equal((await read('http://[invalid')).status, 404);
-    assert.equal((await read('/hello%20world.txt')).status, 200);
+    assert.equal((await read('/hello%20world.css')).status, 200);
   } finally {
     await new Promise((resolve) => server.close(resolve));
+    await rm(outside, {recursive:true,force:true});
     await rm(root, { recursive: true, force: true });
   }
 });
