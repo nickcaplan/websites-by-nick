@@ -81,3 +81,12 @@ body.dark { --surface: #29362e; --surface-strong: #344038; --line: #f2ecdf55; --
 }
 /* Preserve visible spaces at display sizes with the serif's tight tracking. */
 .pg h1, footer h2 { word-spacing: .14em; }
+
+/* Charity offer: content and conditions preserved from the separate preview. */
+.charity-page .charity { max-width: 850px; }
+.charity-page .charity h2 { margin-top: 0; }
+.charity-list { list-style: none; padding: 0; margin: 32px 0; }
+.charity-list li { border-top: 1px solid var(--line); padding: 22px 0 22px 30px; position: relative; font-size: 19px; line-height: 1.55; }
+.charity-list li::before { content: "✳"; color: var(--accent-ink); position: absolute; left: 0; }
+.charity-apply { max-width: 700px; font-size: 20px; line-height: 1.6; }
+.charity-apply a { text-decoration: underline; text-underline-offset: 4px; }
