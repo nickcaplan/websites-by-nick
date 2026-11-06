@@ -448,5 +448,20 @@ console.log("PASS noJS");
   await p.close();
 }
 
+// Mobile Compass fragments must keep the source capture proportions.
+for (const width of [320, 390, 600]) {
+  const p = await b.newPage({ viewport: { width, height: 844 } });
+  await p.goto(base + "/homepage-concepts/");
+  await p.locator(".cmp-stage-compass").scrollIntoViewIfNeeded();
+  const bands = p.locator(".cmp-stage-compass .cp-p1, .cmp-stage-compass .cp-p2");
+  for (const band of await bands.all()) {
+    await band.evaluate((e) => e.decode());
+    const distorted = await band.evaluate((e) => Math.abs((e.clientWidth / e.clientHeight) / (e.naturalWidth / e.naturalHeight) - 1) > 0.02);
+    if (distorted) throw Error("Compass capture distorted at " + width);
+  }
+  console.log("PASS compass-proportions", width);
+  await p.close();
+}
+
 await b.close();
 server.close();

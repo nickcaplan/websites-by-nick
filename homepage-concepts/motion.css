@@ -317,7 +317,7 @@ h1.will-type .pf-url .pfc.on {
 }
 .penurl.url-typing .pf-caret {
   opacity: 1;
-  animation: urlcaret 0.8s steps(1) infinite;
+  animation: urlcaret 1.6s steps(1) infinite;
 }
 @keyframes urlcaret {
   0%, 55% { opacity: 1; }
@@ -550,7 +550,7 @@ h1.sketch-settled .mp-line, h1.sketch-settled .mp-img, h1.sketch-settled .mp-btn
   margin-left: 2px;
   vertical-align: -0.12em;
   background: var(--orange);
-  animation: caret-blink 0.9s steps(2) infinite;
+  animation: caret-blink 1.6s steps(2) infinite;
 }
 .paused .tc-caret,
 .hidden-page .tc-caret {
@@ -563,7 +563,7 @@ h1.sketch-settled .mp-line, h1.sketch-settled .mp-img, h1.sketch-settled .mp-btn
   margin-left: 0.03em;
   vertical-align: -0.06em;
   background: var(--orange);
-  animation: caret-blink 0.9s steps(2) infinite;
+  animation: caret-blink 1.6s steps(2) infinite;
 }
 @keyframes caret-blink {
   50% {
@@ -1671,6 +1671,8 @@ body.paused .studio .sd-fill {
 
 
 @media (max-width: 600px) {
+  .cmp-stage-compass { aspect-ratio: 1280 / 720; }
+  .cmp-stage-compass .cmp { height: auto; }
   /* Compass card on phones: two big readable bands; fine detail stays on larger screens */
   .cmp-stage-compass .cp-phone-hide {
     display: none !important;
