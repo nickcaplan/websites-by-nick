@@ -78,9 +78,9 @@
   .contact a{color:inherit;font-weight:700}
   .contact .big{font-size:26px;font-weight:700;line-height:1.3}
   .morelinks{list-style:none;margin:0 0 4px;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.morelinks a{display:block;background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:14px 18px;font-weight:700;text-decoration:none;min-height:52px}
+.morelinks li{display:flex}.morelinks a{display:flex;align-items:center;width:100%;background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:14px 18px;font-weight:700;text-decoration:none;min-height:52px}
 .morelinks a:hover{background:var(--mint)}
-.social a{display:inline-block;margin:0 14px 0 0;padding:4px 0}
+.social{display:flex;flex-wrap:wrap;gap:4px 18px;align-items:center}.social .lbl{flex-basis:100%;font-weight:700}.social a{display:inline-block;padding:8px 0;min-height:44px}
 @media (max-width:700px){.morelinks{grid-template-columns:1fr}}
 footer{padding:26px 0 40px;color:var(--ink-soft);font-size:14px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
   footer a{color:inherit}
@@ -216,7 +216,7 @@ footer{padding:26px 0 40px;color:var(--ink-soft);font-size:14px;display:flex;jus
           <p>To join a session or become a volunteer, contact our co-ordinator, Pier.</p>
           <p class="big"><a href="tel:+447981450320">07981 450320</a></p>
           <p><a href="mailto:coordinator@eclwalton.org.uk">coordinator@eclwalton.org.uk</a></p>
-          <p class="social">Follow ECL: <a href="https://www.facebook.com/eclwalton" rel="noopener">Facebook</a> <a href="https://www.instagram.com/eclwalton/" rel="noopener">Instagram</a> <a href="https://in.linkedin.com/company/elmbridge-community-link" rel="noopener">LinkedIn</a></p>
+          <p class="social"><span class="lbl">Follow ECL</span> <a href="https://www.facebook.com/eclwalton" rel="noopener">Facebook</a> <a href="https://www.instagram.com/eclwalton/" rel="noopener">Instagram</a> <a href="https://in.linkedin.com/company/elmbridge-community-link" rel="noopener">LinkedIn</a></p>
         </div>
         <div>
           <p><strong>Write to us</strong></p>
