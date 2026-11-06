@@ -1771,3 +1771,6 @@ h2 { overflow-wrap: anywhere; }
 .type-caption.typing, .type-caption.typed { display: grid; }
 .type-caption .tc-text, .type-caption .tc-reserve { grid-area: 1 / 1; }
 .tc-reserve { visibility: hidden; pointer-events: none; }
+
+/* Keyboard focus uses the readable unstacked cards without changing motion choice. */
+.project-focus .work .project { position: relative; top: auto; }
