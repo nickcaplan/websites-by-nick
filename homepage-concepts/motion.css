@@ -245,15 +245,15 @@ h1 {
   animation: navin 0.45s 3.3s ease forwards;
 }
 .pf-nav > span:first-child { color: var(--orange-text); }
-h1.will-type .pf-nav {
+h1.will-type + .pf-nav {
   animation: none;
 }
-h1.will-type.typed.drawn .pf-nav {
+h1.will-type.typed.drawn + .pf-nav {
   animation: navin 0.45s 2.3s ease forwards;
 }
-h1.sketch-settled .pf-nav,
-.paused h1 .pf-nav,
-.hidden-page h1 .pf-nav {
+h1.sketch-settled + .pf-nav,
+.paused h1 + .pf-nav,
+.hidden-page h1 + .pf-nav {
   visibility: visible !important;
   animation: none !important;
   opacity: 1 !important;

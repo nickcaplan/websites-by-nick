@@ -463,5 +463,17 @@ for (const width of [320, 390, 600]) {
   await p.close();
 }
 
+// Browser-frame copy is a sibling, never part of the document heading.
+for (const javaScriptEnabled of [true, false]) {
+  const p = await b.newPage({ javaScriptEnabled });
+  await p.goto(base + "/homepage-concepts/");
+  if (await p.locator("h1 .pf-nav").count()) throw Error("Frame copy nested in heading");
+  if (await p.locator("h1 + .pf-nav").count() !== 1) throw Error("Frame copy missing");
+  if (await p.locator("h1").getAttribute("aria-label") !== "Websites people remember.")
+    throw Error("Hero heading accessible label changed");
+  await p.close();
+}
+console.log("PASS independent-frame-copy");
+
 await b.close();
 server.close();
