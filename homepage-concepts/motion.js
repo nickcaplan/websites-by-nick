@@ -722,8 +722,9 @@
   syncVisibility();
   document.addEventListener("visibilitychange", syncVisibility);
   let pausedBeforeReduced = null;
-  reduced.addEventListener("change", () => {
-    if (reduced.matches) {
+  // Use the state delivered by this change, not a second live-query read.
+  reduced.addEventListener("change", (event) => {
+    if (event.matches) {
       if (pausedBeforeReduced === null) pausedBeforeReduced = paused;
       paused = true;
       resetParallax();
