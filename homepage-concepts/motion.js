@@ -680,7 +680,7 @@
   let pausedBeforeReduced = null;
   reduced.addEventListener("change", () => {
     if (reduced.matches) {
-      pausedBeforeReduced = paused;
+      if (pausedBeforeReduced === null) pausedBeforeReduced = paused;
       paused = true;
       apply();
     } else if (pausedBeforeReduced !== null) {
