@@ -85,3 +85,7 @@ body.dark { --surface: #29362e; --surface-strong: #344038; --line: #f2ecdf55; --
 /* Keep the header-to-content gap compact and consistent across restyled pages. */
 .restyled-page { padding-top: 24px; }
 @media (max-width: 600px) { .restyled-page { padding-top: 12px; } }
+
+/* Keep page links together instead of distributing them across the phone. */
+.restyled-nav nav { gap: 16px; }
+@media (max-width: 600px) { .restyled-nav nav { justify-content: flex-start; gap: 0 16px; } }
