@@ -90,3 +90,7 @@ body.dark { --surface: #29362e; --surface-strong: #344038; --line: #f2ecdf55; --
 .charity-list li::before { content: "✳"; color: var(--accent-ink); position: absolute; left: 0; }
 .charity-apply { max-width: 700px; font-size: 20px; line-height: 1.6; }
 .charity-apply a { text-decoration: underline; text-underline-offset: 4px; }
+
+/* Keep the header-to-content gap compact and consistent across restyled pages. */
+.restyled-page { padding-top: 24px; }
+@media (max-width: 600px) { .restyled-page { padding-top: 12px; } }
