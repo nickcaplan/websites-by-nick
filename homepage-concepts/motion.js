@@ -35,6 +35,59 @@
     typedTitle.classList.add("drawn");
     if (typedTitle.classList.contains("drawn"))
       typedTitle.classList.add("sketch-settled");
+    settleUrl();
+  };
+  // The address bar earns its keep: once the chrome has drawn, the sketched
+  // URL types itself into it with a caret. Settle paths show it complete.
+  const chromeSvg = document.querySelector(".penchrome");
+  const urlText = chromeSvg ? chromeSvg.querySelector(".pf-url") : null;
+  const urlCaret = chromeSvg ? chromeSvg.querySelector(".pf-caret") : null;
+  let urlChars = [];
+  let urlStarted = false;
+  const urlSettled = () => !urlText || !urlText.querySelector(".pfc");
+  const settleUrl = () => {
+    if (!urlText) return;
+    urlChars.forEach((s) => s.classList.add("on"));
+    if (chromeSvg) chromeSvg.classList.remove("url-typing");
+    if (heroTitle) heroTitle.classList.add("url-ready");
+    urlStarted = true;
+  };
+  const startUrl = () => {
+    if (!urlText || urlStarted) return;
+    urlStarted = true;
+    if (reduced.matches || document.body.classList.contains("paused") || document.body.classList.contains("hidden-page")) {
+      settleUrl();
+      return;
+    }
+    if (!urlChars.length) {
+      // JS off or reduced visitors keep the plain text; split only when animating
+      const t = urlText.textContent;
+      urlText.textContent = "";
+      [...t].forEach((ch) => {
+        const s = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+        s.classList.add("pfc");
+        s.textContent = ch;
+        urlText.appendChild(s);
+        urlChars.push(s);
+      });
+    }
+    if (heroTitle) heroTitle.classList.add("url-ready");
+    chromeSvg.classList.add("url-typing");
+    let i = 0;
+    const urlStep = () => {
+      if (reduced.matches || document.body.classList.contains("paused") || document.body.classList.contains("hidden-page")) return settleUrl();
+      if (i >= urlChars.length) {
+        chromeSvg.classList.remove("url-typing");
+        return;
+      }
+      urlChars[i].classList.add("on");
+      i += 1;
+      try {
+        urlCaret.setAttribute("x", String(87 + urlText.getComputedTextLength() + 4));
+      } catch (e) { /* keep the caret where it is */ }
+      setTimeout(urlStep, 55);
+    };
+    setTimeout(urlStep, 250);
   };
   let refreshProjects = () => {};
   const apply = () => {
@@ -83,6 +136,7 @@
         chars.forEach((s) => s.classList.add("on"));
         caret.remove();
         heroTitle.classList.add("typed", "drawn", "sketch-settled");
+        settleUrl();
       };
       const step = () => {
         if (reduced.matches) return finish();
@@ -96,6 +150,9 @@
             caret.remove();
             // the window starts drawing straight after the title types
             heroTitle.classList.add("typed", "drawn");
+            const bar = document.querySelector(".pf-bar");
+            if (bar) bar.addEventListener("animationend", () => setTimeout(startUrl, 350), { once: true });
+            else setTimeout(startUrl, 5400);
             // a pause or tab-hide landing in this gap must still settle the
             // window, so resume does not erase and redraw it
             if (document.body.classList.contains("paused") || document.body.classList.contains("hidden-page"))

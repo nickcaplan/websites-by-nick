@@ -198,7 +198,7 @@ h1 {
   position: absolute;
   top: -115px;
   left: -24px;
-  width: 150px;
+  width: 300px;
   height: 30px;
   overflow: visible;
   fill: none;
@@ -280,6 +280,45 @@ h1.sketch-settled .pf-nav,
 .pf-dot,
 .pf-bar {
   visibility: hidden;
+}
+.pf-url {
+  fill: var(--ink);
+  stroke: none;
+  font: 13px var(--sans);
+  letter-spacing: 0.04em;
+}
+h1.will-type .pf-url {
+  opacity: 0;
+}
+h1.will-type.url-ready .pf-url {
+  opacity: 1;
+}
+h1.will-type .pf-url .pfc {
+  opacity: 0;
+}
+h1.will-type .pf-url .pfc.on {
+  opacity: 1;
+}
+.pf-caret {
+  fill: var(--ink);
+  stroke: none;
+  opacity: 0;
+}
+.penchrome.url-typing .pf-caret {
+  opacity: 1;
+  animation: urlcaret 0.8s steps(1) infinite;
+}
+@keyframes urlcaret {
+  0%, 55% { opacity: 1; }
+  56%, 100% { opacity: 0; }
+}
+h1.sketch-settled .pf-url,
+.paused h1 .pf-url,
+.hidden-page h1 .pf-url,
+h1.sketch-settled .pf-url .pfc,
+.paused h1 .pf-url .pfc,
+.hidden-page h1 .pf-url .pfc {
+  opacity: 1 !important;
 }
 .pf-dot:nth-of-type(1) { fill: #ff5f57; }
 .pf-dot:nth-of-type(2) { fill: #febc2e; }
@@ -375,7 +414,7 @@ h1.sketch-settled .pf-bar,
   .penchrome {
     top: -101px;
     left: -8px;
-    width: 112px;
+    width: 224px;
     height: 22px;
   }
 }
