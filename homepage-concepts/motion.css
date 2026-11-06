@@ -234,14 +234,14 @@ h1 {
   text-transform: uppercase;
   color: var(--ink);
   visibility: hidden;
-  animation: navin 0.5s 4.55s ease both;
+  animation: navin 0.45s 3.3s ease both;
 }
 .pf-nav span:first-child { color: var(--orange); }
 h1.will-type .pf-nav {
   animation: none;
 }
 h1.will-type.typed.drawn .pf-nav {
-  animation: navin 0.5s 3.15s ease both;
+  animation: navin 0.45s 2.3s ease both;
 }
 h1.sketch-settled .pf-nav,
 .paused h1 .pf-nav,
@@ -340,22 +340,22 @@ h1.sketch-settled .pf-url .pfc,
   }
 }
 .pf-frame {
-  animation: pendraw 1.4s 2.2s ease forwards;
+  animation: pendraw 1.0s 1.6s ease forwards;
 }
 .pf-head {
-  animation: pendraw 0.5s 3.7s ease forwards;
+  animation: pendraw 0.4s 2.65s ease forwards;
 }
 .pf-dot:nth-of-type(1) {
-  animation: pendraw 0.2s 4.3s ease forwards;
+  animation: pendraw 0.2s 3.1s ease forwards;
 }
 .pf-dot:nth-of-type(2) {
-  animation: pendraw 0.2s 4.5s ease forwards;
+  animation: pendraw 0.2s 3.25s ease forwards;
 }
 .pf-dot:nth-of-type(3) {
-  animation: pendraw 0.2s 4.7s ease forwards;
+  animation: pendraw 0.2s 3.4s ease forwards;
 }
 .pf-bar {
-  animation: pendraw 0.45s 4.95s ease forwards;
+  animation: pendraw 0.35s 3.6s ease forwards;
 }
 h1.will-type .pf-frame,
 h1.will-type .pf-head,
@@ -364,22 +364,22 @@ h1.will-type .pf-bar {
   animation: none;
 }
 h1.will-type.typed.drawn .pf-frame {
-  animation: pendraw 1.4s ease forwards;
+  animation: pendraw 1.0s ease forwards;
 }
 h1.will-type.typed.drawn .pf-head {
-  animation: pendraw 0.5s 1.5s ease forwards;
+  animation: pendraw 0.4s 1.05s ease forwards;
 }
 h1.will-type.typed.drawn .pf-dot:nth-of-type(1) {
-  animation: pendraw 0.2s 2.05s ease forwards, dotfill 0.3s 2.3s ease forwards;
+  animation: pendraw 0.2s 1.5s ease forwards, dotfill 0.25s 1.75s ease forwards;
 }
 h1.will-type.typed.drawn .pf-dot:nth-of-type(2) {
-  animation: pendraw 0.2s 2.25s ease forwards, dotfill 0.3s 2.5s ease forwards;
+  animation: pendraw 0.2s 1.65s ease forwards, dotfill 0.25s 1.9s ease forwards;
 }
 h1.will-type.typed.drawn .pf-dot:nth-of-type(3) {
-  animation: pendraw 0.2s 2.45s ease forwards, dotfill 0.3s 2.7s ease forwards;
+  animation: pendraw 0.2s 1.8s ease forwards, dotfill 0.25s 2.05s ease forwards;
 }
 h1.will-type.typed.drawn .pf-bar {
-  animation: pendraw 0.45s 2.6s ease forwards;
+  animation: pendraw 0.35s 2.0s ease forwards;
 }
 h1.sketch-settled .pf-dot,
 .paused h1 .pf-dot,

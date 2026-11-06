@@ -85,9 +85,9 @@
       try {
         urlCaret.setAttribute("x", String(87 + urlText.getComputedTextLength() + 4));
       } catch (e) { /* keep the caret where it is */ }
-      setTimeout(urlStep, 45);
+      setTimeout(urlStep, 32);
     };
-    setTimeout(urlStep, 200);
+    setTimeout(urlStep, 120);
   };
   let refreshProjects = () => {};
   const apply = () => {
@@ -151,21 +151,21 @@
             // the window starts drawing straight after the title types
             heroTitle.classList.add("typed", "drawn");
             const bar = document.querySelector(".pf-bar");
-            if (bar) bar.addEventListener("animationend", () => setTimeout(startUrl, 250), { once: true });
-            else setTimeout(startUrl, 5400);
+            if (bar) bar.addEventListener("animationend", () => setTimeout(startUrl, 150), { once: true });
+            else setTimeout(startUrl, 4200);
             // a pause or tab-hide landing in this gap must still settle the
             // window, so resume does not erase and redraw it
             if (document.body.classList.contains("paused") || document.body.classList.contains("hidden-page"))
               heroTitle.classList.add("sketch-settled");
-          }, 200);
+          }, 150);
           return;
         }
         chars[i].classList.add("on");
         chars[i].after(caret);
         i += 1;
-        setTimeout(step, 50);
+        setTimeout(step, 40);
       };
-      setTimeout(step, 300);
+      setTimeout(step, 250);
     }
   }
 
