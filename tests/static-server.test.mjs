@@ -1,13 +1,16 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { request } from 'node:http';
-import { mkdtemp, writeFile, rm } from 'node:fs/promises';
+import { mkdtemp, writeFile, rm, mkdir } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { startStaticServer } from '../scripts/lib/static-server.mjs';
 for (const suffix of ['', '/', '///']) test(`static server normalizes root ${JSON.stringify(suffix)}, decodes files and rejects traversal`, async () => {
-  const root = await mkdtemp(join(tmpdir(), 'static-test-'));
+  const root = await mkdtemp(join(tmpdir(), 'static.test-'));
   await writeFile(join(root, 'hello world.txt'), 'hello');
+  await writeFile(join(root, 'index.html'), 'root index');
+  await mkdir(join(root, 'folder.name'));
+  await writeFile(join(root, 'folder.name', 'index.html'), 'dotted index');
   const server = await startStaticServer(root + suffix);
   const read = (path) => new Promise((resolve, reject) => {
     const req = request({ hostname: '127.0.0.1', port: server.address().port, path }, (res) => {
@@ -15,6 +18,8 @@ for (const suffix of ['', '/', '///']) test(`static server normalizes root ${JSO
     }); req.on('error', reject); req.end();
   });
   try {
+    assert.deepEqual(await read('/'), { status: 200, body: 'root index' });
+    assert.deepEqual(await read('/folder.name/'), { status: 200, body: 'dotted index' });
     assert.deepEqual(await read('/hello%20world.txt'), { status: 200, body: 'hello' });
     assert.equal((await read('/%2e%2e%2foutside.txt')).status, 403);
     assert.equal((await read('/%')).status, 404);

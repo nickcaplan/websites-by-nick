@@ -869,7 +869,8 @@ h2 em {
   }
   /* Paused: no stacking, so a card can never sit covered but still focusable. */
   body.scrub-stacked.paused .project {
-    position: static;
+    position: relative;
+    top: auto;
   }
 }
 .project .project-image {
@@ -1738,7 +1739,10 @@ h2 { overflow-wrap: anywhere; }
 .nav { flex-wrap: wrap; }
 .nav nav { flex-wrap: wrap; }
 .nav nav a { flex-shrink: 0; }
-.pf-nav { max-width: 100%; flex-wrap: wrap; top: calc(-2.8em - 6px); row-gap: 0; }
+.pf-nav { max-width: 100%; flex-wrap: wrap; row-gap: 0; }
+@media (max-width: 1399px) {
+  .pf-nav { top: calc(-2.8em - 6px); }
+}
 .about-grid > *, .section-intro > *, .project-title > * { min-width: 0; }
 .about-grid > *, .project-title > *, footer a { overflow-wrap: anywhere; }
 .project-title { min-width: 0; flex-wrap: wrap; }
@@ -1757,3 +1761,8 @@ h2 { overflow-wrap: anywhere; }
 .hero-copy { container-type: inline-size; }
 #hero-title .line { font-size: min(1em, 23cqw) !important; }
 #hero-title .line em, #hero-title .hc { font-size: inherit !important; }
+@media (min-width: 1400px) {
+  /* Reserve the illustrated mini-page's space even with enlarged text. */
+  #hero-title { max-width: calc(100% - 318px); }
+  #hero-title .line { font-size: min(1em, 17cqw) !important; }
+}

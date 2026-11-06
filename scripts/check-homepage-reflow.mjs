@@ -6,9 +6,11 @@ import { fileURLToPath } from 'node:url';
 const server = await startStaticServer(fileURLToPath(new URL('..', import.meta.url)).replace(/\/$/, ''));
 const browser = await chromium.launch();
 try {
-  for (const width of [320, 390, 768, 1280]) for (const theme of ['light', 'dark']) {
+  for (const width of [320, 390, 768, 1280, 1400]) for (const theme of ['light', 'dark']) {
     const page = await browser.newPage({ viewport: { width, height: 900 }, colorScheme: theme });
+    await page.addInitScript(value => localStorage.setItem('nick-theme', value), theme);
     await page.goto(`http://localhost:${server.address().port}/homepage-concepts/`);
+    assert.equal(await page.locator('body').evaluate(e => e.classList.contains('dark')), theme === 'dark');
     await page.evaluate(() => document.fonts.ready);
     await page.getByRole('button', { name: 'Pause motion', exact: true }).click();
     await page.evaluate(() => {
@@ -49,13 +51,23 @@ try {
     const page = await browser.newPage({ viewport: { width, height: 900 }, reducedMotion: 'reduce' });
     await page.goto(`http://localhost:${server.address().port}/homepage-concepts/`);
     assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `reduced motion overflow: ${width}`);
-    assert.ok(await page.locator('.project').evaluateAll(es => es.every(e => getComputedStyle(e).position === 'relative')));
+    assert.ok(await page.locator('.project').evaluateAll(es => es.length > 0 && es.every(e => getComputedStyle(e).position === 'relative')));
     await page.close(); console.log('PASS reduced containment', width);
   }
   for (const width of [320, 390, 600, 1280]) {
     const page = await browser.newPage({ viewport: { width, height: 900 } });
     await page.goto(`http://localhost:${server.address().port}/homepage-concepts/pricing/`);
-    assert.ok(await page.locator('.card h2').evaluateAll(es => es.every(e => getComputedStyle(e).marginTop === '0px')), `price card top gap: ${width}`);
+    assert.ok(await page.locator('.card h2').evaluateAll(es => es.length > 0 && es.every(e => getComputedStyle(e).marginTop === '0px')), `price card top gap: ${width}`);
     await page.close(); console.log('PASS price heading gap', width);
+  }
+  {
+    const page = await browser.newPage({ viewport: { width: 1400, height: 900 } });
+    await page.goto(`http://localhost:${server.address().port}/homepage-concepts/`);
+    await page.getByRole('button', { name: 'Pause motion', exact: true }).click();
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    assert.ok(await page.locator('.project').evaluateAll(es => es.length > 0 && es.every(e => getComputedStyle(e).position === 'relative' && getComputedStyle(e).top === 'auto')));
+    assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+    assert.equal(await page.locator('.pf-nav').evaluate(e => getComputedStyle(e).top), '-44px');
+    await page.close(); console.log('PASS late reduced-motion and wide frame caption');
   }
 } finally { await browser.close(); server.close(); }

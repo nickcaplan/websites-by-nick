@@ -2,7 +2,7 @@
 // index.html fallback, and one MIME map covering every asset type either
 // script serves. Binds to localhost only.
 import { createServer } from "node:http";
-import { readFile } from "node:fs/promises";
+import { readFile, stat } from "node:fs/promises";
 import { resolve, extname, sep } from "node:path";
 
 const types = {
@@ -28,7 +28,8 @@ export const startStaticServer = (root) => {
         res.writeHead(403).end();
         return;
       }
-      const file = extname(p) ? p : p + "/index.html";
+      const directory = (await stat(p)).isDirectory();
+      const file = directory || !extname(p) ? p + "/index.html" : p;
       res.setHeader("content-type", types[extname(file)] || "application/octet-stream");
       res.end(await readFile(file));
     } catch {
