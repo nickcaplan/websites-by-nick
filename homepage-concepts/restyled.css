@@ -9,7 +9,7 @@ body.dark { --surface: #29362e; --surface-strong: #344038; --line: #f2ecdf55; --
 .restyled-page .principle { border-top: 1px solid var(--line); padding-top: 20px; }
 .restyled-page .principle strong { display: block; font-size: 20px; }
 .restyled-page .principle p { margin: 10px 0 0; }
-.restyled-page .community { max-width: 760px; font-size: 18px; }
+.restyled-page .experience-prose { max-width: 760px; font-size: 18px; }
 .career-history { margin: 36px 0 60px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
 .career-history summary { display: flex; justify-content: space-between; gap: 20px; align-items: center; padding: 24px; cursor: pointer; list-style: none; min-height: 60px; }
 .career-history summary::-webkit-details-marker { display: none; }

@@ -51,3 +51,19 @@ for(const path of ['', 'contact/', 'experience/', 'privacy/']) {
 test('Contact footer preserves an unfinished message',async({page})=>{
  await page.goto(prefix+'contact/');await page.locator('[data-cookie-choice="essential"]').click();await page.getByLabel('Message',{exact:true}).fill('An unfinished message');await page.locator('.footer-cta').click();await expect(page).toHaveURL(/#contact-form$/);await expect(page.getByLabel('Message',{exact:true})).toHaveValue('An unfinished message');
 });
+
+// Experience prose must not inherit the homepage browser-card motion class.
+for(const width of [320,390,1280]) for(const theme of ['dark','light']) {
+ test(`Experience prose stays straight and fills its column at ${width} ${theme}`,async({page})=>{
+  await page.setViewportSize({width,height:900});
+  await page.addInitScript(theme=>{localStorage.setItem('nick-theme',theme);localStorage.setItem('websites-by-nick-cookie-preferences','essential')},theme);
+  await page.goto(prefix+'experience/');await page.evaluate(()=>document.fonts.ready);
+  await expect(page.locator('.community')).toHaveCount(0);
+  const paragraphs=page.locator('.experience-prose');await expect(paragraphs).toHaveCount(2);
+  for(const paragraph of await paragraphs.all()) {
+   await paragraph.scrollIntoViewIfNeeded();
+   const geometry=await paragraph.evaluate(e=>{const s=getComputedStyle(e),p=getComputedStyle(e.parentElement);return {transform:s.transform,animation:s.animationName,width:e.getBoundingClientRect().width,expected:Math.min(760,e.parentElement.clientWidth-parseFloat(p.paddingLeft)-parseFloat(p.paddingRight))}});
+   expect(geometry.transform).toBe('none');expect(geometry.animation).toBe('none');expect(Math.abs(geometry.width-geometry.expected)).toBeLessThan(2);
+  }
+ });
+}
