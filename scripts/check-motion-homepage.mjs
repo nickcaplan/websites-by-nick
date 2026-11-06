@@ -226,8 +226,12 @@ await settle.getByRole("button", { name: "Pause motion", exact: true }).click();
 // a dash offset alone cannot hide a stroke whose path outlives its dash
 {
   const pre = await b.newPage({ viewport: { width: 390, height: 844 } });
-  await pre.goto(base + "/homepage-concepts/");
-  await pre.waitForLoadState("domcontentloaded");
+  // Delay an image beyond the predraw window: load must not gate this check.
+  await pre.route("**/assets/images/**", async (route) => {
+    await new Promise((r) => setTimeout(r, 1800));
+    try { await route.continue(); } catch {}
+  });
+  await pre.goto(base + "/homepage-concepts/", { waitUntil: "domcontentloaded" });
   await pre.waitForTimeout(400);
   for (const sel of [".pf-frame", ".pf-head", ".pf-dot", ".pf-bar"]) {
     const vis = await pre

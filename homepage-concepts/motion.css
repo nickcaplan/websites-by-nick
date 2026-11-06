@@ -1108,12 +1108,13 @@ body.paused .reveal {
   margin: 56px auto 0;
   text-align: center;
 }
-.studio .studio-row {
-  display: flex;
+.studio {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(200px, 24vw, 400px);
   align-items: center;
-  justify-content: center;
-  gap: clamp(32px, 5vw, 88px);
+  column-gap: clamp(32px, 5vw, 88px);
 }
+.studio .studio-eyebrow { grid-column: 1 / -1; }
 .studio svg {
   height: auto;
   flex: none;
@@ -1125,11 +1126,13 @@ body.paused .reveal {
   color: #525d53;
 }
 @media (max-width: 960px) {
-  .studio .studio-row {
-    flex-direction: column;
-    gap: 16px;
+  .studio {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 0;
   }
   .studio figcaption {
+    justify-self: center;
+    margin-top: 16px;
     max-width: 92%;
     text-align: center;
     font-size: 18px;
@@ -1560,13 +1563,9 @@ h1 .last {
 /* side by side (961px up): the drawing shrinks to share the row with the
    caption instead of holding 100% width and pushing the page sideways */
 @media (min-width: 961px) {
-  .studio .studio-row svg {
-    flex: 1 1 0;
+  .studio svg {
     min-width: 0;
     max-width: 880px;
-  }
-  .studio .studio-row figcaption {
-    flex: 0 0 clamp(200px, 24vw, 400px);
   }
 }
 .studio .sd-title {
