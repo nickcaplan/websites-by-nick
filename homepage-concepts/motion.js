@@ -405,7 +405,8 @@
         document.body.classList.contains("hidden-page") ||
         reduced.matches || document.body.classList.contains("project-focus");
       const vh = window.innerHeight;
-      const stacked = desktop.matches;
+      const stacked = desktop.matches && projects.every(card => card.offsetHeight + 96 <= vh);
+      document.body.classList.toggle("project-unstacked", !stacked);
       projects.forEach((card, i) => {
         const shot = card.querySelector(".project-image");
         const stage = shot && shot.querySelector(".cmp-stage");
@@ -458,7 +459,13 @@
     const work = document.querySelector(".work");
     let pointerFocus = false;
     work.addEventListener("pointerdown", () => { pointerFocus = true; });
-    addEventListener("pointerup", () => { pointerFocus = false; });
+    addEventListener("pointerup", () => {
+      pointerFocus = false;
+      if (document.body.classList.contains("project-focus")) {
+        document.body.classList.remove("project-focus");
+        kick2();
+      }
+    });
     addEventListener("pointercancel", () => { pointerFocus = false; });
     addEventListener("keydown", () => { pointerFocus = false; }, true);
     work.addEventListener("focusin", event => {
