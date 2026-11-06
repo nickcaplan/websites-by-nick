@@ -1100,7 +1100,7 @@ body.paused .reveal {
   font: 26px/1.42 var(--serif);
   color: #525d53;
 }
-@media (max-width: 900px) {
+@media (max-width: 960px) {
   .studio .studio-row {
     flex-direction: column;
     gap: 16px;
@@ -1535,9 +1535,9 @@ h1 .last {
   margin: 0 auto;
   overflow: visible;
 }
-/* side by side (901px up): the drawing shrinks to share the row with the
+/* side by side (961px up): the drawing shrinks to share the row with the
    caption instead of holding 100% width and pushing the page sideways */
-@media (min-width: 901px) {
+@media (min-width: 961px) {
   .studio .studio-row svg {
     flex: 1 1 0;
     min-width: 0;

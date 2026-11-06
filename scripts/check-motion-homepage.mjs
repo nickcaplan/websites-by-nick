@@ -20,7 +20,7 @@ const b = await chromium.launch({
       : undefined),
   args: ["--no-sandbox"],
 });
-for (const width of [320, 390, 768, 901, 1024, 1280, 1600]) {
+for (const width of [320, 390, 768, 901, 961, 1024, 1280, 1600]) {
   const p = await b.newPage({
     viewport: { width, height: width < 600 ? 844 : 1000 },
   });
