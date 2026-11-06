@@ -26,6 +26,7 @@ for (const width of [320, 390, 768, 901, 961, 1024, 1280, 1400, 1600]) {
   });
   let errors = [];
   p.on("pageerror", (e) => errors.push(e.message));
+  await p.addInitScript(() => localStorage.setItem("nick-theme", "light"));
   await p.goto(base + "/homepage-concepts/");
   await p.evaluate(() => document.fonts.ready);
   await p.waitForLoadState("networkidle");
