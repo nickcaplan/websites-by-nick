@@ -39,7 +39,7 @@
   };
   // The address bar earns its keep: once the chrome has drawn, the sketched
   // URL types itself into it with a caret. Settle paths show it complete.
-  const chromeSvg = document.querySelector(".penchrome");
+  const chromeSvg = document.querySelector(".penurl");
   const urlText = chromeSvg ? chromeSvg.querySelector(".pf-url") : null;
   const urlCaret = chromeSvg ? chromeSvg.querySelector(".pf-caret") : null;
   let urlChars = [];
@@ -68,7 +68,7 @@
       if (!c.classList.contains("on")) break;
       try { w += c.getComputedTextLength(); } catch (e) { /* keep the caret where it is */ }
     }
-    try { urlCaret.setAttribute("x", String(87 + w + 1)); } catch (e) { /* keep the caret where it is */ }
+    try { urlCaret.setAttribute("x", String(15 + w + 1)); } catch (e) { /* keep the caret where it is */ }
   };
   const urlStopNow = () => reduced.matches || document.body.classList.contains("paused") || document.body.classList.contains("hidden-page");
   const cycleUrl = () => {

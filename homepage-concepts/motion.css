@@ -195,7 +195,8 @@ h1 {
   stroke-linecap: round;
   pointer-events: none;
 }
-.penchrome {
+.penchrome,
+.penurl {
   position: absolute;
   top: -115px;
   left: -24px;
@@ -207,6 +208,11 @@ h1 {
   stroke-width: 2.5;
   stroke-linecap: round;
   pointer-events: none;
+}
+/* the address bar sits in the middle of the window frame */
+.penurl {
+  left: calc(50% - 91px);
+  width: 182px;
 }
 .sr-only {
   position: absolute;
@@ -401,7 +407,7 @@ h1.sketch-settled .pf-nav,
 .pf-url {
   fill: var(--ink);
   stroke: none;
-  font: 13px var(--sans);
+  font: 11.5px var(--sans);
   letter-spacing: 0.04em;
 }
 h1.will-type .pf-url {
@@ -421,7 +427,7 @@ h1.will-type .pf-url .pfc.on {
   stroke: none;
   opacity: 0;
 }
-.penchrome.url-typing .pf-caret {
+.penurl.url-typing .pf-caret {
   opacity: 1;
   animation: urlcaret 0.8s steps(1) infinite;
 }
@@ -534,6 +540,12 @@ h1.sketch-settled .pf-bar,
     width: 224px;
     height: 22px;
   }
+  .penurl {
+    top: -103px;
+    left: calc(50% - 80px);
+    width: 160px;
+    height: 26px;
+  }
 }
 
 /* the mini page sketched into the hero whitespace (desktop only): a whole
@@ -616,6 +628,10 @@ h1.sketch-settled .mp-line, h1.sketch-settled .mp-img, h1.sketch-settled .mp-btn
   }
   .penchrome {
     top: -101px;
+  }
+  .penurl {
+    top: -101px;
+    left: calc(50% + 48px);
   }
   .penhead {
     top: -61px;
