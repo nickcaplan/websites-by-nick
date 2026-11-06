@@ -52,4 +52,10 @@ try {
     assert.ok(await page.locator('.project').evaluateAll(es => es.every(e => getComputedStyle(e).position === 'relative')));
     await page.close(); console.log('PASS reduced containment', width);
   }
+  for (const width of [320, 390, 600, 1280]) {
+    const page = await browser.newPage({ viewport: { width, height: 900 } });
+    await page.goto(`http://localhost:${server.address().port}/homepage-concepts/pricing/`);
+    assert.ok(await page.locator('.card h2').evaluateAll(es => es.every(e => getComputedStyle(e).marginTop === '0px')), `price card top gap: ${width}`);
+    await page.close(); console.log('PASS price heading gap', width);
+  }
 } finally { await browser.close(); server.close(); }

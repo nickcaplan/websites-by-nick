@@ -226,6 +226,9 @@
   .pg h2 {
     margin-top: 64px;
   }
+  .pg .card h2 {
+    margin-top: 0;
+  }
   .card:nth-child(odd),
   .card:nth-child(even) {
     transform: none;

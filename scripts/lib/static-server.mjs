@@ -19,6 +19,7 @@ const types = {
 };
 
 export const startStaticServer = (root) => {
+  root = resolve(root);
   const server = createServer(async (req, res) => {
     try {
       const pathname = decodeURIComponent(new URL(req.url, "http://localhost").pathname);
