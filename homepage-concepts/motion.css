@@ -420,16 +420,16 @@ h1.sketch-settled .pf-url .pfc,
   animation: pendraw 0.4s 2.65s ease forwards;
 }
 .pf-dot:nth-of-type(1) {
-  animation: pendraw 0.2s 3.1s ease forwards;
+  animation: pendraw 0.2s 3.05s ease forwards;
 }
 .pf-dot:nth-of-type(2) {
-  animation: pendraw 0.2s 3.25s ease forwards;
+  animation: pendraw 0.2s 3.2s ease forwards;
 }
 .pf-dot:nth-of-type(3) {
-  animation: pendraw 0.2s 3.4s ease forwards;
+  animation: pendraw 0.2s 3.35s ease forwards;
 }
 .pf-bar {
-  animation: pendraw 0.35s 3.6s ease forwards;
+  animation: pendraw 0.35s 3.5s ease forwards;
 }
 h1.will-type .pf-frame,
 h1.will-type .pf-head,
@@ -444,16 +444,16 @@ h1.will-type.typed.drawn .pf-head {
   animation: pendraw 0.4s 1.05s ease forwards;
 }
 h1.will-type.typed.drawn .pf-dot:nth-of-type(1) {
-  animation: pendraw 0.2s 1.5s ease forwards, dotfill 0.25s 1.75s ease forwards;
+  animation: pendraw 0.18s 1.45s ease forwards, dotfill 0.22s 1.63s ease forwards;
 }
 h1.will-type.typed.drawn .pf-dot:nth-of-type(2) {
-  animation: pendraw 0.2s 1.65s ease forwards, dotfill 0.25s 1.9s ease forwards;
+  animation: pendraw 0.18s 1.57s ease forwards, dotfill 0.22s 1.75s ease forwards;
 }
 h1.will-type.typed.drawn .pf-dot:nth-of-type(3) {
-  animation: pendraw 0.2s 1.8s ease forwards, dotfill 0.25s 2.05s ease forwards;
+  animation: pendraw 0.18s 1.69s ease forwards, dotfill 0.22s 1.87s ease forwards;
 }
 h1.will-type.typed.drawn .pf-bar {
-  animation: pendraw 0.35s 2.0s ease forwards;
+  animation: pendraw 0.35s 1.82s ease forwards;
 }
 h1.sketch-settled .pf-dot,
 .paused h1 .pf-dot,
@@ -1164,7 +1164,6 @@ body.paused .reveal {
   gap: clamp(32px, 5vw, 88px);
 }
 .studio svg {
-  width: min(620px, 52%);
   height: auto;
   flex: none;
 }
@@ -1178,9 +1177,6 @@ body.paused .reveal {
   .studio .studio-row {
     flex-direction: column;
     gap: 16px;
-  }
-  .studio svg {
-    width: min(560px, 92%);
   }
   .studio figcaption {
     max-width: 92%;

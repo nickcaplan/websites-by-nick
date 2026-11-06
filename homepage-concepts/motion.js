@@ -45,6 +45,67 @@
   let urlChars = [];
   let urlStarted = false;
   const urlSettled = () => !urlText || !urlText.querySelector(".pfc");
+  // The address keeps playing after the first typing: it holds, backspaces to
+  // the "your" stem, then types the next option. Settle paths freeze whatever
+  // word is showing; reduced-motion and paused visitors never see the cycle.
+  const urlStem = "your";
+  const urlWords = ["business", "idea", "shop", "project"];
+  let urlWordIx = 0;
+  const buildUrl = (str) => {
+    urlText.textContent = "";
+    urlChars = [];
+    [...str].forEach((ch) => {
+      const s = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+      s.classList.add("pfc");
+      s.textContent = ch;
+      urlText.appendChild(s);
+      urlChars.push(s);
+    });
+  };
+  const moveUrlCaret = () => {
+    let w = 0;
+    for (const c of urlChars) {
+      if (!c.classList.contains("on")) break;
+      try { w += c.getComputedTextLength(); } catch (e) { /* keep the caret where it is */ }
+    }
+    try { urlCaret.setAttribute("x", String(87 + w + 4)); } catch (e) { /* keep the caret where it is */ }
+  };
+  const urlStopNow = () => reduced.matches || document.body.classList.contains("paused") || document.body.classList.contains("hidden-page");
+  const cycleUrl = () => {
+    if (urlStopNow()) return settleUrl();
+    let on = urlChars.length;
+    const typeNext = () => {
+      urlWordIx = (urlWordIx + 1) % urlWords.length;
+      buildUrl(urlStem + urlWords[urlWordIx] + ".co.uk");
+      for (let k = 0; k < urlStem.length; k++) urlChars[k].classList.add("on");
+      let k = urlStem.length;
+      const typ = () => {
+        if (urlStopNow()) return settleUrl();
+        if (k >= urlChars.length) {
+          moveUrlCaret();
+          setTimeout(cycleUrl, 3200);
+          return;
+        }
+        urlChars[k].classList.add("on");
+        k += 1;
+        moveUrlCaret();
+        setTimeout(typ, 55);
+      };
+      setTimeout(typ, 450);
+    };
+    const del = () => {
+      if (urlStopNow()) return settleUrl();
+      if (on <= urlStem.length) {
+        typeNext();
+        return;
+      }
+      on -= 1;
+      urlChars[on].classList.remove("on");
+      moveUrlCaret();
+      setTimeout(del, 28);
+    };
+    del();
+  };
   const settleUrl = () => {
     if (!urlText) return;
     urlChars.forEach((s) => s.classList.add("on"));
@@ -61,30 +122,21 @@
     }
     if (!urlChars.length) {
       // JS off or reduced visitors keep the plain text; split only when animating
-      const t = urlText.textContent;
-      urlText.textContent = "";
-      [...t].forEach((ch) => {
-        const s = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
-        s.classList.add("pfc");
-        s.textContent = ch;
-        urlText.appendChild(s);
-        urlChars.push(s);
-      });
+      buildUrl(urlText.textContent);
     }
     if (heroTitle) heroTitle.classList.add("url-ready");
     chromeSvg.classList.add("url-typing");
     let i = 0;
     const urlStep = () => {
-      if (reduced.matches || document.body.classList.contains("paused") || document.body.classList.contains("hidden-page")) return settleUrl();
+      if (urlStopNow()) return settleUrl();
       if (i >= urlChars.length) {
-        chromeSvg.classList.remove("url-typing");
+        moveUrlCaret();
+        setTimeout(cycleUrl, 2600);
         return;
       }
       urlChars[i].classList.add("on");
       i += 1;
-      try {
-        urlCaret.setAttribute("x", String(87 + urlText.getComputedTextLength() + 4));
-      } catch (e) { /* keep the caret where it is */ }
+      moveUrlCaret();
       setTimeout(urlStep, 32);
     };
     setTimeout(urlStep, 120);
@@ -94,10 +146,19 @@
   const surprise = document.querySelector(".pf-surprise");
   if (surprise) {
     let swapTimer = null;
+    const status = document.querySelector(".pf-sr-status");
     surprise.addEventListener("click", () => {
       surprise.classList.add("pf-swap");
       if (swapTimer) clearTimeout(swapTimer);
-      swapTimer = setTimeout(() => surprise.classList.remove("pf-swap"), 1200);
+      if (status) {
+        // clear first so a repeated tap still announces, then name the payoff
+        status.textContent = "";
+        requestAnimationFrame(() => { status.textContent = "Told you."; });
+      }
+      swapTimer = setTimeout(() => {
+        surprise.classList.remove("pf-swap");
+        if (status) status.textContent = "";
+      }, 1200);
     });
   }
   let refreshProjects = () => {};
