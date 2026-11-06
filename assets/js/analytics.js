@@ -24,6 +24,11 @@
   var channel = null;
   try { channel = new BroadcastChannel(storageKey); } catch (error) {}
   var returnFocus = null;
+  function restoreFocus() {
+    var target = returnFocus || document.querySelector('[data-cookie-preferences]') || document.querySelector('header a, header button');
+    if (target) target.focus();
+    returnFocus = null;
+  }
   var loaded = false;
   var panel = document.createElement('aside');
   panel.id = 'cookie-consent-panel';
@@ -76,8 +81,7 @@
       dismiss.addEventListener('click', function () {
         panel.hidden = true;
         reserveSpace();
-        if (returnFocus) returnFocus.focus();
-        returnFocus = null;
+        restoreFocus();
       });
       panel.appendChild(dismiss);
     }
@@ -120,8 +124,7 @@
       } catch (error) {}
       panel.hidden = true;
       reserveSpace();
-      if (returnFocus) returnFocus.focus();
-      returnFocus = null;
+      if (preferenceStored) restoreFocus();
       if (preference === 'analytics') {
         if (preferenceStored) {
           try { sessionStorage.removeItem(storageKey); } catch (error) {}

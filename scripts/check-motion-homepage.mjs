@@ -335,7 +335,8 @@ for (const sel of [".pf-frame", ".pf-head", ".pf-dot", ".pf-bar"]) {
         if (px !== null) d += Math.hypot(x - px, y - py);
         px = x; py = y;
       }
-      return { rendered: Math.round(d), dash: parseFloat(getComputedStyle(e).strokeDasharray) };
+      const style = getComputedStyle(e);
+      return { rendered: style.vectorEffect === "non-scaling-stroke" ? Math.round(d) : L, dash: parseFloat(style.strokeDasharray) };
     });
     if (!(cov.dash >= cov.rendered))
       throw Error(`dash too short on ${sel}: ` + JSON.stringify(cov));
