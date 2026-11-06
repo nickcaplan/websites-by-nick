@@ -257,13 +257,16 @@ h1.sketch-settled .pf-nav,
 }
 .pf-frame {
   /* dash length must cover the rendered (transformed) path, not just the
-     user-space length - Chrome spaces dashes post-transform here */
-  stroke-dasharray: 3000;
-  stroke-dashoffset: 3000;
+     user-space length - Chrome spaces dashes post-transform here; the
+     stretched frame renders around 3200px long at 1600px wide */
+  stroke-dasharray: 5000;
+  stroke-dashoffset: 5000;
 }
 .pf-head {
-  stroke-dasharray: 1400;
-  stroke-dashoffset: 1400;
+  /* also stretched by preserveAspectRatio="none": ~1170px rendered at
+     1600px wide, growing with viewport */
+  stroke-dasharray: 2400;
+  stroke-dashoffset: 2400;
 }
 .pf-dot {
   /* r=6 -> circumference 37.7; dash must cover it exactly */

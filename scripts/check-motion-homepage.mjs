@@ -299,14 +299,32 @@ for (const sel of [".pf-frame", ".pf-head", ".pf-dot", ".pf-bar"]) {
     throw Error(`reduced chrome not settled on ${sel}: ` + JSON.stringify(st));
 }
 // a dasharray shorter than the path leaves part of the stroke permanently
-// undrawn even at dashoffset 0 - the widened address bar shipped exactly that
-for (const sel of [".pf-frame", ".pf-head", ".pf-dot", ".pf-bar"]) {
-  const cov = await r.locator(sel).first().evaluate((e) => ({
-    len: e.getTotalLength(),
-    dash: parseFloat(getComputedStyle(e).strokeDasharray),
-  }));
-  if (!(cov.dash >= cov.len))
-    throw Error(`dash too short on ${sel}: ` + JSON.stringify(cov));
+// undrawn even at dashoffset 0 - the widened address bar shipped exactly that.
+// Chrome spaces dashes post-transform, so measure the rendered length
+// (through the screen CTM), not the user-space length, on a wide viewport.
+{
+  const wide = await b.newPage({ viewport: { width: 1600, height: 1000 } });
+  await wide.goto(base + "/homepage-concepts/");
+  await wide.waitForLoadState("networkidle");
+  await wide.evaluate(() => document.fonts.ready);
+  for (const sel of [".pf-frame", ".pf-head", ".pf-dot", ".pf-bar"]) {
+    const cov = await wide.locator(sel).first().evaluate((e) => {
+      const L = e.getTotalLength();
+      const ctm = e.getScreenCTM();
+      let d = 0, px = null, py = null;
+      for (let i = 0; i <= 120; i++) {
+        const pt = e.getPointAtLength((L * i) / 120);
+        const x = ctm.a * pt.x + ctm.c * pt.y + ctm.e;
+        const y = ctm.b * pt.x + ctm.d * pt.y + ctm.f;
+        if (px !== null) d += Math.hypot(x - px, y - py);
+        px = x; py = y;
+      }
+      return { rendered: Math.round(d), dash: parseFloat(getComputedStyle(e).strokeDasharray) };
+    });
+    if (!(cov.dash >= cov.rendered))
+      throw Error(`dash too short on ${sel}: ` + JSON.stringify(cov));
+  }
+  await wide.close();
 }
 await r.screenshot({ path: output + "/motion-reduced.png" });
 console.log("PASS reduced");
