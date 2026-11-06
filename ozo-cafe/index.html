@@ -37,8 +37,16 @@
   .hero{padding:26px 0 30px;position:relative}
   .kicker{
     font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
-    color:var(--orange-ink);margin:0 0 26px;line-height:1.7;
+    color:var(--orange-ink);margin:0 0 12px;line-height:1.7;
   }
+  /* the town is a place, not part of the cuisine label: its own line, in the
+     serif italic, with a small pin */
+  .place{
+    display:flex;align-items:center;gap:8px;margin:0 0 22px;
+    font-family:var(--serif);font-style:italic;font-size:21px;line-height:1.2;
+    color:var(--espresso-soft);
+  }
+  .place svg{width:13px;height:18px;flex:none;fill:none;stroke:var(--orange-ink);stroke-width:1.8;stroke-linejoin:round}
   .flag{
     width:30px;height:20px;vertical-align:-5px;margin-right:12px;border-radius:2px;
     box-shadow:0 1px 3px rgba(0,0,0,.28);transform-origin:0% 50%;
@@ -151,7 +159,8 @@
         <circle cx="300" cy="300" r="150" fill="#fff"/>
         <circle cx="337.5" cy="300" r="120" fill="#E30A17"/>
         <polygon fill="#fff" points="462.5,300.0 514.3,316.8 514.3,371.3 546.4,327.2 598.2,344.1 566.1,300.0 598.2,255.9 546.4,272.8 514.3,228.7 514.3,283.2"/>
-      </svg>Turkish &amp; Mediterranean kitchen &middot; Weybridge</p>
+      </svg>Turkish &amp; Mediterranean kitchen</p>
+    <p class="place"><svg viewBox="0 0 16 22" aria-hidden="true" focusable="false"><path d="M8 1C4.1 1 1 4 1 7.8 1 12.9 8 21 8 21s7-8.100 7-13.200C15 4 11.900 1 8 1Z"/><circle cx="8" cy="7.800" r="2.400"/></svg>Weybridge</p>
     <h1 id="heroTitle">Good coffee,<br><em>proper welcome.</em>
       <svg class="squiggle" viewBox="0 0 420 26" aria-hidden="true">
         <path d="M6 18 Q60 6 110 15 T210 14 T310 12 T414 14" />
