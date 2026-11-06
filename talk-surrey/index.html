@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>TALK Surrey - support for people with aphasia</title>
+<meta name="description" content="Long-term communication and social support for people with aphasia after stroke or brain injury, and their families, in Surrey. Concept design.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+  :root{
+    --bg:#f6f6fb; --surface:#ffffff; --ink:#1d1d3a; --ink-soft:#43435f;
+    --indigo:#505090; --indigo-deep:#3b3b78; --yellow:#f9c31a; --line:#cfcfe4; --tint:#e9e9f6;
+    --link:#3b3b78; --focus:#1d1d3a;
+    --sans:"Avenir Next",Avenir,"Segoe UI",Verdana,system-ui,sans-serif;
+  }
+  body.dark{
+    --bg:#15152b; --surface:#1f1f3d; --ink:#f1f1fa; --ink-soft:#c9c9e2;
+    --indigo:#9d9dea; --indigo-deep:#b8b8f2; --line:#3b3b6a; --tint:#2a2a52;
+    --link:#b8b8f2; --focus:#ffffff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:18px;line-height:1.6}
+  a{color:var(--link)}
+  :focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:4px}
+  .skip{position:absolute;left:-999px;top:8px;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:8px;z-index:10}
+  .skip:focus{left:8px}
+  .wrap{max-width:1080px;margin:auto;padding:0 5%}
+  header{display:flex;gap:18px;align-items:center;padding:16px 0}
+  .logo-chip{background:#fff;border-radius:50%;line-height:0;flex:none}
+  .logo{width:84px;height:84px;display:block}
+  .name{font-size:clamp(22px,3.4vw,30px);font-weight:700;line-height:1.15;margin:0}
+  .strap{margin:2px 0 0;color:var(--ink-soft);font-size:16px}
+  .spacer{flex:1}
+  .theme-toggle{border:2px solid var(--line);background:var(--surface);color:var(--ink);min-height:46px;padding:0 16px;border-radius:999px;font:700 16px var(--sans);cursor:pointer;white-space:nowrap}
+  .theme-toggle::after{content:"Off";margin-left:10px;padding:2px 10px;border-radius:999px;background:var(--tint);font-size:14px}
+  .theme-toggle[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+  .theme-toggle[aria-pressed="true"]::after{content:"On";background:var(--yellow);color:#1d1d3a}
+  nav{background:var(--indigo);border-radius:18px;padding:6px}
+  body.dark nav{background:var(--tint)}
+  nav ul{list-style:none;display:flex;gap:4px;flex-wrap:wrap;margin:0;padding:0}
+  nav a{display:inline-block;padding:11px 18px;border-radius:12px;color:#fff;font-weight:700;font-size:16px;text-decoration:none;min-height:44px}
+  body.dark nav a{color:var(--ink)}
+  nav a:hover{background:rgba(255,255,255,.18)}
+  .banner{background:var(--yellow);color:#1d1d3a;border-radius:18px;margin-top:16px;padding:12px 22px;display:flex;gap:14px;align-items:center}
+  .banner img{width:52px;height:auto;border-radius:6px;flex:none;background:#fff}
+  .banner p{margin:0;font-size:16px}
+  .hero{padding:40px 0 22px}
+  h1{font-size:clamp(34px,5.6vw,58px);line-height:1.12;margin:0 0 18px;max-width:17em;letter-spacing:-.01em}
+  h1 em{font-style:normal;color:var(--indigo)}
+  .lede{font-size:21px;max-width:38em;margin:0 0 26px;color:var(--ink-soft)}
+  .actions{display:flex;gap:14px;flex-wrap:wrap}
+  .btn{display:inline-block;padding:14px 26px;border-radius:12px;font-weight:700;font-size:18px;text-decoration:none;border:3px solid var(--indigo);min-height:52px}
+  .btn.primary{background:var(--indigo);color:#fff}
+  body.dark .btn.primary{background:var(--indigo);color:#15152b}
+  .btn.ghost{color:var(--ink);background:transparent}
+  .btn.ghost:hover{background:var(--tint)}
+  .btn.primary:hover{filter:brightness(1.1)}
+  section{padding:28px 0}
+  h2{font-size:clamp(27px,4vw,36px);line-height:1.2;margin:0 0 8px}
+  .sub{margin:0 0 22px;color:var(--ink-soft);max-width:40em}
+  .groups{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+  .group{background:var(--surface);border:2px solid var(--line);border-radius:18px;padding:22px 22px;display:grid;grid-template-rows:subgrid;grid-row:span 4;row-gap:0;margin-bottom:16px}
+  .day{align-self:flex-start;justify-self:start;background:var(--tint);color:var(--ink);font-weight:700;border-radius:999px;padding:4px 14px;font-size:15px;margin-bottom:10px}
+  .group h3{font-size:25px;margin:0 0 2px;line-height:1.2}
+  .group .where-note{margin:0 0 10px;color:var(--ink-soft);font-size:15px}
+  .group dl{margin:0;font-size:17px}
+  .group dt{font-weight:700;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--indigo);margin-top:8px}
+  .group dd{margin:2px 0 0}
+  .about{display:grid;grid-template-columns:1.1fr .9fr;gap:26px;align-items:start}
+  .about p{margin:0 0 14px}
+  .box{background:var(--tint);border-radius:20px;padding:26px 26px}
+  .box h3{margin:0 0 8px;font-size:23px}
+  .box p{margin:0 0 10px}
+  .box ul{margin:0 0 6px;padding-left:20px}
+  .help{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .card{background:var(--surface);border:2px solid var(--line);border-radius:18px;padding:24px 22px;display:flex;flex-direction:column;align-items:flex-start}
+  .card h3{font-size:24px;margin:0 0 8px}
+  .card p{margin:0 0 14px;color:var(--ink-soft)}
+  .card .btn{margin-top:auto}
+  .forms{display:flex;gap:10px;flex-wrap:wrap;margin-top:auto}
+  .forms .btn{padding:10px 18px;font-size:16px;min-height:46px}
+  .contact{background:var(--indigo-deep);color:#fff;border-radius:24px;padding:34px 30px;display:grid;grid-template-columns:1.1fr .9fr;gap:26px}
+  body.dark .contact{background:var(--surface);color:var(--ink);border:2px solid var(--line)}
+  .contact h2{margin-bottom:10px}
+  .contact p{margin:0 0 10px}
+  .contact a{color:inherit;font-weight:700}
+  .contact .big{font-size:28px;font-weight:700}
+  footer{padding:26px 0 40px;color:var(--ink-soft);font-size:14px}
+  footer p{margin:0 0 8px}
+  footer a{color:inherit}
+  @media (max-width:760px){
+    body{font-size:17px}
+    header{flex-wrap:wrap}
+    .logo{width:64px;height:64px}
+    .spacer{display:none}
+    .theme-toggle{margin-left:auto}
+    nav ul{display:grid;grid-template-columns:1fr 1fr}
+    nav a{display:block;text-align:center;padding:10px 6px}
+    .groups,.about,.help,.contact{grid-template-columns:1fr}
+    .group{display:block;margin-bottom:14px}
+    .group .day{display:inline-block}
+    .contact{padding:26px 20px}
+    .hero{padding:26px 0 14px}
+    .actions .btn{width:100%;text-align:center}
+    .banner{align-items:flex-start}
+  }
+  @media (min-width:761px) and (max-width:980px){.help{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="wrap">
+  <header>
+    <span class="logo-chip"><img class="logo" src="logo.jpg" width="202" height="200" alt="TALK Surrey logo: a circle with two face profiles and the letters T, A, L, K"></span>
+    <div>
+      <p class="name">TALK Surrey CIO</p>
+      <p class="strap">Supporting people with aphasia after stroke or brain injury</p>
+    </div>
+    <span class="spacer"></span>
+    <button class="theme-toggle" id="themeToggle" aria-pressed="false">Dark mode</button>
+  </header>
+  <nav aria-label="Main">
+    <ul>
+      <li><a href="#groups">Our groups</a></li>
+      <li><a href="#about">About TALK</a></li>
+      <li><a href="#help">How you can help</a></li>
+      <li><a href="#contact">Contact us</a></li>
+    </ul>
+  </nav>
+  <div class="banner">
+    <img src="queens-award.jpg" width="94" height="100" alt="The Queen&rsquo;s Award for Voluntary Service">
+    <p><strong>TALK received the Queen&rsquo;s Award for Voluntary Service</strong>, in recognition of the outstanding contribution made by volunteers.</p>
+  </div>
+
+  <main id="main">
+    <section class="hero" aria-labelledby="heroTitle">
+      <h1 id="heroTitle">Long-term communication and social support for people with <em>aphasia</em>, and their families.</h1>
+      <p class="lede">Our 4 groups across Surrey provide a friendly and supportive environment where people with aphasia can practise their communication skills and build their social confidence.</p>
+      <div class="actions">
+        <a class="btn primary" href="#groups">Find a group</a>
+        <a class="btn ghost" href="#contact">Contact us</a>
+      </div>
+    </section>
+
+    <section id="groups" aria-labelledby="groupsTitle">
+      <h2 id="groupsTitle">Our groups</h2>
+      <p class="sub">Our four groups meet across Surrey. To find out more or to visit a group, contact us.</p>
+      <div class="groups">
+        <article class="group">
+          <span class="day">Mondays, afternoon</span>
+          <h3>Walton</h3>
+          <p class="where-note">The Walton group meets in Hersham.</p>
+          <dl><dt>When</dt><dd>1:00pm to 3:00pm</dd><dt>Where</dt><dd>Hersham Centre for the Community, 7 Queens Road, Hersham KT12 5LU</dd></dl>
+        </article>
+        <article class="group">
+          <span class="day">Tuesdays, morning</span>
+          <h3>Guildford AM</h3>
+          <p class="where-note">&nbsp;</p>
+          <dl><dt>When</dt><dd>10:00am to 12:00pm</dd><dt>Where</dt><dd>St Catherine&rsquo;s Hall, Chestnut Avenue, Guildford GU2 4HF</dd></dl>
+        </article>
+        <article class="group">
+          <span class="day">Wednesdays, morning</span>
+          <h3>Ashford</h3>
+          <p class="where-note">&nbsp;</p>
+          <dl><dt>When</dt><dd>10:00am to 12:00pm</dd><dt>Where</dt><dd>Room 3, The Salvation Army, Woodthorpe Road, Ashford TW15 3JY</dd></dl>
+        </article>
+        <article class="group">
+          <span class="day">Thursdays, morning</span>
+          <h3>Knaphill</h3>
+          <p class="where-note">&nbsp;</p>
+          <dl><dt>When</dt><dd>10:00am to 12:00pm</dd><dt>Where</dt><dd>Dramatize (formerly The Vyne), Broadway, Knaphill, Woking GU21 2SP</dd></dl>
+        </article>
+      </div>
+    </section>
+
+    <section id="about" aria-labelledby="aboutTitle">
+      <div class="about">
+        <div>
+          <h2 id="aboutTitle">About TALK</h2>
+          <p>Established in 1997, TALK provides long-term support and communication opportunities for people with aphasia. We run groups in four locations across Surrey, serving approximately 80 people with aphasia and their families.</p>
+          <p>Our mission is to support and empower people to live positively with aphasia, through engagement with their local peer network and the wider community.</p>
+          <p>Friendly trained volunteers are always present, and the relaxed atmosphere promotes lots of laughter and fun.</p>
+        </div>
+        <div class="box">
+          <h3>What is aphasia?</h3>
+          <p>Aphasia is a language and communication disorder. It is usually caused by damage to the left side of the brain, and the most common cause is stroke.</p>
+          <p>People with aphasia often have trouble with:</p>
+          <ul><li>speaking</li><li>understanding speech</li><li>reading and writing</li></ul>
+          <p>Aphasia affects each person differently.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="help" aria-labelledby="helpTitle">
+      <h2 id="helpTitle">How you can help</h2>
+      <p class="sub">TALK relies on grants, fund-raising and donations.</p>
+      <div class="help">
+        <div class="card">
+          <h3>Spread the word</h3>
+          <p>Do you know a friend or family member who has aphasia? They may be feeling frustrated or isolated. Encourage them to contact us. We can help.</p>
+          <a class="btn primary" href="#contact">Contact us</a>
+        </div>
+        <div class="card">
+          <h3>Volunteer</h3>
+          <p>Being a TALK volunteer is a rewarding experience and we have a great deal of fun. Contact our Operations Manager, who can tell you about our work and arrange for you to visit one of our groups.</p>
+          <a class="btn primary" href="tel:+447718425953">Call 07718 425953</a>
+        </div>
+        <div class="card">
+          <h3>Give a donation</h3>
+          <p>You can donate through our JustGiving page.</p>
+          <a class="btn primary" href="https://justgiving.com/talksurrey" rel="noopener">Donate on JustGiving</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" aria-labelledby="contactTitle">
+      <div class="contact">
+        <div>
+          <h2 id="contactTitle">Contact us</h2>
+          <p>For more information about TALK, or if you wish to help, contact our Operations Manager.</p>
+          <p class="big"><a href="tel:+447718425953">07718 425953</a></p>
+          <p>Monday to Thursday, 9am to 4pm</p>
+          <p><a href="https://talksurrey.org.uk/component/rsform/form/4-contact-talk-surrey-cio.html?Itemid=148" rel="noopener">Use our enquiry form</a><br>
+          <a href="mailto:info@talksurrey.org.uk">info@talksurrey.org.uk</a></p>
+        </div>
+        <div>
+          <p><strong>Making a referral</strong></p>
+          <p>Use the current TALK referral form:</p>
+          <p><a href="https://talksurrey.org.uk/images/forms/TALK_Referral_Form_2026.pdf" rel="noopener">Referral form (PDF)</a><br>
+          <a href="https://talksurrey.org.uk/images/forms/TALK_Referral_Form_2026.doc" rel="noopener">Referral form (Word)</a></p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>TALK Surrey CIO &middot; Registered Charity No. 1176014 &middot; c/o LFM Accountants, 23B Lenten Street, Alton GU34 1HG</p>
+    <p>Concept design, not the charity&rsquo;s live website. Logo, award image and wording from <a href="https://talksurrey.org.uk/" rel="noopener">talksurrey.org.uk</a>. Design concept by <a href="https://websitesbynick.co.uk/">Websites by Nick</a></p>
+  </footer>
+</div>
+<script>
+  (() => {
+    const KEY = "talk-theme";
+    const btn = document.getElementById("themeToggle");
+    let dark = null;
+    try { dark = localStorage.getItem(KEY); } catch {}
+    if (dark !== "dark" && dark !== "light") dark = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    dark = dark === "dark";
+    const apply = () => { document.body.classList.toggle("dark", dark); btn.setAttribute("aria-pressed", String(dark)); };
+    apply();
+    btn.addEventListener("click", () => { dark = !dark; apply(); try { localStorage.setItem(KEY, dark ? "dark" : "light"); } catch {} });
+  })();
+</script>
+</body>
+</html>
