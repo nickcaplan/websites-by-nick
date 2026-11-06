@@ -410,7 +410,7 @@ test('keyboard: contact form can be completed and submitted by keyboard (submiss
   assert.ok(caught[0].includes('Hello from the keyboard'), 'the intercepted request carries the typed message');
 });
 
-for (const [name, path] of [['home', '/'], ['experience', '/experience/'], ['pricing', '/pricing/'], ['contact', '/contact/']]) {
+for (const [name, path] of [['home', '/'], ['experience', '/experience/'], ['pricing', '/pricing/'], ['charity', '/pricing/charity/'], ['contact', '/contact/']]) {
   test(`mobile 390px (${name}): one visible h1, no horizontal scrolling, visible nav chips`, async ({ page }, testInfo) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto(path);
@@ -431,7 +431,7 @@ for (const [name, path] of [['home', '/'], ['experience', '/experience/'], ['pri
     assert.equal(state.visibleH1, 1, 'exactly one h1 is rendered');
     assert.equal(state.mobileMode, 'true', 'mobile layout active at 390px');
     assert.ok(state.overflow <= 1, `no horizontal scroll (overflow ${state.overflow}px)`);
-    assert.equal(state.chips, 4, 'Work / Experience / Pricing / Contact chips all visible on mobile');
+    assert.equal(state.chips, 5, 'Work / Experience / Pricing / Charity / Contact chips all visible on mobile');
     assert.ok(state.chipDelta <= 2, `chip labels vertically centred (delta ${state.chipDelta.toFixed(1)}px)`);
     assert.equal(state.menuButton, false, 'no hidden menu button');
     await settle(page);
