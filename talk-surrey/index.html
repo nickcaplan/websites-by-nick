@@ -36,16 +36,18 @@
   .theme-toggle::after{content:"Off";margin-left:10px;padding:2px 10px;border-radius:999px;background:var(--tint);font-size:14px}
   .theme-toggle[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
   .theme-toggle[aria-pressed="true"]::after{content:"On";background:var(--yellow);color:#1d1d3a}
-  nav{background:var(--indigo);border-radius:18px;padding:6px}
+  nav{background:var(--indigo);border-radius:18px;padding:6px;position:sticky;top:8px;z-index:5;box-shadow:0 4px 14px rgba(29,29,58,.18)}
+  section[id]{scroll-margin-top:84px}
   body.dark nav{background:var(--tint)}
   nav ul{list-style:none;display:flex;gap:4px;flex-wrap:wrap;margin:0;padding:0}
   nav a{display:inline-block;padding:11px 18px;border-radius:12px;color:#fff;font-weight:700;font-size:16px;text-decoration:none;min-height:44px}
   body.dark nav a{color:var(--ink)}
   nav a:hover{background:rgba(255,255,255,.18)}
-  .banner{background:var(--yellow);color:#1d1d3a;border-radius:18px;margin-top:16px;padding:12px 22px;display:flex;gap:14px;align-items:center}
+  .banner{background:var(--yellow);color:#1d1d3a;border-radius:18px;margin:6px 0 10px;padding:12px 22px;display:flex;gap:14px;align-items:center}
   .banner img{width:52px;height:auto;border-radius:6px;flex:none;background:#fff}
   .banner p{margin:0;font-size:16px}
   .hero{padding:40px 0 22px}
+  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
   h1{font-size:clamp(34px,5.6vw,58px);line-height:1.12;margin:0 0 18px;max-width:17em;letter-spacing:-.01em}
   h1 em{font-style:normal;color:var(--indigo)}
   .lede{font-size:21px;max-width:38em;margin:0 0 26px;color:var(--ink-soft)}
@@ -59,14 +61,16 @@
   section{padding:28px 0}
   h2{font-size:clamp(27px,4vw,36px);line-height:1.2;margin:0 0 8px}
   .sub{margin:0 0 22px;color:var(--ink-soft);max-width:40em}
-  .groups{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
-  .group{background:var(--surface);border:2px solid var(--line);border-radius:18px;padding:22px 22px;display:grid;grid-template-rows:subgrid;grid-row:span 4;row-gap:0;margin-bottom:16px}
+  .groups{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .group{background:var(--surface);border:2px solid var(--line);border-radius:18px;padding:22px 22px;display:flex;flex-direction:column;align-items:flex-start}
   .day{align-self:flex-start;justify-self:start;background:var(--tint);color:var(--ink);font-weight:700;border-radius:999px;padding:4px 14px;font-size:15px;margin-bottom:10px}
   .group h3{font-size:25px;margin:0 0 2px;line-height:1.2}
   .group .where-note{margin:0 0 10px;color:var(--ink-soft);font-size:15px}
   .group dl{margin:0;font-size:17px}
   .group dt{font-weight:700;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--indigo);margin-top:8px}
   .group dd{margin:2px 0 0}
+  .group-actions{margin:auto 0 0;padding-top:16px;display:flex;flex-wrap:wrap;gap:6px 20px}
+  .group-actions a{font-weight:700;display:inline-block;padding:10px 0;min-height:44px}
   .about{display:grid;grid-template-columns:1.1fr .9fr;gap:26px;align-items:start}
   .about p{margin:0 0 14px}
   .box{background:var(--tint);border-radius:20px;padding:26px 26px}
@@ -77,7 +81,7 @@
   .card{background:var(--surface);border:2px solid var(--line);border-radius:18px;padding:24px 22px;display:flex;flex-direction:column;align-items:flex-start}
   .card h3{font-size:24px;margin:0 0 8px}
   .card p{margin:0 0 14px;color:var(--ink-soft)}
-  .card .btn{margin-top:auto}
+  .card .btn{margin-top:auto;width:100%;text-align:center;padding:14px 16px}
   .forms{display:flex;gap:10px;flex-wrap:wrap;margin-top:auto}
   .forms .btn{padding:10px 18px;font-size:16px;min-height:46px}
   .contact{background:var(--indigo-deep);color:#fff;border-radius:24px;padding:34px 30px;display:grid;grid-template-columns:1.1fr .9fr;gap:26px}
@@ -86,29 +90,47 @@
   .contact p{margin:0 0 10px}
   .contact a{color:inherit;font-weight:700}
   .contact .big{font-size:28px;font-weight:700}
+  .contact h3{font-size:20px;margin:0 0 6px}
+  .contact .panel{background:rgba(255,255,255,.1);border-radius:16px;padding:20px 22px}
+  body.dark .contact .panel{background:var(--tint)}
+  .contact .links{display:flex;flex-direction:column;gap:10px;align-items:flex-start;margin-top:8px}
+  .contact .links a{display:inline-block;padding:10px 18px;border:2px solid currentColor;border-radius:12px;text-decoration:none;min-height:44px}
+  .contact .links a:hover{background:rgba(255,255,255,.16)}
+  .totop{display:none}
   footer{padding:26px 0 40px;color:var(--ink-soft);font-size:14px}
   footer p{margin:0 0 8px}
   footer a{color:inherit}
   @media (max-width:760px){
     body{font-size:17px}
-    header{flex-wrap:wrap}
-    .logo{width:64px;height:64px}
+    header{gap:12px;padding:10px 0}
+    .logo{width:52px;height:52px}
+    .strap{display:none}
+    .name{font-size:19px}
     .spacer{display:none}
-    .theme-toggle{margin-left:auto}
+    .theme-toggle{margin-left:auto;padding:0 12px;font-size:15px;min-height:44px}
+    .theme-toggle::after{margin-left:6px;padding:2px 8px;font-size:13px}
+    .btn{padding:12px 22px}
+    h1{font-size:30px}
+    .lede{font-size:19px;margin-bottom:20px}
+    nav{position:static;box-shadow:none}
+    nav a{padding:8px 4px;min-height:44px}
+    .totop{display:block;position:fixed;right:12px;bottom:12px;z-index:5;background:var(--indigo-deep);color:#fff;font-weight:700;font-size:15px;text-decoration:none;padding:11px 14px;border-radius:999px;min-height:44px;min-width:44px;box-shadow:0 4px 14px rgba(29,29,58,.3)}
+    body.dark .totop{background:var(--tint);color:var(--ink);border:2px solid var(--line)}
+    section[id]{scroll-margin-top:12px}
+    footer{padding-bottom:80px}
     nav ul{display:grid;grid-template-columns:1fr 1fr}
     nav a{display:block;text-align:center;padding:10px 6px}
     .groups,.about,.help,.contact{grid-template-columns:1fr}
-    .group{display:block;margin-bottom:14px}
-    .group .day{display:inline-block}
     .contact{padding:26px 20px}
     .hero{padding:26px 0 14px}
     .actions .btn{width:100%;text-align:center}
     .banner{align-items:flex-start}
+    .groups{gap:14px}
   }
   @media (min-width:761px) and (max-width:980px){.help{grid-template-columns:1fr}}
 </style>
 </head>
-<body>
+<body id="top">
 <a class="skip" href="#main">Skip to content</a>
 <div class="wrap">
   <header>
@@ -128,11 +150,6 @@
       <li><a href="#contact">Contact us</a></li>
     </ul>
   </nav>
-  <div class="banner">
-    <img src="queens-award.jpg" width="94" height="100" alt="The Queen&rsquo;s Award for Voluntary Service">
-    <p><strong>TALK received the Queen&rsquo;s Award for Voluntary Service</strong>, in recognition of the outstanding contribution made by volunteers.</p>
-  </div>
-
   <main id="main">
     <section class="hero" aria-labelledby="heroTitle">
       <h1 id="heroTitle">Long-term communication and social support for people with <em>aphasia</em>, and their families.</h1>
@@ -143,33 +160,38 @@
       </div>
     </section>
 
+      <div class="banner" role="note">
+        <img src="queens-award.jpg" width="94" height="100" alt="The Queen&rsquo;s Award for Voluntary Service">
+        <p><strong>TALK received the Queen&rsquo;s Award for Voluntary Service</strong>, in recognition of the outstanding contribution made by volunteers.</p>
+      </div>
+
     <section id="groups" aria-labelledby="groupsTitle">
       <h2 id="groupsTitle">Our groups</h2>
-      <p class="sub">Our four groups meet across Surrey. To find out more or to visit a group, contact us.</p>
+      <p class="sub">Our four groups meet across Surrey. The Walton group meets in Hersham. To find out more or to visit a group, <a href="#contact">contact us</a>.</p>
       <div class="groups">
         <article class="group">
           <span class="day">Mondays, afternoon</span>
           <h3>Walton</h3>
-          <p class="where-note">The Walton group meets in Hersham.</p>
           <dl><dt>When</dt><dd>1:00pm to 3:00pm</dd><dt>Where</dt><dd>Hersham Centre for the Community, 7 Queens Road, Hersham KT12 5LU</dd></dl>
+          <p class="group-actions"><a href="#contact">Ask about this group<span class="sr"> (Walton)</span></a><a href="https://www.google.com/maps/search/?api=1&amp;query=Hersham+Centre+for+the+Community%2C+7+Queens+Road%2C+Hersham+KT12+5LU" rel="noopener">Directions<span class="sr"> to Walton</span></a></p>
         </article>
         <article class="group">
           <span class="day">Tuesdays, morning</span>
           <h3>Guildford AM</h3>
-          <p class="where-note">&nbsp;</p>
           <dl><dt>When</dt><dd>10:00am to 12:00pm</dd><dt>Where</dt><dd>St Catherine&rsquo;s Hall, Chestnut Avenue, Guildford GU2 4HF</dd></dl>
+          <p class="group-actions"><a href="#contact">Ask about this group<span class="sr"> (Guildford AM)</span></a><a href="https://www.google.com/maps/search/?api=1&amp;query=St+Catherine%E2%80%99s+Hall%2C+Chestnut+Avenue%2C+Guildford+GU2+4HF" rel="noopener">Directions<span class="sr"> to Guildford AM</span></a></p>
         </article>
         <article class="group">
           <span class="day">Wednesdays, morning</span>
           <h3>Ashford</h3>
-          <p class="where-note">&nbsp;</p>
           <dl><dt>When</dt><dd>10:00am to 12:00pm</dd><dt>Where</dt><dd>Room 3, The Salvation Army, Woodthorpe Road, Ashford TW15 3JY</dd></dl>
+          <p class="group-actions"><a href="#contact">Ask about this group<span class="sr"> (Ashford)</span></a><a href="https://www.google.com/maps/search/?api=1&amp;query=The+Salvation+Army%2C+Woodthorpe+Road%2C+Ashford+TW15+3JY" rel="noopener">Directions<span class="sr"> to Ashford</span></a></p>
         </article>
         <article class="group">
           <span class="day">Thursdays, morning</span>
           <h3>Knaphill</h3>
-          <p class="where-note">&nbsp;</p>
           <dl><dt>When</dt><dd>10:00am to 12:00pm</dd><dt>Where</dt><dd>Dramatize (formerly The Vyne), Broadway, Knaphill, Woking GU21 2SP</dd></dl>
+          <p class="group-actions"><a href="#contact">Ask about this group<span class="sr"> (Knaphill)</span></a><a href="https://www.google.com/maps/search/?api=1&amp;query=Dramatize%2C+Broadway%2C+Knaphill%2C+Woking+GU21+2SP" rel="noopener">Directions<span class="sr"> to Knaphill</span></a></p>
         </article>
       </div>
     </section>
@@ -218,20 +240,26 @@
       <div class="contact">
         <div>
           <h2 id="contactTitle">Contact us</h2>
+          <h3>Enquiries, visits and volunteering</h3>
           <p>For more information about TALK, or if you wish to help, get in touch.</p>
           <p class="big"><a href="tel:+447718425953">07718 425953</a></p>
-          <p><a href="https://talksurrey.org.uk/component/rsform/form/4-contact-talk-surrey-cio.html?Itemid=148" rel="noopener">Use our enquiry form</a><br>
-          <a href="mailto:info@talksurrey.org.uk">info@talksurrey.org.uk</a></p>
+          <div class="links">
+            <a href="https://talksurrey.org.uk/component/rsform/form/4-contact-talk-surrey-cio.html?Itemid=148" rel="noopener">Use our enquiry form</a>
+            <a href="mailto:info@talksurrey.org.uk">info@talksurrey.org.uk</a>
+          </div>
         </div>
-        <div>
-          <p><strong>Making a referral</strong></p>
+        <div class="panel">
+          <h3>Making a referral</h3>
           <p>Use the current TALK referral form:</p>
-          <p><a href="https://talksurrey.org.uk/images/forms/TALK_Referral_Form_2026.pdf" rel="noopener">Referral form (PDF)</a><br>
-          <a href="https://talksurrey.org.uk/images/forms/TALK_Referral_Form_2026.doc" rel="noopener">Referral form (Word)</a></p>
+          <div class="links">
+            <a href="https://talksurrey.org.uk/images/forms/TALK_Referral_Form_2026.pdf" rel="noopener">Referral form (PDF)</a>
+            <a href="https://talksurrey.org.uk/images/forms/TALK_Referral_Form_2026.doc" rel="noopener">Referral form (Word)</a>
+          </div>
         </div>
       </div>
     </section>
   </main>
+  <a class="totop" href="#top" aria-label="Back to top">&uarr; Top</a>
 
   <footer>
     <p>TALK Surrey CIO &middot; Registered Charity No. 1176014 &middot; c/o LFM Accountants, 23B Lenten Street, Alton GU34 1HG</p>
