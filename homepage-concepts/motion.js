@@ -461,10 +461,13 @@
     work.addEventListener("pointerdown", () => { pointerFocus = true; });
     addEventListener("pointerup", () => {
       pointerFocus = false;
-      if (document.body.classList.contains("project-focus")) {
-        document.body.classList.remove("project-focus");
-        kick2();
-      }
+      // Let the native click dispatch before restoring the pointer deck.
+      setTimeout(() => {
+        if (document.body.classList.contains("project-focus")) {
+          document.body.classList.remove("project-focus");
+          kick2();
+        }
+      }, 0);
     });
     addEventListener("pointercancel", () => { pointerFocus = false; });
     addEventListener("keydown", () => { pointerFocus = false; }, true);
