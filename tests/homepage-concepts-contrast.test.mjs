@@ -60,7 +60,7 @@ test('dark-mode focus ring is two-tone: each tone contrasts cards and page', () 
   assert.ok(rule, 'dark focus override missing');
   const ring = rule[1].match(/outline: 3px solid (#[0-9a-f]{6})/)[1];
   const halo = rule[1].match(/box-shadow: 0 0 0 5px (#[0-9a-f]{6})/)[1];
-  const backdrops = [DARK_PAPER, pagesColor('.card', 'background'), pagesColor('.card.lime', 'background'), pagesColor('.card.ink', 'background')];
+  const backdrops = [DARK_PAPER, pagesColor('.card', 'background'), pagesColor('.card.lime', 'background'), pagesColor('.dark .card.ink', 'background')];
   for (const bg of backdrops) {
     const ok = contrast(ring, bg) >= 3 || contrast(halo, bg) >= 3;
     assert.ok(ok, `ring ${ring} halo ${halo} vs ${bg}`);

@@ -20,13 +20,14 @@ const types = {
 
 export const startStaticServer = (root) => {
   const server = createServer(async (req, res) => {
-    const p = resolve(root, "." + new URL(req.url, "http://localhost").pathname);
-    if (p !== root && !p.startsWith(root + sep)) {
-      res.writeHead(403).end();
-      return;
-    }
-    const file = extname(p) ? p : p + "/index.html";
     try {
+      const pathname = decodeURIComponent(new URL(req.url, "http://localhost").pathname);
+      const p = resolve(root, "." + pathname);
+      if (p !== root && !p.startsWith(root + sep)) {
+        res.writeHead(403).end();
+        return;
+      }
+      const file = extname(p) ? p : p + "/index.html";
       res.setHeader("content-type", types[extname(file)] || "application/octet-stream");
       res.end(await readFile(file));
     } catch {
