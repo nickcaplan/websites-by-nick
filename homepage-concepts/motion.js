@@ -89,6 +89,17 @@
     };
     setTimeout(urlStep, 120);
   };
+  // the surprise nav's payoff: tap swaps the words to "Told you." briefly,
+  // then they come back. Hover and keyboard focus do it through CSS.
+  const surprise = document.querySelector(".pf-surprise");
+  if (surprise) {
+    let swapTimer = null;
+    surprise.addEventListener("click", () => {
+      surprise.classList.add("pf-swap");
+      if (swapTimer) clearTimeout(swapTimer);
+      swapTimer = setTimeout(() => surprise.classList.remove("pf-swap"), 1200);
+    });
+  }
   let refreshProjects = () => {};
   const apply = () => {
     document.body.classList.toggle("paused", paused);

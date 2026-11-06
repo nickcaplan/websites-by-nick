@@ -237,6 +237,78 @@ h1 {
   animation: navin 0.45s 3.3s ease both;
 }
 .pf-nav span:first-child { color: var(--orange); }
+/* the surprise earns its name: the pen circles it once the window is drawn,
+   and a tap or hover swaps it to its payoff. The button keeps the nav row's
+   hand-lettered look; only the words and the circle move. */
+.pf-surprise {
+  position: relative;
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  letter-spacing: inherit;
+  word-spacing: inherit;
+  text-transform: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+.pf-surprise:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+.pf-s-a,
+.pf-s-b {
+  transition: opacity 0.18s ease;
+}
+.pf-s-b {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  color: var(--orange);
+}
+@media (hover: hover) {
+  .pf-surprise:hover .pf-s-a { opacity: 0; }
+  .pf-surprise:hover .pf-s-b { opacity: 1; }
+}
+.pf-surprise:focus-visible .pf-s-a,
+.pf-surprise.pf-swap .pf-s-a { opacity: 0; }
+.pf-surprise:focus-visible .pf-s-b,
+.pf-surprise.pf-swap .pf-s-b { opacity: 1; }
+/* wobbly pen loop around the words. Dash length must cover the rendered
+   (stretched) perimeter, same lesson as the window frame: about 300px
+   rendered at desktop, so 600 covers every width. */
+.pf-circle {
+  position: absolute;
+  inset: -4px -9px;
+  width: calc(100% + 18px);
+  height: calc(100% + 8px);
+  overflow: visible;
+  fill: none;
+  stroke: var(--orange);
+  stroke-width: 2;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+.pf-circle-path {
+  stroke-dasharray: 600;
+  stroke-dashoffset: 600;
+  animation: pendraw 0.7s 3.9s ease forwards;
+}
+h1.will-type .pf-circle-path {
+  animation: none;
+}
+h1.will-type.typed.drawn .pf-circle-path {
+  animation: pendraw 0.7s 2.9s ease forwards;
+}
+h1.sketch-settled .pf-circle-path,
+.paused h1 .pf-circle-path,
+.hidden-page h1 .pf-circle-path {
+  visibility: visible !important;
+  stroke-dashoffset: 0 !important;
+  animation: none !important;
+}
 h1.will-type .pf-nav {
   animation: none;
 }
@@ -1358,6 +1430,10 @@ body.paused .reveal {
     will-change: auto !important;
   }
   /* the sketched browser window shows fully drawn, statically */
+  .pf-circle-path {
+    visibility: visible !important;
+    stroke-dashoffset: 0 !important;
+  }
   .pf-nav {
     visibility: visible !important;
     opacity: 1 !important;
@@ -1610,6 +1686,9 @@ body.paused .studio .sd-fill {
 }
 .dark .studio .sd-title {
   fill: #203027;
+}
+.dark .studio .sd-title-em {
+  fill: #be492b;
 }
 .dark .studio .sd-legs {
   stroke: #f2ecdf66;
