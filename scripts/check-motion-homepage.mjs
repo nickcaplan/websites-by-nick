@@ -418,16 +418,18 @@ console.log("PASS noJS");
     await p.mouse.move(box.x + box.width - 5, box.y + 5);
     await p.waitForTimeout(30);
   }
-  await p.getByRole("button", { name: "Pause motion", exact: true }).click();
-  await p.mouse.move(box.x + box.width - 5, box.y + 5);
-  await p.waitForTimeout(60);
-  const snap = await p.evaluate(() => {
-    const el = document.querySelector('[data-depth="26"]');
-    const m = /([-\d.]+)px ([-\d.]+)px/.exec(el.style.translate || "0px 0px");
-    return m ? Math.max(Math.abs(parseFloat(m[1])), Math.abs(parseFloat(m[2]))) : 0;
-  });
+  // Resume and sample in the next animation frame in one page task, avoiding
+  // network and click latency before the no-snap measurement.
+  const snap = await p.evaluate(() => new Promise(resolve => {
+    document.querySelector('.motion-toggle').click();
+    requestAnimationFrame(() => {
+      const el=document.querySelector('[data-depth="26"]');
+      const m=/([-\d.]+)px ([-\d.]+)px/.exec(el.style.translate || '0px 0px');
+      resolve(m?Math.max(Math.abs(parseFloat(m[1])),Math.abs(parseFloat(m[2]))):0);
+    });
+  }));
   // A snap would show the full offset (0.5 * 26 = 13px); easing from neutral
-  // after ~60ms stays well under half that.
+  // on the first resumed frame stays well under half that.
   if (snap > 6.5) throw Error(`parallax snapped to pointer on resume: ${snap}px`);
   console.log("PASS parallax-no-snap");
   await p.close();

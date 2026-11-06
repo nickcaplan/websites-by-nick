@@ -28,6 +28,11 @@ const studioState = (p) => p.evaluate(() => {
     hand: svg.querySelector(".sd-hand").getAttribute("transform"),
   };
 });
+// Wait for the actual drawing phase instead of guessing when it starts.
+const waitForDrawing = (p) => p.waitForFunction(() => {
+ const svg=document.querySelector('.studio svg');
+ return svg.dataset.state==='running' && svg.dataset.step==='0' && parseFloat(svg.querySelector('.sd-clip').getAttribute('width'))>1;
+},null,{timeout:10000});
 const CLIP_FULL = 300; // fully-open title wipe width for the current board
 const complete = (s) => s.left === 0 && s.fills.every((o) => o === "1") && s.clip >= CLIP_FULL - 1;
 
@@ -87,7 +92,7 @@ for (const width of [320, 390, 768, 901, 961, 1024, 1280, 1400, 1600]) {
   const need = Math.min(600, width * 0.85);
   if (box.width < need) fail("studio too small " + box.width + " at " + width);
   await p.evaluate(() => document.querySelector(".studio svg").scrollIntoView({ block: "center", behavior: "instant" }));
-  await p.waitForTimeout(1600);
+  await waitForDrawing(p);
   const a = await studioState(p);
   await p.waitForTimeout(1400);
   const m = await studioState(p);
@@ -163,7 +168,7 @@ for (const width of [320, 390, 768, 901, 961, 1024, 1280, 1400, 1600]) {
   await p.goto(base + "/homepage-concepts/");
   await p.waitForLoadState("networkidle");
   await p.evaluate(() => document.querySelector(".studio svg").scrollIntoView({ block: "center", behavior: "instant" }));
-  await p.waitForTimeout(700); // mid-draw
+  await waitForDrawing(p);
   await p.evaluate(() => window.scrollTo(0, 0)); // leave before it ends
   await p.waitForFunction(() => document.querySelector(".studio svg").classList.contains("done"), null, { timeout: 25000 });
   await p.evaluate(() => document.querySelector(".studio svg").scrollIntoView({ block: "center", behavior: "instant" }));
@@ -205,7 +210,7 @@ for (const width of [320, 390, 768, 901, 961, 1024, 1280, 1400, 1600]) {
   await p.goto(base + "/homepage-concepts/");
   await p.waitForLoadState("networkidle");
   await p.evaluate(() => document.querySelector(".studio svg").scrollIntoView({ block: "center", behavior: "instant" }));
-  await p.waitForTimeout(1800);
+  await waitForDrawing(p);
   if (complete(await studioState(p))) fail("too early to test pause");
   await p.getByRole("button", { name: "Pause motion", exact: true }).click();
   await p.waitForTimeout(900);
@@ -224,7 +229,7 @@ for (const width of [320, 390, 768, 901, 961, 1024, 1280, 1400, 1600]) {
   await p.goto(base + "/homepage-concepts/");
   await p.waitForLoadState("networkidle");
   await p.evaluate(() => document.querySelector(".studio svg").scrollIntoView({ block: "center", behavior: "instant" }));
-  await p.waitForTimeout(1800);
+  await waitForDrawing(p);
   await p.evaluate(() => { Object.defineProperty(document, "hidden", { configurable: true, get: () => true }); document.dispatchEvent(new Event("visibilitychange")); });
   await p.waitForTimeout(150);
   const s1 = await studioState(p);
@@ -277,7 +282,10 @@ for (const width of [320, 390, 768, 901, 961, 1024, 1280, 1400, 1600]) {
   const reached = new Set();
   for (let i = 0; i < 60 && reached.size < hrefs.length; i++) {
     await p.keyboard.press("Tab");
-    await p.waitForTimeout(500); // focus scrolls into view smoothly; measure once settled
+    await p.evaluate(() => new Promise(resolve => {
+      let previous='',stable=0;
+      const sample=()=>{const e=document.activeElement,r=e.getBoundingClientRect();const current=[scrollX,scrollY,r.x,r.y,r.width,r.height].map(n=>n.toFixed(2)).join();stable=current===previous?stable+1:0;previous=current;if(stable>=5)resolve();else requestAnimationFrame(sample)};requestAnimationFrame(sample);
+    }));
     const r = await p.evaluate(() => {
       const e = document.activeElement;
       if (!e || !e.matches("a.project[href]")) return null;
