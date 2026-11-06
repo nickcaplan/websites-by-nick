@@ -191,8 +191,18 @@ if (resumed.off !== "0px" || resumed.running)
     const h = document.getElementById("hero-title");
     return h.classList.contains("typed") && h.classList.contains("drawn");
   });
-  await midp.waitForTimeout(500);
-  await midp.getByRole("button", { name: "Pause motion", exact: true }).click();
+  const partial = await midp.evaluate(() => {
+    const f = document.querySelector(".pf-frame");
+    const animation = f.getAnimations()[0];
+    if (!animation) throw Error("frame animation missing");
+    animation.currentTime = Number(animation.effect.getTiming().duration) / 2;
+    const offset = parseFloat(getComputedStyle(f).strokeDashoffset);
+    const total = parseFloat(getComputedStyle(f).strokeDasharray);
+    if (!(offset > 0 && offset < total)) throw Error("frame not partial at pause");
+    document.querySelector(".motion-toggle").click();
+    return offset;
+  });
+  if (!(partial > 0)) throw Error("mid-draw pause was not exercised");
   await midp.getByRole("button", { name: "Pause motion", exact: true }).click();
   await midp.waitForTimeout(400);
   const midState = await midp.evaluate(() => {

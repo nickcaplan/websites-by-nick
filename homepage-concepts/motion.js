@@ -197,6 +197,7 @@
   // Hero title types out, then the sketched browser window draws around it.
   // Without JS or with reduced motion the full title and window show settled.
   const heroTitle = document.getElementById("hero-title");
+  if (heroTitle && reduced.matches) heroTitle.classList.add("sketch-settled");
   if (heroTitle && !reduced.matches) {
     const chars = [];
     const walk = (node) => {
@@ -455,7 +456,13 @@
       if (!raf2) raf2 = requestAnimationFrame(scrub);
     };
     const work = document.querySelector(".work");
+    let pointerFocus = false;
+    work.addEventListener("pointerdown", () => { pointerFocus = true; });
+    addEventListener("pointerup", () => { pointerFocus = false; });
+    addEventListener("pointercancel", () => { pointerFocus = false; });
+    addEventListener("keydown", () => { pointerFocus = false; }, true);
     work.addEventListener("focusin", event => {
+      if (pointerFocus) return;
       document.body.classList.add("project-focus");
       scrub();
       const focused = event.target.closest(".project");
