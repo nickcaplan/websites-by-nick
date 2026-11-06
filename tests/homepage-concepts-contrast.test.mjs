@@ -87,8 +87,9 @@ test('footer focus ring contrasts the ink footer', () => {
   const rule = motionCss.match(/footer a:focus-visible \{([^}]*)\}/);
   assert.ok(rule, 'footer focus override missing');
   const ring = rule[1].match(/outline-color: (#[0-9a-f]{6})/)[1];
+  const darkFooter = motionCss.match(/\.dark footer \{([^}]*)\}/)[1].match(/background: (#[0-9a-f]{6})/)[1];
   assert.ok(contrast(ring, lightVar('--ink')) >= 3, 'light footer');
-  assert.ok(contrast(ring, '#111d17') >= 3, 'dark footer');
+  assert.ok(contrast(ring, darkFooter) >= 3, 'dark footer');
 });
 
 test('subpage wordmark dot does not animate without a pause control', () => {
