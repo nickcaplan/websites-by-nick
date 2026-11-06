@@ -153,7 +153,7 @@
     urlTimers.clear();
     if (!urlText) return;
     urlChars.forEach((s) => s.classList.add("on"));
-    if (chromeSvg) chromeSvg.classList.remove("url-typing");
+    if (chromeSvg) {chromeSvg.classList.remove("url-typing");chromeSvg.dataset.finished="true";}
     if (heroTitle) heroTitle.classList.add("url-ready");
     urlStarted = true;
   };
@@ -223,7 +223,7 @@
     };
     heroTitle.querySelectorAll(".line").forEach(walk);
     if (chars.length) {
-      heroTitle.setAttribute("aria-label", [...heroTitle.querySelectorAll(".line")].map((l) => l.textContent.trim()).join(" "));
+      if (!heroTitle.hasAttribute("aria-label")) heroTitle.setAttribute("aria-label", [...heroTitle.querySelectorAll(".line")].map((l) => l.textContent.trim()).join(" "));
       heroTitle.querySelectorAll(".line").forEach((l) => l.setAttribute("aria-hidden", "true"));
       heroTitle.classList.add("will-type");
       const caret = document.createElement("span");

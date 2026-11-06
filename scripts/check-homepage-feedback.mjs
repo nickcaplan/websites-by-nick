@@ -36,7 +36,7 @@ const waitForDrawing = (p) => p.waitForFunction(() => {
 const CLIP_FULL = 300; // fully-open title wipe width for the current board
 const complete = (s) => s.left === 0 && s.fills.every((o) => o === "1") && s.clip >= CLIP_FULL - 1;
 
-for (const width of [320, 390, 768, 901, 961, 1024, 1280, 1400, 1600]) {
+await Promise.all([320, 390, 768, 901, 961, 1024, 1280, 1400, 1600].map(async width => {
   const p = await b.newPage({ viewport: { width, height: width < 600 ? 844 : 1000 } });
   const errors = [];
   p.on("pageerror", (e) => errors.push(e.message));
@@ -45,7 +45,7 @@ for (const width of [320, 390, 768, 901, 961, 1024, 1280, 1400, 1600]) {
   await p.evaluate(() => document.fonts.ready);
   const text = await p.evaluate(() => document.body.innerText);
   const h1 = await p.evaluate(() => document.getElementById("hero-title").getAttribute("aria-label") || document.getElementById("hero-title").textContent);
-  if (!/Websites people\s*remember\./.test(h1.replace(/\s+/g, " "))) fail("hero message " + h1);
+  if (h1 !== "Websites people remember, trust, enjoy, love.") fail("hero message " + h1);
   for (const re of banned) if (re.test(text)) fail("removed line is back: " + re + " at " + width);
   // screenshots must differ from the previous same-looking pair
   const srcs = await p.evaluate(() => [...document.querySelectorAll(".composer img, .community img, .project img")].map((i) => i.getAttribute("src")));
@@ -71,20 +71,10 @@ for (const width of [320, 390, 768, 901, 961, 1024, 1280, 1400, 1600]) {
   await p.waitForTimeout(400);
   // sticker fully visible, not covered by a card
   await p.waitForTimeout(2200);
-  const sticker = await p.evaluate(() => {
-    const el = document.querySelector(".sketch");
-    const comp = document.querySelector(".composition").getBoundingClientRect();
-    const r = el.getBoundingClientRect();
-    const pts = [[0.5, 0.5], [0.3, 0.3], [0.7, 0.3], [0.3, 0.7]].map(([x, y]) => document.elementFromPoint(r.left + r.width * x, r.top + r.height * y));
-    return {
-      covered: pts.some((e) => !e || !(e === el || el.contains(e))),
-      inside: r.left >= comp.left - 1 && r.right <= comp.right + 1 && r.top >= comp.top - 1 && r.bottom <= comp.bottom + 1,
-      text: el.innerText.replace(/\s+/g, " ").trim(),
-    };
-  });
-  if (sticker.covered) fail("sticker covered at " + width);
-  if (!sticker.inside) fail("sticker clipped at " + width);
-  if (!/made by hand/.test(sticker.text)) fail("sticker text " + sticker.text);
+  // The approved cleaner composition removes the post-it entirely.
+  if (!(await p.locator('.sketch').isHidden())) fail('post-it remains visible at '+width);
+  const cards=await p.locator('.composition .browser-card').count();
+  if(cards!==2)fail('expected both showcase cards at '+width);
   if (await p.evaluate(() => document.documentElement.scrollWidth > innerWidth)) fail("overflow " + width);
   // the drawing studio is large and draws live
   await p.locator(".studio svg").scrollIntoViewIfNeeded();
@@ -113,7 +103,7 @@ for (const width of [320, 390, 768, 901, 961, 1024, 1280, 1400, 1600]) {
   if (errors.length) fail(errors.join());
   console.log("PASS", width);
   await p.close();
-}
+}));
 
 // The title wipe never reveals text ahead of the pen tip: while the pen is
 // still left of the measured headline end (x=704), the wipe's right edge

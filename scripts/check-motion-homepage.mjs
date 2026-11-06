@@ -31,22 +31,15 @@ for (const width of [320, 390, 768, 901, 961, 1024, 1280, 1400, 1600]) {
   await p.evaluate(() => document.fonts.ready);
   await p.waitForLoadState("networkidle");
   await p.locator(".composer img").evaluate((e) => e.decode());
-  await p.waitForFunction(() =>
-    document
-      .querySelector(".composer")
-      .getAnimations()
-      .some((a) => a.currentTime > 1400),
-  );
+  // Showcase cards are intentionally still until scroll drives their scale.
+  const showcase=await p.locator('.composer').evaluate(e=>({animation:getComputedStyle(e).animationName,scale:getComputedStyle(e).scale}));
+  if(showcase.animation!=='none')throw Error('showcase still loops');
   if (await p.evaluate(() => document.documentElement.scrollWidth > innerWidth))
     throw Error("overflow" + width);
   if (errors.length) throw Error(errors);
   if (width === 390 || width === 1280)
     await p.screenshot({ path: output + "/motion-" + width + ".png" });
-  await p.waitForFunction(() =>
-    [...document.querySelectorAll(".composition, .pf-frame")]
-      .flatMap((e) => e.getAnimations({ subtree: true }))
-      .some((a) => a.playState === "running"),
-  );
+  await p.waitForFunction(()=>document.querySelector('#hero-title').classList.contains('typed'));
   await p.getByRole("button", { name: "Pause motion", exact: true }).click();
   if (
     (await p
@@ -393,12 +386,19 @@ console.log("PASS noJS");
   const p = await b.newPage({ viewport: { width: 1280, height: 900 } });
   await p.goto(base + "/homepage-concepts/", { waitUntil: "networkidle" });
   await p.waitForTimeout(400);
+  for(const context of b.contexts())for(const other of context.pages())if(other!==p)await other.close();
+  await p.bringToFront();
+  await p.waitForFunction(()=>document.visibilityState==='visible');
   const before = await p.evaluate(() => document.body.classList.contains("paused"));
+  await p.evaluate(()=>{window.flipReduced=new Promise(resolve=>{const m=matchMedia('(prefers-reduced-motion: reduce)');m.addEventListener('change',()=>requestAnimationFrame(resolve),{once:true})})});
   await p.emulateMedia({ reducedMotion: "reduce" });
-  await p.waitForFunction(() => document.body.classList.contains("paused"));
+  await p.evaluate(()=>window.flipReduced);
+  await p.waitForFunction(() => matchMedia("(prefers-reduced-motion: reduce)").matches && document.body.classList.contains("paused"));
   const during = await p.evaluate(() => document.body.classList.contains("paused"));
+  await p.evaluate(()=>{window.flipReduced=new Promise(resolve=>{const m=matchMedia('(prefers-reduced-motion: reduce)');m.addEventListener('change',()=>requestAnimationFrame(resolve),{once:true})})});
   await p.emulateMedia({ reducedMotion: "no-preference" });
-  await p.waitForFunction(() => !document.body.classList.contains("paused"));
+  await p.evaluate(()=>window.flipReduced);
+  await p.waitForFunction(() => !matchMedia("(prefers-reduced-motion: reduce)").matches && !document.body.classList.contains("paused"));
   const after = await p.evaluate(() => document.body.classList.contains("paused"));
   if (before || !during || after) throw Error(`pause not preserved across reduced flip: ${before}/${during}/${after}`);
   console.log("PASS reduced-flip-restores-pause");
@@ -485,7 +485,7 @@ for (const javaScriptEnabled of [true, false]) {
   await p.goto(base + "/homepage-concepts/");
   if (await p.locator("h1 .pf-nav").count()) throw Error("Frame copy nested in heading");
   if (await p.locator("h1 + .pf-nav").count() !== 1) throw Error("Frame copy missing");
-  if (await p.locator("h1").getAttribute("aria-label") !== "Websites people remember.")
+  if (await p.locator("h1").getAttribute("aria-label") !== "Websites people remember, trust, enjoy, love.")
     throw Error("Hero heading accessible label changed");
   await p.close();
 }
@@ -495,7 +495,7 @@ console.log("PASS independent-frame-copy");
 {
   const p = await b.newPage({ viewport: { width: 390, height: 844 } });
   await p.goto(base + "/homepage-concepts/");
-  await p.waitForFunction(() => document.querySelector('.pf-url').textContent === 'www.yourshop.co.uk' && !document.querySelector('.penurl').classList.contains('url-typing'), null, { timeout: 16000 });
+  await p.waitForFunction(() => document.querySelector('.pf-url').textContent === 'www.yourbusiness.co.uk' && !document.querySelector('.penurl').classList.contains('url-typing'), null, { timeout: 16000 });
   const caret = () => p.locator('.pf-caret').evaluate(e => ({ opacity: getComputedStyle(e).opacity, animation: getComputedStyle(e).animationName }));
   const settled = await caret();
   if (settled.opacity !== '0' || settled.animation !== 'none') throw Error('URL caret still blinking after final rewrite');

@@ -68,7 +68,8 @@ try {
     await page.waitForFunction(() => [...document.querySelectorAll('.project')].every(e => getComputedStyle(e).position === 'relative' && ['auto', '0px'].includes(getComputedStyle(e).top)));
     assert.ok(await page.locator('.project').count() > 0);
     assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
-    assert.equal(await page.locator('.pf-nav').evaluate(e => getComputedStyle(e).top), '-44px');
+    const frame=await page.locator('.penframe').boundingBox(),caption=await page.locator('.pf-nav').boundingBox();
+    assert.ok(caption.y>frame.y+25 && caption.y+caption.height<frame.y+frame.height, 'frame caption is contained below toolbar');
     await page.close(); console.log('PASS late reduced-motion and wide frame caption');
   }
 } finally { await browser.close(); server.close(); }
