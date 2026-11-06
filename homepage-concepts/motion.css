@@ -1766,3 +1766,8 @@ h2 { overflow-wrap: anywhere; }
   #hero-title { max-width: calc(100% - 318px); }
   #hero-title .line { font-size: min(1em, 17cqw) !important; }
 }
+
+/* The formatted copy reserves responsive height while its overlay types. */
+.type-caption.typing, .type-caption.typed { display: grid; }
+.type-caption .tc-text, .type-caption .tc-reserve { grid-area: 1 / 1; }
+.tc-reserve { visibility: hidden; pointer-events: none; }
