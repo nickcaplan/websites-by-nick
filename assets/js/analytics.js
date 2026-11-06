@@ -116,6 +116,7 @@
   }
   panel.querySelectorAll('[data-cookie-choice]').forEach(function (button) {
     button.addEventListener('click', function () {
+      panel.querySelectorAll('#cookie-save-warning, #cookie-warning-dismiss').forEach(function (element) { element.remove(); });
       preference = button.dataset.cookieChoice;
       var preferenceStored = false;
       try {
@@ -133,10 +134,6 @@
           // Never let an older saved Allow outlive a page-only choice.
           rememberRejection();
         }
-        var warning = document.getElementById('cookie-save-warning');
-        if (warning) warning.remove();
-        var dismiss = document.getElementById("cookie-warning-dismiss");
-        if (dismiss) dismiss.remove();
         loadAnalytics();
         if (!preferenceStored) showSaveWarning(canTrack
           ? 'Your browser could not save your Allow analytics choice. Analytics is allowed for this page only. Check your choice when you return.'
