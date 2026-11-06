@@ -2,6 +2,7 @@
   --paper: #f1eee5;
   --ink: #203027;
   --orange: #be492b;
+  --orange-text: #a83f24;
   --lime: #d5df91;
   --serif: Fraunces, Georgia, serif;
   --sans: "DM Sans", Arial, sans-serif;
@@ -237,7 +238,7 @@ h1 {
   visibility: hidden;
   animation: navin 0.45s 3.3s ease both;
 }
-.pf-nav > span:first-child { color: var(--orange); }
+.pf-nav > span:first-child { color: var(--orange-text); }
 /* the surprise earns its name: the pen circles it once the window is drawn,
    and a tap or hover swaps it to its payoff. The button keeps the nav row's
    hand-lettered look; only the words and the circle move. */
@@ -267,7 +268,7 @@ h1 {
   position: absolute;
   inset: 0;
   opacity: 0;
-  color: var(--orange);
+  color: var(--orange-text);
 }
 @media (hover: hover) {
   .pf-surprise:hover .pf-s-a { opacity: 0; }
@@ -1474,6 +1475,7 @@ body.paused .reveal {
   --paper: #1b2923;
   --ink: #f2ecdf;
   --orange: #ed926f;
+  --orange-text: #ed926f;
 }
 .dark .composition {
   background: #334338;

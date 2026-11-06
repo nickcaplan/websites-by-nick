@@ -105,3 +105,10 @@ test('theme toggle persists the choice in localStorage', () => {
     assert.match(src, /prefers-color-scheme: dark/, file);
   }
 });
+
+test('nav accent: orange text on paper is AA at the small nav size, both modes', () => {
+  const lightText = lightVar('--orange-text');
+  const darkText = darkVar('--orange-text');
+  assert.ok(contrast(lightText, lightVar('--paper')) >= 4.5, contrast(lightText, lightVar('--paper')).toFixed(2));
+  assert.ok(contrast(darkText, DARK_PAPER) >= 4.5, contrast(darkText, DARK_PAPER).toFixed(2));
+});
