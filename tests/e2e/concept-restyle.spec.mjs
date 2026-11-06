@@ -33,3 +33,16 @@ test('privacy consent reject, reopen, accept preview, withdraw',async({page})=>{
 test('noJS retains content, native form and career disclosure',async({browser,baseURL})=>{
  const c=await browser.newContext({javaScriptEnabled:false});const p=await c.newPage();await p.route('**/formspree.io/**',r=>r.abort());await p.goto(baseURL+prefix+'contact/');await expect(p.locator('form')).toHaveAttribute('method','POST');await expect(p.locator('form')).not.toHaveAttribute('novalidate','');await p.goto(baseURL+prefix+'experience/');await p.locator('summary').click();await expect(p.locator('.career-history')).toHaveAttribute('open','');await c.close();
 });
+
+for(const path of ['', 'contact/', 'experience/', 'privacy/']) {
+ test(`theme toggle persists on ${path || 'home'}`, async({page})=>{
+  await page.goto(prefix+path); await page.locator('.theme-toggle').click();
+  expect(await page.evaluate(()=>localStorage.getItem('nick-theme'))).toBe('light');
+  await page.reload(); await expect(page.locator('body')).not.toHaveClass(/dark/);
+ });
+ test(`early light bootstrap on ${path || 'home'}`,async({page})=>{
+  await page.addInitScript(()=>localStorage.setItem('nick-theme','light'));
+  await page.route('**/pages.js',r=>r.abort()); await page.route('**/motion.js',r=>r.abort());
+  await page.goto(prefix+path); await expect(page.locator('body')).not.toHaveClass(/dark/);
+ });
+}
