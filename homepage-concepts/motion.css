@@ -271,9 +271,9 @@ h1.sketch-settled .pf-nav,
   stroke-dashoffset: 38;
 }
 .pf-bar {
-  /* pill perimeter is about 170 user units */
-  stroke-dasharray: 190;
-  stroke-dashoffset: 190;
+  /* pill perimeter is about 460 user units */
+  stroke-dasharray: 461;
+  stroke-dashoffset: 461;
 }
 .pf-frame,
 .pf-head,
@@ -367,16 +367,16 @@ h1.will-type.typed.drawn .pf-head {
   animation: pendraw 0.5s 1.5s ease forwards;
 }
 h1.will-type.typed.drawn .pf-dot:nth-of-type(1) {
-  animation: pendraw 0.2s 2.1s ease forwards, dotfill 0.3s 2.35s ease forwards;
+  animation: pendraw 0.2s 2.05s ease forwards, dotfill 0.3s 2.3s ease forwards;
 }
 h1.will-type.typed.drawn .pf-dot:nth-of-type(2) {
-  animation: pendraw 0.2s 2.3s ease forwards, dotfill 0.3s 2.55s ease forwards;
+  animation: pendraw 0.2s 2.25s ease forwards, dotfill 0.3s 2.5s ease forwards;
 }
 h1.will-type.typed.drawn .pf-dot:nth-of-type(3) {
-  animation: pendraw 0.2s 2.5s ease forwards, dotfill 0.3s 2.75s ease forwards;
+  animation: pendraw 0.2s 2.45s ease forwards, dotfill 0.3s 2.7s ease forwards;
 }
 h1.will-type.typed.drawn .pf-bar {
-  animation: pendraw 0.45s 2.75s ease forwards;
+  animation: pendraw 0.45s 2.6s ease forwards;
 }
 h1.sketch-settled .pf-dot,
 .paused h1 .pf-dot,

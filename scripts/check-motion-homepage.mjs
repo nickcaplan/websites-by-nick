@@ -298,6 +298,16 @@ for (const sel of [".pf-frame", ".pf-head", ".pf-dot", ".pf-bar"]) {
   if (st.off !== "0px" || st.vis !== "visible")
     throw Error(`reduced chrome not settled on ${sel}: ` + JSON.stringify(st));
 }
+// a dasharray shorter than the path leaves part of the stroke permanently
+// undrawn even at dashoffset 0 - the widened address bar shipped exactly that
+for (const sel of [".pf-frame", ".pf-head", ".pf-dot", ".pf-bar"]) {
+  const cov = await r.locator(sel).first().evaluate((e) => ({
+    len: e.getTotalLength(),
+    dash: parseFloat(getComputedStyle(e).strokeDasharray),
+  }));
+  if (!(cov.dash >= cov.len))
+    throw Error(`dash too short on ${sel}: ` + JSON.stringify(cov));
+}
 await r.screenshot({ path: output + "/motion-reduced.png" });
 console.log("PASS reduced");
 const hidden = await b.newPage();
