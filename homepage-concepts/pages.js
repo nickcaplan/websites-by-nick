@@ -14,14 +14,14 @@
     ? stored === "dark"
     : matchMedia("(prefers-color-scheme: dark)").matches;
   document.body.classList.toggle("dark", dark);
-  theme.setAttribute("aria-pressed", String(dark));
+
   theme.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
   const themeIcon = theme.querySelector(".theme-icon");
   if (themeIcon) themeIcon.textContent = dark ? "☀" : "☾";
   theme.addEventListener("click", () => {
     const dark = !document.body.classList.contains("dark");
     document.body.classList.toggle("dark", dark);
-    theme.setAttribute("aria-pressed", String(dark));
+
     theme.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
     const themeIcon = theme.querySelector(".theme-icon");
     if (themeIcon) themeIcon.textContent = dark ? "☀" : "☾";

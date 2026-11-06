@@ -189,13 +189,13 @@ for (const width of [320, 390, 768, 901, 961, 1024, 1280, 1400, 1600]) {
   await p.goto(base + "/homepage-concepts/about/");
   await p.waitForLoadState("networkidle");
   if (!(await p.evaluate(() => document.body.classList.contains("dark")))) fail("dark did not persist to about");
-  if ((await p.getAttribute(".theme-toggle", "aria-pressed")) !== "true") fail("aria-pressed not restored on about");
+  if ((await p.getAttribute(".theme-toggle", "aria-pressed")) !== null) fail("theme action button must not have aria-pressed");
   await p.reload();
   if (!(await p.evaluate(() => document.body.classList.contains("dark")))) fail("dark did not survive reload");
   await p.click(".theme-toggle");
   await p.reload();
   if (await p.evaluate(() => document.body.classList.contains("dark"))) fail("light choice did not persist");
-  if ((await p.getAttribute(".theme-toggle", "aria-pressed")) !== "false") fail("aria-pressed not cleared");
+  if ((await p.getAttribute(".theme-toggle", "aria-pressed")) !== null) fail("theme action button must not have aria-pressed");
   console.log("PASS theme-persistence");
   await p.close();
 }
