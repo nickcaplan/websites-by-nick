@@ -329,24 +329,26 @@ h1.sketch-settled .pf-tag-hole, h1.sketch-settled .pf-tag-word,
 /* the paper note: light paper in both themes, unfolded from the tag */
 .pf-note {
   position: absolute;
-  top: calc(100% + 32px);
-  left: 50%;
-  transform: translateX(-50%) scaleY(0.05) rotate(-6deg);
-  transform-origin: 50% 0;
+  /* beside the tag, in the empty strip under the words, so it never covers
+     the headline or the nav labels */
+  top: calc(100% - 1px);
+  right: calc(50% + 20px);
+  transform: scaleX(0.05) rotate(-4deg);
+  transform-origin: 100% 50%;
   opacity: 0;
   transition: transform 0.38s ease, opacity 0.22s ease;
   background: #f7f3e8;
   color: #a83f24;
   border: 2px solid var(--orange);
   border-radius: 9px 11px 10px 12px / 11px 9px 12px 10px;
-  padding: 8px 15px;
+  padding: 4px 12px;
   white-space: nowrap;
-  box-shadow: 0 4px 12px rgba(20, 16, 8, 0.25);
+  box-shadow: 0 3px 8px rgba(20, 16, 8, 0.22);
   z-index: 6;
   pointer-events: none;
 }
 .pf-surprise.pf-open .pf-note {
-  transform: translateX(-50%) scaleY(1) rotate(-1.5deg);
+  transform: scaleX(1) rotate(-1.5deg);
   opacity: 1;
 }
 h1.will-type .pf-nav {
