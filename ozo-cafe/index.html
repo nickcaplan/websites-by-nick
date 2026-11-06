@@ -9,14 +9,14 @@
 <style>
   :root{
     --cream:#f6efe3; --cream-deep:#efe4d0; --espresso:#241a12; --espresso-soft:#4a3a2c;
-    --muted:#7a6a58; --orange:#e8712f; --orange-deep:#c85a1e;
+    --muted:#7a6a58; --orange:#e8712f; --orange-deep:#c85a1e; --orange-ink:#a34910;
     --card:#fffaf1; --line:rgba(36,26,18,.16); --line-strong:rgba(36,26,18,.34);
     --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
     --sans:"Avenir Next",Avenir,"Segoe UI",system-ui,sans-serif;
   }
   body.dark{
     --cream:#1d1510; --cream-deep:#251b14; --espresso:#f2e7d7; --espresso-soft:#d8c8b2;
-    --muted:#a89880; --orange:#f07f3c; --orange-deep:#ff9a5c;
+    --muted:#a89880; --orange:#f07f3c; --orange-deep:#ff9a5c; --orange-ink:#f07f3c;
     --card:#282017; --line:rgba(242,231,215,.16); --line-strong:rgba(242,231,215,.34);
   }
   *{box-sizing:border-box}
@@ -28,7 +28,7 @@
   .wrap{max-width:1120px;margin:auto;padding:0 5%}
   header{display:flex;justify-content:space-between;align-items:center;padding:18px 0}
   .brand{font-family:var(--serif);font-weight:700;font-size:22px;letter-spacing:.01em}
-  .brand span{color:var(--orange)}
+  .brand span{color:var(--orange-ink)}
   .theme-toggle{
     border:1.5px solid var(--line-strong);background:none;color:var(--espresso);
     width:38px;height:38px;border-radius:50%;font-size:16px;cursor:pointer;
@@ -37,14 +37,14 @@
   .hero{padding:26px 0 30px;position:relative}
   .kicker{
     font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
-    color:var(--orange);margin:0 0 14px;
+    color:var(--orange-ink);margin:0 0 14px;
   }
   h1{
     font-family:var(--serif);font-weight:700;
     font-size:clamp(52px,9vw,110px);line-height:.98;margin:0 0 18px;letter-spacing:-.01em;
     position:relative;display:inline-block;word-spacing:.12em;
   }
-  h1 em{font-style:normal;color:var(--orange)}
+  h1 em{font-style:normal;color:var(--orange-ink)}
   .squiggle{
     display:block;width:min(420px,72%);height:26px;margin-top:6px;
     fill:none;stroke:var(--orange);stroke-width:3.5;stroke-linecap:round;
