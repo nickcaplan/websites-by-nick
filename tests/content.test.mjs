@@ -301,6 +301,7 @@ test('pricing page: charity offer is a plain panel, not a fourth paid tier, with
   assert.match(block, /registration number/, 'applications name the charity and registration number');
   assert.match(block, /href="\.\.\/contact\/"/, 'the panel routes to the contact page');
   assert.doesNotMatch(block, /free hosting|hosting forever|unlimited/i, 'no invented hosting or scope promises');
+  assert.match(block, /<ul class="charity-list" role="list">/, 'the list keeps its semantics in Safari');
 });
 
 test('pricing page: charity panel text meets the 16px phone readability rule', () => {
