@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <meta name="description" content="What I build, and the engineering behind it. Websites designed and built by Nick Caplan." />
+    <title>About | Websites by Nick</title>
+    <link rel="preload" href="/assets/fonts/dmsans.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/assets/fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="/assets/css/fonts.css" />
+    <link rel="stylesheet" href="/homepage-concepts/motion.css" />
+    <link rel="stylesheet" href="/homepage-concepts/pages.css" />
+    <link rel="stylesheet" href="/homepage-concepts/restyled.css" />
+  </head>
+  <body class="dark">
+    <script>
+      // apply the saved/system theme before first paint, so a dark visitor
+      // never sees a flash of the light theme; pages.js/motion.js keep the toggle
+      (function () {
+        var theme = null;
+        try { theme = window.localStorage.getItem('nick-theme'); } catch (error) {}
+        var dark = theme !== 'light';
+        document.body.classList.toggle('dark', dark);
+      })();
+    </script>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="nav">
+      <a class="wordmark" href="/homepage-concepts/"
+        >Nick <span>Caplan</span><span class="wordmark-dot" aria-hidden="true"></span></a
+      >
+      <nav aria-label="Main">
+        <a href="/homepage-concepts/#work">Work</a><a href="/homepage-concepts/about/" aria-current="page">About</a
+        ><a href="/homepage-concepts/pricing/">Pricing</a><a href="/homepage-concepts/charity/">Charity</a><a href="/homepage-concepts/contact/">Contact</a
+        >
+      </nav>
+      <button type="button" class="theme-toggle" aria-label="Switch to light mode"><span class="theme-icon" aria-hidden="true">☀</span></button>
+    </header>
+    <main id="main" class="pg">
+      <p class="eyebrow pg-enter"><span aria-hidden="true">✳</span> About</p>
+      <h1 class="pg-enter">Websites are what I <em>build.</em></h1>
+      <p class="lede pg-enter">
+        I build websites that work hard for the people behind them. From business websites and
+        creative portfolios to event platforms and custom web applications, I combine design and
+        engineering to turn an idea into a polished, fast, easy-to-use website.
+      </p>
+      <p class="lede pg-enter">
+        You work directly with me from the first conversation to launch, with a clear scope, quick
+        turnaround and close attention to the details your customers notice.
+      </p>
+      <h2>What I <em>build</em></h2>
+      <div class="cards">
+        <article class="card lime"><h3>Business websites</h3><p>Fast, mobile-first sites that win you enquiries, with search engine optimisation built in from the start.</p></article>
+        <article class="card"><h3>Creative portfolios</h3><p>Showcases for artists, performers and makers: catalogues, media and events that are easy to keep up to date.</p></article>
+        <article class="card orange"><h3>Event and community platforms</h3><p>What's-on pages, booking links and fundraising for schools, clubs and charities.</p></article>
+        <article class="card ink"><h3>Custom web applications</h3><p>Bespoke tools, dashboards and integrations when your business needs more than a brochure site.</p></article>
+      </div>
+      <section class="band">
+        <h2>The engineering <em>behind</em> the websites</h2>
+        <p>
+          Over 15 years of engineering sits behind every build. The same discipline that runs
+          high-traffic websites and banking platforms goes into your site: clear communication,
+          dependable delivery and code that is straightforward to maintain.
+        </p>
+        <a class="cta" href="/homepage-concepts/experience/">See the career history <span aria-hidden="true">↗</span></a>
+      </section>
+    </main>
+    <footer>
+      <p class="eyebrow">YOUR WEBSITE DOESN'T HAVE TO BLEND IN.</p>
+      <h2>Let's make something you're <em>proud of.</em></h2>
+      <a class="footer-cta" href="/homepage-concepts/contact/">Say hello <span aria-hidden="true">↗</span></a>
+      <div class="footer-bottom">
+        <a class="wordmark" href="/homepage-concepts/">Nick Caplan</a>
+        <p>© Websites by Nick</p>
+        <a href="/homepage-concepts/privacy/">Privacy</a>
+      </div>
+    </footer>
+    <script src="/homepage-concepts/pages.js"></script>
+  </body>
+</html>

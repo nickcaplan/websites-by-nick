@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <meta name="description" content="Free websites and repairs for small registered charities, designed and built by Nick Caplan - a limited number of charity projects each year." />
+    <title>Charity | Websites by Nick</title>
+    <link rel="preload" href="/assets/fonts/dmsans.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/assets/fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="/assets/css/fonts.css" />
+    <link rel="stylesheet" href="/homepage-concepts/motion.css" />
+    <link rel="stylesheet" href="/homepage-concepts/pages.css" />
+    <link rel="stylesheet" href="/homepage-concepts/restyled.css" />
+  </head>
+  <body class="dark">
+    <script>
+      // apply the saved/system theme before first paint, so a dark visitor
+      // never sees a flash of the light theme; pages.js/motion.js keep the toggle
+      (function () {
+        var theme = null;
+        try { theme = window.localStorage.getItem('nick-theme'); } catch (error) {}
+        var dark = theme !== 'light';
+        document.body.classList.toggle('dark', dark);
+      })();
+    </script>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="nav restyled-nav">
+      <a class="wordmark" href="/homepage-concepts/"
+        >Nick <span>Caplan</span></a
+      >
+      <nav aria-label="Main">
+        <a href="/homepage-concepts/#work">Work</a><a href="/homepage-concepts/about/">About</a
+        ><a href="/homepage-concepts/pricing/">Pricing</a><a href="/homepage-concepts/charity/" aria-current="page">Charity</a><a href="/homepage-concepts/contact/">Contact</a
+        >
+      </nav>
+      <button type="button" class="theme-toggle" aria-label="Switch to light mode" aria-pressed="true"><span class="theme-icon" aria-hidden="true">☀</span></button>
+    </header>
+    <main id="main" class="pg restyled-page charity-page">
+      <section class="page-hero">
+        <h1>Free websites for <em>small local charities.</em></h1>
+        <p class="lede">If you run a small registered charity and your website is holding you back, or you don&rsquo;t have one, I take on a limited number of charity projects free of charge each year, whether that&rsquo;s a new website or a repair.</p>
+      </section>
+
+      <section class="content" aria-label="The charity offer">
+        <section class="charity" aria-labelledby="charity-heading">
+          <h2 id="charity-heading">What the offer covers</h2>
+          <ul class="charity-list" role="list">
+            <li>A simple, fast one-page website, designed and built with you, using your words and pictures</li>
+            <li>Repairs to your existing website when a rebuild is more than you need</li>
+            <li>Your charity keeps ownership of its domain and hosting; any ongoing running costs stay with you and are agreed in writing before anything starts</li>
+            <li>Places are limited, and paid client work comes first</li>
+          </ul>
+          <p class="charity-apply">To apply, <a href="/homepage-concepts/contact/">get in touch</a> with your charity&rsquo;s name, registration number and what&rsquo;s not working today.</p>
+        </section>
+      </section>
+    </main>
+    <footer>
+      <p class="eyebrow">YOUR WEBSITE DOESN'T HAVE TO BLEND IN.</p>
+      <h2>Let's make something you're <em>proud of.</em></h2>
+      <a class="footer-cta" href="/homepage-concepts/contact/">Say hello <span aria-hidden="true">↗</span></a>
+      <div class="footer-bottom">
+        <a class="wordmark" href="/homepage-concepts/">Nick Caplan</a>
+        <p>© Websites by Nick</p>
+        <a href="/homepage-concepts/privacy/">Privacy</a>
+      </div>
+    </footer>
+    <script src="/homepage-concepts/pages.js"></script>
+
+    <script src="/assets/js/analytics.js" defer data-measurement-id="G-J3J3NS19ZS" data-privacy-url="/homepage-concepts/privacy/"></script>
+  </body>
+</html>
