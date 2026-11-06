@@ -18,3 +18,11 @@ test('pointer focus does not move a project between down and up',async({page})=>
 test('reduced-motion load remains settled when preference turns off',async({page})=>{
  await page.emulateMedia({reducedMotion:'reduce'});await page.goto('/homepage-concepts/');await expect(page.locator('#hero-title')).toHaveClass(/sketch-settled/);await page.emulateMedia({reducedMotion:'no-preference'});expect(await page.locator('.pf-frame').evaluate(e=>({visibility:getComputedStyle(e).visibility,offset:getComputedStyle(e).strokeDashoffset,running:e.getAnimations().length}))).toEqual({visibility:'visible',offset:'0px',running:0});
 });
+
+test('short desktop unstacking exposes every project title and updates on resize',async({page})=>{
+ await page.setViewportSize({width:1280,height:600});await page.goto('/homepage-concepts/');await expect(page.locator('body')).toHaveClass(/project-unstacked/);const cards=page.locator('.work .project');for(const card of await cards.all()){expect(await card.evaluate(e=>getComputedStyle(e).position)).toBe('relative');const title=card.locator('.project-title');await title.scrollIntoViewIfNeeded();await expect(title).toBeInViewport();expect(await card.getAttribute('tabindex')).not.toBe('-1');}
+ await page.setViewportSize({width:1280,height:1000});await expect(page.locator('body')).not.toHaveClass(/project-unstacked/);
+});
+test('Pricing preview offers consent without loading analytics',async({page})=>{
+ await page.goto('/homepage-concepts/pricing/');await expect(page.locator('#cookie-consent-panel')).toBeVisible();await page.locator('[data-cookie-choice="analytics"]').click();await expect(page.locator('[data-google-analytics]')).toHaveCount(0);
+});

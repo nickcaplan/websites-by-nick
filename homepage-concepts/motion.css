@@ -1774,3 +1774,6 @@ h2 { overflow-wrap: anywhere; }
 
 /* Keyboard focus uses the readable unstacked cards without changing motion choice. */
 .project-focus .work .project { position: relative; top: auto; }
+
+/* A short desktop must show the whole project, including its title. */
+.project-unstacked .work .project { position: relative; top: auto; }
