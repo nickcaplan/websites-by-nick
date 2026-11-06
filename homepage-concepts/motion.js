@@ -46,9 +46,9 @@
   let urlStarted = false;
   const urlSettled = () => !urlText || !urlText.querySelector(".pfc");
   // The address keeps playing after the first typing: it holds, backspaces to
-  // the "your" stem, then types the next option. Settle paths freeze whatever
+  // the "www.your" stem, then types the next option. Settle paths freeze whatever
   // word is showing; reduced-motion and paused visitors never see the cycle.
-  const urlStem = "your";
+  const urlStem = "www.your";
   const urlWords = ["business", "idea", "shop", "project"];
   let urlWordIx = 0;
   const buildUrl = (str) => {
@@ -68,7 +68,7 @@
       if (!c.classList.contains("on")) break;
       try { w += c.getComputedTextLength(); } catch (e) { /* keep the caret where it is */ }
     }
-    try { urlCaret.setAttribute("x", String(87 + w + 4)); } catch (e) { /* keep the caret where it is */ }
+    try { urlCaret.setAttribute("x", String(87 + w + 1)); } catch (e) { /* keep the caret where it is */ }
   };
   const urlStopNow = () => reduced.matches || document.body.classList.contains("paused") || document.body.classList.contains("hidden-page");
   const cycleUrl = () => {
@@ -141,17 +141,19 @@
     };
     setTimeout(urlStep, 120);
   };
-  // the surprise nav's payoff: tap or Enter pulls the tag and a paper note
-  // unfolds with "Told you.", then folds away again. Hover and keyboard
-  // focus wiggle the tag through CSS.
+  // the surprise nav's payoff: once the tag has drawn in, it pulls itself and a
+  // paper note unfolds with "Told you.", holds, then folds away - no touch
+  // needed. Tap or Enter still replays it, and hover and keyboard focus wiggle
+  // the tag through CSS. Paused, reduced-motion and hidden-tab visitors get the
+  // still tag, never the automatic play.
   const surprise = document.querySelector(".pf-surprise");
   if (surprise) {
     let swapTimer = null;
     const status = document.querySelector(".pf-sr-status");
-    surprise.addEventListener("click", () => {
+    const playNote = (holdMs, announce) => {
       surprise.classList.add("pf-open");
       if (swapTimer) clearTimeout(swapTimer);
-      if (status) {
+      if (announce && status) {
         // clear first so a repeated tap still announces, then name the payoff
         status.textContent = "";
         requestAnimationFrame(() => { status.textContent = "Told you."; });
@@ -159,8 +161,23 @@
       swapTimer = setTimeout(() => {
         surprise.classList.remove("pf-open");
         if (status) status.textContent = "";
-      }, 1600);
-    });
+      }, holdMs);
+    };
+    surprise.addEventListener("click", () => playNote(1600, true));
+    const tagWord = surprise.querySelector(".pf-tag-word");
+    if (tagWord) {
+      let autoPlayed = false;
+      tagWord.addEventListener("animationend", (e) => {
+        if (autoPlayed || e.animationName !== "tagword") return;
+        autoPlayed = true;
+        const b = document.body.classList;
+        if (reduced.matches || b.contains("paused") || b.contains("hidden-page")) return;
+        setTimeout(() => {
+          if (reduced.matches || b.contains("paused") || b.contains("hidden-page")) return;
+          playNote(2400, false);
+        }, 500);
+      });
+    }
   }
   let refreshProjects = () => {};
   const apply = () => {
@@ -438,31 +455,28 @@
       hand = q(".sd-hand"),
       bodyG = q(".sd-body"),
       clip = q(".sd-clip");
-    const SH = { x: 390, y: 262 };
-    const BASE = 56; // the figure stands close to the board
+    const BASE = 24; // the figure stands a step back from the board
+    const SH = { x: BASE + 352, y: 262 }; // his right shoulder, on the torso's edge
     const REST = { x: 470, y: 310 };
-    // Shoulder, elbow, hand. The arm is short relative to the board, so he leans
-    // toward the canvas as he reaches. The upper arm blends between hanging at
-    // his side (hand near the body) and pointing at the pen (hand far away),
-    // always angling down and out to his right: the elbow never crosses his
-    // torso and the arm never reads as two crossed arms or as stretching.
-    const L1 = 135;
+    // Two bones of fixed length, so the arm never stretches or shrinks as the
+    // pen moves. The elbow always bends down, away from his body, and he leans
+    // toward the board (dx) as the pen travels right.
+    const L = 135;
     const pose = (P) => {
-      const dx = Math.max(0, Math.min(100, ((P.x - 500) / 220) * 100));
+      const dx = Math.max(0, Math.min(110, ((P.x - 480) / 220) * 110));
       const S = { x: SH.x + dx, y: SH.y };
-      const H = { x: P.x - 20, y: P.y + 20 };
-      const d = Math.hypot(H.x - S.x, H.y - S.y) || 1;
+      let H = { x: P.x - 20, y: P.y + 20 };
+      let d = Math.hypot(H.x - S.x, H.y - S.y) || 1;
       const ux = (H.x - S.x) / d, uy = (H.y - S.y) / d;
-      // 0 when the hand is at his side, 1 at full reach; a floor keeps a
-      // slight outward angle even at full stretch, so the elbow always reads.
-      const w = Math.max(0.18, 1 - Math.pow(Math.max(0, Math.min(1, (d - 60) / 200)), 0.8));
-      let d1x = ux + (0.35 - ux) * w,
-        d1y = uy + (0.94 - uy) * w;
-      const dn = Math.hypot(d1x, d1y) || 1;
-      d1x /= dn;
-      d1y /= dn;
-      const ex = S.x + L1 * d1x,
-        ey = S.y + L1 * d1y;
+      if (d > 2 * L - 1) {
+        d = 2 * L - 1;
+        H = { x: S.x + ux * d, y: S.y + uy * d };
+      }
+      const a = d / 2, h = Math.sqrt(Math.max(0, L * L - a * a));
+      // the perpendicular to the shoulder-hand line that points down
+      const px = ux >= 0 ? -uy : uy, py = ux >= 0 ? ux : -ux;
+      const ex = S.x + ux * a + px * h,
+        ey = S.y + uy * a + py * h;
       arm.setAttribute("d", `M${S.x.toFixed(1)} ${S.y}L${ex.toFixed(1)} ${ey.toFixed(1)}L${H.x.toFixed(1)} ${H.y.toFixed(1)}`);
       hand.setAttribute("transform", `translate(${H.x.toFixed(1)} ${H.y.toFixed(1)})`);
       bodyG.setAttribute("transform", `translate(${(BASE + dx).toFixed(1)} 0)`);
