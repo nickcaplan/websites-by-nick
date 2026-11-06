@@ -12,14 +12,14 @@
   const stored = readTheme();
   const dark = stored !== "light";
   document.body.classList.toggle("dark", dark);
-  theme.setAttribute("aria-pressed", String(dark));
+
   theme.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
   const themeIcon = theme.querySelector(".theme-icon");
   if (themeIcon) themeIcon.textContent = dark ? "☀" : "☾";
   theme.addEventListener("click", () => {
     const dark = !document.body.classList.contains("dark");
     document.body.classList.toggle("dark", dark);
-    theme.setAttribute("aria-pressed", String(dark));
+
     theme.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
     const themeIcon = theme.querySelector(".theme-icon");
     if (themeIcon) themeIcon.textContent = dark ? "☀" : "☾";
