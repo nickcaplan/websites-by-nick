@@ -39,6 +39,7 @@ for(const path of ['', 'contact/', 'experience/', 'privacy/']) {
   await page.goto(prefix+path); await page.locator('.theme-toggle').click();
   expect(await page.evaluate(()=>localStorage.getItem('nick-theme'))).toBe('light');
   await page.reload(); await expect(page.locator('body')).not.toHaveClass(/dark/);
+  await page.locator('.theme-toggle').click();expect(await page.evaluate(()=>localStorage.getItem('nick-theme'))).toBe('dark');await page.reload();await expect(page.locator('body')).toHaveClass(/dark/);
  });
  test(`early light bootstrap on ${path || 'home'}`,async({page})=>{
   await page.addInitScript(()=>localStorage.setItem('nick-theme','light'));
