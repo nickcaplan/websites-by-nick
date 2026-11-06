@@ -319,3 +319,10 @@ for (const route of ['/', '/contact/']) {
   await expect(page.locator('nav[aria-label] a').first()).toBeFocused();
  });
 }
+
+test('successful Reject clears old save warning when preferences reopen',async({page})=>{
+ await page.goto('/privacy/');await page.evaluate(()=>{window.realSet=Storage.prototype.setItem;Storage.prototype.setItem=function(){throw Error('blocked')}});
+ await page.locator('[data-cookie-choice="analytics"]').click();await expect(page.locator('#cookie-save-warning')).toBeVisible();
+ await page.evaluate(()=>Storage.prototype.setItem=window.realSet);await page.locator('[data-cookie-choice="essential"]').click();await page.getByRole('button',{name:'Cookie preferences',exact:true}).click();
+ await expect(page.locator('#cookie-save-warning')).toHaveCount(0);await expect(page.locator('#cookie-warning-dismiss')).toHaveCount(0);
+});
