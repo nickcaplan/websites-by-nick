@@ -60,18 +60,18 @@
     return saved || document.cookie.split(';').some(function (cookie) { return cookie.trim() === rejectionCookie + '=1'; });
   }
   /** Explain a failed save without suggesting that every browser store worked. */
-  function showSaveWarning() {
+  function showSaveWarning(message) {
     var warning = document.getElementById('cookie-save-warning');
     if (!warning) {
       warning = document.createElement('p');
       warning.id = 'cookie-save-warning';
       warning.className = 'cookie-save-warning';
       warning.setAttribute('role', 'status');
-      warning.textContent = 'Your browser could not save your cookie choice normally. Analytics is off here. If you block all browser storage, close other tabs and check your choice when you return.';
       panel.insertBefore(warning, panel.firstChild);
+    }
+      warning.textContent = message || 'Your browser could not save your cookie choice normally. Analytics is off here. If you block all browser storage, close other tabs and check your choice when you return.';
       panel.hidden = false;
       reserveSpace();
-    }
   }
   /** Enable this production stream after opt-in, loading the tag only once. */
   function loadAnalytics() {
@@ -116,6 +116,9 @@
         var warning = document.getElementById('cookie-save-warning');
         if (warning) warning.remove();
         loadAnalytics();
+        if (!preferenceStored) showSaveWarning(canTrack
+          ? 'Your browser could not save your Allow analytics choice. Analytics is allowed for this page only. Check your choice when you return.'
+          : 'Your browser could not save your Allow analytics choice. Analytics stays off on this preview. Check your choice when you return.');
       }
       else {
         if (measurementId) window['ga-disable-' + measurementId] = true;
