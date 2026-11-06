@@ -130,12 +130,12 @@ for (const width of [320, 390, 768, 901, 961, 1024, 1280, 1400, 1600]) {
     );
   if (width === 390 || width === 1280)
     await p.screenshot({ path: output + "/motion-work-" + width + ".png" });
-  await p.getByRole("button", { name: "Dark mode", exact: true }).click();
+  await p.locator(".theme-toggle").click();
   if (!(await p.locator("body").evaluate((e) => e.classList.contains("dark"))))
     throw Error("theme");
   if (width === 390 || width === 1280)
     await p.screenshot({ path: output + "/motion-dark-" + width + ".png" });
-  await p.getByRole("button", { name: "Dark mode", exact: true }).click();
+  await p.locator(".theme-toggle").click();
   await p.locator("footer").scrollIntoViewIfNeeded();
   await p.locator(".about-grid img").evaluate((e) => e.decode());
   if (width === 390)
