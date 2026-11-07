@@ -35,58 +35,30 @@ for (const width of [320, 390, 768, 901, 961, 1024, 1280, 1400, 1600]) {
   if (errors.length) throw Error(errors);
   if (width === 390 || width === 1280)
     await p.screenshot({ path: output + "/motion-" + width + ".png" });
-  await p.waitForFunction(()=>document.querySelector('#hero-title').classList.contains('typed'));
-  await p.emulateMedia({ reducedMotion: "reduce" });
+  // The finite sketch is removed on settle, not paused in place. Prove that
+  // there is an animation before stopping it, then check the settled pixels.
+  const frameState = page => page.locator('.pf-frame').evaluate(e => ({
+    count:e.getAnimations().length, offset:getComputedStyle(e).strokeDashoffset,
+    visible:getComputedStyle(e).visibility,
+  }));
+  const live = await b.newPage({viewport:{width,height:1000}});
+  await live.goto(base + '/homepage-concepts/');
+  await live.waitForFunction(()=>document.querySelector('.pf-frame').getAnimations().length>0);
+  if (!(await frameState(live)).count) throw Error('live frame animation missing');
+  await live.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,get:()=>true});document.dispatchEvent(new Event('visibilitychange'))});
+  await live.waitForFunction(()=>document.querySelector('#hero-title').classList.contains('sketch-settled'));
+  let settled=await frameState(live);
+  if(settled.count || settled.offset!=='0px' || settled.visible!=='visible')throw Error('hidden frame did not settle');
+  await live.evaluate(()=>{delete document.hidden;document.dispatchEvent(new Event('visibilitychange'))});
+  if((await frameState(live)).count)throw Error('returning restarted the frame');
+  await live.close();
+  await p.emulateMedia({reducedMotion:'reduce'});
   await p.waitForFunction(()=>document.body.classList.contains('paused'));
-  const states = () =>
-    p
-      .locator(".pf-frame")
-      .evaluateAll((elements) =>
-        elements.flatMap((e) =>
-          e.getAnimations({ subtree: true }).map((a) => a.playState),
-        ),
-      );
-  if ((await states()).some((s) => s === "running"))
-    throw Error("motion not paused");
-  await p.emulateMedia({ reducedMotion: "no-preference" });
-  await p.waitForFunction(()=>!document.body.classList.contains("paused"));
-  if ((await states()).some((s) => s === "paused"))
-    throw Error("motion not resumed");
-  await p.evaluate(() => {
-    Object.defineProperty(document, "hidden", {
-      configurable: true,
-      get: () => true,
-    });
-    document.dispatchEvent(new Event("visibilitychange"));
-  });
-  if ((await states()).some((s) => s === "running"))
-    throw Error("visibility alone did not pause");
-  await p.evaluate(() => {
-    delete document.hidden;
-    document.dispatchEvent(new Event("visibilitychange"));
-  });
-  if ((await states()).some((s) => s === "paused"))
-    throw Error("visibility alone did not resume");
-  await p.emulateMedia({ reducedMotion: "reduce" });
-  await p.evaluate(() => {
-    Object.defineProperty(document, "hidden", {
-      configurable: true,
-      get: () => true,
-    });
-    document.dispatchEvent(new Event("visibilitychange"));
-  });
-  if ((await states()).some((s) => s === "running"))
-    throw Error("background motion running");
-  await p.evaluate(() => {
-    delete document.hidden;
-    document.dispatchEvent(new Event("visibilitychange"));
-  });
-  if ((await states()).some((s) => s === "running"))
-    throw Error("system reduced motion lost");
-  await p.emulateMedia({ reducedMotion: "no-preference" });
-  await p.waitForFunction(()=>!document.body.classList.contains("paused"));
-  if ((await states()).some((s) => s === "paused"))
-    throw Error("motion stuck after visibility change");
+  settled=await frameState(p);
+  if(settled.count || settled.offset!=='0px' || settled.visible!=='visible')throw Error('reduced frame did not settle');
+  await p.emulateMedia({reducedMotion:'no-preference'});
+  await p.waitForFunction(()=>!document.body.classList.contains('paused'));
+  if((await frameState(p)).count)throw Error('reduced preference change restarted the frame');
   // Work identifies the current landing page. No other link may look selected.
   // Contact must not masquerade as selected just because it is last.
   const nav = await p.locator(".nav nav a").evaluateAll((links) => links.map((e) => ({
