@@ -7,3 +7,25 @@ for(const initiallyPaused of [false,true]) test(`duplicate reduced-motion change
  await page.emulateMedia({reducedMotion:'no-preference'});await expect(button).toHaveAttribute('aria-pressed',String(initiallyPaused));
  await page.emulateMedia({reducedMotion:'reduce'});await expect(button).toHaveAttribute('aria-pressed','true');await page.emulateMedia({reducedMotion:'no-preference'});await expect(button).toHaveAttribute('aria-pressed',String(initiallyPaused));
 });
+
+for (const initiallyPaused of [false, true]) test(`missing media notifications still restore visitor choice ${initiallyPaused}`, async ({page}) => {
+  await page.addInitScript(() => {
+    const match = window.matchMedia.bind(window);
+    window.matchMedia = query => {
+      const media = match(query);
+      if (query === '(prefers-reduced-motion: reduce)') {
+        media.addEventListener = () => {};
+      }
+      return media;
+    };
+  });
+  await page.goto('/homepage-concepts/');
+  const button = page.locator('.motion-toggle');
+  if (initiallyPaused) await button.click();
+  for (let cycle = 0; cycle < 2; cycle++) {
+    await page.emulateMedia({reducedMotion:'reduce'});
+    await expect(button).toHaveAttribute('aria-pressed','true');
+    await page.emulateMedia({reducedMotion:'no-preference'});
+    await expect(button).toHaveAttribute('aria-pressed',String(initiallyPaused));
+  }
+});
