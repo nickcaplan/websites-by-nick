@@ -12,8 +12,8 @@ try {
     await page.addInitScript(value => localStorage.setItem('nick-theme', value), theme);
     await page.goto(`http://localhost:${server.address().port}/homepage-concepts/`);
     assert.equal(await page.locator('body').evaluate(e => e.classList.contains('dark')), theme === 'dark');
+    await page.emulateMedia({reducedMotion:"reduce"});
     await page.evaluate(() => document.fonts.ready);
-    await page.getByRole('button', { name: 'Pause motion', exact: true }).click();
     await page.evaluate(() => {
       const elements = [...document.querySelectorAll('body *')].filter(e => !e.closest('svg'));
       const sizes = elements.map(e => parseFloat(getComputedStyle(e).fontSize));
@@ -64,7 +64,6 @@ try {
   {
     const page = await browser.newPage({ viewport: { width: 1400, height: 900 } });
     await page.goto(`http://localhost:${server.address().port}/homepage-concepts/`);
-    await page.getByRole('button', { name: 'Pause motion', exact: true }).click();
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.waitForFunction(() => [...document.querySelectorAll('.project')].every(e => getComputedStyle(e).position === 'relative' && ['auto', '0px'].includes(getComputedStyle(e).top)));
     assert.ok(await page.locator('.project').count() > 0);

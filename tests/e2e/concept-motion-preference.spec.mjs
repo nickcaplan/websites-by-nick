@@ -1,31 +1,10 @@
 import {test,expect} from '@playwright/test';
-for(const initiallyPaused of [false,true]) test(`duplicate reduced-motion changes restore visitor choice ${initiallyPaused}`,async({page})=>{
- await page.addInitScript(()=>{const match=window.matchMedia.bind(window);window.matchMedia=query=>{const media=match(query);if(query==='(prefers-reduced-motion: reduce)')window.testReducedMedia=media;return media;};});
- await page.goto('/homepage-concepts/');const button=page.locator('.motion-toggle');if(initiallyPaused)await button.click();
- await page.emulateMedia({reducedMotion:'reduce'});await expect(button).toHaveAttribute('aria-pressed','true');
- await page.evaluate(()=>{window.testReducedMedia.dispatchEvent(new Event('change'));window.testReducedMedia.dispatchEvent(new Event('change'));});
- await page.emulateMedia({reducedMotion:'no-preference'});await expect(button).toHaveAttribute('aria-pressed',String(initiallyPaused));
- await page.emulateMedia({reducedMotion:'reduce'});await expect(button).toHaveAttribute('aria-pressed','true');await page.emulateMedia({reducedMotion:'no-preference'});await expect(button).toHaveAttribute('aria-pressed',String(initiallyPaused));
-});
-
-for (const initiallyPaused of [false, true]) test(`missing media notifications still restore visitor choice ${initiallyPaused}`, async ({page}) => {
-  await page.addInitScript(() => {
-    const match = window.matchMedia.bind(window);
-    window.matchMedia = query => {
-      const media = match(query);
-      if (query === '(prefers-reduced-motion: reduce)') {
-        media.addEventListener = () => {};
-      }
-      return media;
-    };
-  });
-  await page.goto('/homepage-concepts/');
-  const button = page.locator('.motion-toggle');
-  if (initiallyPaused) await button.click();
-  for (let cycle = 0; cycle < 2; cycle++) {
-    await page.emulateMedia({reducedMotion:'reduce'});
-    await expect(button).toHaveAttribute('aria-pressed','true');
-    await page.emulateMedia({reducedMotion:'no-preference'});
-    await expect(button).toHaveAttribute('aria-pressed',String(initiallyPaused));
-  }
+for(const missed of[false,true])test(`system reduced preference handles repeated and missing notifications ${missed}`,async({page})=>{
+ await page.addInitScript(missed=>{const match=window.matchMedia.bind(window);window.matchMedia=query=>{const media=match(query);if(query==='(prefers-reduced-motion: reduce)'){window.testReducedMedia=media;if(missed)media.addEventListener=()=>{}}return media}},missed);
+ await page.goto('/homepage-concepts/');await expect(page.locator('.motion-toggle,.hero-motion-controls')).toHaveCount(0);
+ for(let i=0;i<2;i++){
+  await page.emulateMedia({reducedMotion:'reduce'});await expect(page.locator('body')).toHaveClass(/paused/);await expect(page.locator('#hero-title .last em')).toHaveText('love.');
+  if(!missed)await page.evaluate(()=>{window.testReducedMedia.dispatchEvent(new Event('change'));window.testReducedMedia.dispatchEvent(new Event('change'))});
+  await page.emulateMedia({reducedMotion:'no-preference'});await expect(page.locator('body')).not.toHaveClass(/paused/);
+ }
 });

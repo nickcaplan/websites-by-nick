@@ -30,23 +30,14 @@ for (const width of [320, 390, 768, 901, 961, 1024, 1280, 1400, 1600]) {
   await p.goto(base + "/homepage-concepts/");
   await p.evaluate(() => document.fonts.ready);
   await p.waitForLoadState("networkidle");
-  await p.locator(".composer img").evaluate((e) => e.decode());
-  // Showcase cards are intentionally still until scroll drives their scale.
-  const showcase=await p.locator('.composer').evaluate(e=>({animation:getComputedStyle(e).animationName,scale:getComputedStyle(e).scale}));
-  if(showcase.animation!=='none')throw Error('showcase still loops');
   if (await p.evaluate(() => document.documentElement.scrollWidth > innerWidth))
     throw Error("overflow" + width);
   if (errors.length) throw Error(errors);
   if (width === 390 || width === 1280)
     await p.screenshot({ path: output + "/motion-" + width + ".png" });
   await p.waitForFunction(()=>document.querySelector('#hero-title').classList.contains('typed'));
-  await p.getByRole("button", { name: "Pause motion", exact: true }).click();
-  if (
-    (await p
-      .getByRole("button", { name: "Pause motion", exact: true })
-      .getAttribute("aria-pressed")) !== "true"
-  )
-    throw Error("pause");
+  await p.emulateMedia({ reducedMotion: "reduce" });
+  await p.waitForFunction(()=>document.body.classList.contains('paused'));
   const states = () =>
     p
       .locator(".pf-frame")
@@ -57,7 +48,8 @@ for (const width of [320, 390, 768, 901, 961, 1024, 1280, 1400, 1600]) {
       );
   if ((await states()).some((s) => s === "running"))
     throw Error("motion not paused");
-  await p.getByRole("button", { name: "Pause motion", exact: true }).click();
+  await p.emulateMedia({ reducedMotion: "no-preference" });
+  await p.waitForFunction(()=>!document.body.classList.contains("paused"));
   if ((await states()).some((s) => s === "paused"))
     throw Error("motion not resumed");
   await p.evaluate(() => {
@@ -75,7 +67,7 @@ for (const width of [320, 390, 768, 901, 961, 1024, 1280, 1400, 1600]) {
   });
   if ((await states()).some((s) => s === "paused"))
     throw Error("visibility alone did not resume");
-  await p.getByRole("button", { name: "Pause motion", exact: true }).click();
+  await p.emulateMedia({ reducedMotion: "reduce" });
   await p.evaluate(() => {
     Object.defineProperty(document, "hidden", {
       configurable: true,
@@ -90,8 +82,9 @@ for (const width of [320, 390, 768, 901, 961, 1024, 1280, 1400, 1600]) {
     document.dispatchEvent(new Event("visibilitychange"));
   });
   if ((await states()).some((s) => s === "running"))
-    throw Error("manual pause lost");
-  await p.getByRole("button", { name: "Pause motion", exact: true }).click();
+    throw Error("system reduced motion lost");
+  await p.emulateMedia({ reducedMotion: "no-preference" });
+  await p.waitForFunction(()=>!document.body.classList.contains("paused"));
   if ((await states()).some((s) => s === "paused"))
     throw Error("motion stuck after visibility change");
   // Work identifies the current landing page. No other link may look selected.
@@ -104,7 +97,7 @@ for (const width of [320, 390, 768, 901, 961, 1024, 1280, 1400, 1600]) {
   })));
   if (nav.filter(s=>s.current!==null).length!==1 || nav[0].label!=="Work" || nav[0].current!=="page" || !nav[0].decoration.includes("underline") || nav.some((s,i) => s.border !== "0px" || (i>0 && (s.current!==null || s.decoration.includes("underline")))))
     throw Error("nav falsely selected on landing: " + JSON.stringify(nav));
-  await p.getByRole("link", { name: "Take a closer look" }).click();
+  await p.locator("header nav a").filter({hasText:"Work"}).click();
   await p.waitForFunction(
     () =>
       Math.abs(
@@ -143,7 +136,7 @@ await settle.goto(base + "/homepage-concepts/", {
   waitUntil: "domcontentloaded",
 });
 await settle.waitForTimeout(700);
-await settle.getByRole("button", { name: "Pause motion", exact: true }).click();
+await settle.emulateMedia({reducedMotion:"reduce"});
 await settle.waitForFunction(() => {
   const h = document.getElementById("hero-title");
   return h.classList.contains("typed") && h.classList.contains("drawn");
@@ -161,7 +154,7 @@ if (!settled.total || settled.total !== settled.on)
   throw Error("pause did not settle title");
 if (settled.caret) throw Error("caret left after pause");
 if (settled.off !== "0px") throw Error("window not settled on pause");
-await settle.getByRole("button", { name: "Pause motion", exact: true }).click();
+await settle.emulateMedia({reducedMotion:"no-preference"});
 const resumed = await settle.evaluate(() => {
   const fr = document.querySelector("#hero-title .pf-frame");
   return {
@@ -194,11 +187,11 @@ if (resumed.off !== "0px" || resumed.running)
     const offset = parseFloat(getComputedStyle(f).strokeDashoffset);
     const total = parseFloat(getComputedStyle(f).strokeDasharray);
     if (!(offset > 0 && offset < total)) throw Error("frame not partial at pause");
-    document.querySelector(".motion-toggle").click();
     return offset;
   });
   if (!(partial > 0)) throw Error("mid-draw pause was not exercised");
-  await midp.getByRole("button", { name: "Pause motion", exact: true }).click();
+  await midp.emulateMedia({ reducedMotion: "reduce" });
+  await midp.emulateMedia({ reducedMotion: "no-preference" });
   await midp.waitForTimeout(400);
   const midState = await midp.evaluate(() => {
     const f = document.querySelector(".pf-frame");
@@ -227,7 +220,7 @@ const faceBits = await settle.evaluate(() => ({
   small: [...document.querySelectorAll(".studio .sd-head circle")].filter((c) => +c.getAttribute("r") < 40).length,
 }));
 if (faceBits.eyes || faceBits.dark || faceBits.small) throw Error("cartoon shows a face again " + JSON.stringify(faceBits));
-await settle.getByRole("button", { name: "Pause motion", exact: true }).click();
+await settle.emulateMedia({reducedMotion:"reduce"});
 
 // the sketched-window strokes must not be visible before they are drawn:
 // a dash offset alone cannot hide a stroke whose path outlives its dash
@@ -295,10 +288,6 @@ const r = await b.newPage({
 });
 await r.goto(base + "/homepage-concepts/");
 await r.waitForLoadState("networkidle");
-if (await r.locator(".motion-toggle").isVisible())
-  throw Error("motion control not hidden");
-if (await r.locator(".composer").evaluate((e) => e.getAnimations().length))
-  throw Error("animation reduced");
 // the sketched browser window must be fully drawn and static under reduced
 // motion, not stuck hidden or at its undrawn dash offset
 for (const sel of [".pf-frame", ".pf-head", ".pf-dot", ".pf-bar"]) {
@@ -354,26 +343,12 @@ if (
     .evaluate((e) => e.classList.contains("hidden-page")))
 )
   throw Error("initial hidden state");
-if (
-  (
-    await hidden
-      .locator(".composer")
-      .evaluate((e) => e.getAnimations().map((a) => a.playState))
-  ).some((s) => s === "running")
-)
-  throw Error("initial background motion running");
+
 await hidden.evaluate(() => {
   delete document.hidden;
   document.dispatchEvent(new Event("visibilitychange"));
 });
-if (
-  (
-    await hidden
-      .locator(".composer")
-      .evaluate((e) => e.getAnimations().map((a) => a.playState))
-  ).some((s) => s === "paused")
-)
-  throw Error("initial background motion stuck");
+
 await hidden.close();
 console.log("PASS initial hidden");
 const n = await b.newPage({ javaScriptEnabled: false });
@@ -382,7 +357,7 @@ if (!(await n.locator("h1").isVisible())) throw Error("noJS");
 console.log("PASS noJS");
 
 // Flipping reduced motion on forces pause, and flipping it back off restores
-// the visitor's own pause choice rather than unpausing unconditionally.
+// the system preference rather than unpausing unconditionally.
 {
   const p = await b.newPage({ viewport: { width: 1280, height: 900 } });
   await p.goto(base + "/homepage-concepts/", { waitUntil: "networkidle" });
@@ -412,11 +387,13 @@ console.log("PASS noJS");
   await p.goto(base + "/homepage-concepts/");
   await p.locator(".penurl.url-typing").waitFor({ state: "attached" });
   await p.locator(".pf-url .pfc.on").first().waitFor({ state: "attached" });
-  await p.locator(".motion-toggle").click();
+  await p.emulateMedia({ reducedMotion: "reduce" });
+  await p.waitForFunction(()=>document.body.classList.contains("paused") && !document.querySelector(".penurl").classList.contains("url-typing"));
   const urlState = () => p.locator(".pf-url .pfc").evaluateAll((chars) =>
     chars.map((c) => ({ text: c.textContent, on: c.classList.contains("on") })));
   const frozen = JSON.stringify(await urlState());
-  await p.locator(".motion-toggle").click();
+  await p.emulateMedia({ reducedMotion: "no-preference" });
+  await p.waitForFunction(()=>!document.body.classList.contains("paused"));
   // Watch the visible character state, not just the prebuilt full text.
   const until = Date.now() + 5000;
   while (Date.now() < until) {

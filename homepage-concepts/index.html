@@ -217,12 +217,6 @@
  footer>h2{font-size:70px;max-width:940px}
 }
 </style><style>
-/* Pause controls still govern the hero, project cards and studio, not just the removed collage. */
-.hero-motion-controls{display:none;justify-content:flex-end;margin:12px 0 28px}
-.js-motion .hero-motion-controls{display:flex}
-.hero-motion-controls .motion-toggle{position:static;min-height:44px;font-size:11px;padding:8px 14px}
-@media(prefers-reduced-motion:reduce){.js-motion .hero-motion-controls{display:none}}
-</style><style>
 /* Keep the final work invitation attached to its card and the studio section. */
 .work{padding-bottom:24px}
 .work .project:last-of-type{margin-bottom:0}
@@ -230,6 +224,11 @@
 .work-contact .cta{margin-top:0}
 .work-contact + .about{padding-top:40px}
 @media(max-width:600px){.work{padding-bottom:20px}.work-contact{padding-bottom:20px}.work-contact + .about{padding-top:32px}}
+</style><style>
+/* Move directly from the browser drawing and its CTA into the work. */
+.hero-bottom{margin-bottom:24px}
+.work{padding-top:24px}
+@media(max-width:600px){.hero-bottom{margin-bottom:20px}.work{padding-top:28px}}
 </style></head>
   <body class="dark">
     <script>
@@ -300,9 +299,6 @@
               >See the work <span aria-hidden="true">↓</span></a
             >
           </div>
-        </div>
-        <div class="hero-motion-controls">
-          <button class="motion-toggle" type="button" aria-pressed="false">Pause motion</button>
         </div>
       </section>
       <section id="work" class="work" aria-labelledby="work-title">

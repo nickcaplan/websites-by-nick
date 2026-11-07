@@ -613,23 +613,6 @@ h1.sketch-settled .mp-line, h1.sketch-settled .mp-img, h1.sketch-settled .mp-btn
 .cta:hover span {
   transform: translate(3px, -3px);
 }
-.motion-toggle[aria-pressed="true"] {
-  background: var(--ink);
-  color: var(--paper);
-}
-.motion-toggle {
-  position: absolute;
-  right: 15px;
-  bottom: 13px;
-  z-index: 5;
-  border: 1px solid #20302750;
-  background: var(--paper);
-  color: var(--ink);
-  border-radius: 20px;
-  padding: 8px 14px;
-  font-size: 11px;
-  min-height: 38px;
-}
 h2 {
   font: 450 clamp(38px, 4.7vw, 70px)/1.07 var(--serif);
   letter-spacing: -0.045em;
@@ -1038,13 +1021,6 @@ body.paused .reveal {
   .cta span {
     font-size: 20px;
   }
-  .motion-toggle {
-    font-size: 9px;
-    right: 10px;
-    bottom: 10px;
-    padding: 6px 10px;
-    min-height: 34px;
-  }
   .work {
     padding: 50px 20px 60px;
     grid-template-columns: 1fr;
@@ -1138,9 +1114,6 @@ body.paused .reveal {
     visibility: visible !important;
     stroke-dashoffset: 0 !important;
   }
-  .motion-toggle {
-    display: none;
-  }
 }
 
 .theme-toggle {
@@ -1160,15 +1133,6 @@ body.paused .reveal {
   --ink: #f2ecdf;
   --orange: #ed926f;
   --orange-text: #ed926f;
-}
-.dark .motion-toggle {
-  background: #1b2923;
-  color: #f2ecdf;
-  border-color: #ffffff50;
-}
-.dark .motion-toggle[aria-pressed="true"] {
-  background: var(--ink);
-  color: var(--paper);
 }
 .dark .project-image {
   background: #344038;

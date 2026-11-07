@@ -1,6 +1,4 @@
 (() => {
-  document.body.classList.add("js-motion");
-  const button = document.querySelector(".motion-toggle");
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   const theme = document.querySelector(".theme-toggle");
   const THEME_KEY = "nick-theme";
@@ -31,7 +29,6 @@
       // storage blocked: keep the toggle working for this page
     }
   });
-  let paused = false;
   // Pausing or hiding the tab freezes the title sketch settled; resuming or
   // returning must not clear a drawn window and start the draw again.
   const settleIntro = () => {
@@ -118,17 +115,6 @@
     scheduleUrl(urlStep, 60);
   };
   let refreshProjects = () => {};
-  const apply = () => {
-    document.body.classList.toggle("paused", paused);
-    if (paused) { settleIntro(); }
-    button.setAttribute("aria-pressed", String(paused));
-    refreshProjects();
-  };
-  button.addEventListener("click", () => {
-    paused = !paused;
-    apply();
-  });
-
   // Hero title types out, then the sketched browser window draws around it.
   // Without JS or with reduced motion the full title and window show settled.
   const heroTitle = document.getElementById("hero-title");
@@ -593,23 +579,15 @@
   };
   syncVisibility();
   document.addEventListener("visibilitychange", syncVisibility);
-  let pausedBeforeReduced = null;
-  // Some browsers coalesce media-query notifications during rapid changes.
-  // Reconcile the live preference as well as handling each notification.
+  // System motion preference is the only source of the automatic settled state.
   let lastReduced = reduced.matches;
   const syncReduced = () => {
     lastReduced = reduced.matches;
-    if (lastReduced) {
-      if (pausedBeforeReduced === null) pausedBeforeReduced = paused;
-      paused = true;
-
-      apply();
-    } else if (pausedBeforeReduced !== null) {
-      paused = pausedBeforeReduced;
-      pausedBeforeReduced = null;
-      apply();
-    }
+    document.body.classList.toggle("paused", lastReduced);
+    if (lastReduced) settleIntro();
+    refreshProjects();
   };
+  syncReduced();
   reduced.addEventListener("change", syncReduced);
   setInterval(() => {
     if (reduced.matches === lastReduced) return;

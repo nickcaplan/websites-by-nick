@@ -198,11 +198,11 @@ await Promise.all([320, 390, 768, 901, 961, 1024, 1280, 1400, 1600].map(async wi
   await p.evaluate(() => document.querySelector(".studio svg").scrollIntoView({ block: "center", behavior: "instant" }));
   await waitForDrawing(p);
   if (complete(await studioState(p))) fail("too early to test pause");
-  await p.getByRole("button", { name: "Pause motion", exact: true }).click();
+  await p.emulateMedia({reducedMotion:"reduce"});
   await p.waitForTimeout(900);
   if (!complete(await studioState(p))) fail("pause did not settle the drawing " + JSON.stringify(await studioState(p)));
   const hand1 = (await studioState(p)).hand;
-  await p.getByRole("button", { name: "Pause motion", exact: true }).click();
+  await p.emulateMedia({reducedMotion:"no-preference"});
   await p.waitForTimeout(1200);
   const after = await studioState(p);
   if (!complete(after) || after.hand !== hand1) fail("resume redrew or moved the drawing");
