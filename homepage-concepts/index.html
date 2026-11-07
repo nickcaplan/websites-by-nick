@@ -156,6 +156,16 @@
 </style><style>
 /* Desktop gets its own deeper window; phone geometry stays unchanged. */
 @media(min-width:901px){#hero-title .penframe{top:-132px;bottom:-88px;height:calc(100% + 220px)}#hero-title .penhead{top:-88px}#hero-title .penchrome{top:-124px;left:-26px}#hero-title .penurl{top:-124px}.hero-copy #hero-title{margin-bottom:112px}.hero-copy .pf-nav{left:125px;top:-50px}}
+</style><style>
+/* Enlarge the rotating phone headline without pushing its first line into the bulb. */
+@media(max-width:600px){
+ .hero-copy #hero-title .line:not(.last){font-size:clamp(26px,8.7vw,39px)!important}
+ .hero-copy #hero-title .last{font-size:clamp(34px,10.8vw,47px)!important}
+}
+@media(max-width:360px){
+ .hero-copy #hero-title .line:not(.last){font-size:calc(10vw - 6px)!important}
+ .desktop-bulb{right:30px}
+}
 </style></head>
   <body class="dark">
     <script>
