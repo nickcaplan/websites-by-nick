@@ -153,6 +153,17 @@
   .hero .trust-card p{max-width:280px}
   @media(min-width:1100px){.hero-grid{max-width:1440px;padding-left:max(40px,calc((100% - 1040px)/2));padding-right:40px}}
   @media(max-width:700px){.hero-grid{padding:42px 22px 280px;min-height:0}.hero h1{font-size:45px;max-width:480px}.hero p.lede{font-size:16px}.hero-grid::before{background:linear-gradient(180deg,#102e48 0%,#102e48 50%,#102e48a0 65%,#102e4800 82%)}.hero-photo img{object-position:65% bottom}.hero-photo figcaption{bottom:12px;right:12px}.hero .trust{grid-template-columns:1fr;padding:10px 22px}.hero .trust-card{padding:20px 0}.hero .trust-card+.trust-card{border-left:0;border-top:1px solid var(--line)}.hero .trust-card p{max-width:none}.hero-social{font-size:11px;gap:12px}.hero-social>span{width:100%}}
+
+  /* Preserve the room's full width on phones instead of cropping it to a chair. */
+  .hero-photo img{object-position:center}
+  @media(max-width:700px){
+    .hero-grid{padding:42px 0 0}
+    .hero-grid>div:first-child{padding:0 22px 32px;max-width:none}
+    .hero-grid::before{display:none}
+    .hero-photo{position:relative;inset:auto;width:100%;height:auto;margin:0}
+    .hero-photo img{height:auto;aspect-ratio:3/2;object-fit:contain;object-position:center;display:block}
+    .hero-photo figcaption{bottom:10px;right:10px;font-size:10px}
+  }
 </style>
 </head>
 <body>
@@ -187,7 +198,7 @@
       <div class="hero-social"><span>Get to know the practice</span><a href="http://www.facebook.com/waltonparkdental" target="_blank" rel="noopener">Facebook ↗</a><a href="https://instagram.com/waltonparkdental/" target="_blank" rel="noopener">Instagram ↗</a></div>
     </div>
     <figure class="hero-photo">
-      <img src="assets/site/surgery-1.jpg" alt="A bright Walton Park Dental surgery with a blue dental chair" width="900" height="600" fetchpriority="high">
+      <img src="assets/site/surgery-wide.webp" srcset="assets/site/surgery-wide-900.webp 900w, assets/site/surgery-wide.webp 1920w" sizes="(max-width:700px) 100vw, 1440px" alt="A wide view of a Walton Park Dental surgery, including the chair, cabinetry and garden-facing windows" width="1920" height="1280" fetchpriority="high">
       <figcaption>A real look inside Walton Park Dental</figcaption>
     </figure>
   </div>
