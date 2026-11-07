@@ -94,14 +94,15 @@ for (const width of [320, 390, 768, 901, 961, 1024, 1280, 1400, 1600]) {
   await p.getByRole("button", { name: "Pause motion", exact: true }).click();
   if ((await states()).some((s) => s === "paused"))
     throw Error("motion stuck after visibility change");
-  // On landing, no nav link is a current page or permanently underlined.
+  // Work identifies the current landing page. No other link may look selected.
   // Contact must not masquerade as selected just because it is last.
   const nav = await p.locator(".nav nav a").evaluateAll((links) => links.map((e) => ({
-    current: e.hasAttribute("aria-current"),
+    current: e.getAttribute("aria-current"),
+    label: e.textContent.trim(),
     border: getComputedStyle(e).borderBottomWidth,
     decoration: getComputedStyle(e).textDecorationLine,
   })));
-  if (nav.some((s) => s.current || s.border !== "0px" || s.decoration.includes("underline")))
+  if (nav.filter(s=>s.current!==null).length!==1 || nav[0].label!=="Work" || nav[0].current!=="page" || !nav[0].decoration.includes("underline") || nav.some((s,i) => s.border !== "0px" || (i>0 && (s.current!==null || s.decoration.includes("underline")))))
     throw Error("nav falsely selected on landing: " + JSON.stringify(nav));
   await p.getByRole("link", { name: "Take a closer look" }).click();
   await p.waitForFunction(

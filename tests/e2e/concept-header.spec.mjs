@@ -11,13 +11,13 @@ for(const path of ['', 'about/', 'pricing/', 'contact/', 'experience/', 'privacy
  });
 }
 
-for(const path of ['contact/','experience/','privacy/'])for(const width of[320,390,1280]) {
+for(const path of ['', 'about/','pricing/','charity/','contact/','experience/','privacy/'])for(const width of[320,390,1280]) {
  test(`restyled nav is compact and has no brand dot ${path} ${width}`,async({page})=>{
   await page.setViewportSize({width,height:900});await page.goto('/homepage-concepts/'+path);
   await expect(page.locator('header .wordmark-dot')).toHaveCount(0);
-  expect(await page.locator('header nav').evaluate(e=>getComputedStyle(e).columnGap)).toBe('16px');
+  expect(await page.locator('header nav').evaluate(e=>getComputedStyle(e).columnGap)).toBe('18px');
   const links=await page.locator('header nav a').all();
-  for(let i=1;i<links.length;i++){const a=await links[i-1].boundingBox(),b=await links[i].boundingBox();expect(Math.abs(b.x-a.x-a.width-16)).toBeLessThan(2)}
+  for(let i=1;i<links.length;i++){const a=await links[i-1].boundingBox(),b=await links[i].boundingBox();expect(Math.abs(b.x-a.x-a.width-18)).toBeLessThan(2)}
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
  });
 }

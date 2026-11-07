@@ -117,6 +117,34 @@
  .hero-bottom{margin-top:107px}
 }
 @media(max-width:600px){header.nav nav{justify-content:flex-start;gap:0 18px}}
+</style><style>
+/* Each word has a quiet, distinct light. The wire keeps its ink colour. */
+#hero-title{--bulb-colour:#bd9335}
+#hero-title[data-bulb-word="trust"]{--bulb-colour:#36806a}
+#hero-title[data-bulb-word="enjoy"]{--bulb-colour:#ce743a}
+#hero-title[data-bulb-word="love"]{--bulb-colour:#9662a1}
+.dark #hero-title{--bulb-colour:#e6c466}
+.dark #hero-title[data-bulb-word="trust"]{--bulb-colour:#83d1b3}
+.dark #hero-title[data-bulb-word="enjoy"]{--bulb-colour:#f0a375}
+.dark #hero-title[data-bulb-word="love"]{--bulb-colour:#d5a0d6}
+#hero-title .bulb-glow{transition:opacity .28s ease}
+#hero-title .bulb-glow>path:not(.bulb-glass):not(.bulb-highlight){stroke:var(--bulb-colour)}
+#hero-title.bulb-lit .bulb-outline{stroke:var(--orange)}
+.dark #hero-title.bulb-lit .bulb-outline{stroke:var(--bulb-colour)}
+/* Keep the frame steady while only the bulb switches off and on. */
+#hero-title[data-bulb-word]::before{background:transparent}
+@media(prefers-reduced-motion:reduce){#hero-title .bulb-glow{transition:none}}
+
+/* Plate and ring are inked in the same sequence as the cord, never popped in. */
+.connected-wire>rect{stroke-dasharray:64;stroke-dashoffset:64}
+.bulb-drawing .connected-wire>rect{animation:fixture-draw .55s .25s ease both}
+.bulb-drawing .wire-handle{visibility:visible;animation:none}
+.wire-handle path,.wire-handle circle{stroke-dasharray:50;stroke-dashoffset:50}
+.bulb-drawing .wire-handle path{animation:fixture-draw .2s 1.3s linear both,pull-stretch .8s 1.7s ease}
+.bulb-drawing .wire-handle circle{animation:fixture-draw .25s 1.4s linear both,pull-ring .8s 1.7s ease}
+@keyframes fixture-draw{to{stroke-dashoffset:0}}
+#hero-title.bulb-settled .connected-wire>rect,#hero-title.bulb-settled .wire-handle path,#hero-title.bulb-settled .wire-handle circle{stroke-dashoffset:0;animation:none!important}
+@media(prefers-reduced-motion:reduce){.connected-wire>rect,.wire-handle path,.wire-handle circle{stroke-dashoffset:0;animation:none!important}}
 </style></head>
   <body class="dark">
     <script>
@@ -133,8 +161,7 @@
     <header class="nav">
       <a class="wordmark" href="/homepage-concepts/"
         >Nick <span>Caplan</span
-        ><span class="wordmark-dot" aria-hidden="true"></span
-      ></a>
+        ></a>
       <nav aria-label="Main">
         <a href="#work" aria-current="page">Work</a><a href="/homepage-concepts/about/">About</a
         ><a href="/homepage-concepts/pricing/">Pricing</a><a href="/homepage-concepts/charity/">Charity</a><a href="/homepage-concepts/contact/">Contact</a
@@ -435,21 +462,26 @@
     </footer>
     <script src="/homepage-concepts/motion.js"></script>
   <script>
-(()=>{const h=document.querySelector('#hero-title');h.insertAdjacentHTML('beforeend',`<svg class="desktop-bulb" viewBox="0 0 220 245" aria-hidden="true"><g class="bulb-glow"><circle cx="110" cy="95" r="68" fill="#e6c466" opacity=".18" stroke="none"/><path d="M110 8V0M42 29L32 18M178 29L188 18M20 95H7M200 95h13"/></g><path class="bulb-outline" d="M77 158C77 135 50 134 50 98C50 22 170 22 170 98C170 134 143 135 143 158Z M77 169h66M82 181h56M90 193h40M95 205q15 13 30 0M110 158v-53m0 8L92 93m18 20l18-20"/></svg><svg class="desktop-pull" viewBox="0 0 24 218" aria-hidden="true"><path d="M12 0v194"/><circle cx="12" cy="202" r="6"/></svg>`);let started=false,attempts=0;function start(){if(started)return;if(h.querySelector('.penurl').dataset.finished!=='true'){if(++attempts>=200){started=true;h.classList.add('bulb-lit','bulb-settled');return}setTimeout(start,50);return}started=true;h.classList.add('bulb-drawing');setTimeout(()=>h.classList.add('bulb-lit'),2200)}if(matchMedia('(prefers-reduced-motion:reduce)').matches){h.classList.add('bulb-lit');return}const bar=h.querySelector('.pf-bar');bar.addEventListener('animationend',e=>{if(e.target===bar&&e.animationName==='pendraw')requestAnimationFrame(start)});const settle=()=>{if(!h.classList.contains('sketch-settled')||h.classList.contains('bulb-settled'))return;started=true;h.classList.add('bulb-lit','bulb-settled')};new MutationObserver(settle).observe(h,{attributes:true,attributeFilter:['class']});settle()})();
+(()=>{const h=document.querySelector('#hero-title');h.insertAdjacentHTML('beforeend',`<svg class="desktop-bulb" viewBox="0 0 220 245" aria-hidden="true"><defs><radialGradient id="bulb-halo"><stop stop-color="var(--bulb-colour)" stop-opacity=".38"/><stop offset="1" stop-color="var(--bulb-colour)" stop-opacity="0"/></radialGradient><linearGradient id="bulb-glass" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="var(--bulb-colour)" stop-opacity=".15"/><stop offset="1" stop-color="var(--bulb-colour)" stop-opacity=".48"/></linearGradient></defs><g class="bulb-glow"><circle class="bulb-halo" cx="110" cy="95" r="88" fill="url(#bulb-halo)" stroke="none"/><path class="bulb-glass" d="M77 158C77 135 50 134 50 98C50 22 170 22 170 98C170 134 143 135 143 158Z" fill="url(#bulb-glass)" stroke="none"/><path class="bulb-highlight" d="M69 94C69 68 85 54 102 52" fill="none" stroke="white" stroke-width="5" opacity=".55"/><path d="M110 8V0M42 29L32 18M178 29L188 18M20 95H7M200 95h13"/></g><path class="bulb-outline" d="M77 158C77 135 50 134 50 98C50 22 170 22 170 98C170 134 143 135 143 158Z M77 169h66M82 181h56M90 193h40M95 205q15 13 30 0M110 158v-53m0 8L92 93m18 20l18-20"/></svg><svg class="desktop-pull" viewBox="0 0 24 218" aria-hidden="true"><path d="M12 0v194"/><circle cx="12" cy="202" r="6"/></svg>`);let started=false,attempts=0;function start(){if(started)return;if(h.querySelector('.penurl').dataset.finished!=='true'){if(++attempts>=200){started=true;h.classList.add('bulb-lit','bulb-settled');return}setTimeout(start,50);return}started=true;h.classList.add('bulb-drawing');setTimeout(()=>h.classList.add('bulb-lit'),2200)}if(matchMedia('(prefers-reduced-motion:reduce)').matches){h.classList.add('bulb-lit');return}const bar=h.querySelector('.pf-bar');bar.addEventListener('animationend',e=>{if(e.target===bar&&e.animationName==='pendraw')requestAnimationFrame(start)});const settle=()=>{if(!h.classList.contains('sketch-settled')||h.classList.contains('bulb-settled'))return;started=true;h.classList.add('bulb-lit','bulb-settled')};new MutationObserver(settle).observe(h,{attributes:true,attributeFilter:['class']});settle()})();
 </script><script>(()=>{const h=document.querySelector('#hero-title'),bulb=h.querySelector('.desktop-bulb');function drawWire(){const hb=h.getBoundingClientRect(),bb=bulb.getBoundingClientRect();const x=bb.left-hb.left+bb.width/2,y=bb.top-hb.top+205*bb.height/245,top=bb.top-hb.top+42*bb.height/245,right=hb.width-(innerWidth<=760?32:26),wireShift=innerWidth<=760?20:0;let d='',box='';
- d=`M${x} ${top}V${-32+wireShift} Q${x} ${-54+wireShift} ${x+22} ${-54+wireShift} H${right-30} Q${right+12} ${-54+wireShift} ${right+12} ${-20+wireShift} C${right+12} ${y-26} ${right} ${y-26} ${right} ${y-8}`;box=`<rect x='${x-12}' y='${-64+wireShift}' width='24' height='8' rx='3'/><path d='M${x} ${-56+wireShift}v24'/>`
- let wire=h.querySelector('.connected-wire');if(!wire){h.insertAdjacentHTML('beforeend',`<svg class="connected-wire" aria-hidden="true"><path/>${box}<g class="wire-handle"><path/><circle r="6"/></g></svg>`);wire=h.querySelector('.connected-wire')}wire.querySelector(':scope > path').setAttribute('d',d);const fixture=wire.querySelector(':scope > rect');if(fixture){fixture.setAttribute('x',x-12);fixture.setAttribute('y',-64+wireShift);wire.querySelectorAll(':scope > path')[1].setAttribute('d',`M${x} ${-56+wireShift}v24`)}wire.querySelector('.wire-handle path').setAttribute('d',`M${right} ${y-8}v14`);wire.querySelector('.wire-handle circle').setAttribute('cx',right);wire.querySelector('.wire-handle circle').setAttribute('cy',y+12)
+ d=`M${x} ${top}V${-56+wireShift} M${x+12} ${-60+wireShift} H${right-30} Q${right+12} ${-60+wireShift} ${right+12} ${-20+wireShift} C${right+12} ${y-26} ${right} ${y-26} ${right} ${y-8}`;box=`<rect x='${x-12}' y='${-64+wireShift}' width='24' height='8' rx='3'/>`
+ let wire=h.querySelector('.connected-wire');if(!wire){h.insertAdjacentHTML('beforeend',`<svg class="connected-wire" aria-hidden="true"><path/>${box}<g class="wire-handle"><path/><circle r="6"/></g></svg>`);wire=h.querySelector('.connected-wire')}wire.querySelector(':scope > path').setAttribute('d',d);const fixture=wire.querySelector(':scope > rect');if(fixture){fixture.setAttribute('x',x-12);fixture.setAttribute('y',-64+wireShift)}wire.querySelector('.wire-handle path').setAttribute('d',`M${right} ${y-8}v14`);wire.querySelector('.wire-handle circle').setAttribute('cx',right);wire.querySelector('.wire-handle circle').setAttribute('cy',y+12)
 }drawWire();addEventListener('resize',drawWire);})();</script><script>
 (()=>{const c=document.querySelector('.composition');if(!c)return;let raf=0;const m=matchMedia('(prefers-reduced-motion:reduce)');function update(){raf=0;const r=c.getBoundingClientRect(),off=m.matches||document.body.classList.contains('paused')||document.body.classList.contains('hidden-page');const p=off?0:Math.min(1,Math.max(0,(innerHeight*.18-r.top)/(r.height*.65+innerHeight*.18)));const e=p*p*(3-2*p);c.style.setProperty('--showcase-scale',(1-e*.36).toFixed(4));c.style.setProperty('--showcase-opacity',(1-e*.82).toFixed(4))}function kick(){if(!raf)raf=requestAnimationFrame(update)}addEventListener('scroll',kick,{passive:true});addEventListener('resize',kick);m.addEventListener('change',kick);new MutationObserver(kick).observe(document.body,{attributes:true,attributeFilter:['class']});kick()})();
 </script><script>
 (()=>{
  const h=document.querySelector('#hero-title'),e=h.querySelector('.last em'),m=matchMedia('(prefers-reduced-motion:reduce)');
- const words=['remember.','trust.','enjoy.','love.'];let i=0,pending=null;
+ const words=['remember.','trust.','enjoy.','love.'];let i=0,pending=null,ready=false;
  const stopped=()=>m.matches||document.hidden||document.body.classList.contains('paused');
- const reset=()=>{if(pending)clearTimeout(pending);pending=null;e.classList.remove('word-leaving','word-entering');if(m.matches){i=0;e.textContent=words[0]}};
- h.querySelectorAll('.line').forEach(l=>l.setAttribute('aria-hidden','true'));
- setInterval(()=>{if(stopped()||!h.classList.contains('typed'))return;e.classList.add('word-leaving');pending=setTimeout(()=>{pending=null;if(stopped())return reset();i=(i+1)%words.length;e.textContent=words[i];e.classList.remove('word-leaving');e.classList.add('word-entering');requestAnimationFrame(()=>requestAnimationFrame(()=>e.classList.remove('word-entering')))},260)},3400);
- m.addEventListener('change',reset);document.addEventListener('visibilitychange',reset);new MutationObserver(()=>{if(stopped())reset()}).observe(document.body,{attributes:true,attributeFilter:['class']});
+ const colour=()=>h.dataset.bulbWord=words[i].slice(0,-1);
+ const clear=()=>{if(pending)clearTimeout(pending);pending=null};
+ function arm(){clear();if(ready&&!stopped())pending=setTimeout(change,3400)}
+ function reset(){clear();e.classList.remove('word-leaving','word-entering');if(m.matches){i=0;e.textContent=words[0]}colour();if(ready)h.classList.add('bulb-lit');arm()}
+ function change(){pending=null;if(stopped())return reset();e.classList.add('word-leaving');h.classList.remove('bulb-lit');pending=setTimeout(()=>{pending=null;if(stopped())return reset();i=(i+1)%words.length;e.textContent=words[i];colour();e.classList.remove('word-leaving');e.classList.add('word-entering');requestAnimationFrame(()=>requestAnimationFrame(()=>{if(stopped())return reset();e.classList.remove('word-entering');h.classList.add('bulb-lit');arm()}))},320)}
+ h.querySelectorAll('.line').forEach(l=>l.setAttribute('aria-hidden','true'));colour();
+ // Preserve the opening draw and pull. Start the word/light loop only once it has lit.
+ const initial=new MutationObserver(()=>{if(!h.classList.contains('bulb-lit'))return;ready=true;initial.disconnect();arm()});initial.observe(h,{attributes:true,attributeFilter:['class']});if(h.classList.contains('bulb-lit')){ready=true;initial.disconnect();arm()}
+ m.addEventListener('change',reset);document.addEventListener('visibilitychange',reset);new MutationObserver(reset).observe(document.body,{attributes:true,attributeFilter:['class']});
 })();
 </script></body>
 </html>
