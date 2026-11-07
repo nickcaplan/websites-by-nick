@@ -173,6 +173,13 @@
  .about-grid img{width:160px;grid-column:1;grid-row:2;justify-self:start}
  .about-grid .about-copy{grid-row:3}
 }
+</style><style>
+/* Keep window controls clear of the sketched edges on narrow screens. */
+@media(max-width:760px){
+ #hero-title .penchrome{left:4px;top:-126px}
+ #hero-title .penurl{top:-126px}
+}
+@media(min-width:761px) and (max-width:900px){#hero-title .penchrome{left:4px}}
 </style></head>
   <body class="dark">
     <script>
