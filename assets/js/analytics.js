@@ -88,6 +88,7 @@
       warning.textContent = message || 'Your browser could not save your cookie choice normally. Analytics is off here. If you block all browser storage, close other tabs and check your choice when you return.';
       panel.hidden = false;
       reserveSpace();
+      document.getElementById('cookie-warning-dismiss').focus();
   }
   /** Enable this production stream after opt-in, loading the tag only once. */
   function loadAnalytics() {

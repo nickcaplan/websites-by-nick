@@ -286,7 +286,7 @@ for (const reopened of [false,true]) for(const choice of ['analytics','essential
   await expect(page.locator('#cookie-consent-panel')).toBeVisible();
   await expect(page.locator('#cookie-save-warning')).toHaveAttribute('role','status');
   expect(await page.evaluate(()=>document.querySelector('#cookie-consent-panel').contains(document.activeElement))).toBe(true);
-  const dismiss=page.getByRole('button',{name:'Dismiss warning',exact:true});await dismiss.focus();await page.keyboard.press('Enter');
+  const dismiss=page.getByRole('button',{name:'Dismiss warning',exact:true});await expect(dismiss).toBeFocused();await page.keyboard.press('Enter');
   await expect(page.locator('#cookie-consent-panel')).toBeHidden();await expect(control).toBeFocused();
  });
 }

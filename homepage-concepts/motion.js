@@ -117,10 +117,9 @@
     scheduleUrl(urlStep, 120);
   };
   let refreshProjects = () => {};
-  let resetParallax = () => {};
   const apply = () => {
     document.body.classList.toggle("paused", paused);
-    if (paused) { settleIntro(); resetParallax(); }
+    if (paused) { settleIntro(); }
     button.setAttribute("aria-pressed", String(paused));
     refreshProjects();
   };
@@ -249,65 +248,7 @@
     io.observe(capEl);
   }
 
-  // Pointer parallax on the composition: fine pointers only, transform-only,
-  // rAF-throttled, respects the pause toggle and reduced-motion.
-  const comp = document.querySelector(".composition");
-  const layers = [...document.querySelectorAll("[data-depth]")];
-  const finePointer = matchMedia("(pointer: fine)");
-  if (comp && layers.length && finePointer.matches && !reduced.matches) {
-    let tx = 0,
-      ty = 0,
-      cx = 0,
-      cy = 0,
-      raf = null;
-    resetParallax = () => {
-      if (raf) cancelAnimationFrame(raf);
-      raf = null;
-      tx = ty = cx = cy = 0;
-      layers.forEach(el => { el.style.translate = "0px 0px"; });
-    };
-    const tick = () => {
-      const active = !(
-        document.body.classList.contains("paused") ||
-        document.body.classList.contains("hidden-page") ||
-        reduced.matches
-      );
-      // While motion is off the layers sit at neutral; ease the tracked
-      // position back to neutral as well, so resuming never snaps to
-      // wherever the pointer happened to wander. The factor keeps the
-      // settle immediate: no drift while paused.
-      const on = active ? 1 : 0;
-      const gx = active ? tx : 0;
-      const gy = active ? ty : 0;
-      cx += (gx - cx) * 0.08;
-      cy += (gy - cy) * 0.08;
-      layers.forEach((el) => {
-        const d = parseFloat(el.dataset.depth);
-        el.style.translate = `${(cx * d * on).toFixed(2)}px ${(cy * d * on).toFixed(2)}px`;
-      });
-      // Stop the loop once the layers have settled; the next pointer move
-      // restarts it.
-      raf =
-        Math.abs(gx - cx) > 0.05 || Math.abs(gy - cy) > 0.05
-          ? requestAnimationFrame(tick)
-          : null;
-    };
-    const kick = () => {
-      if (!raf) raf = requestAnimationFrame(tick);
-    };
-    comp.addEventListener("pointermove", (e) => {
-      const r = comp.getBoundingClientRect();
-      tx = (e.clientX - r.left) / r.width - 0.5;
-      ty = (e.clientY - r.top) / r.height - 0.5;
-      kick();
-    });
-    comp.addEventListener("pointerleave", () => {
-      tx = 0;
-      ty = 0;
-      kick();
-    });
-  }
-
+  // Showcase cards stay still until scroll drives their fade and shrink.
   // One-time scroll reveals; content is fully visible without JavaScript.
   if ("IntersectionObserver" in window) {
   document.body.classList.add("js-reveal");
@@ -647,7 +588,7 @@
   // The complete composition and every route remain usable without JavaScript.
   const syncVisibility = () => {
     document.body.classList.toggle("hidden-page", document.hidden);
-    if (document.hidden) { settleIntro(); resetParallax(); }
+    if (document.hidden) { settleIntro(); }
     refreshProjects();
   };
   syncVisibility();
@@ -661,7 +602,7 @@
     if (lastReduced) {
       if (pausedBeforeReduced === null) pausedBeforeReduced = paused;
       paused = true;
-      resetParallax();
+
       apply();
     } else if (pausedBeforeReduced !== null) {
       paused = pausedBeforeReduced;
