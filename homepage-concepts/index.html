@@ -121,12 +121,13 @@
 /* Each word has a quiet, distinct light. The wire keeps its ink colour. */
 #hero-title{--bulb-colour:#bd9335}
 #hero-title[data-bulb-word="trust"]{--bulb-colour:#36806a}
-#hero-title[data-bulb-word="enjoy"]{--bulb-colour:#ce743a}
+#hero-title[data-bulb-word="enjoy"]{--bulb-colour:#bf672e}
 #hero-title[data-bulb-word="love"]{--bulb-colour:#9662a1}
 .dark #hero-title{--bulb-colour:#e6c466}
 .dark #hero-title[data-bulb-word="trust"]{--bulb-colour:#83d1b3}
 .dark #hero-title[data-bulb-word="enjoy"]{--bulb-colour:#f0a375}
 .dark #hero-title[data-bulb-word="love"]{--bulb-colour:#d5a0d6}
+#hero-title[data-bulb-word] .last em{color:var(--bulb-colour)}
 #hero-title .bulb-glow{transition:opacity .28s ease}
 #hero-title .bulb-glow>path:not(.bulb-glass):not(.bulb-highlight){stroke:var(--bulb-colour)}
 #hero-title.bulb-lit .bulb-outline{stroke:var(--orange)}
