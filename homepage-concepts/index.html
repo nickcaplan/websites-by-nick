@@ -166,6 +166,13 @@
  .hero-copy #hero-title .line:not(.last){font-size:calc(10vw - 6px)!important}
  .desktop-bulb{right:30px}
 }
+</style><style>
+/* Give the phone portrait its own row instead of a small badge beside the heading. */
+@media(max-width:600px){
+ .about-grid{grid-template-columns:1fr}
+ .about-grid img{width:160px;grid-column:1;grid-row:2;justify-self:start}
+ .about-grid .about-copy{grid-row:3}
+}
 </style></head>
   <body class="dark">
     <script>
