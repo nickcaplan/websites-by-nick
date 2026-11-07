@@ -1,7 +1,7 @@
 import {test,expect} from '@playwright/test';
 const root='/homepage-concepts/';
 for(const width of [320,390,768,1280]) for(const theme of ['dark','light']) test(`charity ${width} ${theme}: layout, navigation, doubled text`,async({page})=>{
- await page.setViewportSize({width,height:900});await page.addInitScript(t=>localStorage.setItem('nick-theme',t),theme);await page.goto(root+'charity/');await page.evaluate(()=>document.fonts.ready);
+ await page.setViewportSize({width,height:900});await page.addInitScript(t=>localStorage.setItem('nick-theme',t),theme);await page.emulateMedia({reducedMotion:'reduce'});await page.goto(root+'charity/');await page.evaluate(()=>document.fonts.ready);
  expect(await page.locator('body').evaluate(e=>e.classList.contains('dark'))).toBe(theme==='dark');await expect(page.locator('h1')).toContainText('Free websites');await expect(page.locator('.charity-list li')).toHaveCount(4);
  await expect(page.locator('nav a[aria-current="page"]')).toHaveText('Charity');await expect(page.locator('.charity-apply a')).toHaveAttribute('href',root+'contact/');
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);

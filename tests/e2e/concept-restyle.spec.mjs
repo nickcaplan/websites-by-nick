@@ -10,6 +10,7 @@ for(const name of ['contact','experience','privacy']) for(const width of [320,39
   await page.evaluate(()=>document.fonts.ready);
   await page.evaluate(()=>{const es=[...document.querySelectorAll('body *')].filter(e=>!e.closest('svg'));const sz=es.map(e=>parseFloat(getComputedStyle(e).fontSize));es.forEach((e,i)=>e.style.fontSize=sz[i]*2+'px')});
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+  await expect(page.locator('.cookie-banner')).toBeVisible();
   expect(await page.locator('.cookie-banner').evaluate(e=>e.scrollWidth<=e.clientWidth)).toBe(true);
  });
 }
