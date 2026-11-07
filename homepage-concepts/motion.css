@@ -1789,3 +1789,7 @@ h2 { overflow-wrap: anywhere; }
  .nav > .theme-toggle { grid-column: 2; grid-row: 1; }
  .nav > nav { grid-column: 1 / -1; grid-row: 2; margin-left: 0; }
 }
+
+/* One next step in the hero; the contact invitation follows the work. */
+.work-contact { max-width: 1180px; margin: 0 auto; padding: 0 4% 60px; display: flex; justify-content: flex-end; }
+@media (max-width: 600px) { .work-contact { padding: 0 20px 50px; justify-content: flex-start; } }
