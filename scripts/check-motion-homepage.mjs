@@ -127,6 +127,7 @@ if (!settled.total || settled.total !== settled.on)
 if (settled.caret) throw Error("caret left after pause");
 if (settled.off !== "0px") throw Error("window not settled on pause");
 await settle.emulateMedia({reducedMotion:"no-preference"});
+await settle.waitForFunction(()=>!document.body.classList.contains("paused"));
 const resumed = await settle.evaluate(() => {
   const fr = document.querySelector("#hero-title .pf-frame");
   return {
