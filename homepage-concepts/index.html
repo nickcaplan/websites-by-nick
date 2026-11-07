@@ -170,11 +170,14 @@
  .desktop-bulb{right:26px}
 }
 </style><style>
-/* Give the phone portrait its own row instead of a small badge beside the heading. */
+/* Keep the desktop grid order while letting phone copy wrap around the portrait. */
+.about-grid > img{order:2}
+.about-grid > .about-copy{order:1}
 @media(max-width:600px){
- .about-grid{grid-template-columns:1fr}
- .about-grid img{width:160px;grid-column:1;grid-row:2;justify-self:start}
- .about-grid .about-copy{grid-row:3}
+ .about-grid{display:flow-root}
+ .about-grid h2{margin-bottom:24px}
+ .about-grid > img{float:right;width:clamp(132px,38vw,160px);margin:0 0 12px 18px;shape-outside:circle(50%);shape-margin:8px}
+ .about-grid .about-copy p:first-child{margin-top:0}
 }
 </style><style>
 /* Keep window controls clear of the sketched edges on narrow screens. */
@@ -404,6 +407,13 @@
         <p class="eyebrow">A PERSON. NOT A PAGE BUILDER.</p>
         <div class="about-grid reveal">
           <h2>Curiosity up front.<br /><em>Care in every detail.</em></h2>
+          <img
+            src="/assets/images/3-profile-burgundy-320w.webp"
+            width="400"
+            height="400"
+            loading="lazy"
+            alt="Nick Caplan"
+          />
           <div class="about-copy">
             <p>
               I'm Nick. I design, build and maintain websites that are easy to
@@ -416,13 +426,7 @@
             </p>
             <a href="/homepage-concepts/experience/">A little about me <span aria-hidden="true">↗</span></a>
           </div>
-          <img
-            src="/assets/images/3-profile-burgundy-320w.webp"
-            width="400"
-            height="400"
-            loading="lazy"
-            alt="Nick Caplan"
-          />
+
         </div>
         <figure class="studio reveal">
           <p class="eyebrow studio-eyebrow">HOW IT GETS MADE</p>
