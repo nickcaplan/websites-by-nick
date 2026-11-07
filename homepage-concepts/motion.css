@@ -1813,3 +1813,22 @@ h2 { overflow-wrap: anywhere; }
   .work-contact .cta { margin-top: 0; }
   .work-contact + .about { padding-top: 32px; }
 }
+
+
+/* The closing invitation uses the same compact pill as the work CTA. */
+footer > .footer-cta.cta {
+  width: fit-content;
+  border: 0;
+  padding: 16px 24px;
+  gap: 38px;
+  font-size: 14px;
+  background: #f29c76;
+  color: #203027;
+  text-decoration: none;
+}
+footer > .footer-cta.cta span { font-size: 23px; }
+@media (max-width: 600px) {
+  footer > .footer-cta.cta { padding: 11px 18px; gap: 28px; font-size: 12px; margin-top: 0; }
+  footer > .footer-cta.cta span { font-size: 20px; }
+}
+.dark footer > .footer-cta.cta { background: #ed926f; color: #1b2923; }
