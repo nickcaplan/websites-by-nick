@@ -301,6 +301,8 @@ test('failed Allow alone records rejection despite an older saved Allow and no e
  await page.getByRole('button',{name:'Cookie preferences',exact:true}).click();await page.locator('[data-cookie-choice="analytics"]').click();await expect(page.locator('#cookie-save-warning')).toContainText('page only');
  expect(await page.evaluate(()=>localStorage.getItem('websites-by-nick-cookie-preferences'))).toBe('analytics');expect(await page.evaluate(()=>sessionStorage.getItem('websites-by-nick-cookie-preferences'))).toBe('essential');expect(await page.evaluate(()=>document.cookie)).toContain('analytics-rejected=1');
  const before=requests.length;await page.reload();await expect(page.locator('[data-google-analytics]')).toHaveCount(0);expect(requests).toHaveLength(before);
+ expect(await page.evaluate(()=>localStorage.getItem('websites-by-nick-cookie-preferences'))).toBe('analytics');
+ await page.evaluate(()=>sessionStorage.removeItem('websites-by-nick-cookie-preferences'));await page.reload();await expect(page.locator('[data-google-analytics]')).toHaveCount(0);expect(requests).toHaveLength(before);
 });
 
 
