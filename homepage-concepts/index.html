@@ -121,15 +121,16 @@
 /* Each word has a quiet, distinct light. The wire keeps its ink colour. */
 #hero-title{--bulb-colour:#bd9335}
 #hero-title[data-bulb-word="enjoy"]{--bulb-colour:#bf672e}
-#hero-title[data-bulb-word="love"]{--bulb-colour:#9662a1}
+#hero-title[data-bulb-word="love"]{--bulb-colour:#b83a3f}
 .dark #hero-title{--bulb-colour:#e6c466}
 .dark #hero-title[data-bulb-word="enjoy"]{--bulb-colour:#f0a375}
-.dark #hero-title[data-bulb-word="love"]{--bulb-colour:#d5a0d6}
+.dark #hero-title[data-bulb-word="love"]{--bulb-colour:#f17878}
 #hero-title[data-bulb-word] .last em{color:var(--bulb-colour)}
 #hero-title .bulb-glow{transition:opacity .28s ease}
 #hero-title .bulb-glow>path:not(.bulb-glass):not(.bulb-highlight){stroke:var(--bulb-colour)}
 #hero-title.bulb-lit .bulb-outline{stroke:var(--orange)}
-.dark #hero-title.bulb-lit .bulb-outline{stroke:var(--bulb-colour)}
+.dark #hero-title.bulb-lit .bulb-outline,
+#hero-title[data-bulb-word="love"].bulb-lit .bulb-outline{stroke:var(--bulb-colour)}
 /* Keep the frame steady while only the bulb switches off and on. */
 #hero-title[data-bulb-word]::before{background:transparent}
 @media(prefers-reduced-motion:reduce){#hero-title .bulb-glow{transition:none}}
