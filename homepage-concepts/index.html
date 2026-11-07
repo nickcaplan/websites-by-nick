@@ -168,6 +168,13 @@
  .desktop-bulb{right:26px}
 }
 </style><style>
+/* Cap the desktop browser drawing instead of stretching it across wide screens. */
+@media(min-width:1101px){
+ .hero-copy #hero-title{max-width:850px;container-type:inline-size}
+ .hero-copy #hero-title .line{font-size:min(1em,10cqw)!important}
+ .hero-copy .pf-nav{left:max(125px,calc(50% - 425px))}
+}
+</style><style>
 /* Keep the desktop grid order while letting phone copy wrap around the portrait. */
 .about-grid > img{order:2}
 .about-grid > .about-copy{order:1}
