@@ -120,11 +120,9 @@
 </style><style>
 /* Each word has a quiet, distinct light. The wire keeps its ink colour. */
 #hero-title{--bulb-colour:#bd9335}
-#hero-title[data-bulb-word="trust"]{--bulb-colour:#36806a}
 #hero-title[data-bulb-word="enjoy"]{--bulb-colour:#bf672e}
 #hero-title[data-bulb-word="love"]{--bulb-colour:#9662a1}
 .dark #hero-title{--bulb-colour:#e6c466}
-.dark #hero-title[data-bulb-word="trust"]{--bulb-colour:#83d1b3}
 .dark #hero-title[data-bulb-word="enjoy"]{--bulb-colour:#f0a375}
 .dark #hero-title[data-bulb-word="love"]{--bulb-colour:#d5a0d6}
 #hero-title[data-bulb-word] .last em{color:var(--bulb-colour)}
@@ -213,7 +211,7 @@
     <main id="main">
       <section class="entrance" aria-labelledby="hero-title">
         <div class="hero-copy">
-          <h1 id="hero-title" aria-label="Websites people remember, trust, enjoy, love.">
+          <h1 id="hero-title" aria-label="Websites people remember, enjoy, love.">
             <span class="line">Websites people</span
             ><span class="line last"><em>remember.</em></span
             ><svg class="penframe" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
@@ -538,7 +536,7 @@ function drawWire(){sizeBrowserFrame();const hb=h.getBoundingClientRect(),bb=bul
 </script><script>
 (()=>{
  const h=document.querySelector('#hero-title'),e=h.querySelector('.last em'),m=matchMedia('(prefers-reduced-motion:reduce)');
- const words=['remember.','trust.','enjoy.','love.'],cta=document.querySelector('.hero-bottom .cta');let i=0,pending=null,ready=false,pulls=[],cycle=0,cued=m.matches;
+ const words=['remember.','enjoy.','love.'],cta=document.querySelector('.hero-bottom .cta');let i=0,pending=null,ready=false,pulls=[],cycle=0,cued=m.matches;
  const stopped=()=>m.matches||document.hidden||document.body.classList.contains('paused');
  const colour=()=>h.dataset.bulbWord=words[i].slice(0,-1);
  const clear=()=>{if(pending)clearTimeout(pending);pending=null};
