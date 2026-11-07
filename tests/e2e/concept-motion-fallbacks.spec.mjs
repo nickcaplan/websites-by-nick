@@ -2,8 +2,16 @@ import {test,expect} from '@playwright/test';
 test('no IntersectionObserver leaves content and caption visible and controls working',async({page})=>{
  const errors=[];page.on('pageerror',e=>errors.push(e.message));await page.addInitScript(()=>delete window.IntersectionObserver);await page.goto('/homepage-concepts/');await expect(page.locator('body')).not.toHaveClass(/js-reveal/);await page.locator('.studio').scrollIntoViewIfNeeded();await expect(page.locator('.type-caption')).toBeVisible();expect(await page.locator('.reveal').evaluateAll(es=>es.length>0&&es.every(e=>getComputedStyle(e).opacity==='1'))).toBe(true);expect(errors).toEqual([]);await page.locator('.motion-toggle').click();await expect(page.locator('body')).toHaveClass(/paused/);
 });
-test('settled parallax resets immediately on pause without another pointer event',async({page})=>{
- await page.setViewportSize({width:1280,height:900});await page.goto('/homepage-concepts/');test.skip(!await page.evaluate(()=>matchMedia('(pointer: fine)').matches),'Parallax applies only to fine pointers');await page.locator('.composition').dispatchEvent('pointermove',{clientX:1100,clientY:500});await page.waitForFunction(()=>[...document.querySelectorAll('[data-depth]')].some(e=>e.style.translate&&e.style.translate!=='0px'&&!e.style.translate.startsWith('0.00px 0.00px')));await page.waitForFunction(()=>{const value=[...document.querySelectorAll('[data-depth]')].map(e=>e.style.translate).join('|');const now=performance.now();if(window.lastParallax!==value){window.lastParallax=value;window.parallaxStableAt=now;return false;}return now-window.parallaxStableAt>250});expect(await page.locator('[data-depth]').evaluateAll(es=>es.some(e=>e.style.translate&&!e.style.translate.startsWith('0.00px 0.00px')))).toBe(true);await page.locator('.motion-toggle').evaluate(e=>e.click());expect(await page.locator('[data-depth]').evaluateAll(es=>es.every(e=>e.style.translate==='0px'))).toBe(true);
+test('showcase stays still under pointer movement before and after pause',async({page})=>{
+ await page.setViewportSize({width:1280,height:900});await page.goto('/homepage-concepts/');
+ const layers=page.locator('.composition [data-depth]');
+ const positions=()=>layers.evaluateAll(es=>es.map(e=>({translate:getComputedStyle(e).translate,transform:getComputedStyle(e).transform})));
+ const initial=await positions();
+ for(const paused of [false,true,false]){
+  if((await page.locator('.motion-toggle').getAttribute('aria-pressed'))!==String(paused))await page.locator('.motion-toggle').evaluate(e=>e.click());
+  await page.locator('.composition').dispatchEvent('pointermove',{clientX:1100,clientY:500});await page.waitForTimeout(350);
+  expect(await positions()).toEqual(initial);
+ }
 });
 test('unpaused desktop project links support forward and reverse keyboard navigation',async({page})=>{
  await page.setViewportSize({width:1280,height:900});await page.goto('/homepage-concepts/');const cards=page.locator('.work .project');await expect(cards).toHaveCount(3);await cards.last().scrollIntoViewIfNeeded();expect(await cards.evaluateAll(es=>es.every(e=>e.getAttribute('tabindex')!== '-1'))).toBe(true);await cards.last().focus();await page.keyboard.press('Shift+Tab');await expect(cards.nth(1)).toBeFocused();await page.keyboard.press('Shift+Tab');await expect(cards.first()).toBeFocused();await page.keyboard.press('Tab');await expect(cards.nth(1)).toBeFocused();expect(await cards.nth(1).evaluate(e=>{const r=e.getBoundingClientRect();return r.top>=0&&r.bottom<=innerHeight})).toBe(true);await expect(page.locator('body')).not.toHaveClass(/paused/);expect(await cards.nth(1).evaluate(e=>getComputedStyle(e).position)).toBe('relative');
