@@ -112,9 +112,9 @@
       urlChars[i].classList.add("on");
       i += 1;
       moveUrlCaret();
-      scheduleUrl(urlStep, 32);
+      scheduleUrl(urlStep, 22);
     };
-    scheduleUrl(urlStep, 120);
+    scheduleUrl(urlStep, 60);
   };
   let refreshProjects = () => {};
   const apply = () => {
@@ -179,21 +179,21 @@
             // the window starts drawing straight after the title types
             heroTitle.classList.add("typed", "drawn");
             const bar = document.querySelector(".pf-bar");
-            if (bar) bar.addEventListener("animationend", () => setTimeout(startUrl, 150), { once: true });
+            if (bar) bar.addEventListener("animationend", () => setTimeout(startUrl, 60), { once: true });
             else setTimeout(startUrl, 4200);
             // a pause or tab-hide landing in this gap must still settle the
             // window, so resume does not erase and redraw it
             if (document.body.classList.contains("paused") || document.body.classList.contains("hidden-page"))
               heroTitle.classList.add("sketch-settled");
-          }, 150);
+          }, 60);
           return;
         }
         chars[i].classList.add("on");
         chars[i].after(caret);
         i += 1;
-        setTimeout(step, 40);
+        setTimeout(step, 28);
       };
-      setTimeout(step, 250);
+      setTimeout(step, 80);
     }
   }
 
