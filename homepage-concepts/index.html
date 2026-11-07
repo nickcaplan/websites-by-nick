@@ -544,12 +544,17 @@ function drawWire(){sizeBrowserFrame();const hb=h.getBoundingClientRect(),bb=bul
 </script><script>
 (()=>{
  const h=document.querySelector('#hero-title'),e=h.querySelector('.last em'),m=matchMedia('(prefers-reduced-motion:reduce)');
- const words=['remember.','enjoy.','love.'],cta=document.querySelector('.hero-bottom .cta');let i=0,pending=null,ready=false,pulls=[],cycle=0,ctaPulse=null;
+ const words=['remember.','enjoy.','love.'],cta=document.querySelector('.hero-bottom .cta');let i=0,pending=null,ready=false,pulls=[],cycle=0,ctaPulse=null,idlePulse=null;
  const stopped=()=>m.matches||document.hidden||document.body.classList.contains('paused');
  const colour=()=>h.dataset.bulbWord=words[i].slice(0,-1);
  const clear=()=>{if(pending)clearTimeout(pending);pending=null};
- function arm(){clear();if(!ready||stopped())return;if(i<words.length-1)pending=setTimeout(change,1200);}
- function reset(){cycle++;clear();if(ctaPulse){ctaPulse.cancel();ctaPulse=null;}pulls.forEach(a=>a.cancel());pulls=[];e.classList.remove('word-leaving','word-entering');if(m.matches){i=words.length-1;e.textContent=words[i]}colour();if(ready)h.classList.add('bulb-lit');arm()}
+ const interacting=()=>cta.matches(':hover,:focus-visible,:active');
+ function stopIdle(){if(idlePulse){idlePulse.cancel();idlePulse=null;}}
+ function startIdle(){pending=null;if(stopped()||interacting()||i<words.length-1)return;stopIdle();idlePulse=cta.animate([{transform:'scale(1)',offset:0,easing:'ease-in-out'},{transform:'scale(1.045)',offset:.16,easing:'ease-in-out'},{transform:'scale(1)',offset:.32},{transform:'scale(1)',offset:1}],{duration:2000,iterations:Infinity,easing:'linear'});}
+ function arm(){clear();if(!ready||stopped())return;if(i<words.length-1)pending=setTimeout(change,1200);else if(!idlePulse&&!interacting())pending=setTimeout(startIdle,1200);}
+ ['pointerenter','focusin','pointerdown'].forEach(type=>cta.addEventListener(type,()=>{clear();stopIdle();if(ctaPulse){ctaPulse.cancel();ctaPulse=null;}}));
+ ['pointerleave','focusout','pointerup','pointercancel'].forEach(type=>cta.addEventListener(type,()=>requestAnimationFrame(arm)));
+ function reset(){cycle++;clear();stopIdle();if(ctaPulse){ctaPulse.cancel();ctaPulse=null;}pulls.forEach(a=>a.cancel());pulls=[];e.classList.remove('word-leaving','word-entering');if(m.matches){i=words.length-1;e.textContent=words[i]}colour();if(ready)h.classList.add('bulb-lit');arm()}
  function change(){pending=null;if(i===words.length-1)return;if(stopped())return reset();const token=++cycle;if(ctaPulse)ctaPulse.cancel();ctaPulse=cta.animate([{scale:1},{scale:1.045,offset:.5},{scale:1}],{duration:640,easing:'ease-in-out'});pulls.forEach(a=>a.cancel());const stem=h.querySelector('.wire-handle path'),ring=h.querySelector('.wire-handle circle');pulls=[stem.animate([{transform:'scaleY(1)'},{transform:'scaleY(1.857142857)'}],{duration:320,easing:'ease-in-out',fill:'forwards'}),ring.animate([{transform:'translateY(0)'},{transform:'translateY(12px)'}],{duration:320,easing:'ease-in-out',fill:'forwards'})];e.classList.add('word-leaving');h.classList.remove('bulb-lit');Promise.all(pulls.map(a=>a.finished)).then(()=>{if(token!==cycle)return;if(stopped())return reset();i=Math.min(i+1,words.length-1);e.textContent=words[i];colour();e.classList.remove('word-leaving');e.classList.add('word-entering');requestAnimationFrame(()=>requestAnimationFrame(()=>{if(token!==cycle)return;if(stopped())return reset();e.classList.remove('word-entering');h.classList.add('bulb-lit');const held=pulls;pulls=[stem.animate([{transform:'scaleY(1.857142857)'},{transform:'scaleY(1)'}],{duration:320,easing:'ease-in-out'}),ring.animate([{transform:'translateY(12px)'},{transform:'translateY(0)'}],{duration:320,easing:'ease-in-out'})];held.forEach(a=>a.cancel());Promise.all(pulls.map(a=>a.finished)).then(()=>{if(token===cycle)arm()}).catch(()=>{})}))}).catch(()=>{})}
  h.querySelectorAll('.line').forEach(l=>l.setAttribute('aria-hidden','true'));colour();
  // Every pull, including the opening one, reveals its word while held down.
