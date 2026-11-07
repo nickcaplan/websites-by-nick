@@ -92,7 +92,7 @@
   .faq-q:focus-visible{outline:2px solid var(--primary);outline-offset:-2px}
   .faq-q .chev{flex:none;transition:transform .2s;color:var(--primary)}
   .faq-item.open .chev{transform:rotate(180deg)}
-  .faq-a{max-height:0;overflow:hidden;transition:max-height .25s ease}
+  .faq-a{max-height:none;overflow:hidden;transition:max-height .25s ease}
   .faq-a p{padding:0 18px 16px;font-size:14.5px}
 
   .visit-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:26px}
@@ -286,20 +286,20 @@
     <h2>Questions we hear a lot</h2>
     <div class="faq-list">
       <div class="faq-item">
-        <button class="faq-q" aria-expanded="false">Do you see NHS patients?<span class="chev">&#9662;</span></button>
-        <div class="faq-a" aria-hidden="true"><p>We provide care for adult patients on a private basis. We are also able to see the children of our registered adult patients within the NHS.</p></div>
+        <button class="faq-q" aria-expanded="true">Do you see NHS patients?<span class="chev">&#9662;</span></button>
+        <div class="faq-a" aria-hidden="false"><p>We provide care for adult patients on a private basis. We are also able to see the children of our registered adult patients within the NHS.</p></div>
       </div>
       <div class="faq-item">
-        <button class="faq-q" aria-expanded="false">Can I spread the cost of my care?<span class="chev">&#9662;</span></button>
-        <div class="faq-a" aria-hidden="true"><p>Yes - we offer care within Denplan, the UK's largest dental plan provider, for an affordable monthly fee.</p></div>
+        <button class="faq-q" aria-expanded="true">Can I spread the cost of my care?<span class="chev">&#9662;</span></button>
+        <div class="faq-a" aria-hidden="false"><p>Yes - we offer care within Denplan, the UK's largest dental plan provider, for an affordable monthly fee.</p></div>
       </div>
       <div class="faq-item">
-        <button class="faq-q" aria-expanded="false">I am nervous about treatment. What can you do?<span class="chev">&#9662;</span></button>
-        <div class="faq-a" aria-hidden="true"><p>Tell us when you call. Our team takes a careful, sympathetic approach in a friendly atmosphere, and we will work at a pace that builds your confidence.</p></div>
+        <button class="faq-q" aria-expanded="true">I am nervous about treatment. What can you do?<span class="chev">&#9662;</span></button>
+        <div class="faq-a" aria-hidden="false"><p>Tell us when you call. Our team takes a careful, sympathetic approach in a friendly atmosphere, and we will work at a pace that builds your confidence.</p></div>
       </div>
       <div class="faq-item">
-        <button class="faq-q" aria-expanded="false">What about weekends and emergencies?<span class="chev">&#9662;</span></button>
-        <div class="faq-a" aria-hidden="true"><p>We are open Monday to Friday. Saturdays and Sundays are for emergencies only - call us on 01932 220449.</p></div>
+        <button class="faq-q" aria-expanded="true">What about weekends and emergencies?<span class="chev">&#9662;</span></button>
+        <div class="faq-a" aria-hidden="false"><p>We are open Monday to Friday. Saturdays and Sundays are for emergencies only - call us on 01932 220449.</p></div>
       </div>
     </div>
   </div>
@@ -346,6 +346,7 @@
   for(var j=0;j<items.length;j++){
     (function(item){
       var q=item.querySelector(".faq-q"),a=item.querySelector(".faq-a");
+      q.setAttribute("aria-expanded","false");a.setAttribute("aria-hidden","true");a.style.maxHeight="0";
       q.addEventListener("click",function(){
         var open=item.classList.toggle("open");
         q.setAttribute("aria-expanded",open?"true":"false");
