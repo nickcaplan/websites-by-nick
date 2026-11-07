@@ -308,7 +308,16 @@ test('failed Allow alone records rejection despite an older saved Allow and no e
 
 test('homepage decorative arrows are absent from link names',async({page})=>{
  await page.goto('/homepage-concepts/');
- await expect(page.locator('a.cta span').first()).toHaveText('↗');
+ const hero=page.locator('.hero-bottom a.cta'),contact=page.locator('.work-contact a.cta');
+ await expect(hero).toHaveAttribute('href','#work');
+ await expect(hero.locator('span')).toHaveText('↓');
+ await expect(hero.locator('span')).toHaveAttribute('aria-hidden','true');
+ await expect(hero).toHaveAccessibleName('See the work');
+ await expect(page.getByRole('link',{name:'See the work',exact:true})).toHaveCount(1);
+ await expect(contact).toHaveAttribute('href','/homepage-concepts/contact/');
+ await expect(contact.locator('span')).toHaveText('↗');
+ await expect(contact.locator('span')).toHaveAttribute('aria-hidden','true');
+ await expect(contact).toHaveAccessibleName("Let's make yours");
  await expect(page.getByRole('link',{name:"Let's make yours",exact:true})).toHaveCount(1);
  await expect(page.locator('a[href="/homepage-concepts/experience/"] span')).toHaveText('↗');
  await expect(page.getByRole('link',{name:'A little about me',exact:true})).toHaveCount(1);
