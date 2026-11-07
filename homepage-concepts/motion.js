@@ -722,18 +722,26 @@
   syncVisibility();
   document.addEventListener("visibilitychange", syncVisibility);
   let pausedBeforeReduced = null;
-  // Use the state delivered by this change, not a second live-query read.
-  reduced.addEventListener("change", (event) => {
-    if (event.matches) {
+  // Some browsers coalesce media-query notifications during rapid changes.
+  // Reconcile the live preference as well as handling each notification.
+  let lastReduced = reduced.matches;
+  const syncReduced = () => {
+    lastReduced = reduced.matches;
+    if (lastReduced) {
       if (pausedBeforeReduced === null) pausedBeforeReduced = paused;
       paused = true;
       resetParallax();
       apply();
     } else if (pausedBeforeReduced !== null) {
-      // Restore the visitor's own pause choice, not a blanket unpause.
       paused = pausedBeforeReduced;
       pausedBeforeReduced = null;
       apply();
     }
-  });
+  };
+  reduced.addEventListener("change", syncReduced);
+  setInterval(() => {
+    if (reduced.matches === lastReduced) return;
+    lastReduced = reduced.matches;
+    syncReduced();
+  }, 250);
 })();
