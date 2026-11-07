@@ -1,4 +1,10 @@
 (() => {
+  const openCareer = () => {
+    const career = document.getElementById("career-history");
+    if (career && location.hash === "#career-history") {career.open = true;career.scrollIntoView();}
+  };
+  openCareer();
+  addEventListener("hashchange", openCareer);
   const theme = document.querySelector(".theme-toggle");
   if (!theme) return;
   const KEY = "nick-theme";

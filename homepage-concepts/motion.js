@@ -321,8 +321,10 @@
     const work = document.querySelector(".work");
     let pointerFocus = false;
     work.addEventListener("pointerdown", () => { pointerFocus = true; });
-    addEventListener("pointerup", () => {
+    addEventListener("pointerup", event => {
+      const fromWork = pointerFocus && work.contains(event.target);
       pointerFocus = false;
+      if (!fromWork) return;
       // Let the native click dispatch before restoring the pointer deck.
       setTimeout(() => {
         if (document.body.classList.contains("project-focus")) {
