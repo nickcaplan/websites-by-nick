@@ -109,3 +109,6 @@ header.nav nav a:focus-visible{outline:2px solid var(--orange-text);outline-offs
 @media(max-width:600px){header.nav nav{gap:0 18px}}
 
 footer a[aria-current="page"]{text-decoration:underline;text-underline-offset:6px}
+
+.contact-form .whatsapp-icon{color:#128c4a}
+body:not(.dark) .contact-form .whatsapp-icon{color:#25d366}
