@@ -7,7 +7,14 @@ for (const script of ['check-motion-homepage.mjs', 'check-homepage-feedback.mjs'
   test(`homepage detailed checks: ${script}`, async ({}, info) => {
     test.skip(info.project.name !== 'chromium', 'Chromium motion detail suite; cross-browser page UX is covered separately');
     test.setTimeout(240000);
-    const { stdout, stderr } = await run(process.execPath, [`scripts/${script}`], { timeout: 225000, maxBuffer: 1024 * 1024 });
-    await info.attach('detailed-check-output', { body: stdout + stderr, contentType: 'text/plain' });
+    let stdout = '', stderr = '';
+    try {
+      ({stdout, stderr} = await run(process.execPath, [`scripts/${script}`], { timeout: 225000, maxBuffer: 1024 * 1024 }));
+    } catch (error) {
+      stdout = error.stdout || ''; stderr = error.stderr || '';
+      throw error;
+    } finally {
+      await info.attach('detailed-check-output', { body: stdout + stderr, contentType: 'text/plain' });
+    }
   });
 }

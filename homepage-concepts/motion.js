@@ -58,13 +58,6 @@
     }, ms);
     urlTimers.add(id);
   };
-  const urlSettled = () => !urlText || !urlText.querySelector(".pfc");
-  // The address keeps playing after the first typing: it holds, backspaces to
-  // the "www.your" stem, then types the next option. Settle paths freeze whatever
-  // word is showing; reduced-motion and paused visitors never see the cycle.
-  const urlStem = "www.your";
-  const urlWords = ["business", "idea", "shop", "project"];
-  let urlWordIx = 0;
   const buildUrl = (str) => {
     urlText.textContent = "";
     urlChars = [];
@@ -85,68 +78,6 @@
     try { urlCaret.setAttribute("x", String(15 + w + 1)); } catch (e) { /* keep the caret where it is */ }
   };
   const urlStopNow = () => reduced.matches || document.body.classList.contains("paused") || document.body.classList.contains("hidden-page");
-  // the dots hop in turn, once: small, quick, then back where they were
-  const waveDots = (done) => {
-    const all = document.querySelectorAll(".penchrome .pf-dot");
-    all.forEach((d, i) => {
-      if (!d.animate) return;
-      d.animate(
-        [
-          { transform: "translateY(0) scale(1)", offset: 0 },
-          { transform: "translateY(-4.5px) scale(1.25)", offset: 0.4 },
-          { transform: "translateY(0.8px) scale(0.95)", offset: 0.7 },
-          { transform: "translateY(0) scale(1)", offset: 1 },
-        ],
-        { duration: 550, delay: i * 130, easing: "ease" }
-      );
-    });
-    scheduleUrl(done, 550 + 2 * 130 + 120);
-  };
-  let urlRewrites = 0;
-  const cycleUrl = () => {
-    if (urlStopNow()) return settleUrl();
-    // only two rewrites: initial address, wave, rewrite, wave, rewrite, done
-    if (urlRewrites >= 0) return settleUrl();
-    urlRewrites += 1;
-    waveDots(() => {
-      if (urlStopNow()) return settleUrl();
-      rewriteUrl();
-    });
-  };
-  const rewriteUrl = () => {
-    let on = urlChars.length;
-    const typeNext = () => {
-      urlWordIx = (urlWordIx + 1) % urlWords.length;
-      buildUrl(urlStem + urlWords[urlWordIx] + ".co.uk");
-      for (let k = 0; k < urlStem.length; k++) urlChars[k].classList.add("on");
-      let k = urlStem.length;
-      const typ = () => {
-        if (urlStopNow()) return settleUrl();
-        if (k >= urlChars.length) {
-          moveUrlCaret();
-          scheduleUrl(cycleUrl, 450);
-          return;
-        }
-        urlChars[k].classList.add("on");
-        k += 1;
-        moveUrlCaret();
-        scheduleUrl(typ, 26);
-      };
-      scheduleUrl(typ, 120);
-    };
-    const del = () => {
-      if (urlStopNow()) return settleUrl();
-      if (on <= urlStem.length) {
-        typeNext();
-        return;
-      }
-      on -= 1;
-      urlChars[on].classList.remove("on");
-      moveUrlCaret();
-      scheduleUrl(del, 14);
-    };
-    del();
-  };
   const settleUrl = () => {
     urlFrozen = true;
     urlTimers.forEach(clearTimeout);
@@ -175,7 +106,7 @@
       if (urlStopNow()) return settleUrl();
       if (i >= urlChars.length) {
         moveUrlCaret();
-        scheduleUrl(cycleUrl, 700);
+        settleUrl();
         return;
       }
       urlChars[i].classList.add("on");
