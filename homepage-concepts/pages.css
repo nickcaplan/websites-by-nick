@@ -44,7 +44,7 @@
 }
 .cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15.625em), 1fr));
   gap: 26px;
   margin-top: 44px;
 }
@@ -154,7 +154,7 @@
 .steps {
   counter-reset: s;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15.625em), 1fr));
   gap: 26px;
   padding: 0;
   list-style: none;
@@ -238,3 +238,6 @@
   font-size: 30px;
   padding: 7px 0 7px;
 }
+
+/* Long service names must reflow when text is enlarged, including Safari. */
+.card { min-width: 0; overflow-wrap: anywhere; }

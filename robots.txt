@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /homepage-concepts/
+Sitemap: https://websitesbynick.co.uk/sitemap.xml

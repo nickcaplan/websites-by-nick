@@ -1,75 +1,59 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Have a website in mind? Get in touch with Nick Caplan.">
-  <title>Nick Caplan | Contact</title>
-  <!-- Open Graph / Social Sharing -->
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://websitesbynick.co.uk/contact/">
-  <meta property="og:title" content="Nick Caplan | Contact">
-  <meta property="og:description" content="Have a website in mind? Tell me about it and I will get back to you.">
-  <meta property="og:image" content="https://websitesbynick.co.uk/assets/images/profile-burgundy.jpeg">
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Nick Caplan | Contact">
-  <meta name="twitter:description" content="Have a website in mind? Tell me about it and I will get back to you.">
-  <meta name="twitter:image" content="https://websitesbynick.co.uk/assets/images/profile-burgundy.jpeg">
-  <link rel="preload" href="../assets/fonts/dmsans.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="../assets/fonts/dmmono-400.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="../assets/fonts/dmmono-500.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="../assets/css/fonts.css">
-  <link rel="stylesheet" href="../assets/css/site.css">
-  <link rel="stylesheet" href="../assets/css/contact.css">
-  <link rel="icon" href="../assets/images/favicon.svg" type="image/svg+xml">
-  <link rel="icon" href="../favicon.ico" sizes="16x16 32x32 48x48">
-  <link rel="apple-touch-icon" href="../assets/images/apple-touch-icon.png">
-  <link rel="manifest" href="../site.webmanifest">
-  <meta name="theme-color" content="#18211d">
-</head>
-<body data-style="atelier" data-theme="dark">
-  <script>
-    // Apply the saved theme and layout before first paint so the page never
-    // flashes the wrong theme or frame.
-    (function () {
-      var body = document.body;
-      var theme = null;
-      try { theme = window.localStorage.getItem('nick-theme'); } catch (error) {}
-      body.dataset.theme = theme === 'light' || theme === 'dark' ? theme : 'dark';
-      var host = window.location.hostname;
-      var allowsPreview = ['localhost', '127.0.0.1', '[::1]', ''].indexOf(host) !== -1 || /^deploy-preview-\d+--[a-z0-9-]+\.netlify\.app$/.test(host);
-      var storedMobile = null;
-      if (allowsPreview) { try { storedMobile = window.localStorage.getItem('nick-mobile'); } catch (error) {} }
-      body.dataset.preview = String(allowsPreview && storedMobile === 'true');
-      body.dataset.mobile = String(storedMobile === null ? window.matchMedia('(max-width: 600px)').matches : storedMobile === 'true');
-    })();
-  </script>
-  <div class="site-shell">
-    <nav class="site-nav" aria-label="Main navigation">
-      <a class="wordmark" href="../">Nick <span>Caplan</span></a>
-      <div class="nav-links">
-        <a href="../">Work</a>
-        <a href="../experience/">Experience</a>
-        <a href="../pricing/">Pricing</a>
-        <a href="./" aria-current="page">Contact</a>
-        <a class="nav-contact" href="https://www.linkedin.com/in/nick-caplan/" target="_blank" rel="noreferrer">LinkedIn <span aria-hidden="true">↗</span></a>
-        <button class="mobile-toggle" type="button" aria-label="Switch to mobile mode" aria-pressed="false" title="Switch to mobile mode"><svg class="mobile-icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="6" y="3" width="12" height="18" rx="2"/><path d="M10 18h4"/></svg></button>
-        <button class="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false"><span class="theme-icon" aria-hidden="true">☾</span><span class="theme-label">Dark mode</span></button>
-      </div>
-    </nav>
-    <div class="nav-chips" aria-label="Pages">
-      <a href="../">Work</a>
-      <a href="../experience/">Experience</a>
-      <a href="../pricing/">Pricing</a>
-      <a href="./" aria-current="page">Contact</a>
-    </div>
-
-    <main id="top">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="description" content="Have a website in mind? Get in touch with Nick Caplan." />
+    <title>Contact | Websites by Nick</title>
+    <link rel="preload" href="/assets/fonts/dmsans.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/assets/fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="/assets/css/fonts.css" />
+    <link rel="stylesheet" href="/homepage-concepts/motion.css" />
+    <link rel="stylesheet" href="/homepage-concepts/pages.css" />
+    <link rel="stylesheet" href="/homepage-concepts/restyled.css" />
+    <link rel="canonical" href="https://websitesbynick.co.uk/contact/" />
+    <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
+    <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#1b2b23" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://websitesbynick.co.uk/contact/" />
+    <meta property="og:title" content="Contact | Websites by Nick" />
+    <meta property="og:description" content="Have a website in mind? Get in touch with Nick Caplan." />
+    <meta property="og:image" content="https://websitesbynick.co.uk/assets/images/social-homepage-portrait.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Contact | Websites by Nick" />
+    <meta name="twitter:description" content="Have a website in mind? Get in touch with Nick Caplan." />
+    <meta name="twitter:image" content="https://websitesbynick.co.uk/assets/images/social-homepage-portrait.png" />
+  </head>
+  <body class="dark">
+    <script>
+      // apply the saved/system theme before first paint, so a dark visitor
+      // never sees a flash of the light theme; pages.js/motion.js keep the toggle
+      (function () {
+        var theme = null;
+        try { theme = window.localStorage.getItem('nick-theme'); } catch (error) {}
+        var dark = theme !== 'light';
+        document.body.classList.toggle('dark', dark);
+      })();
+    </script>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="nav restyled-nav">
+      <a class="wordmark" href="/"
+        >Nick <span>Caplan</span></a
+      >
+      <nav aria-label="Main">
+        <a href="/#work">Work</a><a href="/about/">About</a
+        ><a href="/pricing/">Pricing</a><a href="/charity/">Charity</a><a href="/contact/" aria-current="page">Contact</a
+        >
+      </nav>
+      <button type="button" class="theme-toggle" aria-label="Switch to light mode"><span class="theme-icon" aria-hidden="true">☀</span></button>
+    </header>
+    <main id="main" class="pg restyled-page">
       <section class="page-hero">
-        <div class="eyebrow">Start a conversation</div>
         <h1>Have a website <em>in mind?</em></h1>
-        <p class="intro">Tell me about the site you&rsquo;re planning and I&rsquo;ll get back to you within a few hours.</p>
+        <p class="lede">Send me a message with the form below. I'll get back to you within a few hours.</p>
       </section>
 
       <section class="content" aria-label="Contact form">
@@ -87,29 +71,30 @@
           </div>
           <div class="form-field">
             <label for="contact-message">Message</label>
-            <p class="visually-hidden" id="message-hint">What do you or your organisation do, and what would you like the website to achieve?</p>
+            <p class="sr-only" id="message-hint">What do you or your organisation do, and what would you like the website to achieve?</p>
             <textarea id="contact-message" name="message" placeholder="What do you or your organisation do, and what would you like the website to achieve?" aria-describedby="message-hint contact-message-error" required></textarea>
             <p class="form-error" id="contact-message-error"></p>
           </div>
           </div>
           <p class="form-status" id="contact-status" role="status" aria-live="polite" aria-atomic="true" tabindex="-1"></p>
-          <button class="button button-primary" type="submit"><span class="cta-label">Send <span class="cta-end">message<svg class="mail-icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg></span></span></button>
+          <button class="button button-primary" type="submit"><span class="cta-label">Send <span class="cta-end">message<svg class="mail-icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 6 9 7 9-7"/></svg></span></span></button>
           <button class="button" id="contact-another" type="button" hidden>Send another message</button>
         </form>
       </section>
     </main>
-
-    <footer class="footer">
-      <div class="footer-inner">
-        <div class="section-kicker">Have a website in mind?</div>
-        <h2><a class="footer-cta" href="#contact-form">Let&rsquo;s Make It <em><span class="cta-end">Happen.<span class="cta-icon" aria-hidden="true">&rarr;</span></span></em></a></h2>
-        <div class="footer-bottom"><span>Nick Caplan / Websites by Nick</span><span><a class="github-link" href="https://github.com/nickcaplan/websites-by-nick" target="_blank" rel="noreferrer"><span class="cta-label">Check it out on <span class="cta-end">GitHub <svg class="github-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 .5a12 12 0 0 0-3.79 23.39c.6.11.82-.26.82-.58v-2.26c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.74.08-.74 1.2.08 1.83 1.23 1.83 1.23 1.07 1.83 2.8 1.3 3.48 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.34-5.47-5.94 0-1.31.47-2.38 1.23-3.22-.12-.3-.53-1.52.12-3.17 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.3-1.55 3.3-1.23 3.3-1.23.65 1.65.24 2.87.12 3.17.76.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.64-5.49 5.93.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0 0 12 .5Z"/></svg></span></span></a></span><span><a href="../privacy/">Privacy &amp; cookies</a></span><span>Designed for the web / 2026</span></div>
+    <footer>
+      <p class="eyebrow">YOUR WEBSITE DOESN'T HAVE TO BLEND IN.</p>
+      <h2>Let's make something you're <em>proud of.</em></h2>
+      <a class="footer-cta" href="#contact-form">Say hello <span aria-hidden="true">↗</span></a>
+      <div class="footer-bottom">
+        <a class="wordmark" href="/">Nick Caplan</a>
+        <p>© Websites by Nick</p>
+        <a href="/privacy/">Privacy</a>
       </div>
     </footer>
-  </div>
+    <script src="/homepage-concepts/pages.js"></script>
 
-  <script src="../assets/js/site.js"></script>
-  <script src="../assets/js/contact.js" defer></script>
-  <script src="../assets/js/analytics.js" defer data-measurement-id="G-J3J3NS19ZS"></script>
-</body>
+    <script src="/assets/js/analytics.js" defer data-measurement-id="G-J3J3NS19ZS" data-privacy-url="/privacy/"></script>
+    <script src="/assets/js/contact.js" defer></script>
+  </body>
 </html>
