@@ -73,6 +73,9 @@ test('card focus override: cream ring contrasts ink and orange cards', () => {
   const ring = rule[1].match(/outline-color: (#[0-9a-f]{6})/)[1];
   assert.ok(contrast(ring, pagesColor('.card.ink', 'background')) >= 3, 'ink card');
   assert.ok(contrast(ring, lightVar('--orange')) >= 3, 'orange card');
+  const darkRule = motionCss.match(/\.dark a:focus-visible,\s*\.dark button:focus-visible \{([^}]*)\}/s)[1];
+  const halo = darkRule.match(/box-shadow: 0 0 0 5px (#[0-9a-f]{6})/)[1];
+  assert.ok(contrast(ring,DARK_ORANGE)>=3 || contrast(halo,DARK_ORANGE)>=3,'dark orange effective ring and halo');
 });
 
 test('skip link text contrasts its background in both themes', () => {

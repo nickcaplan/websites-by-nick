@@ -3,8 +3,9 @@ import assert from 'node:assert/strict';
 import { chromium } from '@playwright/test';
 import { startStaticServer } from './lib/static-server.mjs';
 import { fileURLToPath } from 'node:url';
+import { existsSync } from 'node:fs';
 const server = await startStaticServer(fileURLToPath(new URL('..', import.meta.url)).replace(/\/$/, ''));
-const browser = await chromium.launch();
+const browser = await chromium.launch({executablePath:process.env.CHROME_PATH || (existsSync('/usr/bin/google-chrome') ? '/usr/bin/google-chrome' : undefined)});
 try {
   for (const width of [320, 390, 768, 1280, 1400]) for (const theme of ['light', 'dark']) {
     const page = await browser.newPage({ viewport: { width, height: 900 }, colorScheme: theme });

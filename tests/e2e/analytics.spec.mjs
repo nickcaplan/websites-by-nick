@@ -282,7 +282,10 @@ for (const reopened of [false,true]) for(const choice of ['analytics','essential
   const control=page.getByRole('button',{name:'Cookie preferences',exact:true});
   if(reopened){await page.locator('[data-cookie-choice="essential"]').click();await control.click()}
   await page.evaluate(()=>{Storage.prototype.setItem=Storage.prototype.removeItem=function(){throw Error('blocked writes')}});
-  await page.locator(`[data-cookie-choice="${choice}"]`).click();
+  await page.locator(`[data-cookie-choice="${choice}"]`).focus();await page.keyboard.press('Enter');
+  await expect(page.locator('#cookie-consent-panel')).toBeVisible();
+  await expect(page.locator('#cookie-save-warning')).toHaveAttribute('role','status');
+  expect(await page.evaluate(()=>document.querySelector('#cookie-consent-panel').contains(document.activeElement))).toBe(true);
   const dismiss=page.getByRole('button',{name:'Dismiss warning',exact:true});await dismiss.focus();await page.keyboard.press('Enter');
   await expect(page.locator('#cookie-consent-panel')).toBeHidden();await expect(control).toBeFocused();
  });
