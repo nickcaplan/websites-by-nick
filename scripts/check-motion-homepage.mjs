@@ -163,7 +163,9 @@ if (resumed.off !== "0px" || resumed.running)
   });
   if (!(partial > 0)) throw Error("mid-draw pause was not exercised");
   await midp.emulateMedia({ reducedMotion: "reduce" });
+  await midp.waitForFunction(()=>document.body.classList.contains("paused") && document.querySelector("#hero-title").classList.contains("sketch-settled"));
   await midp.emulateMedia({ reducedMotion: "no-preference" });
+  await midp.waitForFunction(()=>!document.body.classList.contains("paused"));
   await midp.waitForTimeout(400);
   const midState = await midp.evaluate(() => {
     const f = document.querySelector(".pf-frame");
