@@ -97,7 +97,27 @@
 @keyframes pull-stretch{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.857142857)}}
 @keyframes pull-ring{0%,100%{transform:translateY(0)}50%{transform:translateY(12px)}}
 #hero-title.bulb-settled .wire-handle path,#hero-title.bulb-settled .wire-handle circle{animation:none!important}
-@media(prefers-reduced-motion:reduce){.wire-handle path,.wire-handle circle{animation:none!important}}</style></head>
+@media(prefers-reduced-motion:reduce){.wire-handle path,.wire-handle circle{animation:none!important}}
+/* Separate each work sample from the dark page without adding a heavy frame. */
+.dark .work .project{background:#26372e;border-color:#ffffff38;box-shadow:0 12px 30px #00000024}
+/* Give the sketched browser real content padding, including its small-screen layout. */
+@media(max-width:900px){
+ #hero-title .line{padding-left:14px}
+ .hero-copy .pf-nav{left:14px;gap:18px}
+ #hero-title .penframe{height:calc(100% + 207px)}
+ .hero-bottom{margin-top:101px}
+}
+@media(max-width:760px){
+ .hero-copy .pf-nav{top:-68px}
+ .desktop-bulb{top:-26px}
+ #hero-title .penframe{min-height:266px}
+}
+@media(max-width:360px){
+ #hero-title .line,#hero-title .last{font-size:25px!important}
+ .hero-bottom{margin-top:107px}
+}
+@media(max-width:600px){header.nav nav{justify-content:flex-start;gap:0 18px}}
+</style></head>
   <body class="dark">
     <script>
       // apply the saved/system theme before first paint, so a dark visitor
@@ -116,7 +136,7 @@
         ><span class="wordmark-dot" aria-hidden="true"></span
       ></a>
       <nav aria-label="Main">
-        <a href="#work">Work</a><a href="/homepage-concepts/about/">About</a
+        <a href="#work" aria-current="page">Work</a><a href="/homepage-concepts/about/">About</a
         ><a href="/homepage-concepts/pricing/">Pricing</a><a href="/homepage-concepts/charity/">Charity</a><a href="/homepage-concepts/contact/">Contact</a
         >
       </nav>
@@ -416,7 +436,7 @@
     <script src="/homepage-concepts/motion.js"></script>
   <script>
 (()=>{const h=document.querySelector('#hero-title');h.insertAdjacentHTML('beforeend',`<svg class="desktop-bulb" viewBox="0 0 220 245" aria-hidden="true"><g class="bulb-glow"><circle cx="110" cy="95" r="68" fill="#e6c466" opacity=".18" stroke="none"/><path d="M110 8V0M42 29L32 18M178 29L188 18M20 95H7M200 95h13"/></g><path class="bulb-outline" d="M77 158C77 135 50 134 50 98C50 22 170 22 170 98C170 134 143 135 143 158Z M77 169h66M82 181h56M90 193h40M95 205q15 13 30 0M110 158v-53m0 8L92 93m18 20l18-20"/></svg><svg class="desktop-pull" viewBox="0 0 24 218" aria-hidden="true"><path d="M12 0v194"/><circle cx="12" cy="202" r="6"/></svg>`);let started=false,attempts=0;function start(){if(started)return;if(h.querySelector('.penurl').dataset.finished!=='true'){if(++attempts>=200){started=true;h.classList.add('bulb-lit','bulb-settled');return}setTimeout(start,50);return}started=true;h.classList.add('bulb-drawing');setTimeout(()=>h.classList.add('bulb-lit'),2200)}if(matchMedia('(prefers-reduced-motion:reduce)').matches){h.classList.add('bulb-lit');return}const bar=h.querySelector('.pf-bar');bar.addEventListener('animationend',e=>{if(e.target===bar&&e.animationName==='pendraw')requestAnimationFrame(start)});const settle=()=>{if(!h.classList.contains('sketch-settled')||h.classList.contains('bulb-settled'))return;started=true;h.classList.add('bulb-lit','bulb-settled')};new MutationObserver(settle).observe(h,{attributes:true,attributeFilter:['class']});settle()})();
-</script><script>(()=>{const h=document.querySelector('#hero-title'),bulb=h.querySelector('.desktop-bulb');function drawWire(){const hb=h.getBoundingClientRect(),bb=bulb.getBoundingClientRect();const x=bb.left-hb.left+bb.width/2,y=bb.top-hb.top+205*bb.height/245,top=bb.top-hb.top+42*bb.height/245,right=hb.width-(innerWidth<=760?32:26),wireShift=innerWidth<=760?8:0;let d='',box='';
+</script><script>(()=>{const h=document.querySelector('#hero-title'),bulb=h.querySelector('.desktop-bulb');function drawWire(){const hb=h.getBoundingClientRect(),bb=bulb.getBoundingClientRect();const x=bb.left-hb.left+bb.width/2,y=bb.top-hb.top+205*bb.height/245,top=bb.top-hb.top+42*bb.height/245,right=hb.width-(innerWidth<=760?32:26),wireShift=innerWidth<=760?20:0;let d='',box='';
  d=`M${x} ${top}V${-32+wireShift} Q${x} ${-54+wireShift} ${x+22} ${-54+wireShift} H${right-30} Q${right+12} ${-54+wireShift} ${right+12} ${-20+wireShift} C${right+12} ${y-26} ${right} ${y-26} ${right} ${y-8}`;box=`<rect x='${x-12}' y='${-64+wireShift}' width='24' height='8' rx='3'/><path d='M${x} ${-56+wireShift}v24'/>`
  let wire=h.querySelector('.connected-wire');if(!wire){h.insertAdjacentHTML('beforeend',`<svg class="connected-wire" aria-hidden="true"><path/>${box}<g class="wire-handle"><path/><circle r="6"/></g></svg>`);wire=h.querySelector('.connected-wire')}wire.querySelector(':scope > path').setAttribute('d',d);const fixture=wire.querySelector(':scope > rect');if(fixture){fixture.setAttribute('x',x-12);fixture.setAttribute('y',-64+wireShift);wire.querySelectorAll(':scope > path')[1].setAttribute('d',`M${x} ${-56+wireShift}v24`)}wire.querySelector('.wire-handle path').setAttribute('d',`M${right} ${y-8}v14`);wire.querySelector('.wire-handle circle').setAttribute('cx',right);wire.querySelector('.wire-handle circle').setAttribute('cy',y+12)
 }drawWire();addEventListener('resize',drawWire);})();</script><script>

@@ -100,3 +100,12 @@ body.dark { --surface: #29362e; --surface-strong: #344038; --line: #f2ecdf55; --
 @media (max-width: 600px) { .restyled-nav nav { justify-content: flex-start; gap: 0 16px; } }
 
 .restyled-page .lower-grid h2.section-kicker { margin: 0; }
+
+/* One header on every preview page; only the current destination differs. */
+header.nav nav{gap:18px;justify-content:flex-start}
+header.nav nav a[aria-current]{text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:6px}
+header.nav nav a:focus-visible{outline:2px solid var(--orange-text);outline-offset:4px;border-radius:2px}
+@media(max-width:760px){header.nav{padding-top:12px;padding-bottom:10px}}
+@media(max-width:600px){header.nav nav{gap:0 18px}}
+
+footer a[aria-current="page"]{text-decoration:underline;text-underline-offset:6px}
