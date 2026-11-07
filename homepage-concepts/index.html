@@ -76,17 +76,17 @@
 @media(min-width:761px) and (max-width:900px){.entrance{padding-top:160px}}
 @media(min-width:901px) and (max-width:1100px){.desktop-bulb{height:150px;top:-12px}}
 </style><style>@media(max-width:760px){.entrance{padding-top:142px}}
-@media(max-width:360px){#hero-title .line{font-size:29px!important}}
 @media(max-width:760px){
  header.nav{padding-top:12px;padding-bottom:10px}
  .entrance{padding-top:156px}
- #hero-title .penframe{top:-137px;height:calc(100% + 185px)}
+ #hero-title .penframe{top:-137px;height:calc(100% + 185px);min-height:244px}
  #hero-title .penhead{top:-101px}
  #hero-title .penchrome,#hero-title .penurl{top:-131px}
- .hero-copy .pf-nav{top:-68px}
- .desktop-bulb{right:14px;top:-26px;width:66px;height:74px}
+ .hero-copy .pf-nav{top:-72px}
+ .desktop-bulb{right:38px;top:-38px;width:66px;height:74px}
  .hero-bottom{margin-top:43px}
 }
+@media(max-width:360px){#hero-title .line,#hero-title .last{font-size:27px!important}.hero-bottom{margin-top:49px}}
 #hero-title.bulb-settled .bulb-outline{visibility:visible;stroke-dashoffset:0;animation:none!important}
 #hero-title.bulb-settled .connected-wire,#hero-title.bulb-settled .wire-handle{visibility:visible}
 #hero-title.bulb-settled .connected-wire>path{stroke-dashoffset:0}</style></head>
@@ -408,7 +408,7 @@
     <script src="/homepage-concepts/motion.js"></script>
   <script>
 (()=>{const h=document.querySelector('#hero-title');h.insertAdjacentHTML('beforeend',`<svg class="desktop-bulb" viewBox="0 0 220 245" aria-hidden="true"><g class="bulb-glow"><circle cx="110" cy="95" r="68" fill="#e6c466" opacity=".18" stroke="none"/><path d="M110 8V0M42 29L32 18M178 29L188 18M20 95H7M200 95h13"/></g><path class="bulb-outline" d="M77 158C77 135 50 134 50 98C50 22 170 22 170 98C170 134 143 135 143 158Z M77 169h66M82 181h56M90 193h40M95 205q15 13 30 0M110 158v-53m0 8L92 93m18 20l18-20"/></svg><svg class="desktop-pull" viewBox="0 0 24 218" aria-hidden="true"><path d="M12 0v194"/><circle cx="12" cy="202" r="6"/></svg>`);let started=false,attempts=0;function start(){if(started)return;if(h.querySelector('.penurl').dataset.finished!=='true'){if(++attempts>=200){started=true;h.classList.add('bulb-lit','bulb-settled');return}setTimeout(start,50);return}started=true;h.classList.add('bulb-drawing');setTimeout(()=>h.classList.add('bulb-lit'),2200)}if(matchMedia('(prefers-reduced-motion:reduce)').matches){h.classList.add('bulb-lit');return}const bar=h.querySelector('.pf-bar');bar.addEventListener('animationend',e=>{if(e.target===bar&&e.animationName==='pendraw')requestAnimationFrame(start)});const settle=()=>{if(!h.classList.contains('sketch-settled')||h.classList.contains('bulb-settled'))return;started=true;h.classList.add('bulb-lit','bulb-settled')};new MutationObserver(settle).observe(h,{attributes:true,attributeFilter:['class']});settle()})();
-</script><script>(()=>{const h=document.querySelector('#hero-title'),bulb=h.querySelector('.desktop-bulb');function drawWire(){const hb=h.getBoundingClientRect(),bb=bulb.getBoundingClientRect();const x=bb.left-hb.left+bb.width/2,y=bb.top-hb.top+205*bb.height/245,top=bb.top-hb.top+42*bb.height/245,right=hb.width-(innerWidth<=760?8:26),wireShift=innerWidth<=760?20:0;let d='',box='';
+</script><script>(()=>{const h=document.querySelector('#hero-title'),bulb=h.querySelector('.desktop-bulb');function drawWire(){const hb=h.getBoundingClientRect(),bb=bulb.getBoundingClientRect();const x=bb.left-hb.left+bb.width/2,y=bb.top-hb.top+205*bb.height/245,top=bb.top-hb.top+42*bb.height/245,right=hb.width-(innerWidth<=760?32:26),wireShift=innerWidth<=760?8:0;let d='',box='';
  d=`M${x} ${top}V${-32+wireShift} Q${x} ${-54+wireShift} ${x+22} ${-54+wireShift} H${right-30} Q${right+12} ${-54+wireShift} ${right+12} ${-20+wireShift} Q${right+12} 7 ${right} 18 V${y-8}`;box=`<rect x='${x-12}' y='${-64+wireShift}' width='24' height='8' rx='3'/><path d='M${x} ${-56+wireShift}v24'/>`
  let wire=h.querySelector('.connected-wire');if(!wire){h.insertAdjacentHTML('beforeend',`<svg class="connected-wire" aria-hidden="true"><path/>${box}<g class="wire-handle"><path/><circle r="6"/></g></svg>`);wire=h.querySelector('.connected-wire')}wire.querySelector(':scope > path').setAttribute('d',d);const fixture=wire.querySelector(':scope > rect');if(fixture){fixture.setAttribute('x',x-12);fixture.setAttribute('y',-64+wireShift);wire.querySelectorAll(':scope > path')[1].setAttribute('d',`M${x} ${-56+wireShift}v24`)}wire.querySelector('.wire-handle path').setAttribute('d',`M${right} ${y-8}v14`);wire.querySelector('.wire-handle circle').setAttribute('cx',right);wire.querySelector('.wire-handle circle').setAttribute('cy',y+12)
 }drawWire();addEventListener('resize',drawWire);})();</script><script>
