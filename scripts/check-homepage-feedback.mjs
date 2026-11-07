@@ -36,7 +36,8 @@ const waitForDrawing = (p) => p.waitForFunction(() => {
 const CLIP_FULL = 300; // fully-open title wipe width for the current board
 const complete = (s) => s.left === 0 && s.fills.every((o) => o === "1") && s.clip >= CLIP_FULL - 1;
 
-await Promise.all([320, 390, 768, 901, 961, 1024, 1280, 1400, 1600].map(async width => {
+// Keep one active page so real visibility handling does not stop background tabs.
+for (const width of [320, 390, 768, 901, 961, 1024, 1280, 1400, 1600]) {
   const p = await b.newPage({ viewport: { width, height: width < 600 ? 844 : 1000 } });
   const errors = [];
   p.on("pageerror", (e) => errors.push(e.message));
@@ -99,7 +100,7 @@ await Promise.all([320, 390, 768, 901, 961, 1024, 1280, 1400, 1600].map(async wi
   if (errors.length) fail(errors.join());
   console.log("PASS", width);
   await p.close();
-}));
+}
 
 // The title wipe never reveals text ahead of the pen tip: while the pen is
 // still left of the measured headline end (x=704), the wipe's right edge
@@ -258,8 +259,8 @@ await Promise.all([320, 390, 768, 901, 961, 1024, 1280, 1400, 1600].map(async wi
   await p.waitForLoadState("networkidle");
   const pos = () => p.evaluate(() => [...document.querySelectorAll(".project")].map((e) => getComputedStyle(e).position).join());
   if (!(await pos()).includes("sticky")) fail("desktop cards should stack when motion is on");
-  const t = p.getByRole("button", { name: /motion/i });
-  await t.click();
+  await p.emulateMedia({reducedMotion:"reduce"});
+  await p.waitForFunction(()=>document.body.classList.contains("paused"));
   if ((await pos()).includes("sticky")) fail("cards still sticky while paused");
   // Keyboard: every project link that gets focus must be the topmost element at its centre.
   await p.evaluate(() => document.querySelector(".project").scrollIntoView({ behavior: "instant" }));
@@ -286,8 +287,12 @@ await Promise.all([320, 390, 768, 901, 961, 1024, 1280, 1400, 1600].map(async wi
     reached.add(r.href);
   }
   if (reached.size !== hrefs.length) fail("Tab never reached every project link while paused");
-  await t.click();
-  if (!(await pos()).includes("sticky")) fail("stacking did not return after resume");
+  await p.emulateMedia({reducedMotion:"no-preference"});
+  await p.waitForFunction(()=>!document.body.classList.contains("paused"));
+  if ((await pos()).includes("sticky")) fail("stacking returned while a project still has keyboard focus");
+  await p.locator("header .wordmark").focus();
+  await p.waitForFunction(()=>!document.body.classList.contains("project-focus"));
+  if (!(await pos()).includes("sticky")) fail("stacking did not return after focus left the projects");
   await p.setViewportSize({ width: 800, height: 800 });
   await p.waitForTimeout(400);
   const stale = await p.evaluate(() => { const e = document.querySelector(".project"); return e.style.pointerEvents || e.getAttribute("tabindex") || e.style.opacity || e.style.transform; });

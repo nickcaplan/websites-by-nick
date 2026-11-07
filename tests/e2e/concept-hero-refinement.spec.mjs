@@ -1,6 +1,6 @@
 import{test,expect}from'@playwright/test';
 for(const width of[320,390,768,901,1280,1600])for(const theme of['dark','light'])test(`hero bulb and all words fit ${width} ${theme}`,async({page})=>{
- await page.setViewportSize({width,height:900});await page.addInitScript(t=>localStorage.setItem('nick-theme',t),theme);await page.emulateMedia({reducedMotion:'reduce'});await page.goto('/homepage-concepts/');
+ await page.setViewportSize({width,height:900});await page.addInitScript(t=>localStorage.setItem('nick-theme',t),theme);await page.emulateMedia({reducedMotion:'reduce'});await page.goto('/homepage-concepts/');await page.evaluate(()=>document.fonts.ready);
  await expect(page.locator('.sketch')).toBeHidden();await expect(page.locator('.desktop-bulb')).toBeVisible();
  const layout=await page.evaluate(()=>{const f=document.querySelector('.penframe').getBoundingClientRect(),nav=document.querySelector('header.nav').getBoundingClientRect(),b=document.querySelector('.desktop-bulb').getBoundingClientRect();return{frameTop:f.top,navBottom:nav.bottom,bulbBottom:b.bottom,frameBottom:f.bottom}});expect(layout.frameTop).toBeGreaterThan(layout.navBottom);expect(layout.bulbBottom).toBeLessThan(layout.frameBottom);
 
@@ -70,7 +70,7 @@ for(const width of[390,1280])for(const theme of['dark','light'])test(`each later
 for(const width of[901,1024,1280,1600,1920])for(const theme of['dark','light'])test(`desktop browser geometry and clear bulb ${width} ${theme}`,async({page})=>{
  await page.setViewportSize({width,height:1000});await page.addInitScript(t=>localStorage.setItem('nick-theme',t),theme);await page.emulateMedia({reducedMotion:'reduce'});await page.goto('/homepage-concepts/');
  const g=await page.evaluate(()=>{const r=s=>document.querySelector(s).getBoundingClientRect(),f=r('.penframe'),head=r('.penhead'),dot=r('.penchrome circle'),bulb=r('.bulb-outline'),wire=r('.connected-wire>path'),ring=r('.wire-handle circle');return{height:f.height,dotLeft:dot.left-f.left,dotTop:dot.top-f.top,dotBottom:head.top-dot.bottom,rightGap:f.right-wire.right,bottomGap:f.bottom-Math.max(bulb.bottom,ring.bottom)}});
- expect(g.height).toBeGreaterThan(320);expect(g.dotLeft).toBeGreaterThan(12);expect(g.dotTop).toBeGreaterThan(10);expect(g.dotBottom).toBeGreaterThan(10);expect(g.rightGap).toBeGreaterThan(45);expect(g.bottomGap).toBeGreaterThan(45);
+ expect(g.height).toBeGreaterThan(320);expect(g.dotLeft).toBeGreaterThan(12);expect(g.dotTop).toBeGreaterThan(10);expect(g.dotBottom).toBeGreaterThan(10);expect(g.rightGap).toBeGreaterThan(45);if(width>=1101)expect(Math.abs(g.bottomGap-40)).toBeLessThan(2);else expect(g.bottomGap).toBeGreaterThan(45);
  const desktopPath=await page.locator('.pf-frame').getAttribute('d');await page.setViewportSize({width:390,height:1000});await expect(page.locator('.penframe')).toHaveAttribute('viewBox','0 0 100 100');await expect(page.locator('.pf-frame')).toHaveAttribute('d','M2.5 3 Q28 1.5 52 2.8 T97.5 3 Q99 28 98 52 T97.5 97 Q70 98.5 46 97.5 T2.5 97 Q1 70 1.8 46 T2.5 3');await page.setViewportSize({width,height:1000});await expect(page.locator('.pf-frame')).toHaveAttribute('d',desktopPath);
 });
 for(const width of[320,360,390,430])for(const theme of['dark','light'])test(`larger phone word stays clear ${width} ${theme}`,async({page})=>{

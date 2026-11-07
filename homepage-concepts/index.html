@@ -202,12 +202,13 @@
 }
 @media(min-width:761px) and (max-width:900px){#hero-title .penchrome{left:4px}}
 </style><style>
-/* Give the desktop layout one centered content column and readable display tracking. */
+/* Give the desktop layout one centered content column and readable display tracking.
+   Pin the optical-size axis: WebKit otherwise keeps the font's small-text default. */
 @media(min-width:1101px){
  .entrance{max-width:1040px;padding-left:50px;padding-right:50px}
  .hero-copy #hero-title{width:750px;max-width:calc(100% - 80px)}
  .hero-copy .pf-nav{left:max(40px,calc(50% - 375px))}
- .hero-copy #hero-title .line{font-size:min(1em,9.3cqw)!important;letter-spacing:-.025em;word-spacing:.1em;font-optical-sizing:auto;font-kerning:normal}
+ .hero-copy #hero-title .line{font-size:min(1em,9.3cqw)!important;letter-spacing:-.025em;word-spacing:.1em;font-optical-sizing:auto;font-variation-settings:"opsz" 70;font-kerning:normal}
  h2{letter-spacing:-.025em}h3{letter-spacing:-.015em}
  .work,.work-contact{max-width:1040px;padding-left:50px;padding-right:50px}
  .about,footer{padding-left:max(50px,calc((100% - 940px)/2));padding-right:max(50px,calc((100% - 940px)/2))}
