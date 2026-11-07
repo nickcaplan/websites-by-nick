@@ -486,7 +486,7 @@ for (const javaScriptEnabled of [true, false]) {
   await p.goto(base + "/homepage-concepts/");
   if (await p.locator("h1 .pf-nav").count()) throw Error("Frame copy nested in heading");
   if (await p.locator("h1 + .pf-nav").count() !== 1) throw Error("Frame copy missing");
-  if (await p.locator("h1").getAttribute("aria-label") !== "Websites people remember, trust, enjoy, love.")
+  if (await p.locator("h1").getAttribute("aria-label") !== "Websites people remember, enjoy, love.")
     throw Error("Hero heading accessible label changed");
   await p.close();
 }
