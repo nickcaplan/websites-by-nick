@@ -1794,17 +1794,6 @@ h2 { overflow-wrap: anywhere; }
 .work-contact { max-width: 1180px; margin: 0 auto; padding: 0 4% 60px; display: flex; justify-content: flex-end; }
 @media (max-width: 600px) { .work-contact { padding: 0 20px 50px; justify-content: flex-start; } }
 
-/* A single quiet invitation after the final word and bulb have settled. */
-@keyframes hero-cta-pulse {
-  0%, 100% { scale: 1; }
-  45% { scale: 1.045; }
-}
-.hero-bottom .cta.hero-complete { animation: hero-cta-pulse 900ms ease-in-out 1; }
-.paused .hero-bottom .cta, .hidden-page .hero-bottom .cta { animation-play-state: paused; }
-@media (prefers-reduced-motion: reduce) {
-  .hero-bottom .cta.hero-complete { animation: none; }
-}
-
 /* Keep the phone contact invitation close to the work it follows. */
 @media (max-width: 600px) {
   .work { padding-bottom: 32px; }
