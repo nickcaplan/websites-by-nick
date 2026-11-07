@@ -1804,3 +1804,12 @@ h2 { overflow-wrap: anywhere; }
 @media (prefers-reduced-motion: reduce) {
   .hero-bottom .cta.hero-complete { animation: none; }
 }
+
+/* Keep the phone contact invitation close to the work it follows. */
+@media (max-width: 600px) {
+  .work { padding-bottom: 32px; }
+  .work .project:last-of-type { margin-bottom: 0; }
+  .work-contact { padding-bottom: 24px; }
+  .work-contact .cta { margin-top: 0; }
+  .work-contact + .about { padding-top: 32px; }
+}
