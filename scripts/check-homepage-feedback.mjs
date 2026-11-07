@@ -69,12 +69,8 @@ await Promise.all([320, 390, 768, 901, 961, 1024, 1280, 1400, 1600].map(async wi
   if (!cp.srcs.every((s) => /hp-compass-(plan|plans)-desk-dark-c[1-4]\.webp$/.test(s))) fail("compass fragment sources wrong " + cp.srcs);
   await p.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
   await p.waitForTimeout(400);
-  // sticker fully visible, not covered by a card
-  await p.waitForTimeout(2200);
-  // The approved cleaner composition removes the post-it entirely.
-  if (!(await p.locator('.sketch').isHidden())) fail('post-it remains visible at '+width);
-  const cards=await p.locator('.composition .browser-card').count();
-  if(cards!==2)fail('expected both showcase cards at '+width);
+  if (await p.locator('.composition, .entrance-end').count()) fail('removed collage remains at '+width);
+  if (await p.locator('.work .project').count()!==3) fail('work cards missing at '+width);
   if (await p.evaluate(() => document.documentElement.scrollWidth > innerWidth)) fail("overflow " + width);
   // the drawing studio is large and draws live
   await p.locator(".studio svg").scrollIntoViewIfNeeded();

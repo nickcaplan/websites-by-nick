@@ -112,3 +112,6 @@ footer a[aria-current="page"]{text-decoration:underline;text-underline-offset:6p
 
 .contact-form .whatsapp-icon{color:#128c4a}
 body:not(.dark) .contact-form .whatsapp-icon{color:#25d366}
+
+/* Keep the centered desktop header identical across the preview pages. */
+@media(min-width:1101px){header.nav{max-width:1040px;padding-left:50px;padding-right:50px}}

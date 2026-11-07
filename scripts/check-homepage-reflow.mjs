@@ -41,7 +41,7 @@ try {
     });
     assert.equal(brokenWords, false, `hero splits a word: ${width} ${theme}`);
     assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `200% text overflow: ${width} ${theme}`);
-    for (const el of await page.locator('.nav nav a, .nav nav button, .cta, .entrance-end a, .footer-cta').all()) {
+    for (const el of await page.locator('.nav nav a, .nav nav button, .cta, .footer-cta').all()) {
       const rect = await el.boundingBox();
       assert.ok(rect && rect.x >= 0 && rect.x + rect.width <= width + 1, `control outside viewport: ${width}`);
     }

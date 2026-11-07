@@ -49,7 +49,7 @@ for (const width of [320, 390, 768, 901, 961, 1024, 1280, 1400, 1600]) {
     throw Error("pause");
   const states = () =>
     p
-      .locator(".composition, .pf-frame")
+      .locator(".pf-frame")
       .evaluateAll((elements) =>
         elements.flatMap((e) =>
           e.getAnimations({ subtree: true }).map((a) => a.playState),
@@ -403,36 +403,6 @@ console.log("PASS noJS");
   const after = await p.evaluate(() => document.body.classList.contains("paused"));
   if (before || !during || after) throw Error(`pause not preserved across reduced flip: ${before}/${during}/${after}`);
   console.log("PASS reduced-flip-restores-pause");
-  await p.close();
-}
-
-// Moving the pointer while paused must not build up parallax offset: on
-// resume the layers ease from neutral, they do not snap to the pointer.
-{
-  const p = await b.newPage({ viewport: { width: 1280, height: 900 } });
-  await p.goto(base + "/homepage-concepts/", { waitUntil: "networkidle" });
-  await p.evaluate(() => document.querySelector(".composition").scrollIntoView({ block: "center", behavior: "instant" }));
-  await p.waitForTimeout(400);
-  await p.getByRole("button", { name: "Pause motion", exact: true }).click();
-  const box = await p.locator(".composition").boundingBox();
-  for (let i = 0; i < 12; i++) {
-    await p.mouse.move(box.x + box.width - 5, box.y + 5);
-    await p.waitForTimeout(30);
-  }
-  // Resume and sample in the next animation frame in one page task, avoiding
-  // network and click latency before the no-snap measurement.
-  const snap = await p.evaluate(() => new Promise(resolve => {
-    document.querySelector('.motion-toggle').click();
-    requestAnimationFrame(() => {
-      const el=document.querySelector('[data-depth="26"]');
-      const m=/([-\d.]+)px ([-\d.]+)px/.exec(el.style.translate || '0px 0px');
-      resolve(m?Math.max(Math.abs(parseFloat(m[1])),Math.abs(parseFloat(m[2]))):0);
-    });
-  }));
-  // A snap would show the full offset (0.5 * 26 = 13px); easing from neutral
-  // on the first resumed frame stays well under half that.
-  if (snap > 6.5) throw Error(`parallax snapped to pointer on resume: ${snap}px`);
-  console.log("PASS parallax-no-snap");
   await p.close();
 }
 

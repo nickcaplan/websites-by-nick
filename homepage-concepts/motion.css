@@ -613,156 +613,6 @@ h1.sketch-settled .mp-line, h1.sketch-settled .mp-img, h1.sketch-settled .mp-btn
 .cta:hover span {
   transform: translate(3px, -3px);
 }
-.composition {
-  height: 550px;
-  background: #dfe2d1;
-  border: 1px solid #20302725;
-  position: relative;
-  overflow: hidden;
-  border-radius: 6px;
-  isolation: isolate;
-  perspective: 1000px;
-}
-.stage-grid {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(#2030270b 1px, transparent 1px),
-    linear-gradient(90deg, #2030270b 1px, transparent 1px);
-  background-size: 46px 46px;
-}
-.stage-label,
-.stage-index {
-  position: absolute;
-  font-size: 9px;
-  letter-spacing: 0.13em;
-  font-weight: 600;
-  left: 25px;
-  top: 20px;
-}
-.stage-index {
-  top: auto;
-  bottom: 20px;
-}
-.browser-card {
-  position: absolute;
-  transition: scale 0.45s cubic-bezier(0.2, 0.9, 0.3, 1.35), box-shadow 0.3s;
-  background: #f9f6ef;
-  box-shadow: 0 20px 50px #20302725;
-  border: 1px solid #20302726;
-  border-radius: 8px;
-  overflow: hidden;
-  transform-origin: center;
-  will-change: transform;
-}
-.browser-card img {
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 1280/713;
-  object-fit: cover;
-}
-.browser-chrome {
-  height: 16px;
-  background: #f9f6ef;
-  display: flex;
-  gap: 4px;
-  align-items: center;
-  padding: 0 8px;
-  font-size: 7px;
-  color: #526153;
-}
-.browser-chrome i {
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: #a9b19d;
-}
-.browser-chrome span {
-  margin: auto;
-}
-.browser-card:hover {
-  scale: 1.045;
-  box-shadow: 0 22px 45px #20302733;
-  z-index: 5;
-}
-.sketch:hover {
-  scale: 1.06;
-}
-.composer {
-  width: 57%;
-  left: 6%;
-  top: 68px;
-  z-index: 2;
-  --rotation: -6deg;
-  animation:
-    enter-card 1.3s cubic-bezier(0.2, 0.75, 0.2, 1) both,
-    drift-left 7s 1.3s ease-in-out 6 alternate forwards;
-  transform: rotate(-6deg);
-}
-.community {
-  width: 45%;
-  right: 5%;
-  bottom: 50px;
-  z-index: 3;
-  --rotation: 7deg;
-  animation:
-    enter-card 1.4s 0.15s cubic-bezier(0.2, 0.75, 0.2, 1) both,
-    drift-right 8s 1.6s ease-in-out 6 alternate forwards;
-  transform: rotate(7deg);
-}
-.sketch {
-  position: absolute;
-  right: 8%;
-  top: 35px;
-  background: #fdf3d9;
-  color: #203027;
-  width: 200px;
-  transform: rotate(9deg);
-  padding: 28px 18px 14px;
-  box-shadow: 0 12px 25px #20302722;
-  z-index: 1;
-  animation: sketch-in 1.3s 0.3s both, rock 7s 1.7s ease-in-out 4 alternate forwards;
-  transition: scale 0.45s cubic-bezier(0.2, 0.9, 0.3, 1.35);
-}
-.sketch::before {
-  content: "";
-  position: absolute;
-  top: -9px;
-  left: 50%;
-  width: 64px;
-  height: 18px;
-  margin-left: -32px;
-  background: color-mix(in srgb, var(--orange) 55%, transparent);
-  transform: rotate(-3deg);
-}
-.sketch svg {
-  width: 100%;
-  display: block;
-  fill: none;
-  stroke: #203027;
-  stroke-width: 3;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-.sketch svg circle,
-.sketch svg .sketch-star {
-  fill: #203027;
-  stroke: none;
-}
-.sketch svg .sketch-btn {
-  stroke: var(--orange);
-}
-.sketch svg .sketch-star {
-  fill: var(--orange);
-}
-.sketch-note {
-  font: 17px var(--serif);
-  color: #203027;
-  text-align: center;
-  display: block;
-  margin-top: 12px;
-}
 .motion-toggle[aria-pressed="true"] {
   background: var(--ink);
   color: var(--paper);
@@ -779,28 +629,6 @@ h1.sketch-settled .mp-line, h1.sketch-settled .mp-img, h1.sketch-settled .mp-btn
   padding: 8px 14px;
   font-size: 11px;
   min-height: 38px;
-}
-.entrance-end {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 23px 0 50px;
-  font-size: 13px;
-}
-.entrance-end p {
-  margin: 0;
-}
-.entrance-end p em {
-  font-family: var(--serif);
-  font-size: 17px;
-}
-.entrance-end a {
-  display: flex;
-  gap: 35px;
-  align-items: center;
-}
-.entrance-end a span {
-  font-size: 24px;
 }
 h2 {
   font: 450 clamp(38px, 4.7vw, 70px)/1.07 var(--serif);
@@ -1039,8 +867,6 @@ footer h2 em {
 body.paused .reveal {
   transition: none;
 }
-.paused .composition *,
-.hidden-page .composition *,
 .paused .studio *,
 .hidden-page .studio * {
   animation-play-state: paused !important;
@@ -1058,40 +884,10 @@ body.paused .reveal {
     stroke-dashoffset: 0;
   }
 }
-@keyframes enter-card {
-  from {
-    opacity: 0;
-    transform: translateY(100px) rotate(0) scale(0.92);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) rotate(var(--rotation)) scale(1);
-  }
-}
-@keyframes drift-left {
-  from {
-    transform: translateY(0) rotate(-6deg);
-  }
-  to {
-    transform: translateY(-12px) rotate(-3deg);
-  }
-}
-@keyframes drift-right {
-  from {
-    transform: translateY(0) rotate(7deg);
-  }
-  to {
-    transform: translateY(12px) rotate(4deg);
-  }
-}
-@keyframes rock {
-  from {
-    transform: rotate(9deg);
-  }
-  to {
-    transform: rotate(12deg);
-  }
-}
+
+
+
+
 @keyframes pulse {
   0%,
   100% {
@@ -1101,16 +897,7 @@ body.paused .reveal {
     transform: scale(1.4);
   }
 }
-@keyframes sketch-in {
-  from {
-    opacity: 0;
-    transform: translateY(-50px) rotate(-4deg);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) rotate(9deg);
-  }
-}
+
 /* Studio scene: cartoon designer typing while a website takes shape above the laptop. */
 .studio {
   max-width: 1472px;
@@ -1169,9 +956,6 @@ body.paused .reveal {
   }
 }
 @media (max-width: 900px) {
-  .composition {
-    height: 450px;
-  }
   .about-grid {
     grid-template-columns: 1fr 1fr;
     gap: 30px;
@@ -1254,67 +1038,12 @@ body.paused .reveal {
   .cta span {
     font-size: 20px;
   }
-  .composition {
-    height: 360px;
-    margin: 0 -20px;
-    border-left: 0;
-    border-right: 0;
-    border-radius: 0;
-  }
-  .stage-label {
-    font-size: 7px;
-    left: 20px;
-    top: 16px;
-  }
-  .stage-index {
-    font-size: 6px;
-    left: 20px;
-    bottom: 20px;
-    max-width: 180px;
-  }
-  .composer {
-    width: 77%;
-    left: 3%;
-    top: 66px;
-  }
-  .community {
-    width: 65%;
-    right: 4%;
-    bottom: 46px;
-  }
-  .browser-chrome {
-    height: 17px;
-    font-size: 6px;
-    padding: 0 7px;
-  }
-  .browser-chrome i {
-    width: 3px;
-    height: 3px;
-  }
   .motion-toggle {
     font-size: 9px;
     right: 10px;
     bottom: 10px;
     padding: 6px 10px;
     min-height: 34px;
-  }
-  .entrance-end {
-    padding: 18px 0 35px;
-    font-size: 10px;
-    gap: 20px;
-  }
-  .entrance-end p {
-    max-width: 180px;
-  }
-  .entrance-end p em {
-    font-size: 14px;
-  }
-  .entrance-end a {
-    gap: 12px;
-    white-space: nowrap;
-  }
-  .entrance-end a span {
-    font-size: 20px;
   }
   .work {
     padding: 50px 20px 60px;
@@ -1432,22 +1161,6 @@ body.paused .reveal {
   --orange: #ed926f;
   --orange-text: #ed926f;
 }
-.dark .composition {
-  background: #334338;
-  color: #f2ecdf;
-  border-color: #ffffff30;
-}
-.dark .stage-grid {
-  background-image:
-    linear-gradient(#ffffff08 1px, transparent 1px),
-    linear-gradient(90deg, #ffffff08 1px, transparent 1px);
-}
-.dark .browser-card {
-  color: #203027;
-}
-.dark .sketch {
-  background: #f0e3c0;
-}
 .dark .motion-toggle {
   background: #1b2923;
   color: #f2ecdf;
@@ -1544,13 +1257,6 @@ body.paused .reveal {
 /* Hero message sticker and the drawing studio (Nick's feedback on PR 64) */
 h1 .last {
   margin-left: 0;
-}
-.sketch {
-  z-index: 6;
-  top: 26px;
-  right: 3%;
-  width: 190px;
-  padding: 24px 16px 12px;
 }
 .cmp-stage-sam {
   background: #0d0d0d;
@@ -1654,16 +1360,6 @@ body.paused .studio .sd-fill {
   color: #f2ecdf;
 }
 @media (max-width: 600px) {
-  .sketch {
-    width: 140px;
-    padding: 16px 12px 10px;
-    right: 4%;
-    top: 16px;
-  }
-  .sketch-note {
-    font-size: 12px;
-    margin-top: 8px;
-  }
   .studio {
     margin-top: 40px;
   }
@@ -1746,8 +1442,6 @@ h2 { overflow-wrap: anywhere; }
 .about-grid > *, .section-intro > *, .project-title > * { min-width: 0; }
 .about-grid > *, .project-title > *, footer a { overflow-wrap: anywhere; }
 .project-title { min-width: 0; flex-wrap: wrap; }
-.entrance-end, .entrance-end a { flex-wrap: wrap; min-width: 0; }
-.entrance-end a { max-width: 100%; }
 .footer-cta { max-width: 100%; flex-wrap: wrap; }
 @media (max-width: 900px) {
   .penframe, .penhead { left: -20px; width: calc(100% + 40px); }

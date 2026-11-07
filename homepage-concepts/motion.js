@@ -1,4 +1,5 @@
 (() => {
+  document.body.classList.add("js-motion");
   const button = document.querySelector(".motion-toggle");
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   const theme = document.querySelector(".theme-toggle");
@@ -248,7 +249,6 @@
     io.observe(capEl);
   }
 
-  // Showcase cards stay still until scroll drives their fade and shrink.
   // One-time scroll reveals; content is fully visible without JavaScript.
   if ("IntersectionObserver" in window) {
   document.body.classList.add("js-reveal");
@@ -585,7 +585,7 @@
   }
 
   // Motion is decorative, finite and never moves navigation or page layout.
-  // The complete composition and every route remain usable without JavaScript.
+  // The complete page and every route remain usable without JavaScript.
   const syncVisibility = () => {
     document.body.classList.toggle("hidden-page", document.hidden);
     if (document.hidden) { settleIntro(); }

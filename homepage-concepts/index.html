@@ -68,11 +68,7 @@
 }
 @media(min-width:901px) and (max-width:1100px){.desktop-bulb{width:170px;right:60px}#hero-title .line{width:calc(100% - 230px);font-size:min(1em,9.7cqw)!important}}
 @media(prefers-reduced-motion:reduce){.bulb-outline{visibility:visible;stroke-dashoffset:0;animation:none!important}.desktop-pull{animation:none!important}#hero-title::before,.bulb-glow{transition:none}}
-</style><style>@media(min-width:901px){.desktop-pull{display:none!important}.connected-wire{position:absolute;inset:0;width:100%;height:100%;overflow:visible;fill:none;stroke:var(--orange);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;pointer-events:none;visibility:hidden}.bulb-drawing .connected-wire,.sketch-settled .connected-wire{visibility:visible}.connected-wire>path{stroke-dasharray:1200;stroke-dashoffset:1200}.bulb-drawing .connected-wire>path{animation:wire-draw 1.5s ease forwards}@keyframes wire-draw{to{stroke-dashoffset:0}}.sketch-settled .connected-wire>path{stroke-dashoffset:0}.wire-handle{visibility:hidden}.bulb-drawing .wire-handle{animation:handle-show 0s 1.5s forwards}.sketch-settled .wire-handle{visibility:visible}@keyframes handle-show{to{visibility:visible}}.wire-handle{transform-box:fill-box;transform-origin:center}.bulb-drawing .wire-handle circle{animation:wire-dip .7s 1.7s ease}.bulb-drawing .wire-handle path{transform-box:fill-box;transform-origin:top;animation:wire-stretch .7s 1.7s ease}@keyframes wire-stretch{0%,100%{transform:scaleY(1)}45%{transform:scaleY(1.85)}}@keyframes wire-dip{0%,100%{transform:translateY(0)}45%{transform:translateY(12px)}}}@media(prefers-reduced-motion:reduce){.wire-handle{animation:none!important;visibility:visible}.connected-wire>path{stroke-dashoffset:0;animation:none!important}}</style><style>
-.composition .sketch[hidden]{display:none!important}.composition .browser-card,.composition .sketch{animation:none!important;translate:0 0!important;transition:none!important;scale:var(--showcase-scale,1);opacity:var(--showcase-opacity,1)}
-.composition .browser-card:hover,.composition .sketch:hover{scale:var(--showcase-scale,1)}
-.composition .composer{transform:rotate(-6deg)}.composition .community{transform:rotate(7deg)}.composition .sketch{transform:rotate(9deg)}
-</style><style>#hero-title .last em{display:inline-block;transition:opacity .24s ease,translate .32s ease}.word-leaving{opacity:0;translate:0 -.16em}.word-entering{opacity:0;translate:0 .18em}@media(prefers-reduced-motion:reduce){#hero-title .last em{transition:none}}</style><style>
+</style><style>@media(min-width:901px){.desktop-pull{display:none!important}.connected-wire{position:absolute;inset:0;width:100%;height:100%;overflow:visible;fill:none;stroke:var(--orange);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;pointer-events:none;visibility:hidden}.bulb-drawing .connected-wire,.sketch-settled .connected-wire{visibility:visible}.connected-wire>path{stroke-dasharray:1200;stroke-dashoffset:1200}.bulb-drawing .connected-wire>path{animation:wire-draw 1.5s ease forwards}@keyframes wire-draw{to{stroke-dashoffset:0}}.sketch-settled .connected-wire>path{stroke-dashoffset:0}.wire-handle{visibility:hidden}.bulb-drawing .wire-handle{animation:handle-show 0s 1.5s forwards}.sketch-settled .wire-handle{visibility:visible}@keyframes handle-show{to{visibility:visible}}.wire-handle{transform-box:fill-box;transform-origin:center}.bulb-drawing .wire-handle circle{animation:wire-dip .7s 1.7s ease}.bulb-drawing .wire-handle path{transform-box:fill-box;transform-origin:top;animation:wire-stretch .7s 1.7s ease}@keyframes wire-stretch{0%,100%{transform:scaleY(1)}45%{transform:scaleY(1.85)}}@keyframes wire-dip{0%,100%{transform:translateY(0)}45%{transform:translateY(12px)}}}@media(prefers-reduced-motion:reduce){.wire-handle{animation:none!important;visibility:visible}.connected-wire>path{stroke-dashoffset:0;animation:none!important}}</style><style>#hero-title .last em{display:inline-block;transition:opacity .24s ease,translate .32s ease}.word-leaving{opacity:0;translate:0 -.16em}.word-entering{opacity:0;translate:0 .18em}@media(prefers-reduced-motion:reduce){#hero-title .last em{transition:none}}</style><style>
 @media(min-width:901px){.hero-copy #hero-title{width:calc(100% - 250px);margin-left:auto;margin-right:auto}#hero-title .line{font-size:min(1em,8.7cqw)!important;width:calc(100% - 245px)}.desktop-bulb{width:175px;height:196px;right:68px;top:0}}
 @media(max-width:900px){
  #hero-title .minipage{display:none}#hero-title .line{font-size:clamp(36px,10.1vw,70px)!important;width:calc(100% - 73px);white-space:nowrap}#hero-title .last{margin-left:0}
@@ -208,7 +204,6 @@
 </style><style>
 /* Give the desktop layout one centered content column and readable display tracking. */
 @media(min-width:1101px){
- header.nav{max-width:1040px;padding-left:50px;padding-right:50px}
  .entrance{max-width:1040px;padding-left:50px;padding-right:50px}
  .hero-copy #hero-title{width:750px;max-width:calc(100% - 80px)}
  .hero-copy .pf-nav{left:max(40px,calc(50% - 375px))}
@@ -221,6 +216,12 @@
  .studio{grid-template-columns:minmax(0,1fr) 260px;column-gap:40px}
  footer>h2{font-size:70px;max-width:940px}
 }
+</style><style>
+/* Pause controls still govern the hero, project cards and studio, not just the removed collage. */
+.hero-motion-controls{display:none;justify-content:flex-end;margin:12px 0 28px}
+.js-motion .hero-motion-controls{display:flex}
+.hero-motion-controls .motion-toggle{position:static;min-height:44px;font-size:11px;padding:8px 14px}
+@media(prefers-reduced-motion:reduce){.js-motion .hero-motion-controls{display:none}}
 </style></head>
   <body class="dark">
     <script>
@@ -292,74 +293,8 @@
             >
           </div>
         </div>
-        <div
-          class="composition"
-          role="group"
-          aria-label="A collage of two real website projects and an illustrated design sketch"
-        >
-          <div class="stage-grid" aria-hidden="true"></div>
-          <span class="stage-label" data-depth="6"
-            >THE INTERNET COULD BE MORE INTERESTING.</span
-          >
-          <div class="browser-card composer" data-depth="14">
-            <div class="browser-chrome" aria-hidden="true">
-              <i></i><i></i><i></i><span>samanthafernando.com</span>
-            </div>
-            <img
-              src="/assets/images/work/sam-watch-desk-dark-800w.webp"
-              srcset="/assets/images/work/sam-watch-desk-dark-400w.webp 400w, /assets/images/work/sam-watch-desk-dark-800w.webp 800w, /assets/images/work/sam-watch-desk-dark-1280w.webp 1280w, /assets/images/work/sam-watch-desk-dark-1920w.webp 1920w"
-              sizes="(max-width: 600px) 75vw, (max-width: 900px) 52vw, 640px"
-              decoding="async"
-              width="1280"
-              height="713"
-              alt="Samantha Fernando's composer website in dark mode, showing her performance films"
-            />
-          </div>
-          <div class="sketch" hidden data-depth="26" aria-hidden="true">
-            <svg viewBox="0 0 150 100">
-              <path
-                d="M15 16Q73 11 133 15q7 1 6 8l-2 58q0 7-8 7L22 89q-9 1-8-8l1-58q0-6 0-7Z" />
-              <path d="M14 32q61-4 124-1" />
-              <circle cx="24" cy="23" r="2.3" /><circle cx="33" cy="23" r="2.3" /><circle cx="42" cy="22" r="2.3" />
-              <path d="M26 46q14-4 29-1t31 0" />
-              <path d="M26 56q12-3 26-1" />
-              <path
-                class="sketch-btn"
-                d="M26 68l32-1q5 0 5 5l0 6q0 5-5 5l-30 1q-5 0-5-5l0-6q0-5 5-5Z" />
-              <path d="M100 42q16-6 24 5q7 11-3 19q-12 7-22-3q-8-11 1-21Z" />
-              <path d="M97 70q-12 8-27 9m8-5l-9 5 8 6" />
-              <path
-                class="sketch-star"
-                d="M127 2l2 6 6 2-6 2-2 6-2-6-6-2 6-2 2-6Z" />
-            </svg>
-            <span class="sketch-note">made by hand</span>
-          </div>
-          <div class="browser-card community" data-depth="18">
-            <div class="browser-chrome" aria-hidden="true">
-              <i></i><i></i><i></i><span>thefriendsofashley.org</span>
-            </div>
-            <img
-              src="/assets/images/work/foa-fireworks-desk-800w.webp"
-              srcset="/assets/images/work/foa-fireworks-desk-400w.webp 400w, /assets/images/work/foa-fireworks-desk-800w.webp 800w, /assets/images/work/foa-fireworks-desk-1280w.webp 1280w, /assets/images/work/foa-fireworks-desk-1920w.webp 1920w"
-              sizes="(max-width: 600px) 75vw, (max-width: 900px) 52vw, 640px"
-              decoding="async"
-              width="1280"
-              height="713"
-              alt="Friends of Ashley fireworks night page, with a glowing title and a ticket scroll"
-            />
-          </div>
-          <span class="stage-index" data-depth="6" aria-hidden="true"
-            >01 / IMAGINATION, MEET IMPLEMENTATION.</span
-          >
-          <button class="motion-toggle" type="button" aria-pressed="false">
-            Pause motion
-          </button>
-        </div>
-        <div class="entrance-end">
-          <p>For people who want to look like <em>themselves.</em></p>
-          <a href="#work"
-            >Take a closer look <span aria-hidden="true">↓</span></a
-          >
+        <div class="hero-motion-controls">
+          <button class="motion-toggle" type="button" aria-pressed="false">Pause motion</button>
         </div>
       </section>
       <section id="work" class="work" aria-labelledby="work-title">
@@ -569,8 +504,6 @@ function drawWire(){sizeBrowserFrame();const hb=h.getBoundingClientRect(),bb=bul
  d=`M${x} ${top}V${-56+wireShift} M${x+12} ${-60+wireShift} H${right-30} Q${right+12} ${-60+wireShift} ${right+12} ${-20+wireShift} C${right+12} ${y-26} ${right} ${y-26} ${right} ${y-8}`;box=`<rect x='${x-12}' y='${-64+wireShift}' width='24' height='8' rx='3'/>`
  let wire=h.querySelector('.connected-wire');if(!wire){h.insertAdjacentHTML('beforeend',`<svg class="connected-wire" aria-hidden="true"><path/>${box}<g class="wire-handle"><path/><circle r="6"/></g></svg>`);wire=h.querySelector('.connected-wire')}wire.querySelector(':scope > path').setAttribute('d',d);wire.style.setProperty('--wire-length',wire.querySelector(':scope > path').getTotalLength());const fixture=wire.querySelector(':scope > rect');if(fixture){fixture.setAttribute('x',x-12);fixture.setAttribute('y',-64+wireShift)}wire.querySelector('.wire-handle path').setAttribute('d',`M${right} ${y-8}v14`);wire.querySelector('.wire-handle circle').setAttribute('cx',right);wire.querySelector('.wire-handle circle').setAttribute('cy',y+12);wire.querySelector('.wire-handle circle').setAttribute('transform',`rotate(-90 ${right} ${y+12})`)
 }drawWire();addEventListener('resize',drawWire);})();</script><script>
-(()=>{const c=document.querySelector('.composition');if(!c)return;let raf=0;const m=matchMedia('(prefers-reduced-motion:reduce)');function update(){raf=0;const r=c.getBoundingClientRect(),off=m.matches||document.body.classList.contains('paused')||document.body.classList.contains('hidden-page');const p=off?0:Math.min(1,Math.max(0,(innerHeight*.18-r.top)/(r.height*.65+innerHeight*.18)));const e=p*p*(3-2*p);c.style.setProperty('--showcase-scale',(1-e*.36).toFixed(4));c.style.setProperty('--showcase-opacity',(1-e*.82).toFixed(4))}function kick(){if(!raf)raf=requestAnimationFrame(update)}addEventListener('scroll',kick,{passive:true});addEventListener('resize',kick);m.addEventListener('change',kick);new MutationObserver(kick).observe(document.body,{attributes:true,attributeFilter:['class']});kick()})();
-</script><script>
 (()=>{
  const h=document.querySelector('#hero-title'),e=h.querySelector('.last em'),m=matchMedia('(prefers-reduced-motion:reduce)');
  const words=['remember.','enjoy.','love.'],cta=document.querySelector('.hero-bottom .cta');let i=0,pending=null,ready=false,pulls=[],cycle=0,ctaPulse=null,idlePulse=null;
