@@ -1,2 +1,39 @@
 [context.production]
   command = "echo '/*  https://websitesbynick.co.uk/:splat  302!' > _redirects"
+
+# Retired concept-page routes now resolve to the public pages. Shared assets stay in place.
+[[redirects]]
+  from = "/homepage-concepts/"
+  to = "/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/homepage-concepts/about/"
+  to = "/about/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/homepage-concepts/pricing/"
+  to = "/pricing/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/homepage-concepts/charity/"
+  to = "/charity/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/homepage-concepts/contact/"
+  to = "/contact/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/homepage-concepts/privacy/"
+  to = "/privacy/"
+  status = 301
+  force = true
