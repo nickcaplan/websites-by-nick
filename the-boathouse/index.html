@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>The Boathouse - Specialist Coffee & Riverside Views, Walton-on-Thames</title>
+<meta name="description" content="Modern-rustic coffee shop at Walton Marina on the River Thames. Specialist coffee, handmade cakes, hot and cold food. Dog friendly, open every day 9am - 5pm.">
+<style>
+  :root{
+    --ink:#17140f;
+    --ink-soft:#4a4237;
+    --muted:#6f6553;
+    --gold:#b98a2f;
+    --gold-deep:#8a680c;
+    --ivory:#f6f1e6;
+    --cream:#efe7d6;
+    --surface:#fffdf7;
+    --line:#ddd2bc;
+    --radius:14px;
+    --font-head:Georgia,'Times New Roman',serif;
+    --font-body:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--font-body);color:var(--ink);background:var(--ivory);line-height:1.6;-webkit-font-smoothing:antialiased}
+  img{max-width:100%;display:block}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+
+  header{position:sticky;top:0;z-index:20;background:rgba(23,20,15,.96);backdrop-filter:blur(6px);border-bottom:1px solid rgba(185,138,47,.35)}
+  .header-in{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:10px 20px}
+  .brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+  .brand img{width:46px;height:46px;border-radius:50%}
+  .brand .name{font-family:var(--font-head);font-weight:700;font-size:19px;color:var(--ivory);letter-spacing:.3px}
+  .brand .est{display:block;font-family:var(--font-body);font-weight:400;font-size:11px;color:var(--gold);letter-spacing:1.6px;text-transform:uppercase}
+  nav{display:flex;gap:4px;align-items:center;flex-wrap:wrap}
+  nav a{text-decoration:none;color:#d8cfbc;font-size:14.5px;font-weight:600;padding:8px 12px;border-radius:8px}
+  nav a:hover{color:#fff;background:rgba(185,138,47,.18)}
+  nav a:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+  .btn{display:inline-block;padding:12px 22px;border-radius:999px;font-weight:700;font-size:15px;text-decoration:none;transition:transform .15s ease,box-shadow .15s ease}
+  .btn:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+  .btn-gold{background:var(--gold);color:#17140f}
+  .btn-gold:hover{background:#cda03f;transform:translateY(-1px);box-shadow:0 6px 16px rgba(185,138,47,.35)}
+  .btn-ghost{border:2px solid var(--gold);color:var(--gold);background:rgba(23,20,15,.85);backdrop-filter:blur(3px)}
+  .btn-ghost:hover{background:rgba(23,20,15,.92)}
+  .header-in .btn{padding:9px 18px;font-size:14px}
+
+  .hero{position:relative;color:#fff;min-height:78vh;display:flex;align-items:center}
+  .hero-bg{position:absolute;inset:0;background:url('images/cafe.jpg') center 38%/cover no-repeat}
+  .hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(100deg,rgba(15,12,8,.88) 0%,rgba(15,12,8,.62) 45%,rgba(15,12,8,.25) 100%)}
+  .hero-in{position:relative;padding:72px 24px 56px;max-width:640px}
+  .eyebrow{font-size:12.5px;letter-spacing:2.6px;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:16px}
+  h1{font-family:var(--font-head);font-weight:700;font-size:clamp(34px,5vw,52px);line-height:1.12;letter-spacing:-.4px;margin-bottom:18px}
+  .hero .lead{font-size:18px;color:#e9e1d0;max-width:34em;margin-bottom:26px}
+  .hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:34px}
+
+  .visit-bar{background:rgba(23,20,15,.82);border:1px solid rgba(185,138,47,.45);border-radius:var(--radius);padding:18px 22px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 26px;backdrop-filter:blur(4px)}
+  .visit-bar .row{display:flex;gap:12px;align-items:baseline}
+  .visit-bar .row b{min-width:64px;font-size:11.5px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--gold)}
+  .visit-bar .row span{font-size:14.5px;color:#f0e9da}
+  .visit-bar a{color:#fff;font-weight:700;text-decoration:none;border-bottom:1px solid var(--gold)}
+  .visit-bar a:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+
+  section{padding:64px 0}section,main#top{scroll-margin-top:96px}
+  .sec-head{max-width:600px;margin-bottom:34px}
+  h2{font-family:var(--font-head);font-weight:700;font-size:clamp(26px,3.4vw,34px);line-height:1.18;letter-spacing:-.2px;margin-bottom:12px}
+  .sec-head p{font-size:16.5px;color:var(--ink-soft)}
+
+  .feature{display:grid;grid-template-columns:1.05fr 1fr;gap:44px;align-items:center}
+  .feature.flip{grid-template-columns:1fr 1.05fr}
+  .feature.flip .feature-media{order:2}
+  .feature-media{border-radius:var(--radius);overflow:hidden;box-shadow:0 18px 44px rgba(23,20,15,.18);border:1px solid var(--line)}
+  .feature-media img{width:100%;height:100%;object-fit:cover;aspect-ratio:4/3}
+  .feature-copy h2{margin-bottom:14px}
+  .feature-copy p{font-size:16.5px;color:var(--ink-soft);margin-bottom:14px}
+  .rule{width:54px;height:3px;background:var(--gold);border-radius:2px;margin-bottom:18px}
+
+  .details{background:var(--ink);color:#efe8d8}
+  .details h2{color:#fff}
+  .details .sec-head p{color:#c9bfa9}
+  .trio{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .trio figure{border-radius:var(--radius);overflow:hidden;background:#221e17;border:1px solid rgba(185,138,47,.3)}
+  .trio img{width:100%;aspect-ratio:4/5;object-fit:cover}
+  .trio figcaption{padding:14px 16px;font-size:14.5px;color:#d8cfbc}
+  .trio figcaption b{display:block;font-family:var(--font-head);font-size:16px;color:var(--gold);margin-bottom:2px}
+
+  .visit-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .visit-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:26px}
+  .visit-card h3{font-family:var(--font-head);font-size:20px;margin-bottom:12px}
+  .visit-card p, .visit-card li{font-size:15.5px;color:var(--ink-soft)}
+  .visit-card p a{color:var(--gold-deep);font-weight:600}
+  .visit-card .big-tel{display:inline-block;margin-top:10px;font-family:var(--font-head);font-size:26px;font-weight:700;color:var(--gold-deep);text-decoration:none}
+  .visit-card .big-tel:hover{text-decoration:underline}
+  .visit-card .big-tel:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+  .visit-card ul{list-style:none;margin-top:6px}
+  .visit-card li{padding:5px 0;border-bottom:1px dashed var(--line)}
+  .visit-card li:last-child{border-bottom:none}
+
+  footer.site-footer{background:var(--ink);color:#b6ab94;padding:34px 0;font-size:14px}
+  footer.site-footer a{color:#d8cfbc}
+  footer.site-footer .foot-grid{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;align-items:center}
+  footer.site-footer .credit{width:100%;margin-top:16px;padding-top:14px;border-top:1px solid rgba(185,138,47,.25);font-size:13px;color:#8d8168}
+
+  @media (max-width:820px){
+    .feature,.feature.flip,.visit-grid,.trio{grid-template-columns:1fr}
+    .feature.flip .feature-media{order:0}
+    .header-in{flex-wrap:wrap;gap:6px 14px}
+    .brand .est{display:none}
+    nav{order:3;flex-basis:100%;justify-content:center}
+    .hero{min-height:0}
+    section,main#top{scroll-margin-top:172px}
+    .hero-in{padding:52px 24px 40px}
+    .eyebrow{letter-spacing:1.8px;font-size:11.5px}
+    .visit-bar{grid-template-columns:1fr}
+    section{padding:46px 0}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap header-in">
+    <a class="brand" href="#top" aria-label="The Boathouse - back to top">
+      <img src="images/logo-small.png" alt="The Boathouse logo">
+      <span><span class="name">The Boathouse</span><span class="est">Coffee &amp; riverside views</span></span>
+    </a>
+    <nav aria-label="Sections">
+      <a href="#coffee">Our coffee</a>
+      <a href="#food">Our food</a>
+      <a href="#details">The details</a>
+      <a href="#visit">Visit us</a>
+    </nav>
+    <a class="btn btn-gold" href="tel:+441932550980">Call 01932 550980</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero" style="padding:0">
+    <div class="hero-bg" role="img" aria-label="Inside The Boathouse - leather armchairs, warm wood and a wooden boat overhead"></div>
+    <div class="wrap hero-in">
+      <p class="eyebrow">Walton Marina - on the River Thames</p>
+      <h1>Specialist coffee and riverside views.</h1>
+      <p class="lead">A modern-rustic coffee shop in the heart of Walton on the River Thames. Handmade cakes, hot and cold food, and a proper welcome - dogs included.</p>
+      <div class="hero-actions">
+        <a class="btn btn-gold" href="tel:+441932550980">Call 01932 550980</a>
+        <a class="btn btn-ghost" href="mailto:hello@coffeeattheboathouse.com">Email us</a>
+      </div>
+      <div class="visit-bar">
+        <div class="row"><b>Open</b><span>Monday to Sunday, 9am - 5pm</span></div>
+        <div class="row"><b>Call us</b><span><a href="tel:+441932550980">01932 550980</a></span></div>
+        <div class="row"><b>Find us</b><span>Walton Marina, Walton-on-Thames</span></div>
+        <div class="row"><b>Dogs</b><span>Welcome</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="coffee">
+    <div class="wrap feature">
+      <div class="feature-media">
+        <img src="images/our-coffee.jpg" alt="Latte art being poured at The Boathouse">
+      </div>
+      <div class="feature-copy">
+        <div class="rule"></div>
+        <h2>Our coffee</h2>
+        <p>From the day we first opened our doors, we have been working with and serving the finest speciality coffee beans to our customers.</p>
+        <p>Every cup is made with the same care, whether it is your first flat white of the morning or an afternoon pick-me-up by the river.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="food" style="padding-top:0">
+    <div class="wrap feature flip">
+      <div class="feature-media">
+        <img src="images/cakes.jpg" alt="Handmade cakes and scones under glass domes on the counter">
+      </div>
+      <div class="feature-copy">
+        <div class="rule"></div>
+        <h2>Our food</h2>
+        <p>We offer a range of tasty hot and cold food, all handmade and absolutely delicious. Indulge yourself in a crusty bacon roll, a toastie, a fresh sandwich or a panini for breakfast, brunch or lunch.</p>
+        <p>Or treat yourself to a slice of one of our fabulous handmade cakes. Only if you deserve it though!</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="details" class="details">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>The little details</h2>
+        <p>The Boathouse is full of them - a wooden boat overhead, a suitcase for a table, and the river just outside.</p>
+      </div>
+      <div class="trio">
+        <figure>
+          <img src="images/coffee-machine.jpg" alt="Espresso pouring from the machine">
+          <figcaption><b>Made properly</b>Espresso, made to order.</figcaption>
+        </figure>
+        <figure>
+          <img src="images/coffee-table.jpg" alt="A vintage suitcase used as a coffee table">
+          <figcaption><b>Full of character</b>A vintage suitcase for a coffee table.</figcaption>
+        </figure>
+        <figure>
+          <img src="images/cafe.jpg" alt="The cafe interior with the wooden boat on the ceiling">
+          <figcaption><b>Sit a while</b>Leather chairs, warm wood, river air.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section id="visit">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>Visit us</h2>
+        <p>Find us at Walton Marina, right on the Thames. Open every day, and dogs are always welcome.</p>
+      </div>
+      <div class="visit-grid">
+        <div class="visit-card">
+          <h3>Talk to us</h3>
+          <p>Questions, cake orders or a table for a catch-up - call or email any time.</p>
+          <a class="big-tel" href="tel:+441932550980">01932 550980</a>
+          <p style="margin-top:10px"><a href="mailto:hello@coffeeattheboathouse.com">hello@coffeeattheboathouse.com</a></p>
+        </div>
+        <div class="visit-card">
+          <h3>Good to know</h3>
+          <ul>
+            <li>Open Monday to Sunday, 9am - 5pm</li>
+            <li>Walton Marina, Walton-on-Thames</li>
+            <li>Dog friendly</li>
+            <li>Hot and cold food, handmade cakes, specialist coffee</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap foot-grid">
+    <p>The Boathouse - Walton Marina, Walton-on-Thames - 01932 550980</p>
+    <p><a href="mailto:hello@coffeeattheboathouse.com">hello@coffeeattheboathouse.com</a></p>
+    <p class="credit">Design concept by <a href="https://websitesbynick.co.uk">Websites by Nick</a>.</p>
+  </div>
+</footer>
+</body>
+</html>
