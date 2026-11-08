@@ -460,8 +460,9 @@
         q.setAttribute("aria-expanded",open?"true":"false");
         a.setAttribute("aria-hidden",open?"false":"true");
         if(open){
-          a.style.maxHeight=a.scrollHeight+"px";
-          a.addEventListener("transitionend",function h(){a.removeEventListener("transitionend",h);if(item.classList.contains("open")){a.style.maxHeight="none";}});
+          if(window.matchMedia("(prefers-reduced-motion: reduce)").matches){a.style.maxHeight="none";}
+          else {a.style.maxHeight=a.scrollHeight+"px";
+          a.addEventListener("transitionend",function h(){a.removeEventListener("transitionend",h);if(item.classList.contains("open")){a.style.maxHeight="none";}});}
         }else{
           a.style.maxHeight=a.scrollHeight+"px";
           void a.offsetHeight;
