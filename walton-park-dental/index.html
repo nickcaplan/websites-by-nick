@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Walton Park Dental Practice - Dentist in Walton-on-Thames</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+  :root{
+    --bg:#f3f6fb; --surface:#ffffff; --surface-tint:#e6eef8;
+    --ink:#17293f; --ink-soft:#3c5068; --muted:#4d6178;
+    --primary:#005ca8; --primary-deep:#004a85; --on-primary:#f2f7fc;
+    --line:rgba(0,92,168,.16); --line-strong:rgba(0,92,168,.34);
+    --radius:14px; --radius-card:12px;
+    --shadow:0 1px 2px rgba(10,50,95,.06),0 10px 28px rgba(10,50,95,.08);
+    --font-body:"Segoe UI",system-ui,"Helvetica Neue",sans-serif;
+    --font-display:Georgia,"Iowan Old Style","Times New Roman",serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  section[id]{scroll-margin-top:5.5rem}
+  body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  a{color:var(--primary)}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+  .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--primary);background:var(--surface-tint);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+  .eyebrow+h2{margin-top:12px}
+  h1{font-family:var(--font-display);font-size:clamp(30px,5vw,46px);line-height:1.12;letter-spacing:-0.01em;font-weight:700}
+  h2{font-family:var(--font-display);font-size:clamp(23px,3.4vw,30px);line-height:1.2;font-weight:700;margin-bottom:10px}
+  h3{font-size:17px;font-weight:700}
+  p{color:var(--ink-soft)}
+  section{padding:32px 0}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:13px 24px;font-weight:700;font-size:15px;text-decoration:none;border:1px solid transparent;cursor:pointer}
+  .btn-primary{background:var(--primary);color:var(--on-primary)}
+  .btn-primary:hover{background:var(--primary-deep)}
+  .btn-primary:focus-visible{outline:2px solid var(--primary-deep);outline-offset:2px}
+  .btn-ghost{background:var(--surface);color:var(--primary-deep);border-color:var(--line-strong)}
+  .btn-ghost:hover{border-color:var(--primary)}
+  .btn-ghost:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+
+  header{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .header-in{display:flex;align-items:center;gap:20px;max-width:1080px;margin:0 auto;padding:10px 20px}
+  .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-weight:750;font-size:17px;letter-spacing:-0.01em}
+  .brand-logo{width:200px;height:auto;display:block}
+  nav{margin-left:auto;display:flex;gap:18px;align-items:center}
+  nav a{color:var(--ink-soft);text-decoration:none;font-size:14.5px;font-weight:600}
+  nav a:hover{color:var(--primary)}
+  nav a:focus-visible{outline:2px solid var(--primary);outline-offset:3px;border-radius:4px}
+  .header-call{flex:none;padding:10px 18px;font-size:14px}
+
+  .hero{background:linear-gradient(160deg,#e8f0f9 0%,var(--bg) 55%);padding:64px 0 48px}
+  .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center}
+  .hero p.lede{font-size:18px;margin:18px 0 26px;max-width:34em}
+  .hero-actions{display:flex;gap:12px;flex-wrap:wrap}
+  .trust{display:grid;gap:12px;grid-template-columns:repeat(3,1fr);margin-top:34px}
+  .hero-photo img{width:100%;height:auto;border-radius:var(--radius-card);border:1px solid var(--line);box-shadow:var(--shadow);display:block}
+  .hero-photo figcaption,.ph figcaption{margin-top:8px;font-size:.84rem;color:var(--muted)}
+  .photo-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:20px}
+  .ph img{width:100%;height:auto;border-radius:var(--radius-card);border:1px solid var(--line);box-shadow:var(--shadow);display:block}
+  .trust-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);box-shadow:var(--shadow);padding:18px 20px}
+  .trust-card h3{margin-bottom:4px}
+  .trust-card p{font-size:14.5px}
+  .tick{color:var(--primary);font-weight:800;margin-right:6px}
+
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:20px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);box-shadow:var(--shadow);padding:20px}
+  .card h3{margin-bottom:6px}
+  .card p{font-size:14.5px}
+  .card .icon{width:38px;height:38px;border-radius:10px;background:var(--surface-tint);display:flex;align-items:center;justify-content:center;margin-bottom:12px;color:var(--primary);font-size:19px}
+
+  .stats{background:var(--primary);color:var(--on-primary);padding:28px 0}
+  .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;text-align:center}
+  .stats .num{font-size:40px;font-weight:800;letter-spacing:-0.02em}
+  .stats .lbl{opacity:.85;font-size:14.5px}
+
+  .dentist-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:20px}
+  .dentist{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);box-shadow:var(--shadow);padding:18px;text-align:center}
+  img.avatar{width:88px;height:88px;border-radius:50%;object-fit:cover;object-position:50% 50%;border:2px solid var(--line-strong);margin:0 auto 10px;display:block}
+  .dentist .gdc{font-size:13px;color:var(--muted);margin-top:3px}
+
+  .quote-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:20px}
+  blockquote{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--primary);border-radius:var(--radius-card);box-shadow:var(--shadow);padding:20px}
+  blockquote p{font-style:italic;color:var(--ink-soft);font-size:14.5px}
+  blockquote cite{display:block;margin-top:12px;font-style:normal;font-size:13px;font-weight:700;color:var(--primary-deep)}
+
+  .nervous{background:var(--surface-tint)}
+  .nervous .wrap{max-width:760px}
+  .nervous p{margin-bottom:12px}
+
+  .faq-list{margin-top:22px;display:grid;gap:10px}
+  .faq-item{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);box-shadow:var(--shadow);overflow:hidden}
+  .faq-q{width:100%;text-align:left;background:none;border:none;padding:16px 18px;font:inherit;font-weight:700;font-size:15.5px;color:var(--ink);cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .faq-q:focus-visible{outline:2px solid var(--primary);outline-offset:-2px}
+  .faq-q .chev{flex:none;transition:transform .2s;color:var(--primary)}
+  .faq-item.open .chev{transform:rotate(180deg)}
+  .faq-a{max-height:none;overflow:hidden;transition:max-height .25s ease}
+  .faq-a p{padding:0 18px 16px;font-size:14.5px}
+
+  .visit-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:20px;align-items:start}
+  .visit-grid .card{min-width:0}
+  .visit-grid .card p{margin-bottom:8px}
+  .visit-grid .card .btn{margin-top:8px}
+  .practice-entrance{margin:0 0 20px}
+  .practice-entrance img{display:block;width:100%;height:auto;border-radius:12px}
+  .practice-entrance figcaption{margin-top:8px;font-size:13px;color:var(--muted)}
+  .hours{width:100%;table-layout:fixed}
+  .hours td{overflow-wrap:anywhere;padding:4px 0;font-size:14.5px;color:var(--ink-soft)}
+  .hours td:first-child{font-weight:600;color:var(--ink);padding-right:18px}
+  a.big-link{overflow-wrap:anywhere;max-width:100%;display:inline-block;font-weight:700;font-size:17px;margin-top:4px;text-decoration:none;color:var(--primary-deep)}
+  a.big-link:hover{text-decoration:underline}
+  a.big-link:focus-visible{outline:2px solid var(--primary);outline-offset:3px;border-radius:4px}
+
+  footer{border-top:1px solid var(--line);padding:28px 0 36px;background:var(--surface)}
+  footer p{font-size:13.5px;color:var(--muted);margin-bottom:4px}
+
+  @media (max-width:920px){
+    .header-in{flex-wrap:wrap;row-gap:4px}
+    nav{order:3;width:100%;margin-left:0;overflow-x:auto;gap:18px;padding:0 3px}
+    nav a{flex:none;min-height:44px;display:inline-flex;align-items:center}
+    nav a:focus-visible{outline-offset:-2px}
+    .header-call{margin-left:auto}
+    .hero-grid{grid-template-columns:1fr;gap:28px}
+    .grid-3,.quote-grid{grid-template-columns:repeat(2,1fr)}
+    .trust{grid-template-columns:1fr}
+    .photo-grid{grid-template-columns:1fr}
+    .dentist-grid{grid-template-columns:repeat(2,1fr)}
+  }
+  @media (max-width:640px){
+    section{padding:24px 0}
+    .header-call{margin-left:auto;padding:9px 12px;font-size:12.5px}
+    .brand{font-size:14.5px;white-space:nowrap;gap:8px}
+    .brand{flex:1;min-width:0}
+    .brand-logo{width:145px;max-width:100%;height:auto}
+    .header-in{gap:10px;padding:10px 14px}
+    .grid-3,.quote-grid,.visit-grid,.stats-grid{grid-template-columns:1fr}
+    .hero{padding:44px 0 36px}
+  }
+  @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto} .faq-a,.faq-q .chev{transition-duration:.01ms}}
+
+  /* Photo-led direction for review. Content restoration is a separate step. */
+  .hero{position:relative;padding:0;background:#102e48;isolation:isolate}
+  .hero-grid{position:relative;display:block;padding-top:72px;padding-bottom:76px;min-height:560px}
+  .hero-grid>div:first-child{position:relative;z-index:2;max-width:590px}
+  .hero h1{color:#fff;font-size:clamp(44px,4.5vw,68px);font-weight:400;line-height:1.04;letter-spacing:-.025em;margin-top:22px;max-width:580px}
+  .hero p.lede{color:#e3edf4;font-size:17px;max-width:470px;line-height:1.65;margin-top:24px}
+  .hero .eyebrow{background:transparent;border-color:#c1dbef70;color:#e3edf4;letter-spacing:.12em;font-size:10px}
+  .hero-photo{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+  .hero-photo img{width:100%;height:100%;object-fit:cover;object-position:75% center;border:0;border-radius:0;box-shadow:none}
+  .hero-grid::before{content:'';position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,#102e48 0%,#102e48f5 30%,#102e48bd 49%,#102e4818 75%)}
+  .hero-photo figcaption{position:absolute;bottom:24px;right:24px;color:white;background:#102e48b8;padding:6px 12px;font-size:11px;z-index:2;border-radius:3px}
+  .hero .btn-primary{background:#fff;color:#003c6f}
+  .hero .btn-ghost{background:transparent;border-color:#ffffff80;color:white}
+  .hero .btn:focus-visible{outline:3px solid #fff;outline-offset:4px}
+  .hero-social{display:flex;flex-wrap:wrap;gap:14px;margin-top:30px;align-items:center;font-size:12px;color:#c6d8e5}
+  .hero-social a,.footer-social a{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:6px 10px;border:1px solid currentColor;border-radius:6px;text-decoration:none}.hero-social a{color:white}.hero-social svg,.footer-social svg{width:20px;height:20px;flex:none}.footer-social{display:flex;gap:12px;flex-wrap:wrap;margin:16px 0}.hero-social a:hover,.footer-social a:hover{background:#ffffff18}.hero-social a:focus-visible,.footer-social a:focus-visible{outline:3px solid currentColor;outline-offset:4px}
+  .hero>.wrap:last-child{position:relative;z-index:2;max-width:none;background:#fff;padding:0}
+  .hero .trust{max-width:1080px;margin:0 auto;gap:0;padding:0 20px}
+  .hero .trust-card{background:transparent;box-shadow:none;border:0;border-radius:0;padding:20px 24px}
+  .hero .trust-card+.trust-card{border-left:1px solid var(--line)}
+  .hero .trust-card p{max-width:280px}
+  @media(min-width:1100px){.hero-grid{max-width:1440px;padding-left:max(40px,calc((100% - 1040px)/2));padding-right:40px}}
+  @media(max-width:700px){.hero-grid{padding:42px 22px 280px;min-height:0}.hero h1{font-size:45px;max-width:480px}.hero p.lede{font-size:16px}.hero-grid::before{background:linear-gradient(180deg,#102e48 0%,#102e48 50%,#102e48a0 65%,#102e4800 82%)}.hero-photo img{object-position:65% bottom}.hero-photo figcaption{bottom:12px;right:12px}.hero .trust{grid-template-columns:1fr;padding:10px 22px}.hero .trust-card{padding:20px 0}.hero .trust-card+.trust-card{border-left:0;border-top:1px solid var(--line)}.hero .trust-card p{max-width:none}.hero-social{font-size:11px;gap:12px}.hero-social>span{width:100%}}
+
+  /* Preserve the room's full width on phones instead of cropping it to a chair. */
+  .hero-photo img{object-position:center}
+  @media(max-width:700px){
+    .hero-grid{padding:32px 0 0}
+    .hero-grid>div:first-child{padding:0 22px 32px;max-width:none}
+    .hero-grid::before{display:none}
+    .hero-photo{position:relative;inset:auto;width:100%;height:auto;margin:0}
+    .hero-photo img{height:auto;aspect-ratio:3/2;object-fit:contain;object-position:center;display:block}
+    .hero-photo figcaption{bottom:10px;right:10px;font-size:10px}
+  }
+  /* A treatment list, with dental drawings rather than generic icon tiles. */
+  .treatment-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:40px;margin-top:24px}
+  .treatment{border-top:1px solid var(--line-strong);padding:22px 0;min-width:0}
+  .treatment h3{display:flex;align-items:center;gap:12px;font-family:var(--font-display);font-size:21px;line-height:1.25;margin-bottom:10px;color:var(--primary-deep)}
+  .treatment svg{width:30px;height:30px;flex:none;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+  .treatment p{font-size:15px;line-height:1.65;max-width:36em}
+  @media(max-width:640px){.treatment-list{grid-template-columns:1fr;margin-top:20px}.treatment{padding:20px 0}.treatment h3{font-size:20px}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-in">
+    <a class="brand" href="#top"><img class="brand-logo" src="assets/site/logo.png" alt="Walton Park Dental Practice"></a>
+    <nav aria-label="Sections">
+      <a href="#treatments">Treatments</a>
+      <a href="#practice">The practice</a>
+      <a href="#about">About</a>
+      <a href="#dentists">Dentists</a>
+      <a href="#faq">FAQs</a>
+      <a href="#visit">Visit</a>
+    </nav>
+    <a class="btn btn-primary header-call" href="tel:+441932220449">Call 01932 220449</a>
+  </div>
+</header>
+
+<main id="top">
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">Caring for Walton for over 70 years</span>
+      <h1>Friendly, modern dentistry for the whole family</h1>
+      <p class="lede">Walton Park Dental Practice has looked after local smiles for over 70 years. Private care for adults, NHS places for the children of our registered patients, and Denplan plans that spread the cost.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="tel:+441932220449">Call 01932 220449</a>
+        <a class="btn btn-ghost" href="#visit">Plan your visit</a>
+      </div>
+      <div class="hero-social"><span>Get to know the practice</span><a href="https://www.facebook.com/waltonparkdental" target="_blank" rel="noopener" aria-label="Walton Park Dental on Facebook (opens in a new tab)"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M14 21v-8h3l.5-4H14V7c0-1.2.4-2 2-2h2V1.4A24 24 0 0 0 15 1c-3 0-5 1.8-5 5v3H7v4h3v8Z"/></svg><span>Facebook</span></a><a href="https://instagram.com/waltonparkdental/" target="_blank" rel="noopener" aria-label="Walton Park Dental on Instagram (opens in a new tab)"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg><span>Instagram</span></a></div>
+    </div>
+    <figure class="hero-photo">
+      <img src="assets/site/surgery-wide.webp" srcset="assets/site/surgery-wide-900.webp 900w, assets/site/surgery-wide.webp 1920w" sizes="(max-width:700px) 100vw, 1440px" alt="A wide view of a Walton Park Dental surgery, including the chair, cabinetry and garden-facing windows" width="1920" height="1280" fetchpriority="high">
+      <figcaption>A real look inside Walton Park Dental</figcaption>
+    </figure>
+  </div>
+  <div class="wrap">
+    <div class="trust">
+      <div class="trust-card"><h3><span class="tick">&#10003;</span>Nervous patients welcome</h3><p>Careful, sympathetic treatment in a friendly atmosphere, at your pace.</p></div>
+      <div class="trust-card"><h3><span class="tick">&#10003;</span>Private and Denplan</h3><p>Adult care on a private basis, with Denplan monthly plans available.</p></div>
+      <div class="trust-card"><h3><span class="tick">&#10003;</span>Children seen within the NHS</h3><p>We can see the children of our registered adult patients within the NHS.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="treatments">
+  <div class="wrap">
+    <span class="eyebrow">Treatments</span>
+    <h2>Your teeth, looked after.</h2>
+    <p>Our focus is on prevention and keeping treatment to a minimum. When you do need help, we take a careful, sympathetic approach in a friendly atmosphere.</p>
+    <div class="treatment-list">
+      <article class="treatment"><h3><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5c-4-3-7 1-5 6 1 2 1 9 3 9 2 0 1-6 4-6s2 6 4 6c2 0 2-7 3-9 2-5-1-9-5-6-1 1-3 1-4 0Z"/><path d="m19 3 1 2 2 1-2 1-1 2-1-2-2-1 2-1Z"/></svg><span>Routine care &amp; hygiene</span></h3><p>Regular visits help keep your mouth healthy and clean. Our focus is on prevention: keeping treatment to a minimum, and spotting problems before they develop.</p></article>
+      <article class="treatment"><h3><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7q9-7 18 0v10q-9 7-18 0Z"/><path d="M7 5v14m5-15v16m5-15v14M3 12h18"/></svg><span>Invisalign braces</span></h3><p>Teeth straightening with clear braces that are almost invisible. A way to change your smile without making your braces the first thing people notice.</p></article>
+      <article class="treatment"><h3><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5c-4-3-7 1-5 6 1 2 1 9 3 9 2 0 1-6 4-6s2 6 4 6c2 0 2-7 3-9 2-5-1-9-5-6-1 1-3 1-4 0Z"/><path d="m10 5 1 4 4 1-1-5"/></svg><span>Repairing a tooth</span></h3><p>Decay or an accident can damage part of a tooth. A filling repairs that damaged area, helping you keep the tooth you have.</p></article>
+      <article class="treatment"><h3><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 10V7c0-4 3-5 6-3 3-2 6-1 6 3v3Z"/><path d="M7 13c1 2 1 7 3 7s0-4 2-4 0 4 2 4 2-5 3-7M6 10h12"/></svg><span>Crowns &amp; veneers</span></h3><p>When a tooth needs more support, a crown fits over what remains of it. It gives the tooth strength and the shape of a natural tooth.</p></article>
+      <article class="treatment"><h3><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4q5-3 10 0l-1 6H8Z"/><path d="m10 10 1 11h2l1-11m-4 3h4m-4 3h4m-3 3h2"/></svg><span>Replacing missing teeth</span></h3><p>An implant is fixed in place: a lasting replacement for a missing tooth, without having to damage the teeth on either side.</p></article>
+      <article class="treatment"><h3><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6c-4-2-6 1-4 6 1 2 1 8 3 8s1-5 4-5 2 5 4 5 2-6 3-8"/><path d="m17 2 1.5 4.5L23 8l-4.5 1.5L17 14l-1.5-4.5L11 8l4.5-1.5Z"/></svg><span>Dentist-guided whitening</span></h3><p>If your teeth have become discoloured, whitening can help lighten them. Your dentist guides the treatment, so it is done safely and without damaging your teeth.</p></article>
+    </div>
+  </div>
+</section>
+
+<section id="practice">
+  <div class="wrap">
+    <span class="eyebrow">Inside the practice</span>
+    <h2>Take a look inside</h2>
+    <div class="photo-grid">
+      <figure class="ph"><img src="assets/site/surgery-1.jpg" alt="One of the practice surgeries, with a blue dental chair and light blue cabinetry" loading="lazy" width="900" height="600"><figcaption>Inside one of our surgeries</figcaption></figure>
+      <figure class="ph"><img src="assets/site/surgery-2.jpg" alt="Another surgery at the practice, bright and modern, looking towards the window" loading="lazy" width="900" height="600"><figcaption>Another of our five surgeries</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="stats">
+  <div class="wrap stats-grid">
+    <div><div class="num">70+</div><div class="lbl">years serving Walton-on-Thames</div></div>
+    <div><div class="num">5</div><div class="lbl">modern surgeries</div></div>
+    <div><div class="num">17</div><div class="lbl">people on our team</div></div>
+  </div>
+</section>
+
+<section id="about" class="nervous">
+  <div class="wrap">
+    <span class="eyebrow">Nervous about the dentist?</span>
+    <h2>You are not alone - and we can help</h2>
+    <p>We are very aware of the fear some people feel when considering dental treatment. Our goal, as a team, is to combine modern techniques with careful and sympathetic treatment in a friendly atmosphere. Working together, we can build your confidence.</p>
+    <p>The focus is on prevention, keeping treatment to a minimum through good oral health. And when treatment is needed, modern techniques and materials often mean simpler, less invasive procedures than in the past.</p>
+  </div>
+</section>
+
+<section id="dentists">
+  <div class="wrap">
+    <span class="eyebrow">Our dentists</span>
+    <h2>An experienced, GDC-registered team</h2>
+    <div class="dentist-grid">
+      <div class="dentist"><img class="avatar" src="assets/site/jason-drewett-portrait.jpg" alt="Jason Drewett" loading="lazy"><h3>Jason Drewett</h3><p class="gdc">GDC No. 67532</p></div>
+      <div class="dentist"><img class="avatar" src="assets/site/sonila-khaneh-zaei-portrait.jpg" alt="Sonila Khaneh Zaei" loading="lazy"><h3>Sonila Khaneh Zaei</h3><p class="gdc">GDC No. 265545</p></div>
+      <div class="dentist"><img class="avatar" src="assets/site/hugo-drewett-portrait.jpg" alt="Hugo Drewett" loading="lazy"><h3>Hugo Drewett</h3><p class="gdc">GDC No. 265201</p></div>
+      <div class="dentist"><img class="avatar" src="assets/site/grug-kenny-portrait.jpg" alt="Grug Kenny" loading="lazy"><h3>Grug Kenny</h3><p class="gdc">GDC No. 278285</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="patients">
+  <div class="wrap">
+    <span class="eyebrow">Happy patients</span>
+    <h2>What people tell us</h2>
+    <div class="quote-grid">
+      <blockquote><p>"Brilliant 5* experience at this Dentist."</p><cite>Patient review</cite></blockquote>
+      <blockquote><p>"Absolutely incredible dentists , had some bad experiences else where and then i stumbled across this place and so happy with the results !"</p><cite>Patient review</cite></blockquote>
+      <blockquote><p>"This is an invaluable practice where outstanding expertise coexists with outstanding personal service."</p><cite>Patient review</cite></blockquote>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <span class="eyebrow">Good to know</span>
+    <h2>Questions we hear a lot</h2>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="true">Do you see NHS patients?<span class="chev">&#9662;</span></button>
+        <div class="faq-a" aria-hidden="false"><p>We provide care for adult patients on a private basis. We are also able to see the children of our registered adult patients within the NHS.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="true">Can I spread the cost of my care?<span class="chev">&#9662;</span></button>
+        <div class="faq-a" aria-hidden="false"><p>Yes - we offer care within Denplan, the UK's largest dental plan provider, for an affordable monthly fee.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="true">I am nervous about treatment. What can you do?<span class="chev">&#9662;</span></button>
+        <div class="faq-a" aria-hidden="false"><p>Tell us when you call. Our team takes a careful, sympathetic approach in a friendly atmosphere, and we will work at a pace that builds your confidence.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="true">What about weekends and emergencies?<span class="chev">&#9662;</span></button>
+        <div class="faq-a" aria-hidden="false"><p>We are open Monday to Friday. Saturdays and Sundays are for emergencies only - call us on 01932 220449.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="visit">
+  <div class="wrap">
+    <span class="eyebrow">Visit us</span>
+    <h2>In the heart of Walton-on-Thames</h2>
+    <div class="visit-grid">
+      <div class="card">
+        <h3>Find us</h3>
+        <p>Walton Park Dental Practice<br>2a Walton Park<br>Walton-on-Thames<br>Surrey KT12 3ET</p>
+        <table class="hours">
+          <tr><td>Monday to Thursday</td><td>8:00am - 5:30pm</td></tr>
+          <tr><td>Friday</td><td>8:00am - 5:00pm</td></tr>
+          <tr><td>Saturday and Sunday</td><td>Emergencies only</td></tr>
+        </table>
+        <a class="btn btn-ghost" href="https://www.google.com/maps/search/?api=1&query=Walton+Park+Dental+Practice+2a+Walton+Park+Walton-on-Thames+KT12+3ET" target="_blank" rel="noopener">Open in Google Maps</a>
+      </div>
+      <div class="card">
+        <figure class="practice-entrance">
+          <img src="assets/site/practice-front.jpg" width="1400" height="933" loading="lazy" alt="Walton Park Dental Practice sign beside the brick and white frontage, with the entrance behind it">
+          <figcaption>The sign and entrance at 2a Walton Park.</figcaption>
+        </figure>
+        <h3>Talk to us</h3>
+        <p>New patients, Denplan questions, or a treatment you would like to discuss - call or email any time.</p>
+        <a class="big-link" href="tel:+441932220449">01932 220449</a><br>
+        <a class="big-link" href="mailto:info@waltonparkdental.co.uk">info@waltonparkdental.co.uk</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Walton Park Dental Practice - 2a Walton Park, Walton-on-Thames, Surrey KT12 3ET</p>
+    <p>Private and Denplan care for adults - NHS places for children of registered adult patients.</p>
+    <div class="footer-social"><a href="https://www.facebook.com/waltonparkdental" target="_blank" rel="noopener" aria-label="Walton Park Dental on Facebook (opens in a new tab)"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M14 21v-8h3l.5-4H14V7c0-1.2.4-2 2-2h2V1.4A24 24 0 0 0 15 1c-3 0-5 1.8-5 5v3H7v4h3v8Z"/></svg><span>Facebook</span></a><a href="https://instagram.com/waltonparkdental/" target="_blank" rel="noopener" aria-label="Walton Park Dental on Instagram (opens in a new tab)"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg><span>Instagram</span></a></div>
+    <p>Design concept by <a href="https://nickcaplan.co.uk">Websites by Nick</a></p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var items=document.querySelectorAll(".faq-item");
+  for(var j=0;j<items.length;j++){
+    (function(item){
+      var q=item.querySelector(".faq-q"),a=item.querySelector(".faq-a");
+      q.setAttribute("aria-expanded","false");a.setAttribute("aria-hidden","true");a.style.maxHeight="0";
+      q.addEventListener("click",function(){
+        var open=item.classList.toggle("open");
+        q.setAttribute("aria-expanded",open?"true":"false");
+        a.setAttribute("aria-hidden",open?"false":"true");
+        if(open){
+          a.style.maxHeight=a.scrollHeight+"px";
+          a.addEventListener("transitionend",function h(){a.removeEventListener("transitionend",h);if(item.classList.contains("open")){a.style.maxHeight="none";}});
+        }else{
+          a.style.maxHeight=a.scrollHeight+"px";
+          void a.offsetHeight;
+          a.style.maxHeight="0";
+        }
+      });
+    })(items[j]);
+  }
+})();
+</script>
+
+</body>
+</html>

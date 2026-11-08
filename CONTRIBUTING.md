@@ -38,3 +38,7 @@ npm run test:e2e       # browser checks: npx playwright test
 - Never remove, skip, or weaken a check to make the suite green. When the DOM or design changes intentionally, update the expectations to assert the new intended state with the same rigour.
 - When a check fails, explain the cause and the planned fix before changing code.
 - Never merge a pull request without Nick's explicit approval.
+
+## Batch changes for merge throughput
+
+Keep only two or three PRs in flight at once. Sync or push a PR only when it is next to merge, merge it after green checks and review, then start the next. Never start checks across all open PRs together. Cancel redundant runs on superseded commits when safe, not useful checks on current heads. Add each prospect to `/prospects/` as its page is deployed and verified live; never publish a dead listing.
