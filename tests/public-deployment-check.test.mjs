@@ -7,3 +7,6 @@ test('deployment checker accepts Netlify301with preserved query and production c
 test('deployment checker rejects a redirect that drops the query',async()=>assert.rejects(checkPublicDeployment(base,{netlify:true,fetcher:fixture({netlify:true,breakQuery:true})}),/lost query/));
 test('deployment checker rejects HTML fallback disguised as an asset redirect',async()=>assert.rejects(checkPublicDeployment(base,{fetcher:fixture({redirectAsset:true})}),/wrong-type asset/));
 test('deployment checker rejects wrong canonical pages',async()=>assert.rejects(checkPublicDeployment(base,{fetcher:fixture({wrongPage:true})}),/Wrong public page/));
+
+test('checker rejects a broken Experience route without requiring a concept migration',async()=>{const f=fixture();await assert.rejects(checkPublicDeployment(base,{fetcher:input=>new URL(input).pathname==='/experience/'?new Response('missing',{status:404}):f(input)}),/Public route is not a direct200/)});
+test('checker rejects empty production origin',async()=>assert.rejects(checkPublicDeployment(base,{productionNetlify:'',fetcher:fixture()}),/non-empty/));
