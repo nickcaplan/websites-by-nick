@@ -114,7 +114,9 @@
   footer p{font-size:13.5px;color:var(--muted);margin-bottom:4px}
 
   @media (max-width:920px){
-    nav{display:none}
+    .header-in{flex-wrap:wrap;row-gap:4px}
+    nav{order:3;width:100%;margin-left:0;overflow-x:auto;gap:18px;padding:0 3px}
+    nav a{flex:none;min-height:44px;display:inline-flex;align-items:center}
     .header-call{margin-left:auto}
     .hero-grid{grid-template-columns:1fr;gap:28px}
     .grid-3,.quote-grid{grid-template-columns:repeat(2,1fr)}
@@ -124,7 +126,6 @@
   }
   @media (max-width:640px){
     section{padding:24px 0}
-    nav{display:none}
     .header-call{margin-left:auto;padding:9px 12px;font-size:12.5px}
     .brand{font-size:14.5px;white-space:nowrap;gap:8px}
     .brand{flex:1;min-width:0}
