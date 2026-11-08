@@ -1,11 +1,11 @@
-// Public-route equivalent of the approved design contract.
 import {test,expect} from '@playwright/test';
-for(const width of [390,1280]) test(`caption reserves final responsive height while typing at ${width}`,async({page})=>{
- await page.setViewportSize({width,height:900});await page.goto('/');await page.evaluate(()=>document.fonts.ready);await page.evaluate(()=>{
-  const cap=document.querySelector('.type-caption');window.captionHeights=[];
-  new MutationObserver(()=>{if(cap.classList.contains('typing'))window.captionHeights.push(cap.getBoundingClientRect().height)}).observe(cap,{subtree:true,childList:true,characterData:true,attributes:true});
- });await page.locator('.studio').scrollIntoViewIfNeeded();await page.locator('.type-caption.typed').waitFor();
- const sample=()=>page.locator('.type-caption').evaluate(e=>({h:e.getBoundingClientRect().height,reserve:e.querySelector('.tc-reserve').getBoundingClientRect().height}));const first=await sample();expect(first.h).toBeGreaterThan(30);expect(first.h).toBe(first.reserve);
- const heights=await page.evaluate(()=>window.captionHeights);expect(heights.length).toBeGreaterThan(20);for(const h of heights)expect(Math.abs(h-first.h)).toBeLessThan(1);
- await page.locator('.type-caption.typed').waitFor();expect(Math.abs((await sample()).h-first.h)).toBeLessThan(1);await expect(page.locator('.type-caption .sr-only')).toHaveCount(1);await expect(page.locator('.tc-reserve')).toHaveAttribute('aria-hidden','true');await expect(page.locator('.tc-text')).toHaveAttribute('aria-hidden','true');await expect(page.locator('.tc-text em')).toHaveText('Nick.');
+for(const width of [390,1280]) test(`caption is complete and static beneath the cartoon at ${width}`,async({page})=>{
+ await page.setViewportSize({width,height:900});await page.goto('/');await page.evaluate(()=>document.fonts.ready);
+ const caption=page.locator('.studio figcaption');const copy='Thoughtful websites for small businesses, designed and built by Nick.';
+ await expect(caption).toHaveText(copy);await page.locator('.studio').scrollIntoViewIfNeeded();
+ await page.evaluate(()=>{window.captionMutations=0;new MutationObserver(()=>window.captionMutations++).observe(document.querySelector('.tc-text'),{subtree:true,childList:true,characterData:true})});
+ await expect.poll(()=>page.locator('.studio svg').getAttribute('data-state'),{timeout:20000}).toBe('complete');
+ await expect(caption).toHaveText(copy);expect(await page.evaluate(()=>window.captionMutations)).toBe(0);
+ await expect(caption.locator('.tc-caret,.tc-reserve,.sr-only')).toHaveCount(0);await expect(caption.locator('.tc-text')).not.toHaveAttribute('aria-hidden','true');await expect(caption.locator('em')).toHaveText('Nick.');
+ const position=await caption.evaluate(e=>({top:e.getBoundingClientRect().top,bottom:e.closest('.studio').querySelector('svg').getBoundingClientRect().bottom}));expect(position.top).toBeGreaterThan(position.bottom);
 });
