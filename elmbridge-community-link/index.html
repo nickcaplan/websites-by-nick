@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Elmbridge Community Link (ECL) - Walton-on-Thames</title>
+<meta name="description" content="Weekly activity sessions for adults with learning disabilities and/or autism in Elmbridge. Concept design.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+  :root{
+    --bg:#f3faf6; --surface:#ffffff; --ink:#0b2a3a; --ink-soft:#33505f;
+    --blue:#006aa3; --green:#00b459; --green-ink:#00693a; --mint:#d9f3e4;
+    --line:#b9d6c6; --focus:#0b2a3a;
+    --sans:"Avenir Next",Avenir,"Segoe UI",Verdana,system-ui,sans-serif;
+  }
+  body.dark{
+    --bg:#0e2230; --surface:#153245; --ink:#eef6fa; --ink-soft:#c3d6e0;
+    --blue:#59c6f7; --green:#3fd488; --green-ink:#5fe0a0; --mint:#16402f;
+    --line:#2d5368; --focus:#ffffff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:18px;line-height:1.6}
+  a{color:var(--blue)}
+  :focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:4px}
+  nav :focus-visible{outline-color:#0b2a3a}
+  .contact :focus-visible{outline-color:#fff}
+  .skip{position:absolute;left:-999px;top:8px;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:8px;z-index:10}
+  .skip:focus{left:8px}
+  .wrap{max-width:1080px;margin:auto;padding:0 5%}
+  header{display:flex;justify-content:space-between;align-items:center;padding:16px 0}
+  .logo{display:block;height:64px;width:auto}
+  body.dark .logo-chip{background:#fff;border-radius:14px;padding:4px 10px}
+  .theme-toggle{border:2px solid var(--line);background:var(--surface);color:var(--ink);min-height:46px;padding:0 18px;border-radius:999px;font:700 16px var(--sans);cursor:pointer}
+  .theme-toggle::after{content:"Off";content:"Off" / "";margin-left:10px;padding:2px 10px;border-radius:999px;background:var(--mint);color:var(--green-ink);font-size:14px}
+  .theme-toggle[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+  .theme-toggle[aria-pressed="true"]::after{content:"On";content:"On" / "";background:var(--green);color:#0b2a3a}
+  nav ul{list-style:none;display:flex;gap:8px;flex-wrap:wrap;margin:0 0 6px;padding:8px;background:var(--green);border-radius:999px;justify-content:center}
+  nav a{display:inline-block;padding:10px 18px;border-radius:999px;color:#0b2a3a;font-weight:700;text-decoration:none;font-size:16px;min-height:44px}
+  nav a:hover{background:rgba(255,255,255,.55)}
+  .hero{padding:44px 0 26px}
+  .kicker{font-size:14px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--green-ink);margin:0 0 12px}
+  h1{font-size:clamp(38px,6.4vw,70px);line-height:1.08;margin:0 0 18px;max-width:15em;letter-spacing:-.01em}
+  h1 em{font-style:normal;color:var(--blue)}
+  .lede{font-size:21px;max-width:36em;margin:0 0 26px;color:var(--ink-soft)}
+  .actions{display:flex;gap:14px;flex-wrap:wrap}
+  .btn{display:inline-block;padding:14px 26px;border-radius:999px;font-weight:700;font-size:18px;text-decoration:none;border:3px solid var(--ink);color:var(--ink);min-height:52px}
+  .btn.primary{background:var(--green);border-color:var(--green);color:#0b2a3a}
+  .btn.primary:hover{filter:brightness(1.07)}
+  .btn.ghost:hover{background:var(--mint)}
+  section{padding:30px 0}
+  h2{font-size:clamp(28px,4vw,38px);line-height:1.2;margin:0 0 8px}
+  .sub{margin:0 0 22px;color:var(--ink-soft);max-width:38em}
+  .week{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+  .session{background:var(--surface);border:2px solid var(--line);border-radius:18px;padding:22px 20px;display:grid;grid-template-rows:subgrid;grid-row:span 4;row-gap:0;margin-bottom:16px}
+  .day{align-self:flex-start;background:var(--mint);color:var(--green-ink);font-weight:700;border-radius:999px;padding:4px 14px;font-size:15px;margin-bottom:12px}
+  .session h3{font-size:24px;margin:0 0 8px;line-height:1.2}
+  .session p{margin:0 0 14px;font-size:17px;color:var(--ink-soft)}
+  .session dl{margin:0;font-size:16px}
+  .session dt{font-weight:700;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--green-ink);margin-top:10px}
+  .session dd{margin:2px 0 0}
+  .note{font-size:16px;color:var(--ink-soft);margin:18px 0 0}
+  .about{display:grid;grid-template-columns:1.2fr .8fr;gap:28px;align-items:center}
+  .about p{margin:0 0 14px}
+  blockquote{margin:0;background:var(--mint);border-radius:22px;padding:30px 28px;font-size:26px;line-height:1.35;font-weight:700}
+  blockquote cite{display:block;margin-top:12px;font-size:15px;font-weight:400;font-style:normal;color:var(--ink-soft)}
+  .facts{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:6px}
+  .fact{background:var(--surface);border:2px solid var(--line);border-radius:18px;padding:18px 20px}
+  .fact b{display:block;font-size:34px;color:var(--blue);line-height:1.1}
+  .help{display:grid;grid-template-columns:1fr;gap:16px}
+  @media (min-width:981px){.help{grid-template-columns:1fr 1fr;align-items:start}}
+  .card{background:var(--surface);border:2px solid var(--line);border-radius:18px;padding:26px 24px;display:flex;flex-direction:column;align-items:flex-start}
+  .card h3{font-size:26px;margin:0 0 8px}
+  .card p{margin:0 0 14px;color:var(--ink-soft)}
+  .card ul{margin:0 0 16px;padding-left:20px;color:var(--ink-soft)}
+  .contact{background:var(--ink);color:var(--bg);border-radius:24px;padding:36px 32px;display:grid;grid-template-columns:1.1fr .9fr;gap:26px}
+  body.dark .contact{background:var(--surface);color:var(--ink);border:2px solid var(--line)}
+  .contact h2{margin-bottom:10px}
+  .contact p{margin:0 0 10px}
+  .contact a{color:inherit;font-weight:700}
+  .contact .big{font-size:26px;font-weight:700;line-height:1.3}
+  .morelinks{list-style:none;margin:0 0 4px;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.morelinks li{display:flex}.morelinks a{display:flex;align-items:center;width:100%;background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:14px 18px;font-weight:700;text-decoration:none;min-height:52px}
+.morelinks a:hover{background:var(--mint)}
+.social{display:flex;flex-wrap:wrap;gap:4px 18px;align-items:center}.social .lbl{flex-basis:100%;font-weight:700}.social a{display:inline-block;padding:8px 0;min-height:44px}
+@media (max-width:700px){.morelinks{grid-template-columns:1fr}}
+footer{padding:26px 0 40px;color:var(--ink-soft);font-size:14px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
+  footer a{color:inherit}
+  
+  @supports not (grid-template-rows:subgrid){.session{display:flex;flex-direction:column}.session dl{margin-top:auto}}
+  @media (max-width:700px){
+    body{font-size:17px}
+    .logo{height:52px}
+    .week,.about,.facts,.help,.contact{grid-template-columns:1fr}
+    .session{display:flex;flex-direction:column;grid-row:auto}
+    .contact{padding:28px 22px}
+    .hero{padding:28px 0 18px}
+    .actions .btn{width:100%;text-align:center}
+    nav ul{border-radius:24px;display:grid;grid-template-columns:1fr 1fr;gap:4px}
+    nav a{display:block;text-align:center;padding:10px 8px}
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="wrap">
+  <header>
+    <span class="logo-chip"><img class="logo" src="logo.png" width="500" height="306" alt="ECL - Enhancing Lives"></span>
+    <button class="theme-toggle" id="themeToggle" aria-pressed="false">Dark mode</button>
+  </header>
+  <nav aria-label="Main">
+    <ul>
+      <li><a href="#sessions">Our sessions</a></li>
+      <li><a href="#about">About us</a></li>
+      <li><a href="#get-involved">Volunteer or donate</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <main id="main">
+    <section class="hero" aria-labelledby="heroTitle">
+      <p class="kicker">Walton-on-Thames &middot; Elmbridge</p>
+      <h1 id="heroTitle">Have fun, make friends, <em>be yourself.</em></h1>
+      <p class="lede">ECL runs weekly activity sessions for adults with learning disabilities and/or autism, at community venues in Walton and Molesey.</p>
+      <div class="actions">
+        <a class="btn primary" href="#sessions">See when we meet</a>
+        <a class="btn ghost" href="tel:+447981450320">Call Pier: 07981 450320</a>
+      </div>
+    </section>
+
+    <section id="sessions" aria-labelledby="sessionsTitle">
+      <h2 id="sessionsTitle">Our sessions</h2>
+      <p class="sub">To join a session, call or email our co-ordinator, Pier.</p>
+      <div class="week">
+        <article class="session">
+          <span class="day">Mondays</span>
+          <h3>Board Games</h3>
+          <p>A fun get-together for all ages and abilities, with bingo and quizzes. Drinks, snacks and prizes provided.</p>
+          <dl><dt>When</dt><dd>18:30-19:45</dd><dt>Where</dt><dd>Molesey Hub, West Molesey KT8 2LG</dd></dl>
+        </article>
+        <article class="session">
+          <span class="day">Tuesdays</span>
+          <h3>AllSports</h3>
+          <p>A lively, sociable evening for our younger and more physically able members: badminton, boccia, curling and more.</p>
+          <dl><dt>When</dt><dd>18:30-20:30</dd><dt>Where</dt><dd>Walton Youth Centre, Elm Grove, 1 Hersham Road, Walton KT12 1LH</dd></dl>
+        </article>
+        <article class="session">
+          <span class="day">Wednesdays</span>
+          <h3>Multi Activity Day</h3>
+          <p>Chair exercises, coffee and a catch-up, arts and crafts projects, a monthly Lunch Club and more.</p>
+          <dl><dt>When</dt><dd>9:30-14:30</dd><dt>Where</dt><dd>Burview Hall, Queen&rsquo;s Road, Walton KT12 5AB</dd></dl>
+        </article>
+        <article class="session">
+          <span class="day">Last Sunday of the month</span>
+          <h3>Music Workshop</h3>
+          <p>A monthly get-together for all ages and abilities. A great way for everyone to express themselves and have fun.</p>
+          <dl><dt>When</dt><dd>14:00-16:00</dd><dt>Where</dt><dd>Burview Hall, Queen&rsquo;s Road, Walton KT12 5AB</dd></dl>
+        </article>
+      </div>
+      <p class="note">Sessions pause during the Easter, summer and Christmas breaks.</p>
+    </section>
+
+    <section id="about" aria-labelledby="aboutTitle">
+      <div class="about">
+        <div>
+          <h2 id="aboutTitle">About ECL</h2>
+          <p>ECL began in 1994 as an advocacy service for local people with learning disabilities. Today we offer activities for young people and adults in Elmbridge with learning disabilities and/or autism.</p>
+          <p>We treat everyone as an individual. Our staff and volunteers work hard to make sure everyone gets the most out of every session, and our sessions also give parent carers some welcome respite.</p>
+        </div>
+        <blockquote>&ldquo;Since joining ECL, I&rsquo;ve made friends and I feel more confident.&rdquo;</blockquote>
+      </div>
+      <div class="facts" role="list">
+        <div class="fact" role="listitem"><b>16 to 80</b>The age range of our members</div>
+        <div class="fact" role="listitem"><b>Since 1994</b>Supporting people in Elmbridge</div>
+        <div class="fact" role="listitem"><b>4 sessions</b>Three every week and one every month</div>
+      </div>
+    </section>
+
+    <section id="get-involved" aria-labelledby="involvedTitle">
+      <h2 id="involvedTitle">Volunteer or donate</h2>
+      <p class="sub">Volunteers come from all walks of life, from local sixth formers to IT workers to retired accountants.</p>
+      <div class="help">
+        <div class="card">
+          <h3>Volunteer with us</h3>
+          <p>Without our volunteers we couldn&rsquo;t continue. If you&rsquo;d like to help, or just want to find out more, call Pier.</p>
+          <a class="btn primary" href="tel:+447981450320">Call 07981 450320</a>
+        </div>
+        <div class="card">
+          <h3>Support our sessions</h3>
+          <p>Donations buy arts and crafts materials, plants and pots, cooking ingredients, musical instruments and sports equipment.</p>
+          <ul>
+            <li>Give once or monthly on our Local Giving page</li>
+            <li>Raise money for free while you shop, with Easy Fundraising</li>
+            <li>Set up a standing order by emailing Pier</li>
+          </ul>
+          <a class="btn primary" href="https://localgiving.org/charity/ecl" rel="noopener">Donate on Local Giving</a>
+        </div>
+      </div>
+      <p class="note"><a href="https://www.easyfundraising.org.uk/causes/elmbridge-community-link/" rel="noopener">Support ECL with Easy Fundraising</a></p>
+    </section>
+
+    <section id="more" aria-labelledby="moreTitle">
+      <h2 id="moreTitle">More from ECL</h2>
+      <p class="sub">The charity shares news and photos of its sessions on its own website.</p>
+      <ul class="morelinks">
+        <li><a href="https://www.eclwalton.org.uk/_files/ugd/afd491_18ea318bd2b84d71949b79dea1261e97.pdf" rel="noopener">Read the ECL newsletter (PDF)</a></li>
+        <li><a href="https://www.eclwalton.org.uk/contact" rel="noopener">Subscribe to the newsletter on ECL&rsquo;s website</a></li>
+        <li><a href="https://www.eclwalton.org.uk/gallery" rel="noopener">Life at ECL: photo gallery</a></li>
+        <li><a href="https://www.eclwalton.org.uk/joinus" rel="noopener">Hear what volunteering at ECL means: volunteer video</a></li>
+      </ul>
+      <p class="note">With thanks to the Charity of Robert Philips, Walsingham Care, RC Sherrif Trust and Elmbridge Borough Council, whose funding has supported extra arts and crafts activities for our members.</p>
+    </section>
+
+    <section id="contact" aria-labelledby="contactTitle">
+      <div class="contact">
+        <div>
+          <h2 id="contactTitle">Get in touch</h2>
+          <p>To join a session or become a volunteer, contact our co-ordinator, Pier.</p>
+          <p class="big"><a href="tel:+447981450320">07981 450320</a></p>
+          <p><a href="mailto:coordinator@eclwalton.org.uk">coordinator@eclwalton.org.uk</a></p>
+          <p class="social"><span class="lbl">Follow ECL</span> <a href="https://www.facebook.com/eclwalton" rel="noopener">Facebook</a> <a href="https://www.instagram.com/eclwalton/" rel="noopener">Instagram</a> <a href="https://in.linkedin.com/company/elmbridge-community-link" rel="noopener">LinkedIn</a></p>
+        </div>
+        <div>
+          <p><strong>Write to us</strong></p>
+          <p>2 The Quintet<br>Churchfield Road<br>Walton on Thames<br>Surrey KT12 2TZ</p>
+          <p><a href="https://www.google.com/maps/search/?api=1&amp;query=2+The+Quintet+Churchfield+Road+Walton+on+Thames+KT12+2TZ" rel="noopener">Open in Maps</a></p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>Elmbridge Community Link &middot; Registered charity 1035501 &middot; Company no. 02913280</span>
+    <span>Concept design, not the charity&rsquo;s live website. Logo and wording from <a href="https://www.eclwalton.org.uk/" rel="noopener">eclwalton.org.uk</a>. Design concept by <a href="https://websitesbynick.co.uk/">Websites by Nick</a></span>
+  </footer>
+</div>
+<script>
+  (() => {
+    const KEY = "ecl-theme";
+    const btn = document.getElementById("themeToggle");
+    let dark = null;
+    try { dark = localStorage.getItem(KEY); } catch {}
+    if (dark !== "dark" && dark !== "light") dark = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    dark = dark === "dark";
+    const apply = () => { document.body.classList.toggle("dark", dark); btn.setAttribute("aria-pressed", String(dark)); };
+    apply();
+    btn.addEventListener("click", () => { dark = !dark; apply(); try { localStorage.setItem(KEY, dark ? "dark" : "light"); } catch {} });
+  })();
+</script>
+</body>
+</html>

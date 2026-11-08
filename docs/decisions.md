@@ -1,5 +1,12 @@
 # Decisions
 
+## 8 November 2026: Prospects as independent design studies
+
+The prospects collection uses real desktop and phone screenshots of the published designs, rather than business photos that could be mistaken for completed client work. Each card opens the working concept and has a short explanation of its design choices. The collection remains noindex/nofollow, absent from the public navigation and sitemap, and explicitly labelled work in progress and uncommissioned. Contact links use the main site's `/contact/` route.
+
+Keep all twelve distinct designs accessible. The gallery order groups contrasting visual approaches, rather than tracking merge order. Screenshot pairs must come from the actual live designs and be refreshed when a material design change makes the preview misleading. Capture provenance is in `prospects/design-notes.json`. Images are local WebP files with explicit dimensions and lazy loading; no new runtime script is needed.
+
+
 Important decisions, newest first. This is not a changelog: small fixes and implementation details belong in the pull request. Add an entry only when a choice would otherwise be questioned or reversed later. Requirements are in [PROJECT-BRIEF.md](PROJECT-BRIEF.md).
 
 ## 1 November 2026: Contact page promises a reply within two working days
