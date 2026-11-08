@@ -241,3 +241,16 @@
 
 /* Long service names must reflow when text is enlarged, including Safari. */
 .card { min-width: 0; overflow-wrap: anywhere; }
+/* Four-item groups stay in balanced pairs instead of a wide single row. */
+@media (min-width: 601px) {
+  .cards:has(> :nth-child(4):last-child),
+  .steps.plain:has(> :nth-child(4):last-child) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 600px) {
+  .cards:has(> :nth-child(4):last-child),
+  .steps.plain:has(> :nth-child(4):last-child) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
