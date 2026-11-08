@@ -1,4 +1,9 @@
 User-agent: *
 Allow: /
 Disallow: /homepage-concepts/
+Allow: /homepage-concepts/motion.css$
+Allow: /homepage-concepts/pages.css$
+Allow: /homepage-concepts/restyled.css$
+Allow: /homepage-concepts/motion.js$
+Allow: /homepage-concepts/pages.js$
 Sitemap: https://websitesbynick.co.uk/sitemap.xml

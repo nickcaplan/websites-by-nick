@@ -1,10 +1,10 @@
 // Build the static Pages artifact without changing the source preview fixtures.
-import{cp,mkdir,readdir,rm,writeFile}from'node:fs/promises';import{resolve}from'node:path';
+import{cp,mkdir,readdir,rm,writeFile}from'node:fs/promises';import{resolve,dirname}from'node:path';
 const root=resolve(import.meta.dirname,'..'),output=resolve(process.argv[2]||resolve(root,'.site-public'));
-if(output===root||!output.startsWith(root+'/'))throw Error('Output must be a separate directory within the repository');
+if(output===root||dirname(output)!==root)throw Error('Output must be a separate top-level directory within the repository');
 await rm(output,{recursive:true,force:true});await mkdir(output,{recursive:true});
 for(const item of await readdir(root,{withFileTypes:true})){
- if(item.name.startsWith('.')||['node_modules','test-results','playwright-report','tests','scripts','docs','package-lock.json','package.json','README.md','CONTRIBUTING.md','netlify.toml','playwright.config.mjs','playwright.width-local.config.mjs'].includes(item.name))continue;
+ if(resolve(root,item.name)===output||item.name.startsWith('.')||['node_modules','test-results','playwright-report','tests','scripts','docs','package-lock.json','package.json','README.md','CONTRIBUTING.md','netlify.toml','playwright.config.mjs','playwright.width-local.config.mjs'].includes(item.name))continue;
  await cp(resolve(root,item.name),resolve(output,item.name),{recursive:true});
 }
 for(const path of['','about/','pricing/','charity/','contact/','privacy/']){
