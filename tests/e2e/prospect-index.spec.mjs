@@ -22,3 +22,9 @@ for (const width of [320,390,768,1440]) test(`showcase previews and contact ${wi
   for(const a of await page.locator('a[href="/contact/"]').all()){await expect(a).toBeVisible();}
   await page.locator('.showcase-contact a').click();await expect(page).toHaveURL(/\/contact\/$/);
 });
+
+test('enlarged text keeps content within a phone and arrows with their last word',async({page})=>{
+ await page.setViewportSize({width:320,height:1000});await page.goto('/prospects/');await page.evaluate(async()=>{await document.fonts.ready;const xs=[...document.querySelectorAll('body *')].map(x=>[x,parseFloat(getComputedStyle(x).fontSize)]);for(const[x,size]of xs)x.style.fontSize=size*2+'px';});
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth)).toBe(false);
+ for(const tail of await page.locator('.cta-tail').all()){expect(await tail.evaluate(el=>getComputedStyle(el).whiteSpace)).toBe('nowrap');}
+});
