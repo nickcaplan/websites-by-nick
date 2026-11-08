@@ -1,17 +1,18 @@
 import { test, expect } from '@playwright/test';
 function checkPose(p) {
   const [x, y, ex, ey, hx, hy] = p.n;
-  expect(x - p.dx).toBeCloseTo(366, 0);
+  expect(x - p.dx).toBeCloseTo(354, 0);
   expect(y).toBe(260);
-  expect(Math.hypot(ex-x, ey-y)).toBeCloseTo(120, 0);
-  expect(Math.hypot(hx-ex, hy-ey)).toBeCloseTo(120, 0);
-  expect(p.seam).toBeCloseTo(p.dx - 56, 0);
+  expect(Math.hypot(ex-x, ey-y)).toBeCloseTo(126, 0);
+  expect(Math.hypot(hx-ex, hy-ey)).toBeCloseTo(126, 0);
+  expect(p.sleeve[0]).toBeCloseTo(x, 0);
+  expect(p.sleeve[1]).toBeCloseTo(y, 0);
 }
 async function readPose(page) {
   return page.locator('.studio svg').evaluate(svg => ({
     n: svg.querySelector('.sd-arm').getAttribute('d').match(/-?[\d.]+/g).map(Number),
     dx: Number(svg.querySelector('.sd-body').getAttribute('transform').match(/-?[\d.]+/)[0]),
-    seam: Number(svg.querySelector('.sd-shoulder-seam').getAttribute('transform').match(/-?[\d.]+/)[0]),
+    sleeve: svg.querySelector('.sd-sleeve').getAttribute('transform').match(/-?[\d.]+/g).map(Number),
   }));
 }
 for (const width of [390, 1440]) for (const theme of ['dark', 'light']) for (const route of ['/', '/homepage-concepts/']) {
@@ -36,13 +37,13 @@ for (const reduced of [true, false]) test(`static shoulder fallback ${reduced ? 
   finally { await c.close(); }
 });
 
-test('shorter arm can reach every drawing point without pen clamping', async ({ page }) => {
+test('integrated shoulder can reach every drawing point without pen clamping', async ({ page }) => {
   await page.goto('/');
   const farthest = await page.locator('.studio svg').evaluate(svg => {
     let max = 0;
     const check = P => {
       const dx = Math.max(0, Math.min(110, ((P.x - 480) / 220) * 110));
-      max = Math.max(max, Math.hypot(P.x - 20 - (390 + dx), P.y + 20 - 260));
+      max = Math.max(max, Math.hypot(P.x - 20 - (378 + dx), P.y + 20 - 260));
     };
     for (const selector of ['.sd-swoosh', '.sd-subline', '.sd-btn', '.sd-card1', '.sd-card2', '.sd-card3']) {
       const path = svg.querySelector(selector), length = path.getTotalLength();
@@ -51,5 +52,5 @@ test('shorter arm can reach every drawing point without pen clamping', async ({ 
     for (let i = 0; i <= 1000; i++) check({ x: 480 + 250 * i / 1000, y: 140 + Math.sin(i / 1000 * 22) * 10 });
     return max;
   });
-  expect(farthest).toBeLessThan(239);
+  expect(farthest).toBeLessThan(251);
 });

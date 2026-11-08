@@ -368,12 +368,12 @@
       bodyG = q(".sd-body"),
       clip = q(".sd-clip");
     const BASE = 24; // the figure stands a step back from the board
-    const SH = { x: BASE + 366, y: 260 }; // his right shoulder, on the torso's edge
+    const SH = { x: BASE + 354, y: 260 }; // shoulder centre sits inside the torso silhouette
     const REST = { x: 540, y: 290 };
     // Two bones of fixed length, so the arm never stretches or shrinks as the
     // pen moves. The elbow always bends down, away from his body, and he leans
     // toward the board (dx) as the pen travels right.
-    const L = 120; // covers the far-right card corner without moving the shoulder
+    const L = 126; // fixed bones retain full board reach with the shoulder set into the torso
     const pose = (P) => {
       const dx = Math.max(0, Math.min(110, ((P.x - 480) / 220) * 110));
       const S = { x: SH.x + dx, y: SH.y };
@@ -391,7 +391,7 @@
         ey = S.y + uy * a + py * h;
       arm.setAttribute("d", `M${S.x.toFixed(1)} ${S.y}L${ex.toFixed(1)} ${ey.toFixed(1)}L${H.x.toFixed(1)} ${H.y.toFixed(1)}`);
       hand.setAttribute("transform", `translate(${H.x.toFixed(1)} ${H.y.toFixed(1)})`);
-      q(".sd-shoulder-seam").setAttribute("transform", `translate(${(BASE + dx - 56).toFixed(1)} 0)`);
+      q(".sd-sleeve").setAttribute("transform", `translate(${S.x.toFixed(1)} ${S.y}) rotate(${(Math.atan2(ey-S.y,ex-S.x)*180/Math.PI-90).toFixed(1)})`);
       bodyG.setAttribute("transform", `translate(${(BASE + dx).toFixed(1)} 0)`);
     };
     const strokeStep = (sel, dur, fillSel) => {
