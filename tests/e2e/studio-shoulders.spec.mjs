@@ -4,7 +4,8 @@ function checkPose(p) {
   expect(p.rest.d).toBe("M250 260C237 292 232 337 236 392");
   expect(p.rest.stroke).toBe("#91435b");
   expect(p.armColour).toBe(p.rest.stroke);
-  expect(p.sleeveFill).toBe("none");
+  expect(p.sleeveMarks).toBe(0);
+  expect(p.armCap).toBe("butt");
   expect(p.torsoColour).toBe("#6d2b3d");
   expect(p.armColour).not.toBe(p.torsoColour);
   expect(p.rest.capCount).toBe(0);
@@ -21,7 +22,8 @@ async function readPose(page) {
   return page.locator('.studio svg').evaluate(svg => ({
     rest: {d:svg.querySelector('.sd-rest-arm').getAttribute('d'),stroke:svg.querySelector('.sd-rest-arm').getAttribute('stroke'),capCount:svg.querySelectorAll('.sd-rest-sleeve').length,hand:['cx','cy'].map(a=>Number(svg.querySelector('.sd-rest-hand').getAttribute(a))),sameGroup:svg.querySelector('.sd-rest-arm').parentElement===svg.querySelector('.sd-body')&&svg.querySelector('.sd-rest-hand').parentElement===svg.querySelector('.sd-body')},
     armColour: svg.querySelector('.sd-arm').getAttribute('stroke'),
-    sleeveFill: svg.querySelector('.sd-sleeve path').getAttribute('fill'),
+    sleeveMarks: svg.querySelectorAll('.sd-sleeve path').length,
+    armCap: svg.querySelector('.sd-arm').getAttribute('stroke-linecap'),
     torsoColour: svg.querySelector('.sd-torso').getAttribute('fill'),
     n: svg.querySelector('.sd-arm').getAttribute('d').match(/-?[\d.]+/g).map(Number),
     dx: Number(svg.querySelector('.sd-body').getAttribute('transform').match(/-?[\d.]+/)[0]),
