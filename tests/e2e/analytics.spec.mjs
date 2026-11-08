@@ -330,7 +330,7 @@ for (const route of ['/', '/contact/']) {
   await page.locator('[data-cookie-choice="analytics"]').click();
   const dismiss=page.getByRole('button',{name:'Dismiss warning',exact:true});await dismiss.focus();await page.keyboard.press('Enter');
   await expect(page.locator('#cookie-consent-panel')).toBeHidden();
-  await expect(page.locator('nav[aria-label] a').first()).toBeFocused();
+  await expect(page.locator('header .wordmark')).toBeFocused();
  });
 }
 

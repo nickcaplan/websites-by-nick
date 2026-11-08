@@ -33,7 +33,7 @@ export const startStaticServer = (root) => {
         return;
       }
       const parts = pathname.split("/").filter(Boolean);
-      const publicDirs = ["homepage-concepts", "assets", "contact", "experience", "privacy", "pricing"];
+      const publicDirs = ["homepage-concepts", "assets", "contact", "experience", "privacy", "pricing", "about", "charity"];
       if (parts.some(part => part.startsWith(".")) ||
           (parts.length > 1 && !publicDirs.includes(parts[0]))) {
         res.writeHead(403).end();
