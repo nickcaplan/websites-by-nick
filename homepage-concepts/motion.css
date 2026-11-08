@@ -1,0 +1,1481 @@
+:root {
+  --paper: #f1eee5;
+  --ink: #203027;
+  --orange: #be492b;
+  --orange-text: #a83f24;
+  --lime: #d5df91;
+  --serif: Fraunces, Georgia, serif;
+  --sans: "DM Sans", Arial, sans-serif;
+}
+* {
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 30px;
+}
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 16px/1.55 var(--sans);
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+button {
+  font: inherit;
+  cursor: pointer;
+}
+a,
+button {
+  touch-action: manipulation;
+}
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid var(--orange);
+  outline-offset: 6px;
+}
+/* Dark mode mixes light cards with a dark page, so no single ring colour can
+   contrast both: use a cream ring with a dark halo behind it. */
+.dark a:focus-visible,
+.dark button:focus-visible {
+  outline: 3px solid #f2ecdf;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 5px #1b2923;
+}
+.skip {
+  position: absolute;
+  top: -115px;
+  left: 20px;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 12px;
+  z-index: 20;
+}
+.skip:focus {
+  top: 10px;
+}
+.nav {
+  max-width: 1600px;
+  margin: auto;
+  padding: 25px 4%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+}
+.wordmark {
+  font-size: 21px;
+  font-weight: 750;
+  letter-spacing: -0.7px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.wordmark span:first-child {
+  color: var(--orange);
+}
+.wordmark-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--orange);
+  margin-left: 6px;
+  animation: pulse 3.2s ease-in-out infinite;
+}
+.nav nav {
+  display: flex;
+  gap: 32px;
+  align-items: center;
+  font-size: 14px;
+}
+.nav nav a {
+  padding: 10px 0;
+}
+/* Underlines identify the actual page, never the contact position in the row. */
+.nav nav a[aria-current="page"] {
+  text-decoration: underline;
+  text-underline-offset: 6px;
+}
+@media (hover: hover) {
+  .nav nav a:hover {
+    text-decoration: underline;
+    text-underline-offset: 6px;
+  }
+}
+.entrance {
+  max-width: 1600px;
+  margin: auto;
+  padding: 80px 4% 0;
+}
+.eyebrow {
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0.13em;
+  margin: 0 0 20px;
+  text-transform: uppercase;
+}
+.eyebrow > span {
+  font-size: 24px;
+  color: var(--orange);
+  vertical-align: middle;
+  margin-right: 9px;
+}
+.hero-copy {
+  position: relative;
+  z-index: 2;
+}
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+h1 {
+  font-family: var(--serif);
+  font-size: clamp(70px, 10.5vw, 158px);
+  line-height: 0.96;
+  letter-spacing: -0.065em;
+  font-weight: 450;
+  margin-bottom: 30px;
+  max-width: 1100px;
+}
+#hero-title {
+  /* the serif's natural space is hairline-thin at display size */
+  word-spacing: 0.18em;
+}
+h1 .line {
+  display: block;
+}
+h1 .last {
+  position: relative;
+  margin-left: 0.15em;
+}
+em {
+  font-style: normal;
+}
+h1 em {
+  font-weight: 430;
+  color: var(--orange);
+}
+h1.will-type .hc {
+  opacity: 0;
+}
+h1.will-type .hc.on {
+  opacity: 1;
+}
+
+/* Red-pen browser window around the title: the pen sketches a wobbly
+   window (outer frame, toolbar divider, three dots, address pill) after
+   the title and swoosh finish. The header band is part of the window's
+   top edge, spaced clear of the frame lines, and the frame stands well
+   off the title so nothing crowds it. Every stroke is hidden until
+   drawn - base dashoffset alone cannot hide a stroke whose path is
+   longer than its dasharray, so visibility gates the undrawn state. */
+h1 {
+  position: relative;
+  width: fit-content;
+}
+.penframe {
+  position: absolute;
+  inset: -123px -40px -48px -40px;
+  width: calc(100% + 80px);
+  height: calc(100% + 171px);
+  overflow: visible;
+  fill: none;
+  stroke: var(--orange);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+.penhead {
+  position: absolute;
+  top: -79px;
+  left: -40px;
+  width: calc(100% + 80px);
+  height: 10px;
+  overflow: visible;
+  fill: none;
+  stroke: var(--orange);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+.penchrome,
+.penurl {
+  position: absolute;
+  top: -115px;
+  left: -24px;
+  width: 300px;
+  height: 30px;
+  overflow: visible;
+  fill: none;
+  stroke: var(--orange);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+/* the address bar sits in the middle of the window frame */
+.penurl {
+  left: calc(50% - 91px);
+  width: 182px;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+/* the retired eyebrow copy, now the sketched window's own nav row */
+.pf-nav {
+  position: absolute;
+  top: -50px;
+  left: 0;
+  display: flex;
+  gap: 26px;
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0.13em;
+  line-height: 1.4;
+  word-spacing: normal;
+  text-transform: uppercase;
+  color: var(--ink);
+  visibility: hidden;
+  animation: navin 0.45s 3.3s ease forwards;
+}
+.pf-nav > span:first-child { color: var(--orange-text); }
+h1.will-type + .pf-nav {
+  animation: none;
+}
+h1.will-type.typed.drawn + .pf-nav {
+  animation: navin 0.3s 1.35s ease forwards;
+}
+h1.sketch-settled + .pf-nav,
+.paused h1 + .pf-nav,
+.hidden-page h1 + .pf-nav {
+  visibility: visible !important;
+  animation: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+@keyframes navin {
+  from { visibility: visible; opacity: 0; transform: translateY(6px); }
+  to { visibility: visible; opacity: 1; transform: none; }
+}
+.pf-frame {
+  /* dash length must cover the rendered (transformed) path, not just the
+     user-space length - Chrome spaces dashes post-transform here; the
+     stretched frame renders around 3200px long at 1600px wide */
+  stroke-dasharray: 5000;
+  stroke-dashoffset: 5000;
+}
+.pf-head {
+  /* also stretched by preserveAspectRatio="none": ~1170px rendered at
+     1600px wide, growing with viewport */
+  stroke-dasharray: 2400;
+  stroke-dashoffset: 2400;
+}
+.pf-dot {
+  /* r=6 -> circumference 37.7; dash must cover it exactly */
+  stroke-dasharray: 38;
+  stroke-dashoffset: 38;
+}
+.pf-bar {
+  /* pill perimeter is about 460 user units */
+  stroke-dasharray: 461;
+  stroke-dashoffset: 461;
+}
+.pf-frame,
+.pf-head,
+.pf-dot,
+.pf-bar {
+  visibility: hidden;
+}
+.pf-url {
+  fill: var(--ink);
+  stroke: none;
+  font: 11.5px var(--sans);
+  letter-spacing: 0.04em;
+}
+h1.will-type .pf-url {
+  opacity: 0;
+}
+h1.will-type.url-ready .pf-url {
+  opacity: 1;
+}
+h1.will-type .pf-url .pfc {
+  opacity: 0;
+}
+h1.will-type .pf-url .pfc.on {
+  opacity: 1;
+}
+.pf-caret {
+  fill: var(--ink);
+  stroke: none;
+  opacity: 0;
+}
+.penurl.url-typing .pf-caret {
+  opacity: 1;
+  animation: urlcaret 1.6s steps(1) infinite;
+}
+@keyframes urlcaret {
+  0%, 55% { opacity: 1; }
+  56%, 100% { opacity: 0; }
+}
+h1.sketch-settled .pf-url,
+.paused h1 .pf-url,
+.hidden-page h1 .pf-url,
+h1.sketch-settled .pf-url .pfc,
+.paused h1 .pf-url .pfc,
+.hidden-page h1 .pf-url .pfc {
+  opacity: 1 !important;
+}
+.pf-dot:nth-of-type(1) { fill: #ff5f57; }
+.pf-dot:nth-of-type(2) { fill: #febc2e; }
+.pf-dot:nth-of-type(3) { fill: #28c840; }
+.pf-dot { fill-opacity: 0; }
+/* the surprise: between address rewrites the three window dots hop in turn,
+   a small wave (played from motion.js with the Web Animations API so the
+   draw-in animations keep their end state), then settle back. */
+.pf-dot {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+}
+@keyframes dotfill {
+  to { fill-opacity: 1; }
+}
+@keyframes pendraw {
+  from {
+    visibility: visible;
+  }
+  to {
+    visibility: visible;
+    stroke-dashoffset: 0;
+  }
+}
+.pf-frame {
+  animation: pendraw 1.0s 1.6s ease forwards;
+}
+.pf-head {
+  animation: pendraw 0.4s 2.65s ease forwards;
+}
+.pf-dot:nth-of-type(1) {
+  animation: pendraw 0.2s 3.05s ease forwards, dotfill 0.22s 3.25s ease forwards;
+}
+.pf-dot:nth-of-type(2) {
+  animation: pendraw 0.2s 3.2s ease forwards, dotfill 0.22s 3.4s ease forwards;
+}
+.pf-dot:nth-of-type(3) {
+  animation: pendraw 0.2s 3.35s ease forwards, dotfill 0.22s 3.55s ease forwards;
+}
+.pf-bar {
+  animation: pendraw 0.35s 3.5s ease forwards;
+}
+h1.will-type .pf-frame,
+h1.will-type .pf-head,
+h1.will-type .pf-dot,
+h1.will-type .pf-bar {
+  animation: none;
+}
+h1.will-type.typed.drawn .pf-frame {
+  animation: pendraw 0.600s ease forwards;
+}
+h1.will-type.typed.drawn .pf-head {
+  animation: pendraw 0.240s 0.630s ease forwards;
+}
+h1.will-type.typed.drawn .pf-dot:nth-of-type(1) {
+  animation: pendraw 0.108s 0.870s ease forwards, dotfill 0.132s 0.978s ease forwards;
+}
+h1.will-type.typed.drawn .pf-dot:nth-of-type(2) {
+  animation: pendraw 0.108s 0.942s ease forwards, dotfill 0.132s 1.050s ease forwards;
+}
+h1.will-type.typed.drawn .pf-dot:nth-of-type(3) {
+  animation: pendraw 0.108s 1.014s ease forwards, dotfill 0.132s 1.122s ease forwards;
+}
+h1.will-type.typed.drawn .pf-bar {
+  animation: pendraw 0.210s 1.092s ease forwards;
+}
+h1.sketch-settled .pf-dot,
+.paused h1 .pf-dot,
+.hidden-page h1 .pf-dot {
+  fill-opacity: 1 !important;
+}
+h1.sketch-settled .pf-frame,
+h1.sketch-settled .pf-head,
+h1.sketch-settled .pf-dot,
+h1.sketch-settled .pf-bar,
+.paused h1 .pf-frame,
+.paused h1 .pf-head,
+.paused h1 .pf-dot,
+.paused h1 .pf-bar,
+.hidden-page h1 .pf-frame,
+.hidden-page h1 .pf-head,
+.hidden-page h1 .pf-dot,
+.hidden-page h1 .pf-bar {
+  animation: none !important;
+  visibility: visible !important;
+  stroke-dashoffset: 0 !important;
+}
+@media (max-width: 760px) {
+  .penframe {
+    inset: -109px -20px -34px -20px;
+    width: calc(100% + 40px);
+    height: calc(100% + 143px);
+  }
+  .penhead {
+    top: -73px;
+    left: -20px;
+    width: calc(100% + 40px);
+    height: 8px;
+  }
+  .penchrome {
+    top: -101px;
+    left: -8px;
+    width: 224px;
+    height: 22px;
+  }
+  .penurl {
+    top: -103px;
+    left: calc(50% - 80px);
+    width: 160px;
+    height: 26px;
+  }
+}
+
+/* the mini page sketched into the hero whitespace (desktop only): a whole
+   tiny website drawn stroke by stroke once the big window settles */
+.minipage {
+  position: absolute;
+  height: auto;
+  overflow: visible;
+  fill: none;
+  stroke: var(--orange);
+  stroke-width: 2;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+.mp-frame { stroke-dasharray: 900; stroke-dashoffset: 900; }
+.mp-head { stroke-dasharray: 280; stroke-dashoffset: 280; }
+.mp-dot { stroke-dasharray: 32; stroke-dashoffset: 32; }
+.mp-line { stroke-dasharray: 260; stroke-dashoffset: 260; }
+.mp-img { stroke-dasharray: 430; stroke-dashoffset: 430; }
+.mp-btn { stroke-dasharray: 200; stroke-dashoffset: 200; }
+.mp-frame, .mp-head, .mp-dot, .mp-line, .mp-img, .mp-btn {
+  visibility: hidden;
+}
+.mp-dot:nth-of-type(1) { fill: #ff5f57; }
+.mp-dot:nth-of-type(2) { fill: #febc2e; }
+.mp-dot:nth-of-type(3) { fill: #28c840; }
+.mp-dot { fill-opacity: 0; }
+/* no-JS: the whole sequence plays on load, after the big window */
+.mp-frame { animation: pendraw 1s 5.6s ease forwards; }
+.mp-head { animation: pendraw 0.4s 6.7s ease forwards; }
+.mp-dot:nth-of-type(1) { animation: pendraw 0.15s 7.15s ease forwards, dotfill 0.3s 7.35s ease forwards; }
+.mp-dot:nth-of-type(2) { animation: pendraw 0.15s 7.35s ease forwards, dotfill 0.3s 7.55s ease forwards; }
+.mp-dot:nth-of-type(3) { animation: pendraw 0.15s 7.55s ease forwards, dotfill 0.3s 7.75s ease forwards; }
+.mp-img { animation: pendraw 0.5s 7.8s ease forwards; }
+.mp-l1 { animation: pendraw 0.25s 8.35s ease forwards; }
+.mp-l2 { animation: pendraw 0.25s 8.6s ease forwards; }
+.mp-l3 { animation: pendraw 0.25s 8.85s ease forwards; }
+.mp-l4 { animation: pendraw 0.25s 9.1s ease forwards; }
+.mp-l5 { animation: pendraw 0.25s 9.35s ease forwards; }
+.mp-btn { animation: pendraw 0.4s 9.6s ease forwards; }
+h1.will-type .mp-frame, h1.will-type .mp-head, h1.will-type .mp-dot,
+h1.will-type .mp-line, h1.will-type .mp-img, h1.will-type .mp-btn {
+  animation: none;
+}
+/* JS typing path: starts once the big window's address pill is done */
+h1.will-type.typed.drawn .mp-frame { animation: pendraw 1s 2.8s ease forwards; }
+h1.will-type.typed.drawn .mp-head { animation: pendraw 0.4s 3.7s ease forwards; }
+h1.will-type.typed.drawn .mp-dot:nth-of-type(1) { animation: pendraw 0.15s 4.05s ease forwards, dotfill 0.3s 4.25s ease forwards; }
+h1.will-type.typed.drawn .mp-dot:nth-of-type(2) { animation: pendraw 0.15s 4.2s ease forwards, dotfill 0.3s 4.4s ease forwards; }
+h1.will-type.typed.drawn .mp-dot:nth-of-type(3) { animation: pendraw 0.15s 4.35s ease forwards, dotfill 0.3s 4.55s ease forwards; }
+h1.will-type.typed.drawn .mp-img { animation: pendraw 0.5s 4.55s ease forwards; }
+h1.will-type.typed.drawn .mp-l1 { animation: pendraw 0.25s 5.0s ease forwards; }
+h1.will-type.typed.drawn .mp-l2 { animation: pendraw 0.25s 5.2s ease forwards; }
+h1.will-type.typed.drawn .mp-l3 { animation: pendraw 0.25s 5.4s ease forwards; }
+h1.will-type.typed.drawn .mp-l4 { animation: pendraw 0.25s 5.6s ease forwards; }
+h1.will-type.typed.drawn .mp-l5 { animation: pendraw 0.25s 5.8s ease forwards; }
+h1.will-type.typed.drawn .mp-btn { animation: pendraw 0.4s 6.0s ease forwards; }
+h1.sketch-settled .mp-dot, .paused h1 .mp-dot, .hidden-page h1 .mp-dot {
+  fill-opacity: 1 !important;
+}
+h1.sketch-settled .mp-frame, h1.sketch-settled .mp-head, h1.sketch-settled .mp-dot,
+h1.sketch-settled .mp-line, h1.sketch-settled .mp-img, h1.sketch-settled .mp-btn,
+.paused h1 .mp-frame, .paused h1 .mp-head, .paused h1 .mp-dot,
+.paused h1 .mp-line, .paused h1 .mp-img, .paused h1 .mp-btn,
+.hidden-page h1 .mp-frame, .hidden-page h1 .mp-head, .hidden-page h1 .mp-dot,
+.hidden-page h1 .mp-line, .hidden-page h1 .mp-img, .hidden-page h1 .mp-btn {
+  animation: none !important;
+  visibility: visible !important;
+  stroke-dashoffset: 0 !important;
+}
+/* the mini page lives inside a wider browser window on wide screens */
+.minipage { display: none; }
+@media (min-width: 1400px) {
+  /* the window widens to take in the mini page; its top edge drops a
+     touch so the widened frame never crosses the site nav text */
+  .penframe {
+    inset: -109px -318px -48px -40px;
+    width: calc(100% + 358px);
+    height: calc(100% + 157px);
+  }
+  .penchrome {
+    top: -101px;
+  }
+  .penurl {
+    top: -101px;
+    left: calc(50% + 48px);
+  }
+  .penhead {
+    top: -61px;
+    width: calc(100% + 358px);
+  }
+  .pf-nav {
+    top: -44px;
+  }
+  .minipage {
+    display: block;
+    top: 56px;
+    right: -278px;
+    width: 238px;
+  }
+}
+/* typed caption by the studio cartoon, echoing the hero typing */
+.tc-caret {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 2px;
+  vertical-align: -0.12em;
+  background: var(--orange);
+  animation: caret-blink 1.6s steps(2) infinite;
+}
+.paused .tc-caret,
+.hidden-page .tc-caret {
+  animation: none;
+}
+.hero-caret {
+  display: inline-block;
+  width: 0.055em;
+  height: 0.82em;
+  margin-left: 0.03em;
+  vertical-align: -0.06em;
+  background: var(--orange);
+  animation: caret-blink 1.6s steps(2) infinite;
+}
+@keyframes caret-blink {
+  50% {
+    opacity: 0;
+  }
+}
+.hero-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 38px 0 30px;
+}
+.hero-bottom p {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.6;
+}
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 38px;
+  padding: 16px 24px;
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 650;
+}
+.cta span {
+  font-size: 23px;
+  transition: transform 0.2s;
+}
+.cta {
+  transition: scale 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.35);
+}
+.cta:hover {
+  scale: 1.04;
+}
+.cta:hover span {
+  transform: translate(3px, -3px);
+}
+h2 {
+  font: 450 clamp(38px, 4.7vw, 70px)/1.07 var(--serif);
+  letter-spacing: -0.045em;
+}
+h2 em {
+  font-weight: 400;
+  color: var(--orange);
+}
+.work {
+  max-width: 1180px;
+  margin: auto;
+  padding: 85px 4% 60px;
+  border-top: 1px solid #20302730;
+}
+.section-intro {
+  display: grid;
+  grid-template-columns: 1.7fr 1fr;
+  align-items: end;
+  gap: 15px 80px;
+  margin-bottom: 70px;
+}
+.section-intro .eyebrow {
+  grid-column: 1/-1;
+  margin-bottom: 2px;
+}
+.section-intro h2 {
+  margin: 0;
+}
+.section-intro > p:last-child {
+  font-size: 16px;
+  max-width: 350px;
+}
+.project {
+  display: block;
+  background: var(--paper);
+  border: 1px solid #20302722;
+  border-radius: 12px;
+  padding: 40px 44px 34px;
+  box-shadow: 0 34px 70px #20302726;
+  margin-bottom: clamp(60px, 16vh, 160px);
+  will-change: transform;
+}
+.project:last-of-type {
+  margin-bottom: 40px;
+}
+/* The scroll deck dims the covered card towards the paper with an opaque
+   veil, never with the card's own opacity - a transparent card would let the
+   site behind it ghost through (two headers superimposed read as a bug). */
+.project {
+  position: relative;
+}
+.project::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 12px;
+  background: var(--paper);
+  opacity: var(--dim, 0);
+  pointer-events: none;
+}
+@media (min-width: 901px) {
+  body.scrub-stacked .project {
+    position: sticky;
+    top: 80px;
+  }
+  /* Paused: no stacking, so a card can never sit covered but still focusable. */
+  body.scrub-stacked.paused .project {
+    position: relative;
+    top: auto;
+  }
+}
+.project .project-image {
+  will-change: transform;
+}
+.project-image {
+  background: #e4e5db;
+  border: 1px solid #20302720;
+  padding: 8px;
+  overflow: hidden;
+  border-radius: 3px;
+}
+.project-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+  box-shadow: 0 8px 25px #20302715;
+  transition: transform 0.5s;
+}
+.cmp-stage {
+  position: relative;
+  aspect-ratio: 1280 / 713;
+  background: #f9f6ef;
+  box-shadow: 0 8px 25px #20302715;
+  transition: transform 0.5s;
+}
+.cmp-stage-foa {
+  background: #f6f1e7;
+}
+.project:hover .cmp-stage {
+  transform: translateY(-5px) rotate(-1deg);
+}
+.project-image .cmp {
+  position: absolute;
+  left: var(--l);
+  top: var(--t);
+  width: var(--w);
+  height: var(--h);
+  box-shadow: none;
+  transition: opacity 0.45s ease, translate 0.45s cubic-bezier(0.2, 0.7, 0.25, 1), scale 0.45s ease;
+}
+.cmp-stage.building .cmp {
+  opacity: 0;
+  translate: 0 18px;
+  scale: 0.985;
+}
+body.paused .cmp,
+body.hidden-page .cmp {
+  transition: none;
+}
+.cmp-stage.building .cmp.on {
+  opacity: 1;
+  translate: 0 0;
+  scale: 1;
+}
+.project-foa .project-image {
+  background: #e5ddc6;
+}
+.project-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 22px;
+}
+.project-title p {
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  margin-bottom: 5px;
+}
+.project-title h3 {
+  font: 450 30px var(--serif);
+  letter-spacing: -1px;
+  margin: 0;
+}
+.project-title > span {
+  font-size: 32px;
+}
+.project > p {
+  font-size: 14px;
+  color: #525d53;
+  margin: 12px 0 0;
+  max-width: 400px;
+}
+.about {
+  padding: 80px 4% 90px;
+  background: #e5e3d8;
+}
+.about > .eyebrow,
+.about-grid {
+  max-width: 1472px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.about-grid {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr 160px;
+  gap: 60px;
+  align-items: center;
+}
+.about-grid h2 {
+  font-size: clamp(35px, 3.5vw, 55px);
+  margin: 0;
+}
+.about-copy {
+  font-size: 15px;
+}
+.about-copy a {
+  text-decoration: underline;
+}
+.about-grid img {
+  border-radius: 50%;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+footer {
+  padding: 90px 4% 28px;
+  background: var(--ink);
+  color: var(--paper);
+}
+/* The orange focus ring is 2.8:1 on the ink footer; cream is 13:1. The
+   dark-mode two-tone rule still wins in dark mode. */
+footer a:focus-visible {
+  outline-color: #f2ecdf;
+}
+footer > h2 {
+  font-size: clamp(44px, 6.5vw, 95px);
+  margin-bottom: 25px;
+}
+footer h2 em {
+  color: #f29c76;
+}
+.footer-cta {
+  display: inline-flex;
+  gap: 70px;
+  border-bottom: 1px solid;
+  padding-bottom: 12px;
+  font-size: 24px;
+}
+.footer-cta span {
+  font-size: 32px;
+}
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  gap: 25px;
+  align-items: center;
+  border-top: 1px solid #ffffff30;
+  margin-top: 70px;
+  padding-top: 25px;
+  font-size: 11px;
+}
+.footer-bottom p {
+  margin: 0;
+}
+.js-reveal .reveal {
+  opacity: 0;
+  translate: 0 26px;
+  transition: opacity 0.8s ease, translate 0.8s cubic-bezier(0.2, 0.7, 0.25, 1);
+}
+.js-reveal .reveal.in {
+  opacity: 1;
+  translate: 0 0;
+}
+body.paused .reveal {
+  transition: none;
+}
+.paused .studio *,
+.hidden-page .studio * {
+  animation-play-state: paused !important;
+}
+.paused .wordmark-dot,
+.hidden-page .wordmark-dot {
+  animation-play-state: paused !important;
+}
+.paused .hero-caret,
+.hidden-page .hero-caret {
+  animation-play-state: paused !important;
+}
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+
+
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.4);
+  }
+}
+
+/* Studio scene: cartoon designer typing while a website takes shape above the laptop. */
+.studio {
+  max-width: 1472px;
+  margin: 56px auto 0;
+  text-align: center;
+}
+.studio {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(200px, 24vw, 400px);
+  align-items: center;
+  column-gap: clamp(32px, 5vw, 88px);
+}
+.studio .studio-eyebrow { grid-column: 1 / -1; }
+.studio svg {
+  height: auto;
+  flex: none;
+}
+.studio figcaption {
+  max-width: 400px;
+  text-align: left;
+  font: 26px/1.42 var(--serif);
+  color: #525d53;
+}
+@media (max-width: 960px) {
+  .studio {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 0;
+  }
+  .studio figcaption {
+    justify-self: center;
+    margin-top: 16px;
+    max-width: 92%;
+    text-align: center;
+    font-size: 18px;
+  }
+}
+@media (max-width: 900px) {
+  .project {
+    position: relative;
+    padding: 26px 22px 24px;
+    margin-bottom: 34px;
+  }
+  .section-intro {
+    margin-bottom: 48px;
+  }
+  .studio {
+    margin-top: 50px;
+  }
+}
+
+@media (min-width: 1600px) {
+  .about,
+  footer {
+    padding-left: max(4%, calc((100% - 1472px) / 2));
+    padding-right: max(4%, calc((100% - 1472px) / 2));
+  }
+}
+@media (max-width: 900px) {
+  .about-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+  }
+  .about-grid img {
+    width: 110px;
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .about-copy {
+    grid-column: 1/-1;
+  }
+  .section-intro {
+    gap: 20px;
+    grid-template-columns: 1.4fr 1fr;
+  }
+  .project-title h3 {
+    font-size: 25px;
+  }
+}
+@media (max-width: 600px) {
+  .nav {
+    padding: 15px 20px;
+    gap: 15px;
+    align-items: start;
+  }
+  .wordmark {
+    font-size: 18px;
+  }
+  .wordmark-dot {
+    display: none;
+  }
+  .nav nav {
+    font-size: 11px;
+    gap: 7px 17px;
+    display: grid;
+    grid-template-columns: repeat(2, max-content);
+    text-align: right;
+  }
+  .nav nav a {
+    padding: 1px 0;
+    min-height: 25px;
+  }
+  .entrance {
+    padding: 28px 20px 0;
+  }
+  .eyebrow {
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    margin-bottom: 18px;
+  }
+  .eyebrow > span {
+    font-size: 20px;
+  }
+  h1 {
+    font-size: clamp(60px, 17vw, 103px);
+    line-height: 1;
+    letter-spacing: -0.06em;
+    margin-bottom: 0;
+  }
+  h1 .line {
+    display: block;
+  }
+  h1 .last {
+    margin-left: 0;
+  }
+  .hero-bottom {
+    display: block;
+    margin: 29px 0 24px;
+  }
+  .hero-bottom p {
+    font-size: 14px;
+  }
+  .cta {
+    font-size: 12px;
+    padding: 11px 18px;
+    gap: 28px;
+    margin-top: 17px;
+  }
+  .cta span {
+    font-size: 20px;
+  }
+  .work {
+    padding: 50px 20px 60px;
+    grid-template-columns: 1fr;
+    gap: 35px;
+  }
+  .section-intro {
+    display: block;
+  }
+  .section-intro h2 {
+    font-size: 40px;
+    margin: 15px 0;
+  }
+  .section-intro > p:last-child {
+    font-size: 14px;
+  }
+  .project:nth-of-type(2) {
+    margin-top: 0;
+  }
+  .project-image {
+    padding: 20px;
+  }
+  .project-title h3 {
+    font-size: 28px;
+  }
+  .project > p {
+    font-size: 13px;
+  }
+  .about {
+    padding: 50px 20px;
+  }
+  .about-grid {
+    grid-template-columns: 1fr 75px;
+    gap: 20px;
+  }
+  .about-grid h2 {
+    font-size: 32px;
+  }
+  .about-copy {
+    font-size: 14px;
+  }
+  .about-grid img {
+    width: 75px;
+  }
+  footer {
+    padding: 55px 20px 25px;
+  }
+  footer > h2 {
+    font-size: 48px;
+  }
+  .footer-cta {
+    font-size: 21px;
+  }
+  .footer-bottom {
+    margin-top: 45px;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+  .footer-bottom p {
+    order: 3;
+    width: 100%;
+    font-size: 9px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    will-change: auto !important;
+  }
+  /* the sketched browser window shows fully drawn, statically */
+  .pf-nav {
+    visibility: visible !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .pf-dot { fill-opacity: 1 !important; }
+  .mp-frame, .mp-head, .mp-dot, .mp-line, .mp-img, .mp-btn {
+    visibility: visible !important;
+    stroke-dashoffset: 0 !important;
+  }
+  .mp-dot { fill-opacity: 1 !important; }
+  .pf-frame,
+  .pf-head,
+  .pf-dot,
+  .pf-bar {
+    visibility: visible !important;
+    stroke-dashoffset: 0 !important;
+  }
+}
+
+.theme-toggle {
+  background: transparent;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  min-height: 36px;
+  color: inherit;
+  font-size: 22px;
+  line-height: 1;
+  padding: 0;
+}
+.dark {
+  --paper: #1b2923;
+  --ink: #f2ecdf;
+  --orange: #ed926f;
+  --orange-text: #ed926f;
+}
+.dark .project-image {
+  background: #344038;
+  border-color: #ffffff25;
+}
+.dark .studio figcaption {
+  color: #b9c2b2;
+}
+.dark .project-foa .project-image {
+  background: #423f2d;
+}
+.dark .project > p {
+  color: #c0c6bb;
+}
+.dark .work {
+  border-color: #ffffff30;
+}
+.dark .about {
+  background: #29362e;
+}
+.dark footer {
+  background: #111d17;
+  color: #f2ecdf;
+}
+.dark .cta {
+  background: #ed926f;
+  color: #1b2923;
+}
+@media (max-width: 600px) {
+  .nav nav {
+    grid-template-columns: repeat(2, max-content) 28px;
+    gap: 5px 15px;
+  }
+  .nav nav a:nth-child(3) {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .nav nav a:nth-child(4) {
+    grid-column: 2;
+    grid-row: 2;
+  }
+  .theme-toggle {
+    grid-column: 3;
+    grid-row: 1/3;
+    align-self: center;
+    width: 28px;
+    height: 28px;
+    min-height: 28px;
+    font-size: 18px;
+  }
+}
+@media (max-width: 600px) {
+  .nav {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .nav nav {
+    width: 100%;
+    display: flex;
+    gap: 0;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+  }
+  .nav nav a {
+    min-height: 44px;
+    padding: 12px 0;
+  }
+  .nav nav a:nth-child(3),
+  .nav nav a:nth-child(4) {
+    grid-column: auto;
+    grid-row: auto;
+  }
+  .theme-toggle {
+    width: 36px;
+    height: 44px;
+    min-height: 44px;
+    border-radius: 20px;
+  }
+  .entrance {
+    /* keep the drawn window clear of the taller phone header */
+    padding-top: 104px;
+  }
+}
+
+/* Hero message sticker and the drawing studio (Nick's feedback on PR 64) */
+h1 .last {
+  margin-left: 0;
+}
+.cmp-stage-sam {
+  background: #0d0d0d;
+}
+.cmp-stage-foa {
+  background: #f6f1e7;
+}
+
+.studio .studio-eyebrow {
+  text-align: center;
+  margin-bottom: 8px;
+}
+.studio svg {
+  width: min(880px, 100%);
+  display: block;
+  margin: 0 auto;
+  overflow: visible;
+}
+/* side by side (961px up): the drawing shrinks to share the row with the
+   caption instead of holding 100% width and pushing the page sideways */
+@media (min-width: 961px) {
+  .studio svg {
+    min-width: 0;
+    max-width: 880px;
+  }
+}
+.studio .sd-title {
+  font-family: var(--serif);
+  font-weight: 450;
+  letter-spacing: -0.04em;
+  fill: #203027;
+}
+.studio .sd-title-em {
+  fill: #be492b;
+}
+.studio .sd-fill {
+  transition: opacity 0.5s ease;
+}
+.studio svg.studio-live .sd-fill {
+  opacity: 0;
+}
+.studio svg.studio-live .sd-fill.on {
+  opacity: 1;
+}
+body.paused .studio .sd-fill {
+  transition: none;
+}
+.studio svg.studio-live .sd-sparks {
+  opacity: 0;
+}
+.studio svg.studio-live.done .sd-sparks {
+  opacity: 1;
+}
+.studio .sd-sparks path {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.studio svg.studio-live.done .sd-sparks path {
+  animation: st-spark-in 0.7s ease-out both;
+}
+.studio svg.studio-live.done .sd-sparks path:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.studio svg.studio-live.done .sd-sparks path:nth-child(3) {
+  animation-delay: 0.3s;
+}
+@keyframes st-spark-in {
+  from {
+    transform: scale(0) rotate(-40deg);
+  }
+  to {
+    transform: scale(1) rotate(0);
+  }
+}
+.studio .sd-head {
+  transform-box: fill-box;
+  transform-origin: 50% 90%;
+  animation: sd-nod 3.4s ease-in-out infinite alternate;
+}
+@keyframes sd-nod {
+  from {
+    transform: rotate(-1.5deg);
+  }
+  to {
+    transform: rotate(2deg);
+  }
+}
+.dark .studio .sd-title {
+  fill: #203027;
+}
+.dark .studio .sd-title-em {
+  fill: #be492b;
+}
+.dark .studio .sd-legs {
+  stroke: #f2ecdf66;
+}
+.dark .studio .sd-floor {
+  fill: #f2ecdf33;
+}
+.dark .studio .studio-eyebrow {
+  color: #f2ecdf;
+}
+@media (max-width: 600px) {
+  .studio {
+    margin-top: 40px;
+  }
+}
+
+/* Compass card: native-scale fragments of the plan and saved-plans pages, so the app stays readable at card size. Phones show the two clearest bands. */
+.cmp-stage-compass {
+  aspect-ratio: 1280 / 560;
+  overflow: hidden;
+  /* Dark captures on every theme, so the stage matches the app's dark
+     background in the gaps between fragments. */
+  background: #121214;
+}
+
+
+@media (max-width: 600px) {
+  .cmp-stage-compass { aspect-ratio: 1280 / 720; }
+  .cmp-stage-compass .cmp { height: auto; }
+  /* Compass card on phones: two big readable bands; fine detail stays on larger screens */
+  .cmp-stage-compass .cp-phone-hide {
+    display: none !important;
+  }
+  .cmp-stage-compass .cp-p1 {
+    --l: 6% !important;
+    --t: 8% !important;
+    --w: 88% !important;
+    --h: 40.68% !important;
+  }
+  .cmp-stage-compass .cp-p2 {
+    --l: 6% !important;
+    --t: 54% !important;
+    --w: 88% !important;
+    --h: 40.59% !important;
+  }
+}
+
+/* Work cards: the screenshot is the hero of the card. No tinted mat around it
+   and a slimmer card margin, so there is no large frame. */
+.project {
+  padding: 22px 22px 26px;
+}
+.project .project-image,
+.project-foa .project-image,
+.dark .project-image,
+.dark .project-foa .project-image {
+  background: none;
+  padding: 0;
+  border-radius: 6px;
+}
+.project-title {
+  padding-inline: 4px;
+}
+.project > p {
+  padding-inline: 4px;
+}
+.project:hover .cmp-stage {
+  transform: scale(1.012);
+}
+@media (max-width: 900px) {
+  .project {
+    padding: 14px 14px 20px;
+  }
+  .project .project-image {
+    padding: 0;
+  }
+}
+
+/* Text-only zoom must reflow rather than create a second horizontal viewport.
+   Keep normal headline sizing and the drawn frame, but allow long words to
+   wrap when enlarged text can no longer fit a narrow screen. */
+h1 { min-width: 0; max-width: 100%; overflow-wrap: anywhere; }
+h2 { overflow-wrap: anywhere; }
+.nav { flex-wrap: wrap; }
+.nav nav { flex-wrap: wrap; }
+.nav nav a { flex-shrink: 0; }
+.pf-nav { max-width: 100%; flex-wrap: wrap; row-gap: 0; }
+@media (max-width: 1399px) {
+  .pf-nav { top: calc(-2.8em - 6px); }
+}
+.about-grid > *, .section-intro > *, .project-title > * { min-width: 0; }
+.about-grid > *, .project-title > *, footer a { overflow-wrap: anywhere; }
+.project-title { min-width: 0; flex-wrap: wrap; }
+.footer-cta { max-width: 100%; flex-wrap: wrap; }
+@media (max-width: 900px) {
+  .penframe, .penhead { left: -20px; width: calc(100% + 40px); }
+}
+@media (max-width: 600px) {
+  .nav nav { gap: 0 8px; }
+}
+
+/* A container cap keeps complete hero words legible under text enlargement.
+   Body text still enlarges normally; the display heading uses the space it has. */
+.hero-copy { container-type: inline-size; }
+#hero-title .line { font-size: min(1em, 23cqw) !important; }
+#hero-title .line em, #hero-title .hc { font-size: inherit !important; }
+@media (min-width: 1400px) {
+  /* Reserve the illustrated mini-page's space even with enlarged text. */
+  #hero-title { max-width: calc(100% - 318px); }
+  #hero-title .line { font-size: min(1em, 17cqw) !important; }
+}
+
+/* The formatted copy reserves responsive height while its overlay types. */
+.type-caption.typing, .type-caption.typed { display: grid; }
+.type-caption .tc-text, .type-caption .tc-reserve { grid-area: 1 / 1; }
+.tc-reserve { visibility: hidden; pointer-events: none; }
+
+/* Keyboard focus uses the readable unstacked cards without changing motion choice. */
+.project-focus .work .project { position: relative; top: auto; }
+
+/* A short desktop must show the whole project, including its title. */
+.project-unstacked .work .project { position: relative; top: auto; }
+
+/* Match the live site's sun/moon control, kept on the wordmark row. */
+.nav > .theme-toggle { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 44px; width: 44px; height: 44px; min-width: 44px; min-height: 44px; padding: 8px; border: 1px solid var(--theme-line, #20302740); border-radius: 999px; background: transparent; color: inherit; cursor: pointer; }
+.dark .nav > .theme-toggle { --theme-line: #f2ecdf55; }
+.theme-icon { font-size: 17px; line-height: 1; }
+.nav > nav { margin-left: auto; }
+@media (max-width: 600px) {
+ .nav { display: grid; grid-template-columns: minmax(0,1fr) 44px; align-items: center; gap: 6px 16px; }
+ .nav > .wordmark { grid-column: 1; grid-row: 1; }
+ .nav > .theme-toggle { grid-column: 2; grid-row: 1; }
+ .nav > nav { grid-column: 1 / -1; grid-row: 2; margin-left: 0; }
+}
+
+/* One next step in the hero; the contact invitation follows the work. */
+.work-contact { max-width: 1180px; margin: 0 auto; padding: 0 4% 60px; display: flex; justify-content: flex-end; }
+@media (max-width: 600px) { .work-contact { padding: 0 20px 50px; justify-content: flex-start; } }
+
+/* Keep the phone contact invitation close to the work it follows. */
+@media (max-width: 600px) {
+  .work { padding-bottom: 32px; }
+  .work .project:last-of-type { margin-bottom: 0; }
+  .work-contact { padding-bottom: 24px; }
+  .work-contact .cta { margin-top: 0; }
+  .work-contact + .about { padding-top: 32px; }
+}
+
+
+/* The closing invitation uses the same compact pill as the work CTA. */
+footer > .footer-cta.cta {
+  width: fit-content;
+  border: 0;
+  padding: 16px 24px;
+  gap: 38px;
+  font-size: 14px;
+  background: #f29c76;
+  color: #203027;
+  text-decoration: none;
+}
+footer > .footer-cta.cta span { font-size: 23px; }
+@media (max-width: 600px) {
+  footer > .footer-cta.cta { padding: 11px 18px; gap: 28px; font-size: 12px; margin-top: 0; }
+  footer > .footer-cta.cta span { font-size: 20px; }
+}
+.dark footer > .footer-cta.cta { background: #ed926f; color: #1b2923; }
