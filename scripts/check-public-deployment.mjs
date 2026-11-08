@@ -49,7 +49,7 @@ export async function checkPublicDeployment(base,{netlify=false,productionNetlif
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href){
  const base=process.argv[2];if(!base)throw Error('Pass the exact deployed origin');
- const productionNetlify=process.argv.find(a=>a.startsWith('--production-netlify='))?.split('=')[1];
+ const productionNetlify=process.argv.find(a=>a.startsWith('--production-netlify='))?.slice('--production-netlify='.length);
  console.log('HTTP deployment checks passed:',await checkPublicDeployment(base,{netlify:process.argv.includes('--netlify'),productionNetlify}));
  console.log('Still required in a browser: old-route query/hash arrival, consent interaction, production destination and no redirect loop.');
 }

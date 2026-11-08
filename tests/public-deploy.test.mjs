@@ -9,13 +9,13 @@ test('nested artifact output is rejected before creating a directory',()=>{
  const root=resolve(import.meta.dirname,'..'),dir=resolve(root,'public-artifact-test','nested');
  assert.throws(()=>execFileSync(process.execPath,['scripts/prepare-public-deploy.mjs',dir],{cwd:root,stdio:'pipe'}));assert.ok(!existsSync(dir));
 });
-test('crawlers may fetch all concept assets used by public pages but not retired HTML',()=>{
+test('crawlers may fetch all concept assets used by public pages and observe retired HTML redirects',()=>{
  const root=resolve(import.meta.dirname,'..'),robots=readFileSync(resolve(root,'robots.txt'),'utf8');
  const rules=[...robots.matchAll(/^(Allow|Disallow): (.+)$/gm)].map(([,kind,pattern])=>({kind,pattern}));
- const allowed=path=>{const matches=rules.filter(r=>r.pattern.endsWith('$')?path===r.pattern.slice(0,-1):path.startsWith(r.pattern)).sort((a,b)=>b.pattern.replace(/\$$/,'').length-a.pattern.replace(/\$$/,'').length);return !matches.length||matches[0].kind==='Allow'};
+ const allowed=path=>{const matches=rules.filter(r=>r.pattern.endsWith('$')?path===r.pattern.slice(0,-1):path.startsWith(r.pattern)).sort((a,b)=>b.pattern.replace(/\$$/,'').length-a.pattern.replace(/\$$/,'').length||(a.kind==='Allow'?-1:1));return !matches.length||matches[0].kind==='Allow'};
  for(const page of['','about/','pricing/','charity/','contact/','privacy/']){
   const html=readFileSync(resolve(root,page,'index.html'),'utf8');
   for(const [,asset]of html.matchAll(/(?:href|src)="(\/homepage-concepts\/[^"#?]+\.(?:css|js))"/g))assert.ok(allowed(asset),asset);
-  assert.ok(!allowed('/homepage-concepts/'+page));assert.ok(!allowed('/homepage-concepts/'+page+'index.html'));
+  assert.ok(allowed('/homepage-concepts/'+page));assert.ok(allowed('/homepage-concepts/'+page+'index.html'));assert.ok(!allowed('/homepage-concepts/unlisted/'));
  }
 });
