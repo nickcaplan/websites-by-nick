@@ -8,3 +8,5 @@ test('Cloudflare headers retain Formspree referrer compatibility and safe mutabl
 test('Cloudflare build rejects source, nested, unowned and symlink output',()=>{const p=output();mkdirSync(p);writeFileSync(resolve(p,'keep'),'keep');try{for(const x of['about',resolve(p,'nested'),p])assert.throws(()=>build(x));assert.equal(readFileSync(resolve(p,'keep'),'utf8'),'keep')}finally{rmSync(p,{recursive:true,force:true})}});
 
 test('Cloudflare build rejects a symlink destination',()=>{const p=output();symlinkSync(resolve(root,'about'),p);try{assert.throws(()=>build(p))}finally{rmSync(p,{force:true})}});
+
+test('Cloudflare prospect inventory copies only the approved index',()=>{const s=readFileSync(resolve(root,'scripts/prepare-cloudflare-deploy.mjs'),'utf8');assert.match(s,/cp\(resolve\(root,'prospects\/index.html'\)/);assert.ok(!s.includes("'kumar-co','prospects'"));});
