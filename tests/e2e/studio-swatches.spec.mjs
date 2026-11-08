@@ -1,0 +1,2 @@
+import{test,expect}from'@playwright/test';
+test('three small swatches fit the board and leave the signature clear',async({page})=>{await page.goto('/');await expect(page.locator('.sd-swatches path')).toHaveCount(3);const b=await page.locator('.sd-swatches').evaluate(g=>{const b=g.getBBox();return{x:b.x,y:b.y,w:b.width,h:b.height}});expect(b.x).toBeGreaterThan(640);expect(b.x+b.w).toBeLessThan(740);expect(b.y).toBeLessThan(260);expect(await page.locator('.sd-signature').count()).toBe(1)});

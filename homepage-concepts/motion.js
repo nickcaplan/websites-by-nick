@@ -429,6 +429,9 @@
       strokeStep(".sd-card1", 320, ".sd-card1-fill"),
       strokeStep(".sd-card2", 320, ".sd-card2-fill"),
       strokeStep(".sd-card3", 320, ".sd-card3-fill"),
+      strokeStep(".sd-swatch-green", 180),
+      strokeStep(".sd-swatch-orange", 180),
+      strokeStep(".sd-swatch-sage", 180),
       // Sign last: the pen follows the same paths that become visible.
       strokeStep(".sd-sign-n", 180),
       strokeStep(".sd-sign-i", 180),
