@@ -184,56 +184,7 @@
     }
   }
 
-  // the studio caption types itself out when it scrolls into view,
-  // echoing the hero headline typing; reduced motion and no-IO keep it static
-  const capText = document.querySelector(".type-caption .tc-text");
-  if (capText && "IntersectionObserver" in window) {
-    const capEl = capText.closest(".type-caption");
-    const finalHTML = capText.innerHTML;
-    const plain = capText.textContent;
-    const settleCap = () => {
-      capText.innerHTML = finalHTML;
-      capEl.classList.remove("typing");
-      capEl.classList.add("typed");
-    };
-    const io = new IntersectionObserver(
-      (entries) => {
-        if (!entries[0].isIntersecting) return;
-        io.disconnect();
-        if (reduced.matches || document.body.classList.contains("paused")) return;
-        // Keep a complete, stable caption available while the visual copy types.
-        const accessible = document.createElement("span");
-        accessible.className = "sr-only";
-        accessible.textContent = plain;
-        capEl.prepend(accessible);
-        const reserve = document.createElement("span");
-        reserve.className = "tc-reserve";
-        reserve.innerHTML = finalHTML;
-        reserve.setAttribute("aria-hidden", "true");
-        capEl.append(reserve);
-        capText.setAttribute("aria-hidden", "true");
-        capEl.classList.add("typing");
-        capText.textContent = "";
-        const caret = document.createElement("span");
-        caret.className = "tc-caret";
-        capText.append(caret);
-        let i = 0;
-        const tick = () => {
-          if (i >= plain.length || document.body.classList.contains("paused") || reduced.matches) {
-            caret.remove();
-            settleCap();
-            return;
-          }
-          caret.before(document.createTextNode(plain[i]));
-          i += 1;
-          setTimeout(tick, 45);
-        };
-        setTimeout(tick, 250);
-      },
-      { threshold: 0.5 }
-    );
-    io.observe(capEl);
-  }
+
 
   // One-time scroll reveals; content is fully visible without JavaScript.
   if ("IntersectionObserver" in window) {
@@ -368,14 +319,14 @@
       bodyG = q(".sd-body"),
       clip = q(".sd-clip");
     const BASE = 24; // the figure stands a step back from the board
-    const SH = { x: BASE + 366, y: 260 }; // shoulder centre sits inside the torso silhouette
+    const SH = { x: BASE + 356, y: 260 }; // shoulder centre sits inside the torso silhouette
     const REST = { x: 540, y: 290 };
     // Two bones of fixed length, so the arm never stretches or shrinks as the
     // pen moves. The elbow always bends down, away from his body, and he leans
     // toward the board (dx) as the pen travels right.
     const L = 126; // fixed bones retain full board reach with the shoulder set into the torso
     const pose = (P) => {
-      const dx = Math.max(0, Math.min(110, ((P.x - 480) / 220) * 110));
+      const dx = Math.max(0, Math.min(120, ((P.x - 480) / 220) * 120));
       const S = { x: SH.x + dx, y: SH.y };
       let H = { x: P.x - 20, y: P.y + 20 };
       let d = Math.hypot(H.x - S.x, H.y - S.y) || 1;
@@ -389,7 +340,12 @@
       const px = ux >= 0 ? -uy : uy, py = ux >= 0 ? ux : -ux;
       const ex = S.x + ux * a + px * h,
         ey = S.y + uy * a + py * h;
-      arm.setAttribute("d", `M${S.x.toFixed(1)} ${S.y}L${ex.toFixed(1)} ${ey.toFixed(1)}L${H.x.toFixed(1)} ${H.y.toFixed(1)}`);
+      // Round the elbow without changing the two fixed bones or the pen position.
+      const radius = 14;
+      const A = { x: ex + (S.x - ex) * radius / L, y: ey + (S.y - ey) * radius / L };
+      const B = { x: ex + (H.x - ex) * radius / L, y: ey + (H.y - ey) * radius / L };
+      arm.dataset.bones = [S.x, S.y, ex, ey, H.x, H.y].map(n => n.toFixed(1)).join(" ");
+      arm.setAttribute("d", `M${S.x.toFixed(1)} ${S.y}L${A.x.toFixed(1)} ${A.y.toFixed(1)}Q${ex.toFixed(1)} ${ey.toFixed(1)} ${B.x.toFixed(1)} ${B.y.toFixed(1)}L${H.x.toFixed(1)} ${H.y.toFixed(1)}`);
       hand.setAttribute("transform", `translate(${H.x.toFixed(1)} ${H.y.toFixed(1)})`);
       q(".sd-sleeve").setAttribute("transform", `translate(${S.x.toFixed(1)} ${S.y}) rotate(${(Math.atan2(ey-S.y,ex-S.x)*180/Math.PI-90).toFixed(1)})`);
       bodyG.setAttribute("transform", `translate(${(BASE + dx).toFixed(1)} 0)`);
@@ -416,6 +372,12 @@
       strokeStep(".sd-desktop-page", 750),
       strokeStep(".sd-phone", 450),
       strokeStep(".sd-mobile-page", 650),
+      strokeStep(".sd-colour-hero", 260),
+      strokeStep(".sd-colour-phone-hero", 150),
+      strokeStep(".sd-colour-card", 170),
+      strokeStep(".sd-colour-phone-card", 100),
+      strokeStep(".sd-colour-card2", 170),
+      strokeStep(".sd-colour-phone-card2", 100),
       // Two connected names, dot and flourish, written at a natural quick pace.
       strokeStep(".sd-sign-n", 320),
       strokeStep(".sd-sign-idot", 55),

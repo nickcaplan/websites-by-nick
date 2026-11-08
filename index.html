@@ -213,7 +213,7 @@
  .about,footer{padding-left:max(50px,calc((100% - 940px)/2));padding-right:max(50px,calc((100% - 940px)/2))}
  .about-grid{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr) 160px;gap:36px}
  .section-intro{gap:15px 40px}
- .studio{grid-template-columns:minmax(0,1fr) 260px;column-gap:40px}
+ .studio{grid-template-columns:minmax(0,1fr);row-gap:16px}
  footer>h2{font-size:70px;max-width:940px}
 }
 </style><style>
@@ -442,24 +442,25 @@
               <path class="sd-ink sd-desktop-page" d="M500 168L575 168M500 180L555 180M500 194L563 194M611 159L671 159L671 202L611 202ZM500 219L544 219L544 242L500 242ZM563 219L607 219L607 242L563 242ZM626 219L670 219L670 242L626 242Z" />
               <path class="sd-ink sd-phone" d="M707 168Q701 168 701 175L701 285Q701 292 708 292L747 292Q754 292 754 285L754 175Q754 168 747 168ZM719 174L736 174M721 286L734 286" />
               <path class="sd-ink sd-mobile-page" d="M709 186L718 186M737 186L746 186M709 193L746 193M709 202L742 202M709 209L733 209M709 217L739 217M709 225L745 225L745 248L709 248ZM709 257L724 257L724 274L709 274ZM731 257L746 257L746 274L731 274Z" />
+              <!-- Short colour passes after the pencil layout, repeated across both screens. -->
+              <path class="sd-ink sd-colour-hero" d="M617 166H665M617 177H665M617 188H665M617 197H665" stroke="#be492b" stroke-width="9" />
+              <path class="sd-ink sd-colour-phone-hero" d="M714 231H740M714 240H740" stroke="#be492b" stroke-width="8" />
+              <path class="sd-ink sd-colour-card" d="M505 225H539M505 235H539" stroke="#a9b19d" stroke-width="9" />
+              <path class="sd-ink sd-colour-phone-card" d="M713 261H720M713 269H720" stroke="#a9b19d" stroke-width="6" />
+              <path class="sd-ink sd-colour-card2" d="M568 225H602M568 235H602" stroke="#d9a441" stroke-width="9" />
+              <path class="sd-ink sd-colour-phone-card2" d="M735 261H742M735 269H742" stroke="#d9a441" stroke-width="6" />
               <g class="sd-signature" aria-label="Nick Caplan signature" fill="none" stroke="#203027" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-                <path class="sd-sign-n" d="M546 351C559 334 563 322 558 326C552 330 551 349 554 351C558 354 566 330 569 329C572 328 563 353 568 351C575 348 580 335 578 339C571 351 580 352 584 345C590 335 584 336 582 342C579 350 588 353 596 345C608 331 610 321 605 326C599 333 596 350 600 351C603 353 611 338 616 341C620 344 602 343 606 347C611 353 619 350 623 347" />
-                <path class="sd-sign-idot" d="M579 333L579.6 332.5" />
-                <path class="sd-sign-cap" d="M654 332C648 317 628 331 627 344C625 358 643 355 651 344C658 332 650 337 649 344C647 353 655 352 661 341C665 335 661 348 657 362C658 350 665 338 670 340C677 344 667 351 663 347C675 351 689 321 682 325C674 330 672 353 679 350C687 346 693 336 690 341C685 350 693 354 699 342C702 336 698 349 697 351C704 334 711 336 708 345C704 354 716 352 724 346" />
-                <path class="sd-sign-end" d="M578 361C620 354 680 354 722 357C731 358 716 363 707 364" />
+                <path class="sd-sign-n" d="M 535 350 L 543 329 Q 544 326 545 330 L 553 350 L 562 328 M 564 339 L 561 347 Q 559 354 569 348 M 581 341 C 573 336 568 346 572 350 Q 577 354 584 347 M 587 350 L 595 329 Q 599 322 597 331 L 589 348 L 601 340 L 593 346 Q 597 353 605 348" />
+                <path class="sd-sign-idot" d="M 567 334 L 567.5 333.5" />
+                <path class="sd-sign-cap" d="M643 332C638 323 620 330 620 345C620 358 636 355 643 346M656 341C649 337 643 345 647 350C651 354 657 345 656 341L654 348Q653 353 661 348M667 340L660 363M665 345C674 334 680 339 676 346Q672 352 666 348M679 349C691 334 695 322 690 327C682 335 678 354 688 349M704 341C697 337 691 345 695 350C699 354 705 345 704 341L702 348Q701 353 709 348M714 340L711 351Q723 332 726 341L723 348Q725 354 737 347" />
+                <path class="sd-sign-end" d="M578 361C620 354 683 354 735 357C743 358 730 362 718 363" />
               </g>
 
             </g>
-            <!-- sparkles when it is done -->
-            <g class="sd-sparks" fill="#be492b">
-              <path d="M424 70l5 12 12 5-12 5-5 12-5-12-12-5 12-5z" />
-              <path d="M792 150l4 10 10 4-10 4-4 10-4-10-10-4 10-4z" />
-              <path d="M788 400l3 8 8 3-8 3-3 8-3-8-8-3 8-3z" />
-            </g>
             <!-- Nick -->
             <g class="sd-nick">
-              <path class="sd-arm" d="M422 260L423.2 386.0L528 316" fill="none" stroke="#91435b" stroke-width="26" stroke-linecap="butt" stroke-linejoin="round" />
-              <g class="sd-body" transform="translate(56 0)">
+              <path class="sd-arm" data-bones="412.7 260 419.4 385.8 520 310" d="M412.7 260L418.6 371.8Q419.4 385.8 430.6 377.4L520 310" fill="none" stroke="#91435b" stroke-width="26" stroke-linecap="butt" stroke-linejoin="round" />
+              <g class="sd-body" transform="translate(56.7 0)">
                 <rect x="268" y="410" width="34" height="90" rx="12" fill="#2f3e57" />
                 <rect x="312" y="410" width="34" height="90" rx="12" fill="#2f3e57" />
                 <rect x="260" y="486" width="52" height="16" rx="8" fill="#203027" />
@@ -477,8 +478,8 @@
                 <!-- The resting sleeve starts inside the torso, not beside its edge. -->
                 <circle class="sd-rest-hand" cx="236" cy="400" r="13" fill="#e8b48c" />
               </g>
-              <g class="sd-sleeve" transform="translate(422 260) rotate(-0.6)"></g>
-              <g class="sd-hand" transform="translate(528 316)">
+              <g class="sd-sleeve" transform="translate(412.7 260) rotate(0)"></g>
+              <g class="sd-hand" transform="translate(520 310)">
                 <path class="sd-pen" d="M0 0l22-22" stroke="#203027" stroke-width="7" stroke-linecap="round" />
                 <circle class="sd-fist" r="13" fill="#e8b48c" />
               </g>

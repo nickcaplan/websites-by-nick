@@ -6,12 +6,13 @@ function checkPose(p) {
   expect(p.armColour).toBe(p.rest.stroke);
   expect(p.sleeveMarks).toBe(0);
   expect(p.armCap).toBe("butt");
+  expect(p.smoothElbow).toBe(true);
   expect(p.torsoColour).toBe("#6d2b3d");
   expect(p.armColour).not.toBe(p.torsoColour);
   expect(p.rest.capCount).toBe(0);
   expect(p.rest.hand).toEqual([236, 400]);
   expect(p.rest.sameGroup).toBe(true);
-  expect(x - p.dx).toBeCloseTo(366, 0);
+  expect(x - p.dx).toBeCloseTo(356, 0);
   expect(y).toBe(260);
   expect(Math.hypot(ex-x, ey-y)).toBeCloseTo(126, 0);
   expect(Math.hypot(hx-ex, hy-ey)).toBeCloseTo(126, 0);
@@ -25,7 +26,8 @@ async function readPose(page) {
     sleeveMarks: svg.querySelectorAll('.sd-sleeve path').length,
     armCap: svg.querySelector('.sd-arm').getAttribute('stroke-linecap'),
     torsoColour: svg.querySelector('.sd-torso').getAttribute('fill'),
-    n: svg.querySelector('.sd-arm').getAttribute('d').match(/-?[\d.]+/g).map(Number),
+    n: svg.querySelector('.sd-arm').dataset.bones.match(/-?[\d.]+/g).map(Number),
+    smoothElbow: svg.querySelector('.sd-arm').getAttribute('d').includes('Q'),
     dx: Number(svg.querySelector('.sd-body').getAttribute('transform').match(/-?[\d.]+/)[0]),
     sleeve: svg.querySelector('.sd-sleeve').getAttribute('transform').match(/-?[\d.]+/g).map(Number),
   }));
@@ -57,10 +59,10 @@ test('integrated shoulder can reach every drawing point without pen clamping', a
   const farthest = await page.locator('.studio svg').evaluate(svg => {
     let max = 0;
     const check = P => {
-      const dx = Math.max(0, Math.min(110, ((P.x - 480) / 220) * 110));
-      max = Math.max(max, Math.hypot(P.x - 20 - (390 + dx), P.y + 20 - 260));
+      const dx = Math.max(0, Math.min(120, ((P.x - 480) / 220) * 120));
+      max = Math.max(max, Math.hypot(P.x - 20 - (380 + dx), P.y + 20 - 260));
     };
-    for (const selector of ['.sd-laptop', '.sd-laptop-base', '.sd-desktop-header', '.sd-desktop-page', '.sd-phone', '.sd-mobile-page', ...Array.from(document.querySelectorAll('.sd-signature path'), p => '.' + p.getAttribute('class'))]) {
+    for (const selector of ['.sd-laptop', '.sd-laptop-base', '.sd-desktop-header', '.sd-desktop-page', '.sd-phone', '.sd-mobile-page', ...Array.from(svg.querySelectorAll('[class*=sd-colour-]'), p => '.' + p.getAttribute('class').split(' ')[1]), ...Array.from(document.querySelectorAll('.sd-signature path'), p => '.' + p.getAttribute('class'))]) {
       const path = svg.querySelector(selector), length = path.getTotalLength();
       for (let i = 0; i <= 1000; i++) check(path.getPointAtLength(length * i / 1000));
     }
