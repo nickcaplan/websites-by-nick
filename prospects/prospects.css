@@ -4,7 +4,7 @@
 .index-label{font:500 12px/1.5 var(--sans);color:var(--muted);letter-spacing:.07em;text-transform:uppercase}
 .index-main{flex:1;padding-top:96px;padding-bottom:96px}
 .index-main .eyebrow{color:var(--lime);margin-bottom:22px}
-.index-main h1{width:auto;font:500 clamp(42px,6.6vw,76px)/1.08 var(--serif);letter-spacing:-.045em;margin:0 0 28px;max-width:100%;overflow-wrap:normal}
+.index-main h1{width:auto;font:500 clamp(42px,6.6vw,76px)/1.08 var(--serif);letter-spacing:-.045em;margin:0 0 28px;max-width:100%;overflow-wrap:anywhere}
 .index-main h1 em{color:var(--lime);font-weight:inherit}
 .index-intro{max-width:580px;font:400 19px/1.65 var(--sans);color:var(--muted);margin:0 0 52px}
 .prospect-list{list-style:none;padding:0;margin:0;border-top:1px solid var(--line)}
