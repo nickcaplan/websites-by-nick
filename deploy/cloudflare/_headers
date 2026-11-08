@@ -8,6 +8,28 @@
   X-Robots-Tag: noindex, nofollow
 /prospects/*
   X-Robots-Tag: noindex, nofollow
+/bangham-and-scratchett/*
+  X-Robots-Tag: noindex, nofollow
+/kitchen-shop/*
+  X-Robots-Tag: noindex, nofollow
+/ozo-cafe/*
+  X-Robots-Tag: noindex, nofollow
+/stay-inspired/*
+  X-Robots-Tag: noindex, nofollow
+/talk-surrey/*
+  X-Robots-Tag: noindex, nofollow
+/the-boathouse/*
+  X-Robots-Tag: noindex, nofollow
+/walton-firs/*
+  X-Robots-Tag: noindex, nofollow
+/riverhouse-barn/*
+  X-Robots-Tag: noindex, nofollow
+/walton-park-dental/*
+  X-Robots-Tag: noindex, nofollow
+/wheatley-and-sons/*
+  X-Robots-Tag: noindex, nofollow
+/elmbridge-community-link/*
+  X-Robots-Tag: noindex, nofollow
 # Provider hostnames are staging surfaces, not another indexed copy of the site.
 https://:project.pages.dev/*
   X-Robots-Tag: noindex, nofollow

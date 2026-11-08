@@ -2,15 +2,19 @@
 
 No account, API token, live deployment, DNS, nameserver, registrar or email change is included in this PR. Existing GitHub Pages and Netlify workflows/configuration are untouched. CI green and Nick's explicit "Merge" remain release gates. Merging this preparation does not select Cloudflare as the live host.
 
+## Main-branch release, 8 November 2026
+
+Nick selected main-branch deployment on 8 November. This preparation is refreshed against the final twelve-prospect publication state. The Cloudflare production branch must be changed to `main` by the authorized account operator after this PR merges, and the deployment must match the reported merged main SHA. This repository change does not itself change the provider setting or DNS. GitHub Pages remains intact during cutover and rollback.
+
 ## Build and output
 
 - Framework: None.
 - Build command: `node scripts/prepare-cloudflare-deploy.mjs`.
 - Output directory: `.site-cloudflare`.
 - Use a currently supported Node runtime compatible with the repository; the build has no external dependencies.
-- The output is an explicit allowlist of current live public routes, shared assets Kumar's existing concept and the merged unlisted prospect index. It excludes tests, tooling, docs, configuration, experimental concept HTML and unapproved new prospect folders. When a new public route is merged, reconcile this inventory deliberately before cutover.
+- The output is an explicit allowlist of current live public routes, shared assets, all twelve approved prospect designs and the merged unlisted prospect index. It excludes tests, tooling, docs, configuration, experimental concept HTML and unapproved new prospect folders. When a new public route is merged, reconcile this inventory deliberately before cutover.
 - Local safety marker prevents deleting an unowned output directory. Do not upload the whole repository root.
-- The generated directory is not committed. Local output currently has 270 files and is about18MB; this is a preparation measurement, not a bandwidth estimate.
+- The generated directory is not committed. The inventory test verifies every published prospect link and its local image/style assets. Recount the final artifact when preparing a release; an old file count is not a release gate.
 
 ## Routing and headers
 

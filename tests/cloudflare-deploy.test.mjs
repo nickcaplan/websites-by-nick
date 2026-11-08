@@ -10,3 +10,12 @@ test('Cloudflare build rejects source, nested, unowned and symlink output',()=>{
 test('Cloudflare build rejects a symlink destination',()=>{const p=output();symlinkSync(resolve(root,'about'),p);try{assert.throws(()=>build(p))}finally{rmSync(p,{force:true})}});
 
 test('Cloudflare prospect inventory copies only the approved index',()=>{const s=readFileSync(resolve(root,'scripts/prepare-cloudflare-deploy.mjs'),'utf8');assert.ok(s.includes("['index.html','prospects.css']"));assert.ok(!s.includes("'kumar-co','prospects'"));});
+
+const prospectRoutes=['kumar-co','bangham-and-scratchett','kitchen-shop','ozo-cafe','stay-inspired','talk-surrey','the-boathouse','walton-firs','riverhouse-barn','walton-park-dental','wheatley-and-sons','elmbridge-community-link'];
+test('Cloudflare artifact contains all twelve published prospects and their local assets',()=>{
+ const p=output();try{build(p);const index=readFileSync(resolve(p,'prospects/index.html'),'utf8');const headers=readFileSync(resolve(p,'_headers'),'utf8');
+ for(const route of prospectRoutes){assert.ok(index.includes(`href="/${route}/"`),route+' index link');const content=readFileSync(resolve(p,route,'index.html'),'utf8');assert.match(content,/noindex\s*,\s*nofollow/);assert.ok(headers.includes(`/${route}/*\n  X-Robots-Tag: noindex, nofollow`));
+ for(const match of content.matchAll(/(?:src|href)=["']([^"']+)["']/g)){const value=match[1];if(/^(?:https?:|data:|mailto:|tel:|#|javascript:)/.test(value))continue;const clean=value.split(/[?#]/)[0];if(!clean)continue;const target=resolve(p,value.startsWith('/')?'.'+clean:route+'/'+clean);assert.ok(existsSync(target),`${route}: ${value}`);}
+ }
+ }finally{rmSync(p,{recursive:true,force:true})}
+});
