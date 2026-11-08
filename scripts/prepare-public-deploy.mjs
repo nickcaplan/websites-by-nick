@@ -1,8 +1,10 @@
 // Build the static Pages artifact without changing the source preview fixtures.
-import{cp,mkdir,readdir,rm,writeFile}from'node:fs/promises';import{resolve,dirname}from'node:path';
+import{cp,mkdir,readdir,rm,writeFile,lstat,readFile}from'node:fs/promises';import{resolve,dirname}from'node:path';
 const root=resolve(import.meta.dirname,'..'),output=resolve(process.argv[2]||resolve(root,'.site-public'));
 if(output===root||dirname(output)!==root)throw Error('Output must be a separate top-level directory within the repository');
-await rm(output,{recursive:true,force:true});await mkdir(output,{recursive:true});
+const marker='.wbn-generated-artifact',signature='websites-by-nick generated artifact v1';
+try{const info=await lstat(output);if(info.isSymbolicLink()||!info.isDirectory()||await readFile(resolve(output,marker),'utf8')!==signature)throw Error('Refusing to remove a directory not owned by this build')}catch(error){if(error.code!=='ENOENT')throw error;try{await lstat(output);throw Error('Refusing to remove an unmarked existing directory')}catch(check){if(check.code!=='ENOENT')throw check}}
+await rm(output,{recursive:true,force:true});await mkdir(output,{recursive:true});await writeFile(resolve(output,marker),signature);
 for(const item of await readdir(root,{withFileTypes:true})){
  if(resolve(root,item.name)===output||item.name.startsWith('.')||['node_modules','test-results','playwright-report','tests','scripts','docs','package-lock.json','package.json','README.md','CONTRIBUTING.md','netlify.toml','playwright.config.mjs','playwright.width-local.config.mjs'].includes(item.name))continue;
  await cp(resolve(root,item.name),resolve(output,item.name),{recursive:true});

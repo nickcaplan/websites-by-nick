@@ -4,16 +4,18 @@
 import {pathToFileURL} from 'node:url';
 const canonicalOrigin='https://websitesbynick.co.uk';
 const routes=['','about/','pricing/','charity/','contact/','privacy/'];
+const publicRoutes=[...routes,'experience/'];
 function check(value,message){if(!value)throw Error(message)}
 export async function checkPublicDeployment(base,{netlify=false,productionNetlify,fetcher=fetch}={}){
  const origin=new URL(base);check(origin.pathname==='/'&&!origin.search&&!origin.hash,'Pass a deployment origin, not a subpage');
- for(const path of routes){
+ for(const path of publicRoutes){
   const url=new URL(path,origin),page=await fetcher(url,{redirect:'manual'});
   check(page.status===200,'Public route is not a direct200: '+url);
   check((page.headers.get('content-type')||'').includes('text/html'),'Public route is not HTML: '+url);
   const html=await page.text();
   check(html.includes('rel="canonical" href="'+canonicalOrigin+'/'+path+'"'),'Wrong public page: '+url);
   check(html.includes('data-measurement-id="G-J3J3NS19ZS"'),'Consent script missing: '+url);
+  if(!routes.includes(path))continue;
   const oldUrl=new URL('homepage-concepts/'+path+'?promotion-check=1',origin);
   const old=await fetcher(oldUrl,{redirect:'manual'});
   if(netlify){
@@ -38,7 +40,8 @@ export async function checkPublicDeployment(base,{netlify=false,productionNetlif
   if(marker)check((await r.text()).includes(marker),'Wrong asset contents: '+url);
   else check((await r.arrayBuffer()).byteLength>100,'Empty/truncated asset: '+url);
  }
- if(productionNetlify){
+ if(productionNetlify!==undefined){
+  check(typeof productionNetlify==='string'&&productionNetlify.trim().length>0,'Pass a non-empty production Netlify origin');
   const host=new URL(productionNetlify);check(host.pathname==='/'&&!host.search&&!host.hash&&host.origin!==canonicalOrigin,'Pass the exact production Netlify origin');
   const r=await fetcher(new URL('about/?promotion-check=1',host),{redirect:'manual'});
   check(r.status===302,'Production Netlify catch-all is not302');
@@ -49,6 +52,7 @@ export async function checkPublicDeployment(base,{netlify=false,productionNetlif
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href){
  const base=process.argv[2];if(!base)throw Error('Pass the exact deployed origin');
+ check(!process.argv.includes('--production-netlify'),'Pass --production-netlify=EXACT_ORIGIN');
  const productionNetlify=process.argv.find(a=>a.startsWith('--production-netlify='))?.slice('--production-netlify='.length);
  console.log('HTTP deployment checks passed:',await checkPublicDeployment(base,{netlify:process.argv.includes('--netlify'),productionNetlify}));
  console.log('Still required in a browser: old-route query/hash arrival, consent interaction, production destination and no redirect loop.');
