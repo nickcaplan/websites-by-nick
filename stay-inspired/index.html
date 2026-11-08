@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Stay Inspired Music - Guitar Lessons in Walton-on-Thames with Ben Ash</title>
+<meta name="description" content="Design concept for Stay Inspired Music Ltd: personalised guitar lessons for all ages and abilities in Walton-on-Thames, Surrey, with professional guitarist and teacher Ben Ash.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<script>document.documentElement.classList.add('js')</script>
+<style>
+  @font-face{font-family:'Oswald';font-style:normal;font-weight:500 600;font-display:swap;src:url('fonts/oswald.woff2') format('woff2')}
+
+  :root{
+    --bg:#131017; --surface:#1c1721; --surface-tint:#251e2c;
+    --ink:#f3f0ee; --ink-soft:#cdc8c4; --muted:#9d9792;
+    --primary:#e3a83d; --primary-deep:#c98f26; --on-primary:#16121a;
+    --line:rgba(243,240,238,.14); --line-strong:rgba(243,240,238,.34);
+    --radius:14px; --radius-card:12px;
+    --font-head:'Oswald','Arial Narrow',sans-serif;
+    --font-body:'Segoe UI',system-ui,-apple-system,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  section[id]{scroll-margin-top:88px}
+  body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased}
+  a{color:var(--primary)}
+  .wrap{max-width:1060px;margin:0 auto;padding:0 20px}
+
+  header{position:sticky;top:0;z-index:20;background:rgba(19,16,23,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+  .header-in{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 20px}
+  .brand{display:flex;align-items:center;gap:11px;text-decoration:none;color:var(--ink)}
+  .brand .mark{width:38px;height:38px;border-radius:10px;background:var(--primary);color:var(--on-primary);display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:600;font-size:15px;letter-spacing:.5px}
+  .brand .name{font-family:var(--font-head);font-weight:600;font-size:19px;letter-spacing:.6px;text-transform:uppercase}
+  .brand .est{display:block;font-family:var(--font-body);font-weight:400;font-size:11.5px;color:var(--muted);letter-spacing:.8px;text-transform:uppercase}
+  nav{display:flex;gap:2px;align-items:center;flex-wrap:wrap}
+  nav a{text-decoration:none;color:var(--ink-soft);font-family:var(--font-head);font-size:14px;font-weight:500;letter-spacing:.6px;text-transform:uppercase;padding:8px 11px;border-radius:8px}
+  nav a:hover{background:var(--surface-tint);color:var(--ink)}
+  nav a:focus-visible{outline:2px solid var(--primary);outline-offset:3px;border-radius:4px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:12px 22px;font-family:var(--font-head);font-weight:600;font-size:15px;letter-spacing:.5px;text-decoration:none;border:1px solid transparent;cursor:pointer}
+  .btn-primary{background:var(--primary);color:var(--on-primary)}
+  .btn-primary:hover{background:var(--primary-deep);color:var(--on-primary)}
+  .btn-primary:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+  .btn-ghost{background:transparent;color:var(--primary);border-color:var(--line-strong)}
+  .btn-ghost:hover{background:var(--surface-tint)}
+  .btn-ghost:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+
+  .hero{padding:64px 0 56px;border-bottom:1px solid var(--line);background:radial-gradient(900px 480px at 82% -10%,rgba(227,168,61,.14),transparent 60%),var(--bg)}
+  .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:38px;align-items:center}
+  .eyebrow{font-family:var(--font-head);font-size:12.5px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--primary);margin-bottom:14px}
+  h1{font-family:var(--font-head);font-weight:600;font-size:clamp(40px,6.6vw,64px);line-height:1.04;letter-spacing:.2px;text-transform:uppercase;margin-bottom:18px}
+  h1 .accent{color:var(--primary)}
+  .hero p.lede{font-size:18px;color:var(--ink-soft);max-width:34rem;margin-bottom:28px}
+  .hero-cta{display:flex;gap:12px;flex-wrap:wrap}
+  .hero-cta .btn-primary{padding:14px 28px;font-size:16px}
+  .hero figure img{display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:cover;border-radius:var(--radius);border:3px solid var(--primary);box-shadow:0 18px 40px rgba(0,0,0,.55)}
+  .hero figcaption{color:var(--muted);font-size:13px;margin-top:8px}
+
+  .creds{border-bottom:1px solid var(--line);background:var(--surface)}
+  .creds-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:22px 0}
+  .cred{display:flex;align-items:center;gap:12px}
+  .cred .dot{flex:0 0 10px;width:10px;height:10px;border-radius:50%;background:var(--primary)}
+  .cred p{font-family:var(--font-head);font-weight:600;font-size:15px;letter-spacing:.6px;text-transform:uppercase;color:var(--ink);line-height:1.3}
+
+  section{padding:52px 0}
+  .section-head{max-width:42rem;margin-bottom:28px}
+  h2.section-title{font-family:var(--font-head);font-weight:600;font-size:clamp(26px,3.4vw,34px);letter-spacing:.6px;text-transform:uppercase;margin-bottom:10px}
+  .section-head p{color:var(--ink-soft)}
+
+  .feature{background:linear-gradient(180deg,var(--surface-tint),var(--surface));border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .feature-in{display:grid;grid-template-columns:1fr 1fr;gap:34px;align-items:center}
+  .feature h2{font-family:var(--font-head);font-weight:600;font-size:clamp(30px,4.4vw,44px);line-height:1.08;letter-spacing:.4px;text-transform:uppercase;margin-bottom:16px}
+  .feature h2 .accent{color:var(--primary)}
+  .feature p.big{font-size:17.5px;color:var(--ink-soft);max-width:32rem}
+  .feature-card{background:var(--bg);border:1px solid var(--line);border-left:4px solid var(--primary);border-radius:var(--radius);padding:24px 22px}
+  .feature-card h3{font-family:var(--font-head);font-weight:600;font-size:16px;letter-spacing:.6px;text-transform:uppercase;color:var(--primary);margin-bottom:8px}
+  .feature-card p{font-size:14.5px;color:var(--ink-soft);line-height:1.55}
+
+  .card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);padding:20px 18px;transition:transform .25s ease,border-color .25s ease}
+  .card:hover{transform:translateY(-3px);border-color:var(--line-strong)}
+  .card h3{font-family:var(--font-head);font-weight:600;font-size:16.5px;letter-spacing:.5px;text-transform:uppercase;color:var(--primary);margin-bottom:6px}
+  .card p{font-size:14px;color:var(--ink-soft);line-height:1.5}
+
+  .review{background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  blockquote.big{max-width:46rem;margin:0 auto;text-align:center;padding:8px 0}
+  blockquote.big p{font-size:clamp(19px,2.6vw,24px);color:var(--ink);font-style:italic;line-height:1.45;margin-bottom:14px}
+  blockquote.big p::before{content:"\201C";color:var(--primary);font-family:var(--font-head);font-size:1.6em;line-height:0;vertical-align:-.25em;margin-right:2px}
+  blockquote.big cite{font-style:normal;font-size:13.5px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted)}
+
+  .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start}
+  .about-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px}
+  .about-card h3{font-family:var(--font-head);font-weight:600;font-size:18px;letter-spacing:.5px;text-transform:uppercase;margin-bottom:12px}
+  .about-card h2.about-title{font-family:var(--font-head);font-weight:600;font-size:18px;letter-spacing:.5px;text-transform:uppercase;margin-bottom:12px}
+  .about-card p{font-size:14.5px;color:var(--ink-soft);margin-bottom:10px}
+  .fact-list{list-style:none;display:grid;gap:10px;margin-top:4px}
+  .fact-list li{display:flex;gap:10px;font-size:14.5px;color:var(--ink-soft)}
+  .fact-list .k{flex:0 0 92px;font-weight:600;color:var(--ink)}
+  .text-links{display:flex;flex-wrap:wrap;gap:8px 22px}
+  .text-links a{font-weight:600;font-size:15px}
+
+  .contact{background:var(--surface-tint);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .contact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+  .contact-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);padding:20px 18px}
+  .contact-card h3{font-family:var(--font-head);font-weight:600;font-size:16px;letter-spacing:.5px;text-transform:uppercase;color:var(--primary);margin-bottom:6px}
+  .contact-card p{font-size:14.5px;color:var(--ink-soft)}
+  .contact-card a{overflow-wrap:anywhere}
+
+  footer{background:#0e0b11;color:var(--muted);padding:28px 0;font-size:13.5px}
+  footer .wrap{display:flex;justify-content:space-between;gap:12px 24px;flex-wrap:wrap;align-items:center}
+  footer a{color:var(--ink-soft)}
+
+  html.js .reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease}
+  html.js .reveal.in{opacity:1;transform:none}
+
+  a:focus-visible{outline:3px solid var(--primary);outline-offset:3px;border-radius:4px}
+  @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}html.js .reveal{opacity:1;transform:none}}
+  @media(max-width:980px){.header-in{flex-wrap:wrap}nav{order:3;width:100%;justify-content:center}.brand{flex:1}section[id]{scroll-margin-top:140px}}
+  @media(max-width:820px){.hero-grid,.about-grid,.feature-in{grid-template-columns:1fr}.hero{padding:44px 0 38px}.hero figure{max-width:420px}.creds-grid{grid-template-columns:1fr;gap:10px;padding:18px 0}}
+  @media(max-width:700px){.header-in{padding:8px 20px}.brand .est{display:none}nav{justify-content:center;gap:0 4px}nav a{padding:8px 7px;font-size:13px}.header-in>.btn{font-size:13.5px;padding:9px 14px}.brand .name{font-size:17px}section[id]{scroll-margin-top:130px}.fact-list li{display:block}.fact-list .k{display:block}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap header-in">
+    <a class="brand" href="#" aria-label="Stay Inspired Music - back to top">
+      <span class="mark" aria-hidden="true">SI</span>
+      <span><span class="name">Stay Inspired Music</span><span class="est">Guitar lessons - Walton-on-Thames</span></span>
+    </a>
+    <nav aria-label="Sections">
+      <a href="#video-notes">Video notes</a>
+      <a href="#lessons">Lessons</a>
+      <a href="#about">About Ben</a>
+      <a href="#contact">Book a lesson</a>
+    </nav>
+    <a class="btn btn-primary" href="tel:+447901686043">Call Ben</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="eyebrow reveal">Guitar lessons - Walton-on-Thames, Surrey</p>
+        <h1 class="reveal">Learn guitar with <span class="accent">Ben Ash</span></h1>
+        <p class="lede reveal">Personalised guitar lessons for all ages and abilities with a professional guitarist and qualified teacher. Lessons shaped around the music you love, at a pace that suits you.</p>
+        <div class="hero-cta reveal">
+          <a class="btn btn-primary" href="mailto:BAGUITAR1980@gmail.com">Book a lesson</a>
+          <a class="btn btn-ghost" href="tel:+447901686043">Call 07901 686043</a>
+        </div>
+      </div>
+      <figure class="reveal"><img src="images/ben-ash.jpg" width="400" height="400" alt="Ben Ash holding his guitar"><figcaption>Ben Ash - guitarist and teacher</figcaption></figure>
+    </div>
+  </section>
+
+  <div class="creds">
+    <div class="wrap creds-grid">
+      <div class="cred reveal"><span class="dot" aria-hidden="true"></span><p>Dean Guitars artist</p></div>
+      <div class="cred reveal"><span class="dot" aria-hidden="true"></span><p>Mentor at WaterBear college</p></div>
+      <div class="cred reveal"><span class="dot" aria-hidden="true"></span><p>Performs with Phobetor and Strigoi</p></div>
+    </div>
+  </div>
+
+  <section id="video-notes" class="feature">
+    <div class="wrap feature-in">
+      <div class="reveal">
+        <p class="eyebrow">Between lessons</p>
+        <h2>Video notes that keep you <span class="accent">playing</span></h2>
+        <p class="big">Handy video notes after each lesson help you keep practising at home, so the progress you make in the lesson carries on between sessions.</p>
+      </div>
+      <div class="feature-card reveal">
+        <h3>How it helps</h3>
+        <p>Lessons shaped around the music you love are easier to practise when you can revisit what you covered. Ben's video notes give you something concrete to come back to at home, at your own pace.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="lessons">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <h2 class="section-title">Lessons that fit you</h2>
+        <p>One-to-one guitar lessons in Walton-on-Thames, tailored to each student's interests and skill level - from complete beginners to advanced players.</p>
+      </div>
+      <div class="card-grid">
+        <div class="card reveal"><h3>All ages</h3><p>Children and adults welcome, from first chords to advanced technique.</p></div>
+        <div class="card reveal"><h3>Your music</h3><p>Lessons adapt to your personal style, so you learn by playing the music you actually enjoy.</p></div>
+        <div class="card reveal"><h3>Flexible scheduling</h3><p>Lesson times that fit around school, work and family life.</p></div>
+        <div class="card reveal"><h3>Instruments available</h3><p>Quality instruments are available to use during lessons if you don't have your own yet.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="review" aria-label="Student feedback">
+    <div class="wrap">
+      <blockquote class="big reveal"><p>Basic player that had fooled around for years. 1st lesson with Ben and I already play better! Looking forward to accelerated development with Ben's help.</p><cite>Student review of Stay Inspired Music</cite></blockquote>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="wrap about-grid">
+      <div class="about-card reveal">
+        <h2 class="about-title">About Ben</h2>
+        <p>Ben Ash is a professional guitarist and teacher based in Walton-on-Thames. He holds an MA in music, is a Dean Guitars artist and mentors the next generation of musicians at WaterBear college.</p>
+        <p>As a performer he plays with Phobetor and Strigoi, and brings that real-world band experience into every lesson.</p>
+        <p class="text-links"><a href="https://www.linkedin.com/in/benashguitar">LinkedIn</a><a href="https://linktr.ee/benashguitar">Hear his music via his official links</a></p>
+      </div>
+      <div class="about-card reveal">
+        <h3>Good to know</h3>
+        <ul class="fact-list">
+          <li><span class="k">Where</span><span>Walton-on-Thames, Surrey</span></li>
+          <li><span class="k">Who for</span><span>All ages and abilities, beginners especially welcome</span></li>
+          <li><span class="k">How to book</span><span>Email or call to arrange your first lesson</span></li>
+        </ul>
+        <p style="margin-top:14px">Follow Ben for playing videos, band news and lesson updates:</p>
+        <p class="text-links" style="margin-top:6px"><a href="https://linktr.ee/benashguitar">Instagram, TikTok, Facebook and YouTube</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <h2 class="section-title">Book a lesson</h2>
+        <p>Get in touch to check availability and arrange your first lesson.</p>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-card reveal"><h3>Email</h3><p><a href="mailto:BAGUITAR1980@gmail.com">BAGUITAR1980@gmail.com</a></p></div>
+        <div class="contact-card reveal"><h3>Phone</h3><p><a href="tel:+447901686043">07901 686043</a></p></div>
+        <div class="contact-card reveal"><h3>Message</h3><p>DM Ben on <a href="https://linktr.ee/benashguitar">Instagram or TikTok</a></p></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Stay Inspired Music Ltd - Walton-on-Thames, Surrey</span>
+    <span>Design concept by <a href="https://websitesbynick.co.uk">Websites by Nick</a></span>
+  </div>
+</footer>
+<script>
+(function(){
+  if(!('IntersectionObserver' in window)){
+    document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in')});
+    return;
+  }
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){entry.target.classList.add('in');io.unobserve(entry.target)}
+    });
+  },{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el)});
+})();
+</script>
+</body>
+</html>
