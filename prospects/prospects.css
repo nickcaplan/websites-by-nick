@@ -1,0 +1,24 @@
+.prospect-index{min-height:100svh;display:flex;flex-direction:column}
+.index-header,.index-main,.index-footer{width:min(1100px,100%);margin-inline:auto;padding-inline:40px}
+.index-header{display:flex;align-items:center;justify-content:space-between;gap:20px;padding-block:32px;border-bottom:1px solid var(--line)}
+.index-label{font:500 12px/1.5 var(--sans);color:var(--muted);letter-spacing:.07em;text-transform:uppercase}
+.index-main{flex:1;padding-top:96px;padding-bottom:96px}
+.index-main .eyebrow{color:var(--lime);margin-bottom:22px}
+.index-main h1{width:auto;font:500 clamp(42px,6.6vw,76px)/1.08 var(--serif);letter-spacing:-.045em;margin:0 0 28px;max-width:100%;overflow-wrap:anywhere}
+.index-main h1 em{color:var(--lime);font-weight:inherit}
+.index-intro{max-width:580px;font:400 19px/1.65 var(--sans);color:var(--muted);margin:0 0 52px}
+.prospect-list{list-style:none;padding:0;margin:0;border-top:1px solid var(--line)}
+.prospect-list li{border-bottom:1px solid var(--line)}
+.prospect-list a{display:flex;justify-content:space-between;align-items:center;gap:28px;padding:32px 0;text-decoration:none;color:var(--ink)}
+.prospect-copy{display:grid;gap:8px;min-width:0}
+.prospect-copy strong{font:500 clamp(26px,3vw,34px)/1.2 var(--serif);letter-spacing:-.025em}
+.prospect-copy>span{font:400 15px/1.5 var(--sans);color:var(--muted)}
+.prospect-action{font:600 15px/1.5 var(--sans);color:var(--lime);white-space:nowrap}
+.prospect-action>span{display:inline-block;margin-left:12px}
+.prospect-list a:hover .prospect-copy strong{text-decoration:underline;text-underline-offset:6px}
+.prospect-list a:focus-visible{outline:3px solid var(--lime);outline-offset:6px}
+.index-note{font:400 14px/1.6 var(--sans);color:var(--muted);margin:24px 0 0}
+.index-footer{border-top:1px solid var(--line);padding-block:24px;color:var(--muted);background:transparent}
+.index-footer p{font:400 13px/1.5 var(--sans);margin:0}
+@media(max-width:600px){.index-header,.index-main,.index-footer{padding-inline:24px}.index-header{padding-block:24px}.index-label{display:none}.index-main{padding-top:64px;padding-bottom:80px}.index-main h1{font-size:clamp(35px,9.3vw,54px);letter-spacing:-.04em}.index-intro{font-size:17px;margin-bottom:40px}.prospect-list a{align-items:flex-start;flex-direction:column;gap:20px;padding-block:28px}}
+.index-main h1{word-spacing:.14em}

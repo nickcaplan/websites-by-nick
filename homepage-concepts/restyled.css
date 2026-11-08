@@ -1,0 +1,117 @@
+/* Shared preview subpages. Existing public routes are unchanged. */
+body { --surface: #fffdf6; --surface-strong: #e5e3d8; --line: #20302740; --muted: #526153; --accent-ink: #a83f24; --error-ink: #a52c20; }
+body.dark { --surface: #29362e; --surface-strong: #344038; --line: #f2ecdf55; --muted: #c0c6bb; --accent-ink: #ed926f; --error-ink: #ffb4a8; }
+.restyled-page .page-hero { max-width: 900px; margin-bottom: 48px; }
+.restyled-page h1 { width: auto; }
+.restyled-page .content { padding: 0; }
+.restyled-page .section-kicker { font: 650 13px/1.5 var(--sans); letter-spacing: .1em; text-transform: uppercase; }
+.restyled-page .principles { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 28px 40px; }
+.restyled-page .principle { border-top: 1px solid var(--line); padding-top: 20px; }
+.restyled-page .principle strong { display: block; font-size: 20px; }
+.restyled-page .principle p { margin: 10px 0 0; }
+.restyled-page .experience-prose { max-width: 760px; font-size: 18px; }
+.career-history { margin: 36px 0 60px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+.career-history summary { display: flex; justify-content: space-between; gap: 20px; align-items: center; padding: 24px; cursor: pointer; list-style: none; min-height: 60px; }
+.career-history summary::-webkit-details-marker { display: none; }
+.career-history summary:focus-visible { outline: 3px solid var(--accent-ink); outline-offset: 4px; }
+.career-label { display: grid; gap: 6px; }
+.career-label strong { font-size: 24px; }
+.career-note, .role-meta, .role-company { color: var(--muted); font-size: 14px; }
+.career-chev { font-size: 28px; }
+.career-history[open] .career-chev { transform: rotate(45deg); }
+.career-panel { padding: 0 24px 24px; }
+.role { display: grid; grid-template-columns: 200px minmax(0,1fr); gap: 28px; border-top: 1px solid var(--line); padding: 28px 0 0; margin-top: 24px; }
+.role-meta strong { display: block; font-size: 16px; color: var(--ink); margin-bottom: 8px; }
+.role-title { font: 450 30px/1.2 var(--serif); letter-spacing: -.03em; margin-bottom: 12px; }
+.role-highlights { padding-left: 20px; }
+.role-highlights li { margin-bottom: 16px; }
+.role-highlights strong { display: block; }
+.lower-grid { display: grid; grid-template-columns: minmax(0,1.4fr) minmax(0,1fr); gap: 60px; }
+.lower-grid .principles { grid-template-columns: 1fr; }
+.tag-cloud { display: flex; flex-wrap: wrap; gap: 10px; }
+.tag { padding: 6px 12px; border: 1px solid var(--line); border-radius: 20px; font-size: 14px; }
+.details-list { display: grid; gap: 24px; }
+.detail-label { color: var(--muted); font-size: 14px; }
+.detail p { margin: 8px 0 0; }
+.contact-form { max-width: 700px; --error-ink: #a52c20; }
+.dark .contact-form { --error-ink: #ffb4a8; }
+.contact-fields { display: grid; gap: 24px; }
+.contact-form [hidden] { display: none; }
+.form-field { display: grid; gap: 8px; }
+.form-field label { font-size: 15px; font-weight: 650; }
+.form-field input, .form-field textarea { width: 100%; min-width: 0; border: 1px solid var(--line); border-radius: 7px; color: var(--ink); background: var(--surface); font: inherit; padding: 14px 16px; }
+.form-field textarea { min-height: 180px; resize: vertical; }
+.form-field input::placeholder, .form-field textarea::placeholder { color: var(--muted); opacity: 1; }
+.form-field input:focus-visible, .form-field textarea:focus-visible { outline: 3px solid var(--accent-ink); outline-offset: 3px; }
+.form-field [aria-invalid="true"] { border: 2px solid var(--error-ink); }
+.form-error { color: var(--error-ink); font-size: 15px; margin: 0; }
+.form-error:empty, .form-status:empty { display: none; }
+.form-status { padding: 16px; margin: 24px 0; border: 1px solid var(--line); border-radius: 7px; background: var(--surface); overflow-wrap: anywhere; }
+.form-status[data-state="error"] { border-color: var(--error-ink); }
+.form-status:focus { outline: none; }
+.form-status:focus-visible { outline: 3px solid var(--accent-ink); outline-offset: 4px; }
+.button { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 12px 24px; font: 650 16px/1.4 var(--sans); color: var(--ink); background: var(--surface-strong); border: 1px solid var(--line); border-radius: 26px; }
+.contact-form .button { margin-top: 24px; }
+.contact-form .button-primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.contact-form .button:disabled { opacity: .65; cursor: wait; }
+.mail-icon { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.6; vertical-align: middle; margin-left: 10px; }
+.privacy-details { max-width: 800px; }
+.privacy-details p { line-height: 1.7; }
+.privacy-details a { text-decoration: underline; text-underline-offset: 3px; }
+.privacy-details h2 { margin-top: 50px; }
+.cookie-banner[hidden] { display: none; }
+.cookie-banner { position: fixed; z-index: 30; inset: auto 24px 24px auto; width: 420px; max-width: calc(100vw - 48px); max-height: 70vh; overflow: auto; padding: 18px; border: 1px solid var(--line); border-radius: 16px; color: var(--ink); background: var(--surface); box-shadow: 0 12px 40px #0003; }
+.cookie-banner h2 { font: 650 18px/1.3 var(--sans); margin: 0 0 8px; letter-spacing: 0; }
+.cookie-banner p { font-size: 14px; margin: 0 0 12px; overflow-wrap: anywhere; }
+.cookie-banner a { text-decoration: underline; }
+.cookie-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.cookie-actions .button { flex: 1 1 0; min-width: 0; padding: 10px 12px; font-size: 14px; min-height: 44px; }
+.cookie-save-warning { padding: 10px 0; border-bottom: 1px solid var(--line); }
+.restyled-page * { overflow-wrap: anywhere; }
+@media (hover: hover) { .button:hover { filter: brightness(.94); } }
+@media (max-width: 700px) {
+  .restyled-page .principles, .lower-grid { grid-template-columns: minmax(0,1fr); }
+  .lower-grid { gap: 40px; }
+  .role { grid-template-columns: minmax(0,1fr); gap: 16px; }
+  .career-history summary, .career-panel { padding: 20px; }
+}
+@media (max-width: 600px) {
+  .cookie-banner { inset: auto 0 0; width: auto; max-width: 100%; border-radius: 0; padding: 14px 20px; }
+  .restyled-page .page-hero { margin-bottom: 36px; }
+}
+/* Preserve visible spaces at display sizes with the serif's tight tracking. */
+.pg h1, footer h2 { word-spacing: .14em; }
+
+/* Charity offer: content and conditions preserved from the separate preview. */
+.charity-page .charity { max-width: 850px; }
+.charity-page .charity h2 { margin-top: 0; }
+.charity-list { list-style: none; padding: 0; margin: 32px 0; }
+.charity-list li { border-top: 1px solid var(--line); padding: 22px 0 22px 30px; position: relative; font-size: 19px; line-height: 1.55; }
+.charity-list li::before { content: "✳"; color: var(--accent-ink); position: absolute; left: 0; }
+.charity-apply { max-width: 700px; font-size: 20px; line-height: 1.6; }
+.charity-apply a { text-decoration: underline; text-underline-offset: 4px; }
+
+/* Keep the header-to-content gap compact and consistent across restyled pages. */
+.restyled-page { padding-top: 24px; }
+@media (max-width: 600px) { .restyled-page { padding-top: 12px; } }
+
+/* Keep page links together instead of distributing them across the phone. */
+.restyled-nav nav { gap: 16px; }
+@media (max-width: 600px) { .restyled-nav nav { justify-content: flex-start; gap: 0 16px; } }
+
+.restyled-page .lower-grid h2.section-kicker { margin: 0; }
+
+/* One header on every preview page; only the current destination differs. */
+header.nav nav{gap:18px;justify-content:flex-start}
+header.nav nav a[aria-current]{text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:6px}
+header.nav nav a:focus-visible{outline:2px solid var(--orange-text);outline-offset:4px;border-radius:2px}
+@media(max-width:760px){header.nav{padding-top:12px;padding-bottom:10px}}
+@media(max-width:600px){header.nav nav{gap:0 18px}}
+
+footer a[aria-current="page"]{text-decoration:underline;text-underline-offset:6px}
+
+.contact-form .whatsapp-icon{color:#128c4a}
+body:not(.dark) .contact-form .whatsapp-icon{color:#25d366}
+
+/* Keep the centered desktop header identical across the preview pages. */
+@media(min-width:1101px){header.nav{max-width:1040px;padding-left:50px;padding-right:50px}}
