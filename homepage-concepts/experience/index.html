@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <meta name="description" content="The engineering and career history behind Websites by Nick." />
+    <title>Experience | Websites by Nick</title>
+    <link rel="preload" href="/assets/fonts/dmsans.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/assets/fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="/assets/css/fonts.css" />
+    <link rel="stylesheet" href="/homepage-concepts/motion.css" />
+    <link rel="stylesheet" href="/homepage-concepts/pages.css" />
+    <link rel="stylesheet" href="/homepage-concepts/restyled.css" />
+  </head>
+  <body class="dark">
+    <script>
+      // apply the saved/system theme before first paint, so a dark visitor
+      // never sees a flash of the light theme; pages.js/motion.js keep the toggle
+      (function () {
+        var theme = null;
+        try { theme = window.localStorage.getItem('nick-theme'); } catch (error) {}
+        var dark = theme !== 'light';
+        document.body.classList.toggle('dark', dark);
+      })();
+    </script>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="nav restyled-nav">
+      <a class="wordmark" href="/homepage-concepts/"
+        >Nick <span>Caplan</span></a
+      >
+      <nav aria-label="Main">
+        <a href="/homepage-concepts/">Home</a><a href="/homepage-concepts/about/">About</a
+        ><a href="/homepage-concepts/pricing/">Pricing</a><a href="/homepage-concepts/charity/">Charity</a><a href="/homepage-concepts/contact/">Contact</a
+        >
+      </nav>
+      <button type="button" class="theme-toggle" aria-label="Switch to light mode"><span class="theme-icon" aria-hidden="true">☀</span></button>
+    </header>
+    <main id="main" class="pg restyled-page">
+      <section class="page-hero">
+        <h1>Websites are <em>what I build.</em></h1>
+        <p class="lede">I build websites that work hard for the people behind them. From business websites and creative portfolios to event platforms and custom web applications, I combine design and engineering to turn an idea into a polished, fast, easy-to-use website.</p>
+        <p class="lede">You work directly with me from the first conversation to launch, with a clear scope, quick turnaround and close attention to the details your customers notice.</p>
+      </section>
+
+      <section class="content" aria-label="Experience">
+        <h2 class="section-kicker">What I build</h2>
+        <div class="principles">
+          <div class="principle"><strong>Business websites.</strong><p>Fast, mobile-first sites that win you enquiries, with search engine optimisation built in from the start.</p></div>
+          <div class="principle"><strong>Creative portfolios.</strong><p>Showcases for artists, performers and makers: catalogues, media and events that are easy to keep up to date.</p></div>
+          <div class="principle"><strong>Event and community platforms.</strong><p>What's-on pages, booking links and fundraising for schools, clubs and charities.</p></div>
+          <div class="principle"><strong>Custom web applications.</strong><p>Bespoke tools, dashboards and integrations when your business needs more than a brochure site.</p></div>
+        </div>
+
+        <h2 class="section-kicker" style="margin-top: 52px;">The engineering behind the websites</h2>
+        <p class="experience-prose">Over 15 years of engineering sits behind every build. The same discipline that runs high-traffic websites and banking platforms goes into your site: clear communication, dependable delivery and code that is straightforward to maintain.</p>
+        <details class="career-history" id="career-history">
+          <summary>
+            <span class="career-label"><strong>Career history</strong><span class="career-note">15+ years across banking, high-traffic media and enterprise software</span></span>
+            <span class="career-chev" aria-hidden="true">+</span>
+          </summary>
+          <div class="experience-list career-panel">
+          <article class="role">
+            <div class="role-meta"><strong>2023 - now</strong>Senior Engineering Leader</div>
+            <div>
+              <h3 class="role-title">NatWest Boxed · Senior Engineering Leader</h3>
+              <p class="role-company">Core banking platforms, customer onboarding and account services</p>
+              <p class="role-summary">Leading engineering teams that build the systems used to create, manage and change customer accounts and products - the same rigour I bring to your website.</p>
+            </div>
+          </article>
+          <article class="role">
+            <div class="role-meta"><strong>2020 - 2023</strong>Engineering Manager<br>&amp; Technical Lead</div>
+            <div>
+              <h3 class="role-title">Oddschecker</h3>
+              <p class="role-company">High-traffic US website · London</p>
+              <p class="role-summary">Provided technical and people leadership for the squad behind a website serving 100,000+ monthly visitors: 12 engineers and 25+ microservices.</p>
+              <ul class="role-highlights">
+                <li><strong>Website delivery</strong>Increased the site’s release frequency from 1 / month to 15+ production deployments / week.</li>
+                <li><strong>Web platform growth</strong>Scaled the website from 2 to 23 US state jurisdictions, engineering real-time data pipelines under strict regulatory compliance.</li>
+              </ul>
+            </div>
+          </article>
+          <article class="role">
+            <div class="role-meta"><strong>2019 - 2020</strong>Technical Lead</div>
+            <div>
+              <h3 class="role-title">Moogsoft</h3>
+              <p class="role-company">AIOps Enterprise web platform · London</p>
+              <p class="role-summary">Led backend architecture and engineering delivery for an enterprise AIOps web application, including a complete API and workflow redesign behind its Topologies interface.</p>
+            </div>
+          </article>
+          <article class="role">
+            <div class="role-meta"><strong>2010 - 2019</strong>Senior Engineer<br>Technical &amp; Product Architect</div>
+            <div>
+              <h3 class="role-title">Alfa</h3>
+              <p class="role-company">Enterprise web platform · London</p>
+              <p class="role-summary">Progressed through successive leadership roles, owning architecture, test frameworks and delivery of core modules for a global enterprise web platform.</p>
+            </div>
+          </article>
+          </div>
+        </details>
+
+        <div class="lower-grid">
+          <section>
+            <h2 class="section-kicker">The toolkit</h2>
+            <div class="tag-cloud">
+              <span class="tag">JavaScript</span><span class="tag">Python</span><span class="tag">SQL</span><span class="tag">Platform architecture</span><span class="tag">API design</span><span class="tag">Microservices</span><span class="tag">Performance</span><span class="tag">Accessibility</span><span class="tag">SEO</span><span class="tag">DevSecOps</span><span class="tag">CI/CD</span><span class="tag">High availability</span>
+            </div>
+          </section>
+          <section>
+            <h2 class="section-kicker">Beyond the job title</h2>
+            <p class="experience-prose">I care about the communities around the work too: I’ve led communications for 600 parents, volunteered in reading intervention, managed IT for a music school, and chaired the board of an Ofsted-rated Outstanding pre-school.</p>
+            <div class="details-list">
+              <div class="detail"><span class="detail-label">Education</span><p>MA Greek &amp; Latin, University of Oxford<br>1st Class BA Jt Hons Classics, University of Nottingham</p></div>
+              <div class="detail"><span class="detail-label">Base</span><p>London, United Kingdom</p></div>
+            </div>
+          </section>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <p class="eyebrow">YOUR WEBSITE DOESN'T HAVE TO BLEND IN.</p>
+      <h2>Let's make something you're <em>proud of.</em></h2>
+      <a class="footer-cta" href="/homepage-concepts/contact/">Say hello <span aria-hidden="true">↗</span></a>
+      <div class="footer-bottom">
+        <a class="wordmark" href="/homepage-concepts/">Nick Caplan</a>
+        <p>© Websites by Nick</p>
+        <a href="/homepage-concepts/privacy/">Privacy</a>
+      </div>
+    </footer>
+    <script src="/homepage-concepts/pages.js"></script>
+
+    <script src="/assets/js/analytics.js" defer data-measurement-id="G-J3J3NS19ZS" data-privacy-url="/homepage-concepts/privacy/"></script>
+  </body>
+</html>

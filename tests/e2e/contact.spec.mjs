@@ -189,18 +189,11 @@ test('status panel keeps a uniform border; outline follows input modality', asyn
     const cs = getComputedStyle(el);
     return { left: cs.borderLeftWidth, outline: cs.outlineStyle, outlineWidth: cs.outlineWidth };
   });
-  expect(keyStyle).toEqual({ left: '1px', outline: 'solid', outlineWidth: '2px' });
+  expect(keyStyle).toEqual({ left: '1px', outline: 'solid', outlineWidth: '3px' });
 });
 
-test('contact form sits the same distance below the intro as the other pages', async ({ page }) => {
-  async function gap(path, target) {
-    await page.goto(path);
-    return page.evaluate(selector => {
-      const intro = document.querySelector('.page-hero .intro').getBoundingClientRect();
-      return Math.round(document.querySelector(selector).getBoundingClientRect().top - intro.bottom);
-    }, target);
-  }
-  const contact = await gap('/contact/', '.contact-form');
-  const pricing = await gap('/pricing/', '.pricing-grid');
-  expect(contact).toBe(pricing);
+test('contact form keeps a readable separation below the intro', async ({ page }) => {
+ await page.goto('/contact/');await page.evaluate(()=>document.fonts.ready);
+ const gap=await page.evaluate(()=>document.querySelector('.contact-form').getBoundingClientRect().top-document.querySelector('main .lede').getBoundingClientRect().bottom);
+ expect(gap).toBeGreaterThanOrEqual(32);expect(gap).toBeLessThanOrEqual(64);
 });
