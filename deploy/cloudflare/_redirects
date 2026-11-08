@@ -1,0 +1,19 @@
+# Exact retired-page routes only. Never redirect the shared CSS/JS directory.
+/homepage-concepts / 301
+/homepage-concepts/ / 301
+/homepage-concepts/index.html / 301
+/homepage-concepts/about /about/ 301
+/homepage-concepts/about/ /about/ 301
+/homepage-concepts/about/index.html /about/ 301
+/homepage-concepts/pricing /pricing/ 301
+/homepage-concepts/pricing/ /pricing/ 301
+/homepage-concepts/pricing/index.html /pricing/ 301
+/homepage-concepts/charity /charity/ 301
+/homepage-concepts/charity/ /charity/ 301
+/homepage-concepts/charity/index.html /charity/ 301
+/homepage-concepts/contact /contact/ 301
+/homepage-concepts/contact/ /contact/ 301
+/homepage-concepts/contact/index.html /contact/ 301
+/homepage-concepts/privacy /privacy/ 301
+/homepage-concepts/privacy/ /privacy/ 301
+/homepage-concepts/privacy/index.html /privacy/ 301

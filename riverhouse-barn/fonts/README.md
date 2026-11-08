@@ -1,0 +1,1 @@
+Quicksand and Open Sans are unmodified Google Fonts releases, licensed under SIL OFL1.1. See Quicksand-OFL.txt and OpenSans-OFL.txt. Sources: https://github.com/google/fonts/tree/main/ofl/quicksand and https://github.com/google/fonts/tree/main/ofl/opensans
