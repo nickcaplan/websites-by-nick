@@ -60,11 +60,10 @@ test('integrated shoulder can reach every drawing point without pen clamping', a
       const dx = Math.max(0, Math.min(110, ((P.x - 480) / 220) * 110));
       max = Math.max(max, Math.hypot(P.x - 20 - (390 + dx), P.y + 20 - 260));
     };
-    for (const selector of ['.sd-swoosh', '.sd-subline', '.sd-btn', '.sd-card1', '.sd-card2', '.sd-card3', ...Array.from(document.querySelectorAll('.sd-signature path'), p => '.' + p.getAttribute('class'))]) {
+    for (const selector of ['.sd-laptop', '.sd-laptop-base', '.sd-desktop-header', '.sd-desktop-page', '.sd-phone', '.sd-mobile-page', ...Array.from(document.querySelectorAll('.sd-signature path'), p => '.' + p.getAttribute('class'))]) {
       const path = svg.querySelector(selector), length = path.getTotalLength();
       for (let i = 0; i <= 1000; i++) check(path.getPointAtLength(length * i / 1000));
     }
-    for (let i = 0; i <= 1000; i++) check({ x: 480 + 250 * i / 1000, y: 140 + Math.sin(i / 1000 * 22) * 10 });
     return max;
   });
   expect(farthest).toBeLessThan(251);

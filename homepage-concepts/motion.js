@@ -410,37 +410,17 @@
       };
     };
     const steps = [
-      {
-        dur: 1300,
-        el: null,
-        // The wipe chases the pen tip with a fixed 22px lag, so no letter
-        // appears before the pen reaches it. Once the tip passes the measured
-        // headline end (x=704, t=0.888) the wipe catches up over the remaining
-        // blank board, opening fully (300) as the step ends.
-        pos: (t) => ({ x: 480 + 250 * t, y: 140 + Math.sin(t * 22) * 10 }),
-        show: (t) => {
-          const w = t <= 0.888 ? 250 * t : 222 + ((t - 0.888) / 0.112) * 78;
-          clip.setAttribute("width", String(Math.max(0, Math.min(300, w))));
-        },
-      },
-      strokeStep(".sd-swoosh", 380),
-      strokeStep(".sd-subline", 260),
-      strokeStep(".sd-btn", 420, ".sd-btn-fill"),
-      strokeStep(".sd-card1", 320, ".sd-card1-fill"),
-      strokeStep(".sd-card2", 320, ".sd-card2-fill"),
-      strokeStep(".sd-card3", 320, ".sd-card3-fill"),
-      // Sign last: the pen follows the same paths that become visible.
-      strokeStep(".sd-sign-n", 180),
-      strokeStep(".sd-sign-i", 180),
-      strokeStep(".sd-sign-idot", 90),
-      strokeStep(".sd-sign-c", 180),
-      strokeStep(".sd-sign-k", 180),
-      strokeStep(".sd-sign-cap", 180),
-      strokeStep(".sd-sign-a", 180),
-      strokeStep(".sd-sign-p", 180),
-      strokeStep(".sd-sign-l", 180),
-      strokeStep(".sd-sign-a2", 180),
-      strokeStep(".sd-sign-end", 180),
+      strokeStep(".sd-laptop", 650),
+      strokeStep(".sd-laptop-base", 300),
+      strokeStep(".sd-desktop-header", 260),
+      strokeStep(".sd-desktop-page", 750),
+      strokeStep(".sd-phone", 450),
+      strokeStep(".sd-mobile-page", 650),
+      // Two connected names, dot and flourish, written at a natural quick pace.
+      strokeStep(".sd-sign-n", 320),
+      strokeStep(".sd-sign-idot", 55),
+      strokeStep(".sd-sign-cap", 440),
+      strokeStep(".sd-sign-end", 185),
 
     ];
     const reset = () => {
