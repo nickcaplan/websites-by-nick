@@ -1,0 +1,37 @@
+# Mutable filenames must revalidate. Do not give motion.js/CSS a long-lived cache.
+/*
+  Cache-Control: public, max-age=0, must-revalidate
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+# This unindexed business concept stays unindexed on every host.
+/kumar-co/*
+  X-Robots-Tag: noindex, nofollow
+/prospects/*
+  X-Robots-Tag: noindex, nofollow
+/bangham-and-scratchett/*
+  X-Robots-Tag: noindex, nofollow
+/kitchen-shop/*
+  X-Robots-Tag: noindex, nofollow
+/ozo-cafe/*
+  X-Robots-Tag: noindex, nofollow
+/stay-inspired/*
+  X-Robots-Tag: noindex, nofollow
+/talk-surrey/*
+  X-Robots-Tag: noindex, nofollow
+/the-boathouse/*
+  X-Robots-Tag: noindex, nofollow
+/walton-firs/*
+  X-Robots-Tag: noindex, nofollow
+/riverhouse-barn/*
+  X-Robots-Tag: noindex, nofollow
+/walton-park-dental/*
+  X-Robots-Tag: noindex, nofollow
+/wheatley-and-sons/*
+  X-Robots-Tag: noindex, nofollow
+/elmbridge-community-link/*
+  X-Robots-Tag: noindex, nofollow
+# Provider hostnames are staging surfaces, not another indexed copy of the site.
+https://:project.pages.dev/*
+  X-Robots-Tag: noindex, nofollow
+https://:preview.:project.pages.dev/*
+  X-Robots-Tag: noindex, nofollow

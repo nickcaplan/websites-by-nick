@@ -2,3 +2,8 @@ node_modules/
 test-results/
 
 .site-public/
+
+# Local Cloudflare staging artifact
+.site-cloudflare/
+
+.site-cloudflare-browser-*/
