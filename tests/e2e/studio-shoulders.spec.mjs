@@ -1,6 +1,12 @@
 import { test, expect } from '@playwright/test';
 function checkPose(p) {
   const [x, y, ex, ey, hx, hy] = p.n;
+  expect(p.rest.d).toBe("M267 260C254 292 246 337 250 392");
+  expect(p.rest.stroke).toBe("#6d2b3d");
+  expect(p.rest.capFill).toBe(p.rest.stroke);
+  expect(p.rest.capStroke).toBeNull();
+  expect(p.rest.hand).toEqual([250, 400]);
+  expect(p.rest.sameGroup).toBe(true);
   expect(x - p.dx).toBeCloseTo(354, 0);
   expect(y).toBe(260);
   expect(Math.hypot(ex-x, ey-y)).toBeCloseTo(126, 0);
@@ -10,6 +16,7 @@ function checkPose(p) {
 }
 async function readPose(page) {
   return page.locator('.studio svg').evaluate(svg => ({
+    rest: {d:svg.querySelector('.sd-rest-arm').getAttribute('d'),stroke:svg.querySelector('.sd-rest-arm').getAttribute('stroke'),capFill:svg.querySelector('.sd-rest-sleeve').getAttribute('fill'),capStroke:svg.querySelector('.sd-rest-sleeve').getAttribute('stroke'),hand:['cx','cy'].map(a=>Number(svg.querySelector('.sd-rest-hand').getAttribute(a))),sameGroup:svg.querySelector('.sd-rest-arm').parentElement===svg.querySelector('.sd-body')&&svg.querySelector('.sd-rest-sleeve').parentElement===svg.querySelector('.sd-body')&&svg.querySelector('.sd-rest-hand').parentElement===svg.querySelector('.sd-body')},
     n: svg.querySelector('.sd-arm').getAttribute('d').match(/-?[\d.]+/g).map(Number),
     dx: Number(svg.querySelector('.sd-body').getAttribute('transform').match(/-?[\d.]+/)[0]),
     sleeve: svg.querySelector('.sd-sleeve').getAttribute('transform').match(/-?[\d.]+/g).map(Number),
