@@ -1,11 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-// Fail closed: no check in this suite may send a real enquiry. Every page gets
-// a network-level abort for the live form endpoint before anything else runs.
-test.beforeEach(async ({ page }) => {
-  await page.route('**/formspree.io/**', route => route.abort());
-});
-
+// Request-only checks do not create pages or submit enquiry forms.
 // Exercise the same static server used by every local browser check.
 for (const [path, type] of [
   ['/assets/images/favicon.svg', 'image/svg+xml'],
