@@ -1,0 +1,2 @@
+import{test}from'node:test';import assert from'node:assert/strict';import{readFileSync}from'node:fs';
+for(const file of['charity/index.html','homepage-concepts/charity/index.html'])test(`charity invitation has no paid-client priority disclaimer: ${file}`,()=>{const s=readFileSync(new URL('../'+file,import.meta.url),'utf8');assert.doesNotMatch(s,/Places are limited, and paid client work comes first/);assert.equal((s.match(/<li>/g)||[]).length,3);assert.match(s,/To apply/);assert.match(s,/charity.*name, registration number/);assert.match(s,/ongoing running costs/)});
