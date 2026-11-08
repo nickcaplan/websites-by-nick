@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Ozo Coffee House - Weybridge</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<script>
+  (() => {
+    let theme = null;
+    try { theme = localStorage.getItem("ozo-theme"); } catch {}
+    if (theme !== "dark" && theme !== "light") theme = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    document.documentElement.classList.toggle("dark", theme === "dark");
+  })();
+</script>
+<style>
+  :root{
+    --cream:#f6efe3; --cream-deep:#efe4d0; --espresso:#241a12; --espresso-soft:#4a3a2c;
+    --muted:#7a6a58; --orange:#e8712f; --orange-deep:#c85a1e; --orange-ink:#a34910;
+    --card:#fffaf1; --line:rgba(36,26,18,.16); --line-strong:rgba(36,26,18,.34);
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+    --sans:"Avenir Next",Avenir,"Segoe UI",system-ui,sans-serif;
+  }
+  :root.dark{
+    --cream:#1d1510; --cream-deep:#251b14; --espresso:#f2e7d7; --espresso-soft:#d8c8b2;
+    --muted:#a89880; --orange:#f07f3c; --orange-deep:#ff9a5c; --orange-ink:#f07f3c;
+    --card:#282017; --line:rgba(242,231,215,.16); --line-strong:rgba(242,231,215,.34);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--cream); color:var(--espresso);
+    font-family:var(--sans); font-size:16px; line-height:1.55;
+    transition:background .3s,color .3s;
+  }
+  .wrap{max-width:1120px;margin:auto;padding:0 5%}
+  header{display:flex;justify-content:space-between;align-items:center;padding:18px 0}
+  .brand{font-family:var(--serif);font-weight:700;font-size:22px;letter-spacing:.01em}
+  .brand span{color:var(--orange-ink)}
+  .theme-toggle{
+    border:1.5px solid var(--line-strong);background:none;color:var(--espresso);
+    width:38px;height:38px;border-radius:50%;font-size:16px;cursor:pointer;
+  }
+  /* hero */
+  .hero{padding:26px 0 30px;position:relative}
+  .kicker{
+    font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--orange-ink);margin:0 0 12px;line-height:1.7;
+  }
+  /* the town is a place, not part of the cuisine label: its own line, in the
+     serif italic, with a small pin */
+  .place{
+    display:flex;align-items:center;gap:8px;margin:0 0 22px;
+    font-family:var(--serif);font-style:italic;font-size:21px;line-height:1.2;
+    color:var(--espresso-soft);
+  }
+  .place svg{width:13px;height:18px;flex:none;fill:none;stroke:var(--orange-ink);stroke-width:1.8;stroke-linejoin:round}
+  .flag{
+    width:30px;height:20px;vertical-align:-5px;margin-right:12px;border-radius:2px;
+    box-shadow:0 1px 3px rgba(0,0,0,.28);transform-origin:0% 50%;
+    animation:flagwave 1.8s .3s ease both;
+  }
+  @keyframes flagwave{
+    0%{opacity:0;transform:scaleX(.08) rotate(-10deg)}
+    25%{opacity:1;transform:scaleX(1.06) rotate(4deg) skewY(3deg)}
+    45%{transform:scaleX(1) rotate(-3deg) skewY(-2.5deg)}
+    65%{transform:rotate(2deg) skewY(1.5deg)}
+    85%{transform:rotate(-1deg)}
+    100%{transform:none}
+  }
+  h1{
+    font-family:var(--serif);font-weight:700;
+    font-size:clamp(52px,9vw,110px);line-height:.98;margin:0 0 18px;letter-spacing:-.01em;
+    position:relative;display:inline-block;word-spacing:.12em;
+  }
+  h1 em{font-style:normal;color:var(--orange-ink)}
+  .squiggle{
+    display:block;width:min(420px,72%);height:26px;margin-top:6px;
+    fill:none;stroke:var(--orange);stroke-width:3.5;stroke-linecap:round;
+    stroke-dasharray:520;stroke-dashoffset:520;visibility:hidden;
+    animation:draw 1.2s .5s ease forwards;
+  }
+  @keyframes draw{from{visibility:visible}to{visibility:visible;stroke-dashoffset:0}}
+  .lede{font-size:19px;max-width:560px;margin:0 0 22px;color:var(--espresso-soft)}
+  .hero-cta{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .btn{
+    display:inline-block;padding:12px 22px;border-radius:999px;font-weight:700;font-size:15px;
+    text-decoration:none;border:2px solid var(--espresso);
+  }
+  .btn.primary{background:var(--orange);border-color:var(--orange);color:#241a12}
+  .btn.ghost{color:var(--espresso)}
+  /* facts strip */
+  .strip{
+    display:flex;gap:0;border-block:1.5px solid var(--line);margin:8px 0 26px;
+  }
+  .strip > div{
+    flex:1;padding:16px 18px;border-right:1.5px solid var(--line);
+  }
+  .strip > div:last-child{border-right:0}
+  .strip b{display:block;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;font-weight:700}
+  .strip span{font-family:var(--serif);font-size:19px}
+  /* cards */
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:0 0 30px}
+  .card{
+    background:var(--card);border:1.5px solid var(--line);border-radius:14px;
+    padding:22px 20px;position:relative;
+  }
+  .card .dot{
+    width:34px;height:34px;border-radius:50%;background:var(--orange);color:#fff;
+    display:grid;place-items:center;font-size:17px;margin-bottom:12px;
+  }
+  .card h2{font-family:var(--serif);font-size:22px;margin:0 0 8px}
+  .card p{margin:0;color:var(--espresso-soft);font-size:15px}
+  /* photos */
+  .photos{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:14px;margin:0 0 30px}
+  .photos figure{margin:0;border-radius:14px;overflow:hidden;border:1.5px solid var(--line)}
+  .photos img{width:100%;height:100%;object-fit:cover;display:block;aspect-ratio:4/3}
+  /* menu cards */
+  .menu{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:0 0 30px}
+  .menu .card ul{margin:10px 0 0;padding-left:18px;color:var(--espresso-soft);font-size:15px}
+  .menu .card ul li{margin-bottom:4px}
+  /* find us */
+  .find{
+    background:var(--espresso);color:var(--cream);border-radius:18px;
+    padding:34px 30px;display:grid;grid-template-columns:1.2fr .8fr;gap:26px;align-items:center;
+    margin-bottom:30px;
+  }
+  :root.dark .find{background:var(--card);color:var(--espresso);border:1.5px solid var(--line)}
+  .find h2{font-family:var(--serif);font-size:clamp(28px,4vw,40px);margin:0 0 10px}
+  .find p{margin:0 0 6px;opacity:.86}
+  .find .addr{font-family:var(--serif);font-size:19px;opacity:1}
+  .find a{color:inherit}
+  .find .map-btn{
+    justify-self:end;display:inline-block;padding:14px 26px;border-radius:999px;
+    background:var(--orange);color:#241a12;text-decoration:none;font-weight:700;white-space:nowrap;
+  }
+  footer{
+    padding:20px 0 34px;color:var(--muted);font-size:13px;
+    display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;
+  }
+  @media (prefers-reduced-motion: reduce){
+    .squiggle{animation:none;visibility:visible;stroke-dashoffset:0}
+    .flag{animation:none}
+  }
+  @media (max-width:760px){
+    .strip{flex-direction:column}
+    .strip > div{border-right:0;border-bottom:1.5px solid var(--line);padding:13px 4px}
+    .strip > div:last-child{border-bottom:0}
+    .photos{grid-template-columns:1fr}
+    .menu{grid-template-columns:1fr}
+    .cards{grid-template-columns:1fr}
+    .find{grid-template-columns:1fr;padding:26px 22px}
+    .find .map-btn{justify-self:start}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">Ozo<span>.</span></div>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" aria-pressed="false">&#9681;</button>
+  </header>
+
+  <main>
+  <section class="hero">
+    <p class="kicker"><svg class="flag" viewBox="0 0 900 600" aria-hidden="true" focusable="false">
+        <rect width="900" height="600" fill="#E30A17"/>
+        <circle cx="300" cy="300" r="150" fill="#fff"/>
+        <circle cx="337.5" cy="300" r="120" fill="#E30A17"/>
+        <polygon fill="#fff" points="462.5,300.0 514.3,316.8 514.3,371.3 546.4,327.2 598.2,344.1 566.1,300.0 598.2,255.9 546.4,272.8 514.3,228.7 514.3,283.2"/>
+      </svg>Turkish &amp; Mediterranean kitchen</p>
+    <p class="place"><svg viewBox="0 0 16 22" aria-hidden="true" focusable="false"><path d="M8 1C4.1 1 1 4 1 7.8 1 12.9 8 21 8 21s7-8.100 7-13.200C15 4 11.900 1 8 1Z"/><circle cx="8" cy="7.800" r="2.400"/></svg>Weybridge</p>
+    <h1 id="heroTitle">Good coffee,<br><em>proper welcome.</em>
+      <svg class="squiggle" viewBox="0 0 420 26" aria-hidden="true">
+        <path d="M6 18 Q60 6 110 15 T210 14 T310 12 T414 14" />
+      </svg>
+    </h1>
+    <p class="lede">A neighbourhood cafe on the St Martin&rsquo;s Court parade - Turkish breakfasts, Mediterranean lunches, homemade cakes, and evening tapas with wine and cocktails.</p>
+    <div class="hero-cta">
+      <a class="btn primary" href="tel:+441932924342">Call us</a>
+      <a class="btn ghost" href="https://www.google.com/maps/search/?api=1&amp;query=Ozo+Cafe%2C+Unit+A+St+Martin%27s+Court%2C+37+Queen%27s+Road%2C+Weybridge+KT13+9UQ" rel="noopener">Find us on the map</a>
+    </div>
+  </section>
+
+  <div class="photos">
+    <figure><img src="interior.jpg" width="1000" height="753" loading="lazy" decoding="async" alt="Inside the cafe - banquette seating, bar stools at a marble counter and hanging plants"></figure>
+    <figure><img src="breakfast.jpg" width="1000" height="1333" loading="lazy" decoding="async" alt="A Turkish breakfast plate with fried eggs, sausage, olives, tomatoes, cucumber and sourdough"></figure>
+    <figure><img src="tea.jpg" width="1000" height="1239" loading="lazy" decoding="async" alt="A glass cup of tea on a marble table"></figure>
+  </div>
+
+  <div class="strip">
+    <div><b>Sit in</b><span>Dine in, take your time</span></div>
+    <div><b>Takeaway</b><span>Food and coffee to go</span></div>
+    <div><b>Families</b><span>Kids&rsquo; menu, high chairs</span></div>
+    <div><b>Where</b><span>St Martin&rsquo;s Court</span></div>
+  </div>
+
+  <div class="menu">
+    <div class="card">
+      <div class="dot" aria-hidden="true">&#9728;</div>
+      <h2>Breakfast &amp; brunch</h2>
+      <ul>
+        <li>Menemen and leafy green shakshuka</li>
+        <li>Chilbir Turkish eggs</li>
+        <li>The full Turkish breakfast</li>
+        <li>Pancakes, classic or high-protein</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="dot" aria-hidden="true">&#10070;</div>
+      <h2>Lunch &amp; sharing</h2>
+      <ul>
+        <li>Sharing platters for the table</li>
+        <li>Halloumi and falafel bowls</li>
+        <li>Courgette patties</li>
+        <li>Plenty of vegetarian and vegan choices</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="dot" aria-hidden="true">&#9749;</div>
+      <h2>Cakes, coffee &amp; tea</h2>
+      <ul>
+        <li>Homemade cakes</li>
+        <li>Coffee made to order</li>
+        <li>A proper tea selection</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="dot" aria-hidden="true">&#9733;</div>
+      <h2>Evenings</h2>
+      <ul>
+        <li>Wine and cocktails</li>
+        <li>Evening tapas events</li>
+      </ul>
+    </div>
+  </div>
+
+  <section class="find">
+    <div>
+      <h2>Come and find us</h2>
+      <p class="addr">Unit A, St Martin&rsquo;s Court, 37 Queen&rsquo;s Road,<br>Weybridge KT13 9UQ</p>
+      <p>Call ahead: <a href="tel:+441932924342">01932 924342</a></p>
+      <p>Step-free access, with free street parking nearby.</p>
+    </div>
+    <a class="map-btn" href="https://www.google.com/maps/search/?api=1&amp;query=Ozo+Cafe%2C+Unit+A+St+Martin%27s+Court%2C+37+Queen%27s+Road%2C+Weybridge+KT13+9UQ" rel="noopener">Open in Google Maps &#8599;</a>
+  </section>
+
+  </main>
+  <footer>
+    <span>Ozo Coffee House, Weybridge</span>
+    <span>Concept design - not the business&rsquo;s live website. Photos: the business&rsquo;s public listing photos via <a href="https://ozo-cafe.wheree.com/" rel="noopener" style="color:inherit">wheree.com</a></span>
+  </footer>
+</div>
+<script>
+  (() => {
+    const KEY = "ozo-theme";
+    const btn = document.getElementById("themeToggle");
+    let dark = document.documentElement.classList.contains("dark");
+    btn.setAttribute("aria-pressed", String(dark));
+    btn.addEventListener("click", () => {
+      dark = !dark;
+      document.documentElement.classList.toggle("dark", dark);
+      btn.setAttribute("aria-pressed", String(dark));
+      try { localStorage.setItem(KEY, dark ? "dark" : "light"); } catch {}
+    });
+  })();
+</script>
+</body>
+</html>
