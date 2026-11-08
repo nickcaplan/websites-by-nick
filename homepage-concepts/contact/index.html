@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <meta name="description" content="Have a website in mind? Get in touch with Nick Caplan." />
+    <title>Contact | Websites by Nick</title>
+    <link rel="preload" href="/assets/fonts/dmsans.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/assets/fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="/assets/css/fonts.css" />
+    <link rel="stylesheet" href="/homepage-concepts/motion.css" />
+    <link rel="stylesheet" href="/homepage-concepts/pages.css" />
+    <link rel="stylesheet" href="/homepage-concepts/restyled.css" />
+  </head>
+  <body class="dark">
+    <script>
+      // apply the saved/system theme before first paint, so a dark visitor
+      // never sees a flash of the light theme; pages.js/motion.js keep the toggle
+      (function () {
+        var theme = null;
+        try { theme = window.localStorage.getItem('nick-theme'); } catch (error) {}
+        var dark = theme !== 'light';
+        document.body.classList.toggle('dark', dark);
+      })();
+    </script>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="nav restyled-nav">
+      <a class="wordmark" href="/homepage-concepts/"
+        >Nick <span>Caplan</span></a
+      >
+      <nav aria-label="Main">
+        <a href="/homepage-concepts/">Home</a><a href="/homepage-concepts/about/">About</a
+        ><a href="/homepage-concepts/pricing/">Pricing</a><a href="/homepage-concepts/charity/">Charity</a><a href="/homepage-concepts/contact/" aria-current="page">Contact</a
+        >
+      </nav>
+      <button type="button" class="theme-toggle" aria-label="Switch to light mode"><span class="theme-icon" aria-hidden="true">☀</span></button>
+    </header>
+    <main id="main" class="pg restyled-page">
+      <section class="page-hero">
+        <h1>Have a website <em>in mind?</em></h1>
+        <p class="lede">Send me a message with the form below. I'll get back to you within a few hours.</p>
+      </section>
+
+      <section class="content" aria-label="Contact form">
+        <form class="contact-form" id="contact-form" tabindex="-1" action="https://formspree.io/f/mlgqojak" method="POST">
+          <div class="contact-fields">
+          <div class="form-field">
+            <label for="contact-name">Name</label>
+            <input id="contact-name" name="name" type="text" autocomplete="name" aria-describedby="contact-name-error" required>
+            <p class="form-error" id="contact-name-error"></p>
+          </div>
+          <div class="form-field">
+            <label for="contact-email">Email</label>
+            <input id="contact-email" name="email" type="email" autocomplete="email" aria-describedby="contact-email-error" required>
+            <p class="form-error" id="contact-email-error"></p>
+          </div>
+          <div class="form-field">
+            <label for="contact-message">Message</label>
+            <p class="sr-only" id="message-hint">What do you or your organisation do, and what would you like the website to achieve?</p>
+            <textarea id="contact-message" name="message" placeholder="What do you or your organisation do, and what would you like the website to achieve?" aria-describedby="message-hint contact-message-error" required></textarea>
+            <p class="form-error" id="contact-message-error"></p>
+          </div>
+          </div>
+          <p class="form-status" id="contact-status" role="status" aria-live="polite" aria-atomic="true" tabindex="-1"></p>
+          <button class="button button-primary" type="submit"><span class="cta-label">Send <span class="cta-end">message<svg class="mail-icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 6 9 7 9-7"/></svg></span></span></button>
+          <button class="button" id="contact-another" type="button" hidden>Send another message</button>
+        </form>
+      </section>
+    </main>
+    <footer>
+      <p class="eyebrow">YOUR WEBSITE DOESN'T HAVE TO BLEND IN.</p>
+      <h2>Let's make something you're <em>proud of.</em></h2>
+      <a class="footer-cta" href="#contact-form">Say hello <span aria-hidden="true">↗</span></a>
+      <div class="footer-bottom">
+        <a class="wordmark" href="/homepage-concepts/">Nick Caplan</a>
+        <p>© Websites by Nick</p>
+        <a href="/homepage-concepts/privacy/">Privacy</a>
+      </div>
+    </footer>
+    <script src="/homepage-concepts/pages.js"></script>
+
+    <script src="/assets/js/analytics.js" defer data-measurement-id="G-J3J3NS19ZS" data-privacy-url="/homepage-concepts/privacy/"></script>
+    <script src="/assets/js/contact.js" defer></script>
+  </body>
+</html>
