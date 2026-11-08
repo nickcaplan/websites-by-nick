@@ -7,6 +7,7 @@ function checkPose(p) {
   expect(p.sleeveMarks).toBe(0);
   expect(p.armCap).toBe("butt");
   expect(p.smoothElbow).toBe(true);
+  for (const [actual, bone] of [[0,0],[1,1],[4,2],[5,3],[8,4],[9,5]]) expect(p.path[actual]).toBeCloseTo(p.n[bone], 0);
   expect(p.torsoColour).toBe("#6d2b3d");
   expect(p.armColour).not.toBe(p.torsoColour);
   expect(p.rest.capCount).toBe(0);
@@ -28,6 +29,8 @@ async function readPose(page) {
     torsoColour: svg.querySelector('.sd-torso').getAttribute('fill'),
     n: svg.querySelector('.sd-arm').dataset.bones.match(/-?[\d.]+/g).map(Number),
     smoothElbow: svg.querySelector('.sd-arm').getAttribute('d').includes('Q'),
+    path: svg.querySelector('.sd-arm').getAttribute('d').match(/-?[\d.]+/g).map(Number),
+    state: svg.dataset.state,
     dx: Number(svg.querySelector('.sd-body').getAttribute('transform').match(/-?[\d.]+/)[0]),
     sleeve: svg.querySelector('.sd-sleeve').getAttribute('transform').match(/-?[\d.]+/g).map(Number),
   }));
@@ -43,8 +46,9 @@ for (const width of [390, 1440]) for (const theme of ['dark', 'light']) for (con
       const p = await readPose(page);
       checkPose(p);
       poses.add(p.n.join(','));
-      return poses.size;
-    }, { timeout: 10000 }).toBeGreaterThan(3);
+      return p.state;
+    }, { timeout: 20000, intervals: [50] }).toBe('complete');
+    expect(poses.size).toBeGreaterThan(20);
     expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
   });
 }
