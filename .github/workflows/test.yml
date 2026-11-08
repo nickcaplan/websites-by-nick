@@ -50,7 +50,7 @@ jobs:
         env:
           HOME: /root
       - name: Retain shard report and diagnostics
-        if: always()
+        if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v7
         with:
           name: browser-shard-${{ matrix.shard }}
@@ -63,7 +63,7 @@ jobs:
   # Preserve the existing check name as the final aggregate gate. No branch
   # protection changes are needed or made by this workflow.
   checks:
-    if: always()
+    if: ${{ !cancelled() }}
     needs: [unit, browser]
     runs-on: ubuntu-24.04
     steps:
@@ -85,10 +85,10 @@ jobs:
       - name: Merge reports without losing case results
         run: npx playwright merge-reports --reporter=json all-blob-reports > test-results/report.json
       - name: Coverage summary (genuine passes counted separately from known defects)
-        if: always()
+        if: ${{ !cancelled() }}
         run: node scripts/summarise-playwright.mjs >> "$GITHUB_STEP_SUMMARY"
       - name: Retain merged browser results
-        if: always()
+        if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v7
         with:
           name: browser-test-results
@@ -96,7 +96,7 @@ jobs:
           if-no-files-found: error
           retention-days: 14
       - name: Require unit checks and every browser shard to pass
-        if: always()
+        if: ${{ !cancelled() }}
         env:
           UNIT_RESULT: ${{ needs.unit.result }}
           BROWSER_RESULT: ${{ needs.browser.result }}
