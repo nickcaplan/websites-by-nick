@@ -326,7 +326,7 @@
     // toward the board (dx) as the pen travels right.
     const L = 126; // fixed bones retain full board reach with the shoulder set into the torso
     const pose = (P) => {
-      const dx = Math.max(0, Math.min(120, ((P.x - 480) / 220) * 120));
+      const dx = Math.max(0, Math.min(130, ((P.x - 480) / 220) * 130));
       const S = { x: SH.x + dx, y: SH.y };
       let H = { x: P.x - 20, y: P.y + 20 };
       let d = Math.hypot(H.x - S.x, H.y - S.y) || 1;

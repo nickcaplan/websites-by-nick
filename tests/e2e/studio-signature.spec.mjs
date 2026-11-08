@@ -16,3 +16,12 @@ test('studio copy stays complete beneath the illustration without a caret', asyn
   expect(boxes.copy).toBeGreaterThan(boxes.drawing);
  }
 });
+
+test('laptop and phone stay separate and inside the canvas at every viewport',async({page})=>{
+ await page.emulateMedia({reducedMotion:'reduce'});
+ for(const width of [320,390,768,1440]) {
+  await page.setViewportSize({width,height:1000});await page.goto('/');
+  const p=await page.locator('.studio svg').evaluate(s=>{const a=s.querySelector('.sd-laptop-base').getBoundingClientRect(),b=s.querySelector('.sd-phone').getBoundingClientRect(),board=s.querySelector('rect[width="332"]').getBoundingClientRect();return{gap:b.left-a.right,inside:b.right<board.right,overflow:document.documentElement.scrollWidth>innerWidth}});
+  expect(p.gap).toBeGreaterThan(2);expect(p.inside).toBe(true);expect(p.overflow).toBe(false);
+ }
+});
