@@ -65,7 +65,7 @@
     return saved || document.cookie.split(';').some(function (cookie) { return cookie.trim() === rejectionCookie + '=1'; });
   }
   /** Explain a failed save without suggesting that every browser store worked. */
-  function showSaveWarning(message) {
+  function showSaveWarning(message, moveFocus) {
     var warning = document.getElementById('cookie-save-warning');
     if (!warning) {
       warning = document.createElement('p');
@@ -88,7 +88,7 @@
       warning.textContent = message || 'Your browser could not save your cookie choice normally. Analytics is off here. If you block all browser storage, close other tabs and check your choice when you return.';
       panel.hidden = false;
       reserveSpace();
-      document.getElementById('cookie-warning-dismiss').focus();
+      if (moveFocus) document.getElementById('cookie-warning-dismiss').focus();
   }
   /** Enable this production stream after opt-in, loading the tag only once. */
   function loadAnalytics() {
@@ -138,12 +138,12 @@
         loadAnalytics();
         if (!preferenceStored) showSaveWarning(canTrack
           ? 'Your browser could not save your Allow analytics choice. Analytics is allowed for this page only. Check your choice when you return.'
-          : 'Your browser could not save your Allow analytics choice. Analytics stays off on this preview. Check your choice when you return.');
+          : 'Your browser could not save your Allow analytics choice. Analytics stays off on this preview. Check your choice when you return.', true);
       }
       else {
         if (measurementId) window['ga-disable-' + measurementId] = true;
         removeCookies();
-        if (!preferenceStored) { rememberRejection(); showSaveWarning(); }
+        if (!preferenceStored) { rememberRejection(); showSaveWarning(null, true); }
         if (channel) channel.postMessage('essential');
         // Do not send denied-consent pings: unload the script entirely.
         if (loaded && preferenceStored) location.reload();
