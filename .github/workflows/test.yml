@@ -3,16 +3,37 @@ name: Behaviour checks
 on:
   pull_request:
   push:
+    branches: [main]
+  workflow_dispatch:
+
+# A newer commit makes checks on the previous commit obsolete.
+concurrency:
+  group: behaviour-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  checks:
+  unit:
     runs-on: ubuntu-24.04
-    # Official Playwright image: browsers and their system libraries are already
-    # installed, so no per-run package or browser download. The tag must match the
-    # @playwright/test version in package-lock.json (checked in a step below).
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: DOM and content checks
+        run: node --test tests/*.test.mjs
+
+  browser:
+    name: Browser shard ${{ matrix.shard }}/8
+    runs-on: ubuntu-24.04
     container:
       image: mcr.microsoft.com/playwright:v1.63.0-noble
       options: --init --ipc=host
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4, 5, 6, 7, 8]
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
@@ -23,26 +44,60 @@ jobs:
       - name: Check the Playwright image matches the installed version
         run: |
           installed="$(node -p "require('@playwright/test/package.json').version")"
-          if [ "$installed" != "1.63.0" ]; then
-            echo "@playwright/test is $installed but the container image is v1.63.0-noble. Update the image tag in .github/workflows/test.yml to match."
-            exit 1
-          fi
-      - name: DOM and content checks
-        run: node --test tests/*.test.mjs
-      - name: Browser checks (Chromium, Firefox, WebKit, mobile Chrome)
-        run: npx playwright test
+          test "$installed" = "1.63.0"
+      - name: Full cross-browser coverage, shard ${{ matrix.shard }}/8
+        run: npx playwright test --workers=2 --shard=${{ matrix.shard }}/8 --reporter=github,blob
         env:
-          # The Actions container runs as root but sets HOME=/github/home, which
-          # Firefox refuses to launch with; Chromium and WebKit are unaffected.
           HOME: /root
+      - name: Retain shard report and diagnostics
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: browser-shard-${{ matrix.shard }}
+          path: |
+            blob-report/
+            test-results/
+          if-no-files-found: error
+          retention-days: 14
+
+  # Preserve the existing check name as the final aggregate gate. No branch
+  # protection changes are needed or made by this workflow.
+  checks:
+    if: always()
+    needs: [unit, browser]
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: browser-shard-*
+          path: shard-results
+      - name: Collect all eight reports
+        run: |
+          mkdir all-blob-reports test-results
+          find shard-results -name 'report-*.zip' -exec cp {} all-blob-reports/ \;
+          test "$(find all-blob-reports -name '*.zip' | wc -l)" -eq 8
+      - name: Merge reports without losing case results
+        run: npx playwright merge-reports --reporter=json all-blob-reports > test-results/report.json
       - name: Coverage summary (genuine passes counted separately from known defects)
         if: always()
         run: node scripts/summarise-playwright.mjs >> "$GITHUB_STEP_SUMMARY"
-      - name: Retain browser diagnostics and failure evidence
+      - name: Retain merged browser results
         if: always()
         uses: actions/upload-artifact@v7
         with:
           name: browser-test-results
           path: test-results/
-          if-no-files-found: ignore
+          if-no-files-found: error
           retention-days: 14
+      - name: Require unit checks and every browser shard to pass
+        if: always()
+        env:
+          UNIT_RESULT: ${{ needs.unit.result }}
+          BROWSER_RESULT: ${{ needs.browser.result }}
+        run: test "$UNIT_RESULT" = success && test "$BROWSER_RESULT" = success
