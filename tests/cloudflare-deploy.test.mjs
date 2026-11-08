@@ -19,3 +19,5 @@ test('Cloudflare artifact contains all twelve published prospects and their loca
  }
  }finally{rmSync(p,{recursive:true,force:true})}
 });
+
+test('Cloudflare showcase includes every responsive screenshot and no extra prospect folders',()=>{const p=output();try{build(p);const content=readFileSync(resolve(p,'prospects/index.html'),'utf8');const sources=[...content.matchAll(/\/prospects\/screens\/[^" ,]+\.webp/g)].map(x=>x[0]);assert.equal(new Set(sources).size,48);for(const src of sources)assert.ok(existsSync(resolve(p,'.'+src)),src);assert.ok(!existsSync(resolve(p,'prospects/design-notes.json')));assert.equal(readFileSync(resolve(p,'prospects/index.html'),'utf8'),readFileSync(resolve(root,'prospects/index.html'),'utf8'));}finally{rmSync(p,{recursive:true,force:true})}});
