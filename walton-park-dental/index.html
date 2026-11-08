@@ -24,11 +24,12 @@
   a{color:var(--primary)}
   .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
   .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--primary);background:var(--surface-tint);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+  .eyebrow+h2{margin-top:12px}
   h1{font-family:var(--font-display);font-size:clamp(30px,5vw,46px);line-height:1.12;letter-spacing:-0.01em;font-weight:700}
   h2{font-family:var(--font-display);font-size:clamp(23px,3.4vw,30px);line-height:1.2;font-weight:700;margin-bottom:10px}
   h3{font-size:17px;font-weight:700}
   p{color:var(--ink-soft)}
-  section{padding:56px 0}
+  section{padding:32px 0}
   .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:13px 24px;font-weight:700;font-size:15px;text-decoration:none;border:1px solid transparent;cursor:pointer}
   .btn-primary{background:var(--primary);color:var(--on-primary)}
   .btn-primary:hover{background:var(--primary-deep)}
@@ -54,30 +55,30 @@
   .trust{display:grid;gap:12px;grid-template-columns:repeat(3,1fr);margin-top:34px}
   .hero-photo img{width:100%;height:auto;border-radius:var(--radius-card);border:1px solid var(--line);box-shadow:var(--shadow);display:block}
   .hero-photo figcaption,.ph figcaption{margin-top:8px;font-size:.84rem;color:var(--muted)}
-  .photo-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:26px}
+  .photo-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:20px}
   .ph img{width:100%;height:auto;border-radius:var(--radius-card);border:1px solid var(--line);box-shadow:var(--shadow);display:block}
   .trust-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);box-shadow:var(--shadow);padding:18px 20px}
   .trust-card h3{margin-bottom:4px}
   .trust-card p{font-size:14.5px}
   .tick{color:var(--primary);font-weight:800;margin-right:6px}
 
-  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:26px}
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:20px}
   .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);box-shadow:var(--shadow);padding:20px}
   .card h3{margin-bottom:6px}
   .card p{font-size:14.5px}
   .card .icon{width:38px;height:38px;border-radius:10px;background:var(--surface-tint);display:flex;align-items:center;justify-content:center;margin-bottom:12px;color:var(--primary);font-size:19px}
 
-  .stats{background:var(--primary);color:var(--on-primary);padding:40px 0}
+  .stats{background:var(--primary);color:var(--on-primary);padding:28px 0}
   .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;text-align:center}
   .stats .num{font-size:40px;font-weight:800;letter-spacing:-0.02em}
   .stats .lbl{opacity:.85;font-size:14.5px}
 
-  .dentist-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:26px}
+  .dentist-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:20px}
   .dentist{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);box-shadow:var(--shadow);padding:18px;text-align:center}
-  img.avatar{width:88px;height:88px;border-radius:50%;object-fit:cover;border:2px solid var(--line-strong);margin:0 auto 10px;display:block}
+  img.avatar{width:88px;height:88px;border-radius:50%;object-fit:cover;object-position:50% 50%;border:2px solid var(--line-strong);margin:0 auto 10px;display:block}
   .dentist .gdc{font-size:13px;color:var(--muted);margin-top:3px}
 
-  .quote-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:26px}
+  .quote-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:20px}
   blockquote{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--primary);border-radius:var(--radius-card);box-shadow:var(--shadow);padding:20px}
   blockquote p{font-style:italic;color:var(--ink-soft);font-size:14.5px}
   blockquote cite{display:block;margin-top:12px;font-style:normal;font-size:13px;font-weight:700;color:var(--primary-deep)}
@@ -95,7 +96,7 @@
   .faq-a{max-height:none;overflow:hidden;transition:max-height .25s ease}
   .faq-a p{padding:0 18px 16px;font-size:14.5px}
 
-  .visit-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:26px}
+  .visit-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:20px;align-items:start}
   .visit-grid .card{min-width:0}
   .visit-grid .card p{margin-bottom:8px}
   .visit-grid .card .btn{margin-top:8px}
@@ -122,7 +123,7 @@
     .dentist-grid{grid-template-columns:repeat(2,1fr)}
   }
   @media (max-width:640px){
-    section{padding:42px 0}
+    section{padding:24px 0}
     nav{display:none}
     .header-call{margin-left:auto;padding:9px 12px;font-size:12.5px}
     .brand{font-size:14.5px;white-space:nowrap;gap:8px}
@@ -136,7 +137,7 @@
 
   /* Photo-led direction for review. Content restoration is a separate step. */
   .hero{position:relative;padding:0;background:#102e48;isolation:isolate}
-  .hero-grid{position:relative;display:block;padding-top:105px;padding-bottom:110px;min-height:650px}
+  .hero-grid{position:relative;display:block;padding-top:72px;padding-bottom:76px;min-height:560px}
   .hero-grid>div:first-child{position:relative;z-index:2;max-width:590px}
   .hero h1{color:#fff;font-size:clamp(44px,4.5vw,68px);font-weight:400;line-height:1.04;letter-spacing:-.025em;margin-top:22px;max-width:580px}
   .hero p.lede{color:#e3edf4;font-size:17px;max-width:470px;line-height:1.65;margin-top:24px}
@@ -152,7 +153,7 @@
   .hero-social a,.footer-social a{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:6px 10px;border:1px solid currentColor;border-radius:6px;text-decoration:none}.hero-social a{color:white}.hero-social svg,.footer-social svg{width:20px;height:20px;flex:none}.footer-social{display:flex;gap:12px;flex-wrap:wrap;margin:16px 0}.hero-social a:hover,.footer-social a:hover{background:#ffffff18}.hero-social a:focus-visible,.footer-social a:focus-visible{outline:3px solid currentColor;outline-offset:4px}
   .hero>.wrap:last-child{position:relative;z-index:2;max-width:none;background:#fff;padding:0}
   .hero .trust{max-width:1080px;margin:0 auto;gap:0;padding:0 20px}
-  .hero .trust-card{background:transparent;box-shadow:none;border:0;border-radius:0;padding:28px 24px}
+  .hero .trust-card{background:transparent;box-shadow:none;border:0;border-radius:0;padding:20px 24px}
   .hero .trust-card+.trust-card{border-left:1px solid var(--line)}
   .hero .trust-card p{max-width:280px}
   @media(min-width:1100px){.hero-grid{max-width:1440px;padding-left:max(40px,calc((100% - 1040px)/2));padding-right:40px}}
@@ -161,7 +162,7 @@
   /* Preserve the room's full width on phones instead of cropping it to a chair. */
   .hero-photo img{object-position:center}
   @media(max-width:700px){
-    .hero-grid{padding:42px 0 0}
+    .hero-grid{padding:32px 0 0}
     .hero-grid>div:first-child{padding:0 22px 32px;max-width:none}
     .hero-grid::before{display:none}
     .hero-photo{position:relative;inset:auto;width:100%;height:auto;margin:0}
@@ -264,10 +265,10 @@
     <span class="eyebrow">Our dentists</span>
     <h2>An experienced, GDC-registered team</h2>
     <div class="dentist-grid">
-      <div class="dentist"><img class="avatar" src="assets/site/jason-drewett.jpg" alt="Jason Drewett" loading="lazy"><h3>Jason Drewett</h3><p class="gdc">GDC No. 67532</p></div>
-      <div class="dentist"><img class="avatar" src="assets/site/sonila-khaneh-zaei.jpg" alt="Sonila Khaneh Zaei" loading="lazy"><h3>Sonila Khaneh Zaei</h3><p class="gdc">GDC No. 265545</p></div>
-      <div class="dentist"><img class="avatar" src="assets/site/hugo-drewett.jpg" alt="Hugo Drewett" loading="lazy"><h3>Hugo Drewett</h3><p class="gdc">GDC No. 265201</p></div>
-      <div class="dentist"><img class="avatar" src="assets/site/grug-kenny.jpg" alt="Grug Kenny" loading="lazy"><h3>Grug Kenny</h3><p class="gdc">GDC No. 278285</p></div>
+      <div class="dentist"><img class="avatar" src="assets/site/jason-drewett-portrait.jpg" alt="Jason Drewett" loading="lazy"><h3>Jason Drewett</h3><p class="gdc">GDC No. 67532</p></div>
+      <div class="dentist"><img class="avatar" src="assets/site/sonila-khaneh-zaei-portrait.jpg" alt="Sonila Khaneh Zaei" loading="lazy"><h3>Sonila Khaneh Zaei</h3><p class="gdc">GDC No. 265545</p></div>
+      <div class="dentist"><img class="avatar" src="assets/site/hugo-drewett-portrait.jpg" alt="Hugo Drewett" loading="lazy"><h3>Hugo Drewett</h3><p class="gdc">GDC No. 265201</p></div>
+      <div class="dentist"><img class="avatar" src="assets/site/grug-kenny-portrait.jpg" alt="Grug Kenny" loading="lazy"><h3>Grug Kenny</h3><p class="gdc">GDC No. 278285</p></div>
     </div>
   </div>
 </section>
