@@ -28,3 +28,5 @@ test('enlarged text keeps content within a phone and arrows with their last word
  expect(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth)).toBe(false);
  for(const tail of await page.locator('.cta-tail').all()){expect(await tail.evaluate(el=>getComputedStyle(el).whiteSpace)).toBe('nowrap');}
 });
+
+test('uncommissioned notice precedes every design link',async({page})=>{await page.goto('/prospects/');expect(await page.locator('.concept-note').evaluate(el=>Boolean(el.compareDocumentPosition(document.querySelector('.prospect-list'))&Node.DOCUMENT_POSITION_FOLLOWING))).toBe(true);for(const image of await page.locator('.design-card img').all()){await expect(image).toHaveAttribute('srcset',/-small\.webp/);}});
