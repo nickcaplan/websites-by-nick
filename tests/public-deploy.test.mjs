@@ -26,3 +26,5 @@ test('existing source and unmarked directories survive rejected output requests'
  const dir=mkdtempSync(resolve(root,'unmarked-artifact-'));try{writeFileSync(resolve(dir,'keep.txt'),'keep');assert.throws(()=>execFileSync(process.execPath,['scripts/prepare-public-deploy.mjs',dir],{cwd:root,stdio:'pipe'}));assert.equal(readFileSync(resolve(dir,'keep.txt'),'utf8'),'keep')}finally{rmSync(dir,{recursive:true,force:true})}
 });
 test('owned generated artifacts can be rebuilt',()=>{const root=resolve(import.meta.dirname,'..'),dir=resolve(root,'.rebuild-test-artifact');try{for(let i=0;i<2;i++)execFileSync(process.execPath,['scripts/prepare-public-deploy.mjs',dir],{cwd:root});assert.ok(existsSync(resolve(dir,'index.html')))}finally{rmSync(dir,{recursive:true,force:true})}});
+
+test('preserved public Experience page supplies its canonical URL',()=>{assert.ok(readFileSync(resolve(import.meta.dirname,'..','experience','index.html'),'utf8').includes('rel="canonical" href="https://websitesbynick.co.uk/experience/"'))});
