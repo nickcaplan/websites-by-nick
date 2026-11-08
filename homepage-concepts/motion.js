@@ -373,7 +373,7 @@
     // Two bones of fixed length, so the arm never stretches or shrinks as the
     // pen moves. The elbow always bends down, away from his body, and he leans
     // toward the board (dx) as the pen travels right.
-    const L = 110;
+    const L = 120; // covers the far-right card corner without moving the shoulder
     const pose = (P) => {
       const dx = Math.max(0, Math.min(110, ((P.x - 480) / 220) * 110));
       const S = { x: SH.x + dx, y: SH.y };

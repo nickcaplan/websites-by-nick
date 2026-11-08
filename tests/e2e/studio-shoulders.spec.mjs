@@ -3,8 +3,8 @@ function checkPose(p) {
   const [x, y, ex, ey, hx, hy] = p.n;
   expect(x - p.dx).toBeCloseTo(366, 0);
   expect(y).toBe(260);
-  expect(Math.hypot(ex-x, ey-y)).toBeCloseTo(110, 0);
-  expect(Math.hypot(hx-ex, hy-ey)).toBeCloseTo(110, 0);
+  expect(Math.hypot(ex-x, ey-y)).toBeCloseTo(120, 0);
+  expect(Math.hypot(hx-ex, hy-ey)).toBeCloseTo(120, 0);
   expect(p.seam).toBeCloseTo(p.dx - 56, 0);
 }
 async function readPose(page) {
@@ -34,4 +34,22 @@ for (const reduced of [true, false]) test(`static shoulder fallback ${reduced ? 
   const c = await browser.newContext({ javaScriptEnabled: reduced, reducedMotion: reduced ? 'reduce' : 'no-preference' });
   try { const page = await c.newPage(); await page.goto('/'); checkPose(await readPose(page)); }
   finally { await c.close(); }
+});
+
+test('shorter arm can reach every drawing point without pen clamping', async ({ page }) => {
+  await page.goto('/');
+  const farthest = await page.locator('.studio svg').evaluate(svg => {
+    let max = 0;
+    const check = P => {
+      const dx = Math.max(0, Math.min(110, ((P.x - 480) / 220) * 110));
+      max = Math.max(max, Math.hypot(P.x - 20 - (390 + dx), P.y + 20 - 260));
+    };
+    for (const selector of ['.sd-swoosh', '.sd-subline', '.sd-btn', '.sd-card1', '.sd-card2', '.sd-card3']) {
+      const path = svg.querySelector(selector), length = path.getTotalLength();
+      for (let i = 0; i <= 1000; i++) check(path.getPointAtLength(length * i / 1000));
+    }
+    for (let i = 0; i <= 1000; i++) check({ x: 480 + 250 * i / 1000, y: 140 + Math.sin(i / 1000 * 22) * 10 });
+    return max;
+  });
+  expect(farthest).toBeLessThan(239);
 });
