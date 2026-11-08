@@ -429,6 +429,19 @@
       strokeStep(".sd-card1", 320, ".sd-card1-fill"),
       strokeStep(".sd-card2", 320, ".sd-card2-fill"),
       strokeStep(".sd-card3", 320, ".sd-card3-fill"),
+      // Sign last: the pen follows the same paths that become visible.
+      strokeStep(".sd-sign-n", 180),
+      strokeStep(".sd-sign-i", 180),
+      strokeStep(".sd-sign-idot", 90),
+      strokeStep(".sd-sign-c", 180),
+      strokeStep(".sd-sign-k", 180),
+      strokeStep(".sd-sign-cap", 180),
+      strokeStep(".sd-sign-a", 180),
+      strokeStep(".sd-sign-p", 180),
+      strokeStep(".sd-sign-l", 180),
+      strokeStep(".sd-sign-a2", 180),
+      strokeStep(".sd-sign-end", 180),
+
     ];
     const reset = () => {
       studioSvg.classList.remove("done");

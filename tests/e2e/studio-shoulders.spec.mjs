@@ -58,7 +58,7 @@ test('integrated shoulder can reach every drawing point without pen clamping', a
       const dx = Math.max(0, Math.min(110, ((P.x - 480) / 220) * 110));
       max = Math.max(max, Math.hypot(P.x - 20 - (378 + dx), P.y + 20 - 260));
     };
-    for (const selector of ['.sd-swoosh', '.sd-subline', '.sd-btn', '.sd-card1', '.sd-card2', '.sd-card3']) {
+    for (const selector of ['.sd-swoosh', '.sd-subline', '.sd-btn', '.sd-card1', '.sd-card2', '.sd-card3', ...Array.from(document.querySelectorAll('.sd-signature path'), p => '.' + p.getAttribute('class'))]) {
       const path = svg.querySelector(selector), length = path.getTotalLength();
       for (let i = 0; i <= 1000; i++) check(path.getPointAtLength(length * i / 1000));
     }
