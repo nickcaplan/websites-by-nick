@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <meta name="description" content="How Websites by Nick uses your information and optional analytics cookies." />
+    <title>Privacy &amp; cookies | Websites by Nick</title>
+    <link rel="preload" href="/assets/fonts/dmsans.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/assets/fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="/assets/css/fonts.css" />
+    <link rel="stylesheet" href="/homepage-concepts/motion.css" />
+    <link rel="stylesheet" href="/homepage-concepts/pages.css" />
+    <link rel="stylesheet" href="/homepage-concepts/restyled.css" />
+  </head>
+  <body class="dark">
+    <script>
+      // apply the saved/system theme before first paint, so a dark visitor
+      // never sees a flash of the light theme; pages.js/motion.js keep the toggle
+      (function () {
+        var theme = null;
+        try { theme = window.localStorage.getItem('nick-theme'); } catch (error) {}
+        var dark = theme !== 'light';
+        document.body.classList.toggle('dark', dark);
+      })();
+    </script>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="nav restyled-nav">
+      <a class="wordmark" href="/homepage-concepts/"
+        >Nick <span>Caplan</span></a
+      >
+      <nav aria-label="Main">
+        <a href="/homepage-concepts/#work">Work</a><a href="/homepage-concepts/about/">About</a
+        ><a href="/homepage-concepts/pricing/">Pricing</a><a href="/homepage-concepts/charity/">Charity</a><a href="/homepage-concepts/contact/">Contact</a
+        >
+      </nav>
+      <button type="button" class="theme-toggle" aria-label="Switch to light mode"><span class="theme-icon" aria-hidden="true">☀</span></button>
+    </header>
+    <main id="main" class="pg restyled-page">
+      <section class="page-hero">
+        <h1>Your information.<br><em>Your choice.</em></h1>
+        <p>This notice explains how this website uses information and optional analytics cookies.</p>
+      </section>
+      <section class="privacy-details">
+        <h2>Website enquiries</h2>
+        <p>Nick Caplan uses the information you send through the <a href="/homepage-concepts/contact/">contact form</a> to read your enquiry and respond. The form sends your name, email address and message to Formspree. Please do not include unnecessary sensitive information.</p>
+        <p>Read <a href="https://formspree.io/legal/privacy-policy/">Formspree's privacy policy</a> for information about its service.</p>
+        <h2 id="cookie-settings">Cookie settings</h2>
+        <p>Google Analytics is optional. It is not loaded and no analytics requests are made unless you choose <strong>Allow analytics</strong>. You can reject cookies and still use the whole site.</p>
+        <button class="button button-secondary" type="button" data-cookie-preferences aria-controls="cookie-consent-panel">Cookie preferences</button>
+        <noscript><p>Analytics stays off without JavaScript.</p></noscript>
+        <h2>Analytics cookies</h2>
+        <p>With your permission, Google Analytics measures visits and page use to help improve this website. It uses cookies such as <code>_ga</code> to recognise returning browsers. Advertising features are disabled. This site does not deliberately send contact form fields to Google Analytics.</p>
+        <p>Read <a href="https://policies.google.com/privacy">Google's privacy policy</a> for information about how Google handles data.</p>
+        <p>Your choice is remembered in this browser's local storage. To change it or withdraw consent, use Cookie preferences above, available through Privacy in every page's footer. Withdrawing consent stops further analytics and removes this site's analytics cookies. When your choice can be saved, the page reloads to unload the analytics script. If your browser blocks saving a rejection or withdrawal, analytics stays disabled on the current page. If you allow analytics but that choice cannot be saved, analytics is allowed on the current page only; you will need to choose again when you return. A rejection is also kept in a first-party fallback cookie and session storage where available, and sent to other open tabs. A visible warning explains a failed save. If all browser storage and tab messaging are blocked, close other tabs and check your choice when you return. It does not delete information already sent to Google.</p>
+        <h2>Display preferences</h2>
+        <p>Your light or dark theme choice is stored locally in your browser. It is not used for analytics. Local and development previews can also remember a display-size choice. Clearing this site's browser data removes these preferences and your cookie choice.</p>
+        <h2>Questions</h2>
+        <p>Use the <a href="/homepage-concepts/contact/">contact form</a> to ask Nick about this notice or the information you have provided, including access, correction or deletion.</p>
+      </section>
+    </main>
+    <footer>
+      <p class="eyebrow">YOUR WEBSITE DOESN'T HAVE TO BLEND IN.</p>
+      <h2>Let's make something you're <em>proud of.</em></h2>
+      <a class="footer-cta" href="/homepage-concepts/contact/">Say hello <span aria-hidden="true">↗</span></a>
+      <div class="footer-bottom">
+        <a class="wordmark" href="/homepage-concepts/">Nick Caplan</a>
+        <p>© Websites by Nick</p>
+        <a href="/homepage-concepts/privacy/" aria-current="page">Privacy</a>
+      </div>
+    </footer>
+    <script src="/homepage-concepts/pages.js"></script>
+
+    <script src="/assets/js/analytics.js" defer data-measurement-id="G-J3J3NS19ZS" data-privacy-url="/homepage-concepts/privacy/"></script>
+  </body>
+</html>

@@ -304,7 +304,7 @@ test('pricing page: says domains, SSL certificates and other services can be man
   assert.doesNotMatch(section, /£|\bfree\b|included in/i, 'no price or inclusion promise');
 });
 
-test('contact page: intro promises a reply within two working days', () => {
+test('contact page: intro promises a reply within a few hours', () => {
   const html = read('contact/index.html');
-  assert.match(html, /<p class="intro">Tell me about the site you&rsquo;re planning and I&rsquo;ll get back to you within two working days\.<\/p>/);
+  assert.match(html, /<p class="intro">Tell me about the site you&rsquo;re planning and I&rsquo;ll get back to you within a few hours\.<\/p>/);
 });
