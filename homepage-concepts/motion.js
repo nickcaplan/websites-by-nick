@@ -368,7 +368,7 @@
       bodyG = q(".sd-body"),
       clip = q(".sd-clip");
     const BASE = 24; // the figure stands a step back from the board
-    const SH = { x: BASE + 354, y: 260 }; // shoulder centre sits inside the torso silhouette
+    const SH = { x: BASE + 366, y: 260 }; // shoulder centre sits inside the torso silhouette
     const REST = { x: 540, y: 290 };
     // Two bones of fixed length, so the arm never stretches or shrinks as the
     // pen moves. The elbow always bends down, away from his body, and he leans
