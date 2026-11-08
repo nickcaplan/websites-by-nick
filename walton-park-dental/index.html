@@ -169,6 +169,13 @@
     .hero-photo img{height:auto;aspect-ratio:3/2;object-fit:contain;object-position:center;display:block}
     .hero-photo figcaption{bottom:10px;right:10px;font-size:10px}
   }
+  /* A treatment list, with dental drawings rather than generic icon tiles. */
+  .treatment-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:40px;margin-top:24px}
+  .treatment{border-top:1px solid var(--line-strong);padding:22px 0;min-width:0}
+  .treatment h3{display:flex;align-items:center;gap:12px;font-family:var(--font-display);font-size:21px;line-height:1.25;margin-bottom:10px;color:var(--primary-deep)}
+  .treatment svg{width:30px;height:30px;flex:none;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+  .treatment p{font-size:15px;line-height:1.65;max-width:36em}
+  @media(max-width:640px){.treatment-list{grid-template-columns:1fr;margin-top:20px}.treatment{padding:20px 0}.treatment h3{font-size:20px}}
 </style>
 </head>
 <body>
@@ -219,15 +226,15 @@
 <section id="treatments">
   <div class="wrap">
     <span class="eyebrow">Treatments</span>
-    <h2>From six-monthly check-ups to a new smile</h2>
-    <p>Prevention first, with the expertise to help when more is needed - often with simpler, less invasive procedures than you might expect.</p>
-    <div class="grid-3">
-      <div class="card"><div class="icon">&#10003;</div><h3>Routine exams and hygiene</h3><p>Regular check-ups and hygienist visits keep your mouth healthy and catch issues before they develop.</p></div>
-      <div class="card"><div class="icon">&#9786;</div><h3>Clear braces</h3><p>Teeth straightening with clear braces that are almost invisible. Most treatment is completed within 6 months.</p></div>
-      <div class="card"><div class="icon">&#10010;</div><h3>Fillings</h3><p>Fillings repair a tooth damaged by decay or accident, restoring its shape and strength.</p></div>
-      <div class="card"><div class="icon">&#9673;</div><h3>Crowns and veneers</h3><p>A crown fits over a prepared tooth, making it strong and giving it the shape of a natural tooth.</p></div>
-      <div class="card"><div class="icon">&#10022;</div><h3>Implants</h3><p>A permanent solution for replacing missing teeth, fixed in place without damaging adjacent teeth.</p></div>
-      <div class="card"><div class="icon">&#9728;</div><h3>Teeth whitening</h3><p>Under a dentist's guidance, whitening is a safe and easy way to lighten discoloured teeth without damage.</p></div>
+    <h2>Your teeth, looked after.</h2>
+    <p>Our focus is on prevention and keeping treatment to a minimum. When you do need help, we take a careful, sympathetic approach in a friendly atmosphere.</p>
+    <div class="treatment-list">
+      <article class="treatment"><h3><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5c-4-3-7 1-5 6 1 2 1 9 3 9 2 0 1-6 4-6s2 6 4 6c2 0 2-7 3-9 2-5-1-9-5-6-1 1-3 1-4 0Z"/><path d="m19 3 1 2 2 1-2 1-1 2-1-2-2-1 2-1Z"/></svg><span>Routine care &amp; hygiene</span></h3><p>Regular visits help keep your mouth healthy and clean. Our focus is on prevention: keeping treatment to a minimum, and spotting problems before they develop.</p></article>
+      <article class="treatment"><h3><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7q9-7 18 0v10q-9 7-18 0Z"/><path d="M7 5v14m5-15v16m5-15v14M3 12h18"/></svg><span>Invisalign braces</span></h3><p>Teeth straightening with clear braces that are almost invisible. A way to change your smile without making your braces the first thing people notice.</p></article>
+      <article class="treatment"><h3><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5c-4-3-7 1-5 6 1 2 1 9 3 9 2 0 1-6 4-6s2 6 4 6c2 0 2-7 3-9 2-5-1-9-5-6-1 1-3 1-4 0Z"/><path d="m10 5 1 4 4 1-1-5"/></svg><span>Repairing a tooth</span></h3><p>Decay or an accident can damage part of a tooth. A filling repairs that damaged area, helping you keep the tooth you have.</p></article>
+      <article class="treatment"><h3><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 10V7c0-4 3-5 6-3 3-2 6-1 6 3v3Z"/><path d="M7 13c1 2 1 7 3 7s0-4 2-4 0 4 2 4 2-5 3-7M6 10h12"/></svg><span>Crowns &amp; veneers</span></h3><p>When a tooth needs more support, a crown fits over what remains of it. It gives the tooth strength and the shape of a natural tooth.</p></article>
+      <article class="treatment"><h3><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4q5-3 10 0l-1 6H8Z"/><path d="m10 10 1 11h2l1-11m-4 3h4m-4 3h4m-3 3h2"/></svg><span>Replacing missing teeth</span></h3><p>An implant is fixed in place: a lasting replacement for a missing tooth, without having to damage the teeth on either side.</p></article>
+      <article class="treatment"><h3><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6c-4-2-6 1-4 6 1 2 1 8 3 8s1-5 4-5 2 5 4 5 2-6 3-8"/><path d="m17 2 1.5 4.5L23 8l-4.5 1.5L17 14l-1.5-4.5L11 8l4.5-1.5Z"/></svg><span>Dentist-guided whitening</span></h3><p>If your teeth have become discoloured, whitening can help lighten them. Your dentist guides the treatment, so it is done safely and without damaging your teeth.</p></article>
     </div>
   </div>
 </section>
