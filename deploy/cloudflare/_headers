@@ -1,0 +1,15 @@
+# Mutable filenames must revalidate. Do not give motion.js/CSS a long-lived cache.
+/*
+  Cache-Control: public, max-age=0, must-revalidate
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+# This unindexed business concept stays unindexed on every host.
+/kumar-co/*
+  X-Robots-Tag: noindex, nofollow
+/prospects/*
+  X-Robots-Tag: noindex, nofollow
+# Provider hostnames are staging surfaces, not another indexed copy of the site.
+https://:project.pages.dev/*
+  X-Robots-Tag: noindex, nofollow
+https://:preview.:project.pages.dev/*
+  X-Robots-Tag: noindex, nofollow
