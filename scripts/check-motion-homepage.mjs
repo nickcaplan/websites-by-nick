@@ -59,7 +59,7 @@ for (const width of [320, 390, 768, 901, 961, 1024, 1280, 1400, 1600]) {
   await p.emulateMedia({reducedMotion:'no-preference'});
   await p.waitForFunction(()=>!document.body.classList.contains('paused'));
   if((await frameState(p)).count)throw Error('reduced preference change restarted the frame');
-  // Work identifies the current landing page. No other link may look selected.
+  // Home identifies the current landing page. No other link may look selected.
   // Contact must not masquerade as selected just because it is last.
   const nav = await p.locator(".nav nav a").evaluateAll((links) => links.map((e) => ({
     current: e.getAttribute("aria-current"),
@@ -67,9 +67,11 @@ for (const width of [320, 390, 768, 901, 961, 1024, 1280, 1400, 1600]) {
     border: getComputedStyle(e).borderBottomWidth,
     decoration: getComputedStyle(e).textDecorationLine,
   })));
-  if (nav.filter(s=>s.current!==null).length!==1 || nav[0].label!=="Work" || nav[0].current!=="page" || !nav[0].decoration.includes("underline") || nav.some((s,i) => s.border !== "0px" || (i>0 && (s.current!==null || s.decoration.includes("underline")))))
+  if (nav.filter(s=>s.current!==null).length!==1 || nav[0].label!=="Home" || nav[0].current!=="page" || !nav[0].decoration.includes("underline") || nav.some((s,i) => s.border !== "0px" || (i>0 && (s.current!==null || s.decoration.includes("underline")))))
     throw Error("nav falsely selected on landing: " + JSON.stringify(nav));
-  await p.locator("header nav a").filter({hasText:"Work"}).click();
+  await p.locator("header nav a").filter({hasText:"Home"}).click();
+  await p.waitForFunction(()=>scrollY===0&&!location.hash);
+  await p.locator(".hero-bottom .cta").click();
   await p.waitForFunction(
     () =>
       Math.abs(
