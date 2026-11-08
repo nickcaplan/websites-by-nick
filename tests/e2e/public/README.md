@@ -9,7 +9,7 @@ Replacement public-route contracts cover the actual project imagery and load
 behaviour, native linked cards, no-JS fallbacks, responsive device widths,
 headline/bulb geometry, finite word/pull sequence, pulse and interaction stopping,
 reduced-motion/hidden state, caption, CTA bounds, theme persistence, navigation,
-career disclosure,200%text, metadata, canonical URLs, analytics inclusion, linked
+career disclosure, 200% text, metadata, canonical URLs, analytics inclusion, linked
 assets and complete pricing offer. The existing provider-intercepted contact
 validation/retry/failure suite and analytics consent/withdrawal suite continue
 against root routes without being replaced.
@@ -29,7 +29,7 @@ Run the checked-in HTTP verifier against the exact draft URL returned by Netlify
 
     node scripts/check-public-deployment.mjs EXACT_DRAFT_ORIGIN --netlify
 
-It requires direct200public HTML, matching canonicals/consent inclusion, exact301
+It requires direct 200 public HTML, matching canonicals/consent inclusion, exact 301
 legacy HTML redirects with the query retained, and unredirected typed assets.
 The verifier itself has negative unit tests for wrong pages, asset redirects and
 lost queries. The generated Pages fallback HTML has a real-browser test across
@@ -44,6 +44,6 @@ tag host when testing Allow so this review cannot add real analytics traffic.
 After an approved production deploy, run the verifier against the custom domain
 without --netlify (Pages fallback mode), adding
 `--production-netlify=EXACT_EXISTING_PRODUCTION_NETLIFY_ORIGIN` to check the old
-production host's302catch-all. Open that production host in a browser too,
+production host's 302 catch-all. Open that production host in a browser too,
 following its path/query/hash to the custom domain and checking no loop. This
 is a post-deploy verification gate, not permission to merge or deploy.
