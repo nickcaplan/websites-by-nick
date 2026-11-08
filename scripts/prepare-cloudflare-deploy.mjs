@@ -12,7 +12,7 @@ const inventory=['index.html','about','pricing','charity','contact','privacy','e
 for(const path of inventory)await cp(resolve(root,path),resolve(output,path),{recursive:true});
 // Only the approved prospect index is public, never arbitrary future folders.
 await mkdir(resolve(output,'prospects'));
-await cp(resolve(root,'prospects/index.html'),resolve(output,'prospects/index.html'));
+for(const name of['index.html','prospects.css'])await cp(resolve(root,'prospects',name),resolve(output,'prospects',name));
 // Keep only shared CSS/JS here, not any retired concept HTML or experiments.
 await mkdir(resolve(output,'homepage-concepts'));
 for(const entry of await readdir(resolve(root,'homepage-concepts'),{withFileTypes:true}))if(entry.isFile()&&/\.(css|js)$/.test(entry.name))await cp(resolve(root,'homepage-concepts',entry.name),resolve(output,'homepage-concepts',entry.name));
