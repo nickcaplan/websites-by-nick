@@ -424,7 +424,7 @@
 
         </div>
         <figure class="studio reveal">
-          <svg viewBox="0 0 880 540" role="img" aria-label="Cartoon of Nick sketching a responsive website on a laptop and phone, then signing the canvas">
+          <svg viewBox="0 0 880 540" role="img" aria-label="Cartoon of Nick sketching a responsive website beneath Designed with care, then signing the canvas">
             <defs>
               <clipPath id="studio-title-clip"><rect class="sd-clip" x="460" y="52" width="300" height="116" /></clipPath>
             </defs>
@@ -433,6 +433,27 @@
             <!-- canvas on an easel -->
             <path class="sd-legs" d="M500 372l-56 126M720 372l56 126M610 372v126" stroke="#22312a55" stroke-width="9" stroke-linecap="round" fill="none" />
             <rect x="460" y="18" width="332" height="358" rx="14" fill="#f9f6ef" stroke="#22312a44" stroke-width="3" />
+            <!-- A permanent hand-lettered heading, separate from the timed device drawing. -->
+            <g class="sd-board-heading" aria-label="Designed with care." fill="none" stroke="#22312a" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" transform="translate(486 54) scale(1.24)">
+              <title>Designed with care.</title>
+                <path d="M1 20L2 0C18 -1 17 20 1 20" transform="translate(0 -0.4)" />
+                <path d="M1 13Q11 14 9 8Q7 4 3 8C-3 17 4 23 10 17" transform="translate(14 0.4)" />
+                <path d="M10 8C3 2 -1 12 5 13C16 15 6 23 0 18" transform="translate(26 0)" />
+                <path d="M3 8L2 20M4 2L4.3 1.5" transform="translate(38 -0.4)" />
+                <path d="M10 8C1 2 -3 21 5 20Q8 19 10 9L8 26Q5 32 0 26" transform="translate(45 0.4)" />
+                <path d="M1 8L0 20M1 15Q8 2 10 10L9 20" transform="translate(58 0)" />
+                <path d="M1 13Q11 14 9 8Q7 4 3 8C-3 17 4 23 10 17" transform="translate(71 -0.4)" />
+                <path d="M10 -1L9 20M9 9C0 1 -3 23 5 20Q9 18 9 12" transform="translate(83 0.4)" />
+                <path d="M1 8L3 20L9 9L11 20L16 8" transform="translate(105 -0.4)" />
+                <path d="M3 8L2 20M4 2L4.3 1.5" transform="translate(123 0.4)" />
+                <path d="M5 1L3 17Q2 22 8 19M0 8L9 7" transform="translate(130 0)" />
+                <path d="M3 -1L1 20M2 14Q10 2 11 11L10 20" transform="translate(140 -0.4)" />
+                <path d="M10 9C2 1 -3 20 5 20L10 17" transform="translate(162 0)" />
+                <path d="M10 8C2 2 -3 20 4 20Q9 20 10 8L9 20" transform="translate(174 -0.4)" />
+                <path d="M2 8L1 20M2 14Q5 5 10 8" transform="translate(187 0.4)" />
+                <path d="M1 13Q11 14 9 8Q7 4 3 8C-3 17 4 23 10 17" transform="translate(198 0)" />
+                <path d="M1 19L1.6 19.6" transform="translate(210 -0.4)" />
+            </g>
             <!-- Nick sketches a website that fits a laptop and phone. -->
             <g class="sd-art" fill="none" stroke="#22312a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
               <!-- A responsive website: the same masthead, hero and cards on both screens. -->
@@ -453,13 +474,17 @@
                 <text x="723" y="211" font-size="4.2">A little sunshine.</text>
               </g>
               <path class="sd-ink sd-photo-detail" d="M620 172C620 165 631 165 631 172C631 179 620 179 620 172M612 198L630 181L645 195L657 180L670 195M 728 232 C 728 228 734 228 734 232 C 734 236 728 236 728 232 M 724 245 L 735 236 L 743 243 L 751 234 L 758 243" stroke-width="1.7" />
-              <!-- Paint-like colour strokes bring the page to life, with the same scene on mobile. -->
-              <path class="sd-ink sd-colour-hero" d="M618 166H664M664 179H618M618 195H664" stroke="#d9a441" stroke-width="12" />
-              <path class="sd-ink sd-colour-phone-hero" d="M 728 230 H 754 M 754 238 H 728 M 728 244 H 754" stroke="#d9a441" stroke-width="7" />
-              <path class="sd-ink sd-colour-card" d="M616 196L630 187L644 198L657 187L667 197M506 226H538M538 235H506" stroke="#829477" stroke-width="8" />
-              <path class="sd-ink sd-colour-phone-card" d="M 727 244 L 735 239 L 744 246 L 751 238 L 756 244 M 727 261 H 734 M 734 269 H 727" stroke="#829477" stroke-width="5" />
-              <path class="sd-ink sd-colour-card2" d="M506 199H557M568 226H602M602 235H568" stroke="#be492b" stroke-width="8" />
-              <path class="sd-ink sd-colour-phone-card2" d="M 726 218 H 750 M 749 261 H 756 M 756 269 H 749" stroke="#be492b" stroke-width="4" />
+              <!-- Colour arrives with each shape, without a second pen pass. -->
+              <path class="sd-paint sd-colour-hero" data-draw-source=".sd-desktop-page" data-draw-segment="3" d="M618 166H664M664 179H618M618 195H664" stroke="#d9a441" stroke-width="12" />
+              <path class="sd-paint sd-colour-phone-hero" data-draw-source=".sd-mobile-page" data-draw-segment="6" d="M728 230H754M754 238H728M728 244H754" stroke="#d9a441" stroke-width="7" />
+              <path class="sd-paint sd-colour-mountain" data-draw-source=".sd-desktop-page" data-draw-segment="3" d="M616 196L630 187L644 198L657 187L667 197" stroke="#829477" stroke-width="8" />
+              <path class="sd-paint sd-colour-card" data-draw-source=".sd-desktop-page" data-draw-segment="4" d="M506 226H538M538 235H506" stroke="#829477" stroke-width="8" />
+              <path class="sd-paint sd-colour-phone-mountain" data-draw-source=".sd-mobile-page" data-draw-segment="6" d="M727 244L735 239L744 246L751 238L756 244" stroke="#829477" stroke-width="5" />
+              <path class="sd-paint sd-colour-phone-card" data-draw-source=".sd-mobile-page" data-draw-segment="7" d="M727 261H734M734 269H727" stroke="#829477" stroke-width="5" />
+              <path class="sd-paint sd-colour-button" data-draw-source=".sd-desktop-page" data-draw-segment="2" d="M506 199H557" stroke="#be492b" stroke-width="8" />
+              <path class="sd-paint sd-colour-card2" data-draw-source=".sd-desktop-page" data-draw-segment="5" d="M568 226H602M602 235H568" stroke="#be492b" stroke-width="8" />
+              <path class="sd-paint sd-colour-phone-button" data-draw-source=".sd-mobile-page" data-draw-segment="5" d="M726 218H750" stroke="#be492b" stroke-width="4" />
+              <path class="sd-paint sd-colour-phone-card2" data-draw-source=".sd-mobile-page" data-draw-segment="8" d="M749 261H756M756 269H749" stroke="#be492b" stroke-width="4" />
               <g class="sd-fill sd-finished-details" stroke="none">
                 <circle cx="625" cy="171" r="4.5" fill="#f9f6ef" /><circle cx="731" cy="232" r="2" fill="#f9f6ef" />
                 <text x="512" y="202" fill="#fff" font-family="Arial, sans-serif" font-size="6" font-weight="700">COME ON IN</text>

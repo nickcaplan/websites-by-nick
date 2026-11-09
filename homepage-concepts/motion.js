@@ -372,13 +372,7 @@
       strokeStep(".sd-desktop-page", 750),
       strokeStep(".sd-phone", 450),
       strokeStep(".sd-mobile-page", 650, ".sd-business-copy"),
-      strokeStep(".sd-photo-detail", 350),
-      strokeStep(".sd-colour-hero", 260),
-      strokeStep(".sd-colour-phone-hero", 150),
-      strokeStep(".sd-colour-card", 170),
-      strokeStep(".sd-colour-phone-card", 100),
-      strokeStep(".sd-colour-card2", 170),
-      strokeStep(".sd-colour-phone-card2", 100, ".sd-finished-details"),
+      strokeStep(".sd-photo-detail", 350, ".sd-finished-details"),
       // Two connected names, dot and flourish, written at a natural quick pace.
       strokeStep(".sd-sign-n", 320),
       strokeStep(".sd-sign-idot", 55),
@@ -386,6 +380,27 @@
       strokeStep(".sd-sign-end", 185),
 
     ];
+    // Reveal each paint stroke alongside the boundary currently under the pen.
+    // Existing outline lengths, durations and easing stay unchanged.
+    const paints = [...studioSvg.querySelectorAll(".sd-paint")].map(el => {
+      const source = q(el.dataset.drawSource);
+      const segments = source.getAttribute("d").match(/M[^M]*/g);
+      const lengths = segments.map(d => {
+        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        path.setAttribute("d", d);
+        return path.getTotalLength();
+      });
+      const index = Number(el.dataset.drawSegment);
+      const start = lengths.slice(0, index).reduce((a, b) => a + b, 0);
+      return { el, source, start, length: lengths[index], total: source.getTotalLength(), ink: el.getTotalLength() };
+    });
+    const paint = () => paints.forEach(p => {
+      const offset = parseFloat(p.source.style.strokeDashoffset);
+      const drawn = p.total - (Number.isFinite(offset) ? offset : p.total);
+      const t = Math.max(0, Math.min(1, (drawn - p.start) / p.length));
+      p.el.style.strokeDasharray = p.ink;
+      p.el.style.strokeDashoffset = p.ink * (1 - t);
+    });
     const reset = () => {
       studioSvg.classList.remove("done");
       clip.setAttribute("width", "0");
@@ -393,12 +408,14 @@
         s.show(0);
         if (s.fill) s.fill.classList.remove("on");
       });
+      paint();
     };
     const finish = () => {
       steps.forEach((s) => {
         s.show(1);
         if (s.fill) s.fill.classList.add("on");
       });
+      paint();
       pose(REST);
       studioSvg.classList.add("done");
     };
@@ -442,6 +459,7 @@
         const t = Math.min((since - TRAVEL) / s.dur, 1);
         const tt = ease(t) * 0.35 + t * 0.65;
         s.show(tt);
+        paint();
         pose(s.pos(tt));
         if (t >= 1) {
           if (s.fill) s.fill.classList.add("on");
