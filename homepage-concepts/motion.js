@@ -184,56 +184,7 @@
     }
   }
 
-  // the studio caption types itself out when it scrolls into view,
-  // echoing the hero headline typing; reduced motion and no-IO keep it static
-  const capText = document.querySelector(".type-caption .tc-text");
-  if (capText && "IntersectionObserver" in window) {
-    const capEl = capText.closest(".type-caption");
-    const finalHTML = capText.innerHTML;
-    const plain = capText.textContent;
-    const settleCap = () => {
-      capText.innerHTML = finalHTML;
-      capEl.classList.remove("typing");
-      capEl.classList.add("typed");
-    };
-    const io = new IntersectionObserver(
-      (entries) => {
-        if (!entries[0].isIntersecting) return;
-        io.disconnect();
-        if (reduced.matches || document.body.classList.contains("paused")) return;
-        // Keep a complete, stable caption available while the visual copy types.
-        const accessible = document.createElement("span");
-        accessible.className = "sr-only";
-        accessible.textContent = plain;
-        capEl.prepend(accessible);
-        const reserve = document.createElement("span");
-        reserve.className = "tc-reserve";
-        reserve.innerHTML = finalHTML;
-        reserve.setAttribute("aria-hidden", "true");
-        capEl.append(reserve);
-        capText.setAttribute("aria-hidden", "true");
-        capEl.classList.add("typing");
-        capText.textContent = "";
-        const caret = document.createElement("span");
-        caret.className = "tc-caret";
-        capText.append(caret);
-        let i = 0;
-        const tick = () => {
-          if (i >= plain.length || document.body.classList.contains("paused") || reduced.matches) {
-            caret.remove();
-            settleCap();
-            return;
-          }
-          caret.before(document.createTextNode(plain[i]));
-          i += 1;
-          setTimeout(tick, 45);
-        };
-        setTimeout(tick, 250);
-      },
-      { threshold: 0.5 }
-    );
-    io.observe(capEl);
-  }
+
 
   // One-time scroll reveals; content is fully visible without JavaScript.
   if ("IntersectionObserver" in window) {
@@ -368,14 +319,14 @@
       bodyG = q(".sd-body"),
       clip = q(".sd-clip");
     const BASE = 24; // the figure stands a step back from the board
-    const SH = { x: BASE + 352, y: 262 }; // his right shoulder, on the torso's edge
-    const REST = { x: 470, y: 310 };
+    const SH = { x: BASE + 356, y: 260 }; // shoulder centre sits inside the torso silhouette
+    const REST = { x: 540, y: 290 };
     // Two bones of fixed length, so the arm never stretches or shrinks as the
     // pen moves. The elbow always bends down, away from his body, and he leans
     // toward the board (dx) as the pen travels right.
-    const L = 135;
+    const L = 126; // fixed bones retain full board reach with the shoulder set into the torso
     const pose = (P) => {
-      const dx = Math.max(0, Math.min(110, ((P.x - 480) / 220) * 110));
+      const dx = Math.max(0, Math.min(130, ((P.x - 480) / 220) * 130));
       const S = { x: SH.x + dx, y: SH.y };
       let H = { x: P.x - 20, y: P.y + 20 };
       let d = Math.hypot(H.x - S.x, H.y - S.y) || 1;
@@ -389,59 +340,118 @@
       const px = ux >= 0 ? -uy : uy, py = ux >= 0 ? ux : -ux;
       const ex = S.x + ux * a + px * h,
         ey = S.y + uy * a + py * h;
-      arm.setAttribute("d", `M${S.x.toFixed(1)} ${S.y}L${ex.toFixed(1)} ${ey.toFixed(1)}L${H.x.toFixed(1)} ${H.y.toFixed(1)}`);
+      // Round the elbow without changing the two fixed bones or the pen position.
+      const radius = 14;
+      const A = { x: ex + (S.x - ex) * radius / L, y: ey + (S.y - ey) * radius / L };
+      const B = { x: ex + (H.x - ex) * radius / L, y: ey + (H.y - ey) * radius / L };
+      arm.dataset.bones = [S.x, S.y, ex, ey, H.x, H.y].map(n => n.toFixed(1)).join(" ");
+      arm.setAttribute("d", `M${S.x.toFixed(1)} ${S.y}L${A.x.toFixed(1)} ${A.y.toFixed(1)}Q${ex.toFixed(1)} ${ey.toFixed(1)} ${B.x.toFixed(1)} ${B.y.toFixed(1)}L${H.x.toFixed(1)} ${H.y.toFixed(1)}`);
       hand.setAttribute("transform", `translate(${H.x.toFixed(1)} ${H.y.toFixed(1)})`);
+      q(".sd-sleeve").setAttribute("transform", `translate(${S.x.toFixed(1)} ${S.y}) rotate(${(Math.atan2(ey-S.y,ex-S.x)*180/Math.PI-90).toFixed(1)})`);
       bodyG.setAttribute("transform", `translate(${(BASE + dx).toFixed(1)} 0)`);
     };
+    const ease = (t) => t * t * (3 - 2 * t);
+    // Pace pen lifts by distance, not a fixed short hop across the board.
+    const travelTime = (from, to) => {
+      const distance = Math.hypot(to.x - from.x, to.y - from.y);
+      return distance < 1 ? 0 : Math.max(40, Math.min(600, distance * 2));
+    };
     const strokeStep = (sel, dur, fillSel) => {
-      const el = q(sel);
-      const len = el.getTotalLength();
+      const el = q(sel), len = el.getTotalLength();
+      const segments = el.getAttribute("d").match(/M[^M]*/g).map(d => {
+        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        path.setAttribute("d", d);
+        return { path, len: path.getTotalLength() };
+      });
+      const timeline = [];
+      let time = 0, drawn = 0, previous = null;
+      for (const segment of segments) {
+        const from = segment.path.getPointAtLength(0);
+        if (previous) {
+          const travel = travelTime(previous, from);
+          if (travel) timeline.push({ start: time, duration: travel, from: previous, to: from, drawn });
+          time += travel;
+        }
+        const duration = dur * segment.len / len;
+        timeline.push({ start: time, duration, segment, drawn });
+        time += duration;
+        drawn += segment.len;
+        previous = segment.path.getPointAtLength(segment.len);
+      }
+      const show = (t) => {
+        el.style.strokeDasharray = len;
+        el.style.strokeDashoffset = len * (1 - t);
+      };
       return {
-        dur,
-        len,
-        el,
-        fill: fillSel ? q(fillSel) : null,
-        pos: (t) => el.getPointAtLength(len * t),
-        show: (t) => {
-          el.style.strokeDasharray = len;
-          el.style.strokeDashoffset = len * (1 - t);
+        dur: time, len, el, fill: fillSel ? q(fillSel) : null,
+        pos: (t) => el.getPointAtLength(len * t), show,
+        render: (elapsed) => {
+          const item = timeline.find(item => elapsed < item.start + item.duration) || timeline[timeline.length - 1];
+          const t = Math.max(0, Math.min(1, (elapsed - item.start) / item.duration));
+          if (item.segment) {
+            const progress = ease(t) * 0.35 + t * 0.65;
+            show((item.drawn + item.segment.len * progress) / len);
+            studioSvg.dataset.phase = "draw";
+            return item.segment.path.getPointAtLength(item.segment.len * progress);
+          }
+          show(item.drawn / len);
+          studioSvg.dataset.phase = "travel";
+          const k = ease(t);
+          return { x: item.from.x + (item.to.x - item.from.x) * k, y: item.from.y + (item.to.y - item.from.y) * k };
         },
       };
     };
     const steps = [
-      {
-        dur: 1300,
-        el: null,
-        // The wipe chases the pen tip with a fixed 22px lag, so no letter
-        // appears before the pen reaches it. Once the tip passes the measured
-        // headline end (x=704, t=0.888) the wipe catches up over the remaining
-        // blank board, opening fully (300) as the step ends.
-        pos: (t) => ({ x: 480 + 250 * t, y: 140 + Math.sin(t * 22) * 10 }),
-        show: (t) => {
-          const w = t <= 0.888 ? 250 * t : 222 + ((t - 0.888) / 0.112) * 78;
-          clip.setAttribute("width", String(Math.max(0, Math.min(300, w))));
-        },
-      },
-      strokeStep(".sd-swoosh", 380),
-      strokeStep(".sd-subline", 260),
-      strokeStep(".sd-btn", 420, ".sd-btn-fill"),
-      strokeStep(".sd-card1", 320, ".sd-card1-fill"),
-      strokeStep(".sd-card2", 320, ".sd-card2-fill"),
-      strokeStep(".sd-card3", 320, ".sd-card3-fill"),
+      strokeStep(".sd-laptop", 650),
+      strokeStep(".sd-laptop-base", 300),
+      strokeStep(".sd-desktop-page", 750),
+      strokeStep(".sd-phone", 450),
+      strokeStep(".sd-mobile-page", 650, ".sd-finished-details"),
+      // Two connected names, dot and flourish, written at a natural quick pace.
+      strokeStep(".sd-sign-n", 320),
+      strokeStep(".sd-sign-idot", 55),
+      strokeStep(".sd-sign-cap", 440),
+      strokeStep(".sd-sign-end", 185),
+
     ];
+    // Reveal each paint stroke alongside the boundary currently under the pen.
+    // Existing outline lengths, durations and easing stay unchanged.
+    const paints = [...studioSvg.querySelectorAll(".sd-paint")].map(el => {
+      const source = q(el.dataset.drawSource);
+      const segments = source.getAttribute("d").match(/M[^M]*/g);
+      const lengths = segments.map(d => {
+        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        path.setAttribute("d", d);
+        return path.getTotalLength();
+      });
+      const index = Number(el.dataset.drawSegment);
+      const start = lengths.slice(0, index).reduce((a, b) => a + b, 0);
+      return { el, source, start, length: lengths[index], total: source.getTotalLength(), ink: el.getTotalLength() };
+    });
+    const paint = () => paints.forEach(p => {
+      const offset = parseFloat(p.source.style.strokeDashoffset);
+      const drawn = p.total - (Number.isFinite(offset) ? offset : p.total);
+      const t = Math.max(0, Math.min(1, (drawn - p.start) / p.length));
+      p.el.style.strokeDasharray = p.ink;
+      p.el.style.strokeDashoffset = p.ink * (1 - t);
+    });
     const reset = () => {
       studioSvg.classList.remove("done");
       clip.setAttribute("width", "0");
       steps.forEach((s) => {
         s.show(0);
         if (s.fill) s.fill.classList.remove("on");
+        q(".sd-business-copy").classList.remove("on");
       });
+      paint();
     };
     const finish = () => {
       steps.forEach((s) => {
         s.show(1);
         if (s.fill) s.fill.classList.add("on");
+        q(".sd-business-copy").classList.add("on");
       });
+      paint();
       pose(REST);
       studioSvg.classList.add("done");
     };
@@ -456,11 +466,9 @@
       raf3 = null,
       last = 0,
       clock = 0;
-    const TRAVEL = 200;
     const isOff = () =>
       document.body.classList.contains("paused") ||
       document.body.classList.contains("hidden-page");
-    const ease = (t) => t * t * (3 - 2 * t);
     const frame = (now) => {
       raf3 = null;
       if (state !== "running") return;
@@ -475,19 +483,23 @@
       const s = steps[step];
       const since = clock - stepStart;
       const startPt = s.el ? s.pos(0) : s.pos(0);
-      if (since < TRAVEL) {
-        const k = ease(since / TRAVEL);
+      const travel = travelTime(travelFrom, startPt);
+      if (since < travel) {
+        studioSvg.dataset.phase = "travel";
+        const k = ease(since / travel);
         pose({
           x: travelFrom.x + (startPt.x - travelFrom.x) * k,
           y: travelFrom.y + (startPt.y - travelFrom.y) * k,
         });
       } else {
-        const t = Math.min((since - TRAVEL) / s.dur, 1);
-        const tt = ease(t) * 0.35 + t * 0.65;
-        s.show(tt);
-        pose(s.pos(tt));
+        const t = Math.min((since - travel) / s.dur, 1);
+        pose(s.render(since - travel));
+        paint();
         if (t >= 1) {
+          s.show(1);
+          paint();
           if (s.fill) s.fill.classList.add("on");
+          if (s.el.matches(".sd-mobile-page")) q(".sd-business-copy").classList.add("on");
           travelFrom = s.pos(1);
           step += 1;
           studioSvg.dataset.step = String(step);
@@ -500,6 +512,7 @@
       if (state === "ending") {
         const t0 = clock;
         const endStart = t0;
+        const returnTime = Math.max(400, travelTime(travelFrom, REST));
         const wrap = (n) => {
           raf3 = null;
           if (document.body.classList.contains("paused") || reduced.matches) {
@@ -510,7 +523,7 @@
           const d2 = isOff() ? 0 : Math.min(n - last, 64);
           last = n;
           clock += d2;
-          const k = Math.min((clock - endStart) / 400, 1);
+          const k = Math.min((clock - endStart) / returnTime, 1);
           const e = ease(k);
           pose({
             x: travelFrom.x + (REST.x - travelFrom.x) * e,

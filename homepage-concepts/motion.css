@@ -1479,3 +1479,7 @@ footer > .footer-cta.cta span { font-size: 23px; }
   footer > .footer-cta.cta span { font-size: 20px; }
 }
 .dark footer > .footer-cta.cta { background: var(--orange); color: var(--paper); }
+
+/* The studio copy is always complete and sits beneath the drawing. */
+.studio { grid-template-columns: minmax(0, 1fr); row-gap: 16px; }
+.studio figcaption { justify-self: center; max-width: 620px; margin: 0; text-align: center; }

@@ -211,7 +211,7 @@
  .about,footer{padding-left:max(50px,calc((100% - 940px)/2));padding-right:max(50px,calc((100% - 940px)/2))}
  .about-grid{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr) 160px;gap:36px}
  .section-intro{gap:15px 40px}
- .studio{grid-template-columns:minmax(0,1fr) 260px;column-gap:40px}
+ .studio{grid-template-columns:minmax(0,1fr);row-gap:16px}
  footer>h2{font-size:70px;max-width:940px}
 }
 </style><style>
@@ -422,52 +422,91 @@
 
         </div>
         <figure class="studio reveal">
-          <svg viewBox="0 0 880 540" role="img" aria-label="Cartoon of Nick drawing this very homepage by hand on a big canvas: the headline, an orange swoosh, a button and the tilted row of website screenshots appear as he draws them">
+          <svg viewBox="0 0 880 540" role="img" aria-label="Cartoon of Nick sketching a responsive website beneath Designed with care, then signing the canvas">
             <defs>
-              <clipPath id="studio-title-clip"><rect class="sd-clip" x="460" y="84" width="300" height="116" /></clipPath>
+              <clipPath id="studio-title-clip"><rect class="sd-clip" x="460" y="52" width="300" height="116" /></clipPath>
             </defs>
             <!-- floor -->
             <rect class="sd-floor" x="40" y="498" width="800" height="9" rx="4.5" fill="#22312a22" />
             <!-- canvas on an easel -->
             <path class="sd-legs" d="M500 372l-56 126M720 372l56 126M610 372v126" stroke="#22312a55" stroke-width="9" stroke-linecap="round" fill="none" />
-            <rect x="460" y="18" width="300" height="358" rx="14" fill="#f9f6ef" stroke="#22312a44" stroke-width="3" />
-            <circle cx="484" cy="42" r="5" fill="#c04b28" />
-            <circle cx="501" cy="42" r="5" fill="#a8b598" />
-            <circle cx="518" cy="42" r="5" fill="#a9b19d" />
-            <rect x="460" y="58" width="300" height="2" fill="#22312a22" />
-            <!-- things Nick draws: a tiny version of this very homepage - big headline,
-                 orange swoosh, a text line, the orange button and the tilted row of
-                 website screenshots from the hero -->
-            <g class="sd-art">
-              <g clip-path="url(#studio-title-clip)">
-                <text class="sd-title" x="494" y="124" font-size="30">Websites people</text>
-                <text class="sd-title sd-title-em" x="494" y="166" font-size="38">remember.</text>
-              </g>
-              <path class="sd-ink sd-swoosh" d="M496 182 Q565 170 640 178 Q600 176 586 188" fill="none" stroke="#c04b28" stroke-width="6" stroke-linecap="round" />
-              <path class="sd-ink sd-subline" d="M496 200 H592" fill="none" stroke="#a9b19d" stroke-width="5" stroke-linecap="round" />
-              <rect class="sd-fill sd-btn-fill" x="496" y="216" width="140" height="38" rx="19" fill="#c04b28" />
-              <rect class="sd-ink sd-btn" x="496" y="216" width="140" height="38" rx="19" fill="none" stroke="#22312a" stroke-width="4.5" />
-              <g class="sd-fill sd-card1-fill"><path d="M493.2 291.9 L564.8 284.4 L570.8 342.1 L499.2 349.6 Z" fill="#22312a" /><path d="M494.1 300.9 L565.7 293.3 L566.2 298.3 L494.6 305.8 Z" fill="#f9f6ef" /></g>
-              <path class="sd-ink sd-card1" d="M493.2 291.9 L564.8 284.4 L570.8 342.1 L499.2 349.6 Z" fill="none" stroke="#22312a" stroke-width="4.5" stroke-linejoin="round" />
-              <g class="sd-fill sd-card2-fill"><path d="M580.7 281 L652.4 287.2 L647.3 345 L575.6 338.8 Z" fill="#22312a" /><path d="M579.9 289.9 L651.6 296.2 L651.2 301.2 L579.4 294.9 Z" fill="#d9a441" /><circle cx="596" cy="312.4" r="2.2" fill="#d9a441" /><circle cx="621.2" cy="322.7" r="1.8" fill="#d9a441" /><circle cx="610.6" cy="305.7" r="1.5" fill="#d9a441" /></g>
-              <path class="sd-ink sd-card2" d="M580.7 281 L652.4 287.2 L647.3 345 L575.6 338.8 Z" fill="none" stroke="#22312a" stroke-width="4.5" stroke-linejoin="round" />
-              <g class="sd-fill sd-card3-fill"><path d="M654.1 290.6 L725.9 285.6 L729.9 343.4 L658.1 348.4 Z" fill="#e9e4d6" /><path d="M654.7 299.6 L726.5 294.5 L726.9 299.5 L655 304.5 Z" fill="#22312a" /></g>
-              <path class="sd-ink sd-card3" d="M654.1 290.6 L725.9 285.6 L729.9 343.4 L658.1 348.4 Z" fill="none" stroke="#22312a" stroke-width="4.5" stroke-linejoin="round" />
+            <rect x="460" y="18" width="332" height="358" rx="14" fill="#f9f6ef" stroke="#22312a44" stroke-width="3" />
+            <!-- A permanent hand-lettered heading, separate from the timed device drawing. -->
+            <g class="sd-board-heading" aria-label="Designed with care." fill="none" stroke="#22312a" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" transform="translate(486 54) scale(1.24)">
+              <title>Designed with care.</title>
+                <path d="M1 20L2 0C18 -1 17 20 1 20" transform="translate(0 -0.4)" />
+                <path d="M1 13Q11 14 9 8Q7 4 3 8C-3 17 4 23 10 17" transform="translate(14 0.4)" />
+                <path d="M10 8C3 2 -1 12 5 13C16 15 6 23 0 18" transform="translate(26 0)" />
+                <path d="M3 8L2 20M4 2L4.3 1.5" transform="translate(38 -0.4)" />
+                <path d="M10 8C1 2 -3 21 5 20Q8 19 10 9L8 26Q5 32 0 26" transform="translate(45 0.4)" />
+                <path d="M1 8L0 20M1 15Q8 2 10 10L9 20" transform="translate(58 0)" />
+                <path d="M1 13Q11 14 9 8Q7 4 3 8C-3 17 4 23 10 17" transform="translate(71 -0.4)" />
+                <path d="M10 -1L9 20M9 9C0 1 -3 23 5 20Q9 18 9 12" transform="translate(83 0.4)" />
+                <path d="M1 8L3 20L9 9L11 20L16 8" transform="translate(105 -0.4)" />
+                <path d="M3 8L2 20M4 2L4.3 1.5" transform="translate(123 0.4)" />
+                <path d="M5 1L3 17Q2 22 8 19M0 8L9 7" transform="translate(130 0)" />
+                <path d="M3 -1L1 20M2 14Q10 2 11 11L10 20" transform="translate(140 -0.4)" />
+                <path d="M10 9C2 1 -3 20 5 20L10 17" transform="translate(162 0)" />
+                <path d="M10 8C2 2 -3 20 4 20Q9 20 10 8L9 20" transform="translate(174 -0.4)" />
+                <path d="M2 8L1 20M2 14Q5 5 10 8" transform="translate(187 0.4)" />
+                <path d="M1 13Q11 14 9 8Q7 4 3 8C-3 17 4 23 10 17" transform="translate(198 0)" />
+                <path d="M1 19L1.6 19.6" transform="translate(210 -0.4)" />
             </g>
-            <!-- sparkles when it is done -->
-            <g class="sd-sparks" fill="#c04b28">
-              <path d="M424 70l5 12 12 5-12 5-5 12-5-12-12-5 12-5z" />
-              <path d="M792 150l4 10 10 4-10 4-4 10-4-10-10-4 10-4z" />
-              <path d="M788 400l3 8 8 3-8 3-3 8-3-8-8-3 8-3z" />
+            <!-- Nick sketches a website that fits a laptop and phone. -->
+            <g class="sd-art" fill="none" stroke="#22312a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+              <!-- A responsive website: the same masthead, hero and cards on both screens. -->
+              <path class="sd-ink sd-laptop" d="M483 257L483 123Q483 116 491 117L680 117Q688 117 688 125L688 257Z" />
+              <path class="sd-ink sd-laptop-base" d="M483 257L467 274Q466 278 475 279L695 279Q704 278 702 274L688 257M550 258L552 263L619 263L622 258" />
+              <path class="sd-paint sd-desktop-header" data-draw-source=".sd-desktop-page" data-draw-segment="0" d="M499 132Q505 129 510 132L510 138Q506 141 501 138ZM511 133Q517 132 515 136M641 135L654 135M661 135L673 135M498 146L673 146" />
+              <path class="sd-ink sd-desktop-page" d="M500 165L575 165M500 179L559 179M500 194L563 194L563 204L500 204ZM611 159L671 159L671 202L611 202ZM500 219L544 219L544 242L500 242ZM563 219L607 219L607 242L563 242ZM626 219L670 219L670 242L626 242Z" />
+              <path class="sd-ink sd-phone" d="M 721 168 Q 715 168 715 175 L 715 285 Q 715 292 722 292 L 761 292 Q 768 292 768 285 L 768 175 Q 768 168 761 168 Z M 733 174 L 750 174 M 735 286 L 748 286" />
+              <path class="sd-ink sd-mobile-page" d="M 723 186 Q 727 183 730 186 L 730 190 L 724 190 Z M 751 186 L 760 186 M 723 193 L 760 193 M 723 202 L 756 202 M 723 209 L 747 209 M 723 216 L 753 216 L 753 221 L 723 221 Z M 723 225 L 759 225 L 759 248 L 723 248 Z M 723 257 L 738 257 L 738 274 L 723 274 Z M 745 257 L 760 257 L 760 274 L 745 274 Z" />
+              <g class="sd-fill sd-business-copy" stroke="none" fill="#22312a" font-family="Arial, sans-serif">
+                <text x="519" y="138" font-size="8" font-weight="700">LITTLE CAFE</text>
+                <rect x="497" y="155" width="80" height="30" fill="#f9f6ef" />
+                <text x="500" y="166" font-size="12" font-weight="700">Good coffee.</text>
+                <text x="500" y="181" font-size="10">A little sunshine.</text>
+                <text x="733" y="189" font-size="4">LITTLE CAFE</text>
+                <rect x="721" y="198" width="38" height="15" fill="#f9f6ef" />
+                <text x="723" y="204" font-size="5.3" font-weight="700">Good coffee.</text>
+                <text x="723" y="211" font-size="4.2">A little sunshine.</text>
+              </g>
+              <path class="sd-paint sd-photo-detail" data-draw-source=".sd-desktop-page" data-draw-segment="3" d="M620 172C620 165 631 165 631 172C631 179 620 179 620 172M612 198L630 181L645 195L657 180L670 195" stroke-width="1.7" />
+              <path class="sd-paint sd-phone-photo-detail" data-draw-source=".sd-mobile-page" data-draw-segment="6" d="M 728 232 C 728 228 734 228 734 232 C 734 236 728 236 728 232 M 724 245 L 735 236 L 743 243 L 751 234 L 758 243" stroke-width="1.7" />
+              <!-- Colour arrives with each shape, without a second pen pass. -->
+              <path class="sd-paint sd-colour-hero" data-draw-source=".sd-desktop-page" data-draw-segment="3" d="M618 166H664M664 179H618M618 195H664" stroke="#d9a441" stroke-width="12" />
+              <path class="sd-paint sd-colour-phone-hero" data-draw-source=".sd-mobile-page" data-draw-segment="6" d="M728 230H754M754 238H728M728 244H754" stroke="#d9a441" stroke-width="7" />
+              <path class="sd-paint sd-colour-mountain" data-draw-source=".sd-desktop-page" data-draw-segment="3" d="M616 196L630 187L644 198L657 187L667 197" stroke="#829477" stroke-width="8" />
+              <path class="sd-paint sd-colour-card" data-draw-source=".sd-desktop-page" data-draw-segment="4" d="M506 226H538M538 235H506" stroke="#829477" stroke-width="8" />
+              <path class="sd-paint sd-colour-phone-mountain" data-draw-source=".sd-mobile-page" data-draw-segment="6" d="M727 244L735 239L744 246L751 238L756 244" stroke="#829477" stroke-width="5" />
+              <path class="sd-paint sd-colour-phone-card" data-draw-source=".sd-mobile-page" data-draw-segment="7" d="M727 261H734M734 269H727" stroke="#829477" stroke-width="5" />
+              <path class="sd-paint sd-colour-button" data-draw-source=".sd-desktop-page" data-draw-segment="2" d="M506 199H557" stroke="#be492b" stroke-width="8" />
+              <path class="sd-paint sd-colour-card2" data-draw-source=".sd-desktop-page" data-draw-segment="5" d="M568 226H602M602 235H568" stroke="#be492b" stroke-width="8" />
+              <path class="sd-paint sd-colour-phone-button" data-draw-source=".sd-mobile-page" data-draw-segment="5" d="M726 218H750" stroke="#be492b" stroke-width="4" />
+              <path class="sd-paint sd-colour-phone-card2" data-draw-source=".sd-mobile-page" data-draw-segment="8" d="M749 261H756M756 269H749" stroke="#be492b" stroke-width="4" />
+              <g class="sd-fill sd-finished-details" stroke="none">
+                <circle cx="625" cy="171" r="4.5" fill="#f9f6ef" /><circle cx="731" cy="232" r="2" fill="#f9f6ef" />
+                <text x="512" y="202" fill="#fff" font-family="Arial, sans-serif" font-size="6" font-weight="700">COME ON IN</text>
+                <text x="731" y="220" fill="#fff" font-family="Arial, sans-serif" font-size="3">VISIT US</text>
+              </g>
+              <g class="sd-signature" aria-label="Nick Caplan signature" fill="none" stroke="#22312a" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <path class="sd-sign-n" d="M 535 350 L 543 329 Q 544 326 545 330 L 553 350 L 562 328 M 564 339 L 561 347 Q 559 354 569 348 M 581 341 C 573 336 568 346 572 350 Q 577 354 584 347 M 587 350 L 595 329 Q 599 322 597 331 L 589 348 L 601 340 L 593 346 Q 597 353 605 348" />
+                <path class="sd-sign-idot" d="M 567 334 L 567.5 333.5" />
+                <path class="sd-sign-cap" d="M643 332C638 323 620 330 620 345C620 358 636 355 643 346M656 341C649 337 643 345 647 350C651 354 657 345 656 341L654 348Q653 353 661 348M667 340L660 363M665 345C674 334 680 339 676 346Q672 352 666 348M679 349C691 334 695 322 690 327C682 335 678 354 688 349M704 341C697 337 691 345 695 350C699 354 705 345 704 341L702 348Q701 353 709 348M714 340L711 351Q723 332 726 341L723 348Q725 354 737 347" />
+                <path class="sd-sign-end" d="M578 361C620 354 683 354 735 357C743 358 730 362 718 363" />
+              </g>
+
             </g>
             <!-- Nick -->
             <g class="sd-nick">
-              <g class="sd-body" transform="translate(56 0)">
+              <path class="sd-arm" data-bones="415.5 260 419.5 385.9 520 310" d="M415.5 260L419.0 371.9Q419.5 385.9 430.6 377.5L520 310" fill="none" stroke="#91435b" stroke-width="26" stroke-linecap="butt" stroke-linejoin="round" />
+              <g class="sd-body" transform="translate(59.5 0)">
                 <rect x="268" y="410" width="34" height="90" rx="12" fill="#2f3e57" />
                 <rect x="312" y="410" width="34" height="90" rx="12" fill="#2f3e57" />
                 <rect x="260" y="486" width="52" height="16" rx="8" fill="#22312a" />
                 <rect x="304" y="486" width="52" height="16" rx="8" fill="#22312a" />
-                <rect x="250" y="232" width="116" height="196" rx="44" fill="#6d2b3d" />
+                <path class="sd-rest-arm" d="M250 260C237 292 232 337 236 392" fill="none" stroke="#91435b" stroke-width="26" stroke-linecap="butt" stroke-linejoin="round" />
+                <rect class="sd-torso" x="250" y="232" width="116" height="196" rx="44" fill="#6d2b3d" />
                 <g class="sd-head">
                   <rect x="294" y="196" width="28" height="40" rx="12" fill="#e8b48c" />
                   <ellipse cx="262" cy="170" rx="8" ry="12" fill="#e8b48c" />
@@ -476,11 +515,11 @@
                   <path d="M312 124q18 6 12 22-7 13-24 6" fill="none" stroke="#9a5f2f" stroke-width="4" stroke-linecap="round" />
                   <path d="M272 186q40 22 80 0" fill="none" stroke="#9a5f2f" stroke-width="4" stroke-linecap="round" />
                 </g>
-                <path d="M258 264Q236 326 244 392" fill="none" stroke="#7a3249" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" />
-                <circle cx="244" cy="400" r="13" fill="#e8b48c" />
+                <!-- The resting sleeve starts inside the torso, not beside its edge. -->
+                <circle class="sd-rest-hand" cx="236" cy="400" r="13" fill="#e8b48c" />
               </g>
-              <path class="sd-arm" d="M408 262L447.4 383.9L450 330" fill="none" stroke="#7a3249" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" />
-              <g class="sd-hand" transform="translate(450 330)">
+              <g class="sd-sleeve" transform="translate(415.5 260) rotate(0)"></g>
+              <g class="sd-hand" transform="translate(520 310)">
                 <path class="sd-pen" d="M0 0l22-22" stroke="#22312a" stroke-width="7" stroke-linecap="round" />
                 <circle class="sd-fist" r="13" fill="#e8b48c" />
               </g>

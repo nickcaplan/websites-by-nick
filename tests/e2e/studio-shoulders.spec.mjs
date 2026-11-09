@@ -1,0 +1,76 @@
+import { test, expect } from '@playwright/test';
+function checkPose(p) {
+  const [x, y, ex, ey, hx, hy] = p.n;
+  expect(p.rest.d).toBe("M250 260C237 292 232 337 236 392");
+  expect(p.rest.stroke).toBe("#91435b");
+  expect(p.armColour).toBe(p.rest.stroke);
+  expect(p.sleeveMarks).toBe(0);
+  expect(p.armCap).toBe("butt");
+  expect(p.smoothElbow).toBe(true);
+  for (const [actual, bone] of [[0,0],[1,1],[4,2],[5,3],[8,4],[9,5]]) expect(p.path[actual]).toBeCloseTo(p.n[bone], 0);
+  expect(p.torsoColour).toBe("#6d2b3d");
+  expect(p.armColour).not.toBe(p.torsoColour);
+  expect(p.rest.capCount).toBe(0);
+  expect(p.rest.hand).toEqual([236, 400]);
+  expect(p.rest.sameGroup).toBe(true);
+  expect(x - p.dx).toBeCloseTo(356, 0);
+  expect(y).toBe(260);
+  expect(Math.hypot(ex-x, ey-y)).toBeCloseTo(126, 0);
+  expect(Math.hypot(hx-ex, hy-ey)).toBeCloseTo(126, 0);
+  expect(p.sleeve[0]).toBeCloseTo(x, 0);
+  expect(p.sleeve[1]).toBeCloseTo(y, 0);
+}
+async function readPose(page) {
+  return page.locator('.studio svg').evaluate(svg => ({
+    rest: {d:svg.querySelector('.sd-rest-arm').getAttribute('d'),stroke:svg.querySelector('.sd-rest-arm').getAttribute('stroke'),capCount:svg.querySelectorAll('.sd-rest-sleeve').length,hand:['cx','cy'].map(a=>Number(svg.querySelector('.sd-rest-hand').getAttribute(a))),sameGroup:svg.querySelector('.sd-rest-arm').parentElement===svg.querySelector('.sd-body')&&svg.querySelector('.sd-rest-hand').parentElement===svg.querySelector('.sd-body')},
+    armColour: svg.querySelector('.sd-arm').getAttribute('stroke'),
+    sleeveMarks: svg.querySelectorAll('.sd-sleeve path').length,
+    armCap: svg.querySelector('.sd-arm').getAttribute('stroke-linecap'),
+    torsoColour: svg.querySelector('.sd-torso').getAttribute('fill'),
+    n: svg.querySelector('.sd-arm').dataset.bones.match(/-?[\d.]+/g).map(Number),
+    smoothElbow: svg.querySelector('.sd-arm').getAttribute('d').includes('Q'),
+    path: svg.querySelector('.sd-arm').getAttribute('d').match(/-?[\d.]+/g).map(Number),
+    state: svg.dataset.state,
+    dx: Number(svg.querySelector('.sd-body').getAttribute('transform').match(/-?[\d.]+/)[0]),
+    sleeve: svg.querySelector('.sd-sleeve').getAttribute('transform').match(/-?[\d.]+/g).map(Number),
+  }));
+}
+for (const width of [390, 1440]) for (const theme of ['dark', 'light']) for (const route of ['/', '/homepage-concepts/']) {
+  test(`studio shoulder stays attached through drawing ${route} ${width} ${theme}`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 1000 });
+    await page.addInitScript(t => localStorage.setItem('nick-theme', t), theme);
+    await page.goto(route);
+    await page.locator('.studio').scrollIntoViewIfNeeded();
+    const poses = new Set();
+    await expect.poll(async () => {
+      const p = await readPose(page);
+      checkPose(p);
+      poses.add(p.n.join(','));
+      return p.state;
+    }, { timeout: 20000, intervals: [50] }).toBe('complete');
+    expect(poses.size).toBeGreaterThan(20);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
+  });
+}
+for (const reduced of [true, false]) test(`static shoulder fallback ${reduced ? 'reduced motion' : 'no JS'}`, async ({ browser }) => {
+  const c = await browser.newContext({ javaScriptEnabled: reduced, reducedMotion: reduced ? 'reduce' : 'no-preference' });
+  try { const page = await c.newPage(); await page.goto('/'); checkPose(await readPose(page)); }
+  finally { await c.close(); }
+});
+
+test('integrated shoulder can reach every drawing point without pen clamping', async ({ page }) => {
+  await page.goto('/');
+  const farthest = await page.locator('.studio svg').evaluate(svg => {
+    let max = 0;
+    const check = P => {
+      const dx = Math.max(0, Math.min(130, ((P.x - 480) / 220) * 130));
+      max = Math.max(max, Math.hypot(P.x - 20 - (380 + dx), P.y + 20 - 260));
+    };
+    for (const selector of ['.sd-laptop', '.sd-laptop-base', '.sd-desktop-header', '.sd-desktop-page', '.sd-phone', '.sd-mobile-page', '.sd-photo-detail', ...Array.from(svg.querySelectorAll('[class*=sd-colour-]'), p => '.' + p.getAttribute('class').split(' ')[1]), ...Array.from(document.querySelectorAll('.sd-signature path'), p => '.' + p.getAttribute('class'))]) {
+      const path = svg.querySelector(selector), length = path.getTotalLength();
+      for (let i = 0; i <= 1000; i++) check(path.getPointAtLength(length * i / 1000));
+    }
+    return max;
+  });
+  expect(farthest).toBeLessThan(251);
+});
