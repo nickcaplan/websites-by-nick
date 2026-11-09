@@ -17,7 +17,7 @@ test('phone frame uses a ring colour, not the old near-background outline', () =
 });
 
 test('light and dark themes both define the ring and glow', () => {
-  assert.match(css, /:root \{[^}]*--phone-ring: #b45e3f/);
-  assert.match(css, /data-theme="dark"\] \{[^}]*--phone-ring: #f09a7c/);
+  assert.match(css, /:root \{[^}]*--phone-ring: #c04b28/);
+  assert.match(css, /data-theme="dark"\] \{[^}]*--phone-ring: #f0996f/);
   assert.equal((css.match(/--phone-glow:/g) || []).length, 2);
 });

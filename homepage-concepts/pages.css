@@ -51,10 +51,10 @@
 .card {
   padding: 28px 26px 30px;
   border-radius: 10px;
-  border: 1px solid #20302726;
+  border: 1px solid #22312a26;
   background: #f9f6ef;
-  color: #203027;
-  box-shadow: 0 14px 34px #20302715;
+  color: #22312a;
+  box-shadow: 0 14px 34px #22312a15;
   transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.35), box-shadow 0.3s;
 }
 .card:nth-child(odd) {
@@ -65,18 +65,18 @@
 }
 .card:hover {
   transform: rotate(0) translateY(-5px);
-  box-shadow: 0 22px 44px #20302722;
+  box-shadow: 0 22px 44px #22312a22;
 }
 .card.lime {
-  background: #d5df91;
+  background: #a8b598;
 }
 .card.orange {
   background: var(--orange);
-  color: #fff4da;
+  color: #ffffff;
 }
 .card.ink {
-  background: #203027;
-  color: #f2ecdf;
+  background: #22312a;
+  color: #f2ede1;
 }
 /* The orange focus outline is 2.8:1 on the ink card and invisible on the
    orange card; cream contrasts both (and the dark-mode halo still applies). */
@@ -206,7 +206,7 @@
 }
 .dark .pg h1 em,
 .dark .pg h2 em {
-  color: #ed926f;
+  color: #f0996f;
 }
 .dark .card.ink {
   background: #111d17;
@@ -214,10 +214,10 @@
 }
 .dark .card.orange {
   /* The dark-mode orange is a light salmon; cream text on it is 2.1:1. */
-  color: #203027;
+  color: #22312a;
 }
 .dark .steps li {
-  border-color: #f2ecdf;
+  border-color: #f2ede1;
 }
 @media (max-width: 600px) {
   .pg {

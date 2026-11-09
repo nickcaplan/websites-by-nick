@@ -1,6 +1,6 @@
 /* Shared preview subpages. Existing public routes are unchanged. */
-body { --surface: #fffdf6; --surface-strong: #e5e3d8; --line: #20302740; --muted: #526153; --accent-ink: #a83f24; --error-ink: #a52c20; }
-body.dark { --surface: #29362e; --surface-strong: #344038; --line: #f2ecdf55; --muted: #c0c6bb; --accent-ink: #ed926f; --error-ink: #ffb4a8; }
+body { --surface: #fffdf6; --surface-strong: #e5e3d8; --line: #22312a40; --muted: #54604e; --accent-ink: #9e3d1c; --error-ink: #a52c20; }
+body.dark { --surface: #29362e; --surface-strong: #344038; --line: #f2ede155; --muted: #bfc7b9; --accent-ink: #f0996f; --error-ink: #ffb4a8; }
 .restyled-page .page-hero { max-width: 900px; margin-bottom: 48px; }
 .restyled-page h1 { width: auto; }
 .restyled-page .content { padding: 0; }
