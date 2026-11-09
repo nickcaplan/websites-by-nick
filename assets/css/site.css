@@ -1,7 +1,7 @@
 /* Nick Caplan - shared site styles (home / experience / contact) */
 :root {
-  --phone-ring: #b45e3f;
-  --phone-glow: rgba(180, 94, 63, .3);
+  --phone-ring: #c04b28;
+  --phone-glow: rgba(192, 75, 40, .3);
   --bg: #f4f0e8;
   --surface: #fbfaf6;
   --surface-strong: #e8e1d5;
@@ -350,32 +350,32 @@ body[data-style="systems"] .footer-bottom { border-color: rgba(16, 19, 26, .22);
 
 /* Option 03 - warm, restrained portfolio */
 body[data-style="atelier"] {
-  --accent-ink: #9a4527;
-  --bg: #eee9e2;
+  --accent-ink: #9e3d1c;
+  --bg: #f4f1e9;
   --surface: #f7f4ef;
   --surface-strong: #e2d9d0;
-  --ink: #28332c;
-  --muted: #5a6057;
-  --line: rgba(40, 51, 44, .17);
-  --accent: #b45e3f;
-  --accent-2: #9cae6c;
+  --ink: #22312a;
+  --muted: #54604e;
+  --line: rgba(34, 49, 42, .17);
+  --accent: #c04b28;
+  --accent-2: #a8b598;
   --display: "DM Sans", "DM Sans FB", Arial, sans-serif;
   --body: "DM Sans", "DM Sans FB", Arial, sans-serif;
   --mono: "DM Mono", monospace;
   --radius: 4px;
 }
 body[data-style="atelier"][data-theme="dark"] {
-  --phone-ring: #f09a7c;
-  --phone-glow: rgba(240, 154, 124, .45);
-  --accent-ink: #e0805f;
-  --bg: #18211d;
+  --phone-ring: #f0996f;
+  --phone-glow: rgba(240, 153, 111, .45);
+  --accent-ink: #f0996f;
+  --bg: #1b2521;
   --surface: #212b25;
   --surface-strong: #29362e;
-  --ink: #edf0e8;
-  --muted: #a1aaa0;
-  --line: rgba(237, 240, 232, .17);
-  --accent: #e0805f;
-  --accent-2: #bdcf80;
+  --ink: #f2ede1;
+  --muted: #bfc7b9;
+  --line: rgba(242, 237, 225, .17);
+  --accent: #f0996f;
+  --accent-2: #a8b598;
   --shadow: none;
 }
 body[data-style="atelier"] .site-nav { padding-top: 36px; }
@@ -390,8 +390,8 @@ body[data-style="atelier"] .section-heading h2, body[data-style="atelier"] .foot
 body[data-style="atelier"] .role { gap: 70px; grid-template-columns: 160px 1fr; }
 body[data-style="atelier"] .role-highlights { grid-template-columns: 1fr; }
 body[data-style="atelier"] .role-highlights li { border-left: 0; border-top: 1px solid var(--line); padding: 11px 0 0; }
-body[data-style="atelier"] .footer { background: var(--accent); }
-body[data-style="atelier"] .footer h2 em { color: #f7f4ef; }
+body[data-style="atelier"] .footer { background: var(--accent); color: #ffffff; }
+body[data-style="atelier"] .footer h2 em { color: #ffffff; }
 body[data-style="atelier"][data-theme="dark"] .footer { background: var(--accent); color: #f7f4ef; }
 body[data-style="atelier"][data-theme="dark"] .footer h2 em { color: #f7f4ef; }
 body[data-style="atelier"][data-theme="dark"] .footer .section-kicker { color: #101711; }

@@ -42,7 +42,7 @@ const DARK_ORANGE = darkVar('--orange');
 const DARK_PAPER = darkVar('--paper');
 const DARK_INK = darkVar('--ink');
 
-test('orange card text: cream on light-mode orange is AA', () => {
+test('orange card text: white on light-mode orange is AA', () => {
   const orange = lightVar('--orange');
   const text = pagesColor('.card.orange', 'color');
   assert.ok(contrast(text, orange) >= 4.5, contrast(text, orange).toFixed(2));

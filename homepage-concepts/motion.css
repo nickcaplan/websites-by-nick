@@ -1,9 +1,9 @@
 :root {
-  --paper: #f1eee5;
-  --ink: #203027;
-  --orange: #be492b;
-  --orange-text: #a83f24;
-  --lime: #d5df91;
+  --paper: #f4f1e9;
+  --ink: #22312a;
+  --orange: #c04b28;
+  --orange-text: #9e3d1c;
+  --lime: #a8b598;
   --serif: Fraunces, Georgia, serif;
   --sans: "DM Sans", Arial, sans-serif;
 }
@@ -41,9 +41,9 @@ button:focus-visible {
    contrast both: use a cream ring with a dark halo behind it. */
 .dark a:focus-visible,
 .dark button:focus-visible {
-  outline: 3px solid #f2ecdf;
+  outline: 3px solid #f2ede1;
   outline-offset: 2px;
-  box-shadow: 0 0 0 5px #1b2923;
+  box-shadow: 0 0 0 5px #1b2521;
 }
 .skip {
   position: absolute;
@@ -625,7 +625,7 @@ h2 em {
   max-width: 1180px;
   margin: auto;
   padding: 85px 4% 60px;
-  border-top: 1px solid #20302730;
+  border-top: 1px solid #22312a30;
 }
 .section-intro {
   display: grid;
@@ -648,10 +648,10 @@ h2 em {
 .project {
   display: block;
   background: var(--paper);
-  border: 1px solid #20302722;
+  border: 1px solid #22312a22;
   border-radius: 12px;
   padding: 40px 44px 34px;
-  box-shadow: 0 34px 70px #20302726;
+  box-shadow: 0 34px 70px #22312a26;
   margin-bottom: clamp(60px, 16vh, 160px);
   will-change: transform;
 }
@@ -689,7 +689,7 @@ h2 em {
 }
 .project-image {
   background: #e4e5db;
-  border: 1px solid #20302720;
+  border: 1px solid #22312a20;
   padding: 8px;
   overflow: hidden;
   border-radius: 3px;
@@ -698,14 +698,14 @@ h2 em {
   display: block;
   width: 100%;
   height: auto;
-  box-shadow: 0 8px 25px #20302715;
+  box-shadow: 0 8px 25px #22312a15;
   transition: transform 0.5s;
 }
 .cmp-stage {
   position: relative;
   aspect-ratio: 1280 / 713;
   background: #f9f6ef;
-  box-shadow: 0 8px 25px #20302715;
+  box-shadow: 0 8px 25px #22312a15;
   transition: transform 0.5s;
 }
 .cmp-stage-foa {
@@ -761,7 +761,7 @@ body.hidden-page .cmp {
 }
 .project > p {
   font-size: 14px;
-  color: #525d53;
+  color: #54604e;
   margin: 12px 0 0;
   max-width: 400px;
 }
@@ -806,14 +806,14 @@ footer {
 /* The orange focus ring is 2.8:1 on the ink footer; cream is 13:1. The
    dark-mode two-tone rule still wins in dark mode. */
 footer a:focus-visible {
-  outline-color: #f2ecdf;
+  outline-color: #f2ede1;
 }
 footer > h2 {
   font-size: clamp(44px, 6.5vw, 95px);
   margin-bottom: 25px;
 }
 footer h2 em {
-  color: #f29c76;
+  color: #f0996f;
 }
 .footer-cta {
   display: inline-flex;
@@ -902,7 +902,7 @@ body.paused .reveal {
   max-width: 400px;
   text-align: left;
   font: 26px/1.42 var(--serif);
-  color: #525d53;
+  color: #54604e;
 }
 @media (max-width: 960px) {
   .studio {
@@ -1129,23 +1129,23 @@ body.paused .reveal {
   padding: 0;
 }
 .dark {
-  --paper: #1b2923;
-  --ink: #f2ecdf;
-  --orange: #ed926f;
-  --orange-text: #ed926f;
+  --paper: #1b2521;
+  --ink: #f2ede1;
+  --orange: #f0996f;
+  --orange-text: #f0996f;
 }
 .dark .project-image {
   background: #344038;
   border-color: #ffffff25;
 }
 .dark .studio figcaption {
-  color: #b9c2b2;
+  color: #bfc7b9;
 }
 .dark .project-foa .project-image {
   background: #423f2d;
 }
 .dark .project > p {
-  color: #c0c6bb;
+  color: #bfc7b9;
 }
 .dark .work {
   border-color: #ffffff30;
@@ -1155,11 +1155,11 @@ body.paused .reveal {
 }
 .dark footer {
   background: #111d17;
-  color: #f2ecdf;
+  color: #f2ede1;
 }
 .dark .cta {
-  background: #ed926f;
-  color: #1b2923;
+  background: var(--orange);
+  color: var(--paper);
 }
 @media (max-width: 600px) {
   .nav nav {
@@ -1251,10 +1251,10 @@ h1 .last {
   font-family: var(--serif);
   font-weight: 450;
   letter-spacing: -0.04em;
-  fill: #203027;
+  fill: #22312a;
 }
 .studio .sd-title-em {
-  fill: #be492b;
+  fill: #c04b28;
 }
 .studio .sd-fill {
   transition: opacity 0.5s ease;
@@ -1309,19 +1309,19 @@ body.paused .studio .sd-fill {
   }
 }
 .dark .studio .sd-title {
-  fill: #203027;
+  fill: #22312a;
 }
 .dark .studio .sd-title-em {
-  fill: #be492b;
+  fill: #c04b28;
 }
 .dark .studio .sd-legs {
-  stroke: #f2ecdf66;
+  stroke: #f2ede166;
 }
 .dark .studio .sd-floor {
-  fill: #f2ecdf33;
+  fill: #f2ede133;
 }
 .dark .studio .studio-eyebrow {
-  color: #f2ecdf;
+  color: #f2ede1;
 }
 @media (max-width: 600px) {
   .studio {
@@ -1437,8 +1437,8 @@ h2 { overflow-wrap: anywhere; }
 .project-unstacked .work .project { position: relative; top: auto; }
 
 /* Match the live site's sun/moon control, kept on the wordmark row. */
-.nav > .theme-toggle { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 44px; width: 44px; height: 44px; min-width: 44px; min-height: 44px; padding: 8px; border: 1px solid var(--theme-line, #20302740); border-radius: 999px; background: transparent; color: inherit; cursor: pointer; }
-.dark .nav > .theme-toggle { --theme-line: #f2ecdf55; }
+.nav > .theme-toggle { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 44px; width: 44px; height: 44px; min-width: 44px; min-height: 44px; padding: 8px; border: 1px solid var(--theme-line, #22312a40); border-radius: 999px; background: transparent; color: inherit; cursor: pointer; }
+.dark .nav > .theme-toggle { --theme-line: #f2ede155; }
 .theme-icon { font-size: 17px; line-height: 1; }
 .nav > nav { margin-left: auto; }
 @media (max-width: 600px) {
@@ -1469,8 +1469,8 @@ footer > .footer-cta.cta {
   padding: 16px 24px;
   gap: 38px;
   font-size: 14px;
-  background: #f29c76;
-  color: #203027;
+  background: var(--orange);
+  color: #ffffff;
   text-decoration: none;
 }
 footer > .footer-cta.cta span { font-size: 23px; }
@@ -1478,7 +1478,7 @@ footer > .footer-cta.cta span { font-size: 23px; }
   footer > .footer-cta.cta { padding: 11px 18px; gap: 28px; font-size: 12px; margin-top: 0; }
   footer > .footer-cta.cta span { font-size: 20px; }
 }
-.dark footer > .footer-cta.cta { background: #ed926f; color: #1b2923; }
+.dark footer > .footer-cta.cta { background: var(--orange); color: var(--paper); }
 
 /* The studio copy is always complete and sits beneath the drawing. */
 .studio { grid-template-columns: minmax(0, 1fr); row-gap: 16px; }
