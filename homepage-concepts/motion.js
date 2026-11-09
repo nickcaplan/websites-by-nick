@@ -350,29 +350,63 @@
       q(".sd-sleeve").setAttribute("transform", `translate(${S.x.toFixed(1)} ${S.y}) rotate(${(Math.atan2(ey-S.y,ex-S.x)*180/Math.PI-90).toFixed(1)})`);
       bodyG.setAttribute("transform", `translate(${(BASE + dx).toFixed(1)} 0)`);
     };
+    const ease = (t) => t * t * (3 - 2 * t);
+    // Pace pen lifts by distance, not a fixed short hop across the board.
+    const travelTime = (from, to) => {
+      const distance = Math.hypot(to.x - from.x, to.y - from.y);
+      return distance < 1 ? 0 : Math.max(40, Math.min(600, distance * 2));
+    };
     const strokeStep = (sel, dur, fillSel) => {
-      const el = q(sel);
-      const len = el.getTotalLength();
+      const el = q(sel), len = el.getTotalLength();
+      const segments = el.getAttribute("d").match(/M[^M]*/g).map(d => {
+        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        path.setAttribute("d", d);
+        return { path, len: path.getTotalLength() };
+      });
+      const timeline = [];
+      let time = 0, drawn = 0, previous = null;
+      for (const segment of segments) {
+        const from = segment.path.getPointAtLength(0);
+        if (previous) {
+          const travel = travelTime(previous, from);
+          if (travel) timeline.push({ start: time, duration: travel, from: previous, to: from, drawn });
+          time += travel;
+        }
+        const duration = dur * segment.len / len;
+        timeline.push({ start: time, duration, segment, drawn });
+        time += duration;
+        drawn += segment.len;
+        previous = segment.path.getPointAtLength(segment.len);
+      }
+      const show = (t) => {
+        el.style.strokeDasharray = len;
+        el.style.strokeDashoffset = len * (1 - t);
+      };
       return {
-        dur,
-        len,
-        el,
-        fill: fillSel ? q(fillSel) : null,
-        pos: (t) => el.getPointAtLength(len * t),
-        show: (t) => {
-          el.style.strokeDasharray = len;
-          el.style.strokeDashoffset = len * (1 - t);
+        dur: time, len, el, fill: fillSel ? q(fillSel) : null,
+        pos: (t) => el.getPointAtLength(len * t), show,
+        render: (elapsed) => {
+          const item = timeline.find(item => elapsed < item.start + item.duration) || timeline[timeline.length - 1];
+          const t = Math.max(0, Math.min(1, (elapsed - item.start) / item.duration));
+          if (item.segment) {
+            const progress = ease(t) * 0.35 + t * 0.65;
+            show((item.drawn + item.segment.len * progress) / len);
+            studioSvg.dataset.phase = "draw";
+            return item.segment.path.getPointAtLength(item.segment.len * progress);
+          }
+          show(item.drawn / len);
+          studioSvg.dataset.phase = "travel";
+          const k = ease(t);
+          return { x: item.from.x + (item.to.x - item.from.x) * k, y: item.from.y + (item.to.y - item.from.y) * k };
         },
       };
     };
     const steps = [
       strokeStep(".sd-laptop", 650),
       strokeStep(".sd-laptop-base", 300),
-      strokeStep(".sd-desktop-header", 260),
       strokeStep(".sd-desktop-page", 750),
       strokeStep(".sd-phone", 450),
-      strokeStep(".sd-mobile-page", 650, ".sd-business-copy"),
-      strokeStep(".sd-photo-detail", 350, ".sd-finished-details"),
+      strokeStep(".sd-mobile-page", 650, ".sd-finished-details"),
       // Two connected names, dot and flourish, written at a natural quick pace.
       strokeStep(".sd-sign-n", 320),
       strokeStep(".sd-sign-idot", 55),
@@ -407,6 +441,7 @@
       steps.forEach((s) => {
         s.show(0);
         if (s.fill) s.fill.classList.remove("on");
+        q(".sd-business-copy").classList.remove("on");
       });
       paint();
     };
@@ -414,6 +449,7 @@
       steps.forEach((s) => {
         s.show(1);
         if (s.fill) s.fill.classList.add("on");
+        q(".sd-business-copy").classList.add("on");
       });
       paint();
       pose(REST);
@@ -430,11 +466,9 @@
       raf3 = null,
       last = 0,
       clock = 0;
-    const TRAVEL = 200;
     const isOff = () =>
       document.body.classList.contains("paused") ||
       document.body.classList.contains("hidden-page");
-    const ease = (t) => t * t * (3 - 2 * t);
     const frame = (now) => {
       raf3 = null;
       if (state !== "running") return;
@@ -449,20 +483,23 @@
       const s = steps[step];
       const since = clock - stepStart;
       const startPt = s.el ? s.pos(0) : s.pos(0);
-      if (since < TRAVEL) {
-        const k = ease(since / TRAVEL);
+      const travel = travelTime(travelFrom, startPt);
+      if (since < travel) {
+        studioSvg.dataset.phase = "travel";
+        const k = ease(since / travel);
         pose({
           x: travelFrom.x + (startPt.x - travelFrom.x) * k,
           y: travelFrom.y + (startPt.y - travelFrom.y) * k,
         });
       } else {
-        const t = Math.min((since - TRAVEL) / s.dur, 1);
-        const tt = ease(t) * 0.35 + t * 0.65;
-        s.show(tt);
+        const t = Math.min((since - travel) / s.dur, 1);
+        pose(s.render(since - travel));
         paint();
-        pose(s.pos(tt));
         if (t >= 1) {
+          s.show(1);
+          paint();
           if (s.fill) s.fill.classList.add("on");
+          if (s.el.matches(".sd-mobile-page")) q(".sd-business-copy").classList.add("on");
           travelFrom = s.pos(1);
           step += 1;
           studioSvg.dataset.step = String(step);
@@ -475,6 +512,7 @@
       if (state === "ending") {
         const t0 = clock;
         const endStart = t0;
+        const returnTime = Math.max(400, travelTime(travelFrom, REST));
         const wrap = (n) => {
           raf3 = null;
           if (document.body.classList.contains("paused") || reduced.matches) {
@@ -485,7 +523,7 @@
           const d2 = isOff() ? 0 : Math.min(n - last, 64);
           last = n;
           clock += d2;
-          const k = Math.min((clock - endStart) / 400, 1);
+          const k = Math.min((clock - endStart) / returnTime, 1);
           const e = ease(k);
           pose({
             x: travelFrom.x + (REST.x - travelFrom.x) * e,
