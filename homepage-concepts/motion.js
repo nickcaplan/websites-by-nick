@@ -585,7 +585,9 @@
     );
     sio.observe(studioSvg);
     const pauseWatch = new MutationObserver(() => {
-      if (document.body.classList.contains("paused") && state === "running") {
+      if (document.body.classList.contains("paused") && studioSvg.classList.contains("studio-live") && state !== "complete") {
+        if (raf3 !== null) cancelAnimationFrame(raf3);
+        raf3 = null;
         setState("complete");
         finish();
       }

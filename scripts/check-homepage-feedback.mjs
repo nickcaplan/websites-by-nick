@@ -115,7 +115,7 @@ for (const width of [320, 390, 768, 901, 961, 1024, 1280, 1400, 1600]) {
 }
 
 // Leaving mid-draw and returning replays the drawing from the start, even
-// though the abandoned run finished off-screen.
+// with no drawing work continuing off-screen.
 {
   const p = await b.newPage({ viewport: { width: 1280, height: 900 } });
   await p.goto(base + "/homepage-concepts/");
@@ -123,7 +123,10 @@ for (const width of [320, 390, 768, 901, 961, 1024, 1280, 1400, 1600]) {
   await p.evaluate(() => document.querySelector(".studio svg").scrollIntoView({ block: "center", behavior: "instant" }));
   await waitForDrawing(p);
   await p.evaluate(() => window.scrollTo(0, 0)); // leave before it ends
-  await p.waitForFunction(() => document.querySelector(".studio svg").classList.contains("done"), null, { timeout: 25000 });
+  await p.waitForFunction(() => document.querySelector(".studio svg").dataset.state === "idle");
+  const stoppedStep = await p.locator(".studio svg").getAttribute("data-step");
+  await p.waitForTimeout(400);
+  if (await p.locator(".studio svg").getAttribute("data-step") !== stoppedStep) fail("drawing advanced off-screen");
   await p.evaluate(() => document.querySelector(".studio svg").scrollIntoView({ block: "center", behavior: "instant" }));
   let restarted = false;
   for (let i = 0; i < 15 && !restarted; i++) {

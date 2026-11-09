@@ -8,7 +8,7 @@ for (const width of [320, 390, 768, 1440, 1920]) for (const theme of ['light', '
     const svg = page.locator('.studio svg');
     await expect(svg).toHaveAttribute('data-state', 'idle');
     await expect(svg).not.toHaveClass(/studio-in-view/);
-    const read = () => svg.evaluate(s => ({ step: s.dataset.step, arm: s.querySelector('.sd-arm').getAttribute('d'), time: s.querySelector('.sd-head').getAnimations()[0]?.currentTime, play: getComputedStyle(s.querySelector('.sd-head')).animationPlayState }));
+    const read = () => svg.evaluate(s => ({ step: s.dataset.step, arm: s.querySelector('.sd-arm').getAttribute('d'), head: getComputedStyle(s.querySelector('.sd-head')).transform, play: getComputedStyle(s.querySelector('.sd-head')).animationPlayState }));
     const initial = await read();
     await page.waitForTimeout(350);
     expect(await read()).toEqual(initial);
@@ -21,6 +21,7 @@ for (const width of [320, 390, 768, 1440, 1920]) for (const theme of ['light', '
     await page.evaluate(() => scrollTo(0, 0));
     await expect(svg).toHaveAttribute('data-state', 'idle');
     await expect(svg).not.toHaveClass(/studio-in-view/);
+    await page.evaluate(() => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r))));
     const left = await read();
     await page.waitForTimeout(350);
     expect(await read()).toEqual(left);
@@ -44,4 +45,20 @@ for (const mode of ['reduce', 'nojs']) test(`studio static fallback ${mode}`, as
   await expect(svg.locator('.sd-head')).toHaveCSS('animation-play-state', 'paused');
   await expect(svg.locator('.sd-signature')).toBeVisible();
   await context.close();
+});
+test('reduced motion settles an interrupted off-screen drawing', async ({ page }) => {
+  await page.goto('/');
+  const svg = page.locator('.studio svg');
+  await svg.scrollIntoViewIfNeeded();
+  await expect(svg).toHaveAttribute('data-state', 'running');
+  await page.evaluate(() => scrollTo(0, 0));
+  await expect(svg).toHaveAttribute('data-state', 'idle');
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await expect(svg).toHaveAttribute('data-state', 'complete');
+  await expect(svg).toHaveClass(/done/);
+  await svg.scrollIntoViewIfNeeded();
+  await expect(svg).toHaveAttribute('data-state', 'complete');
+  await expect(svg.locator('.sd-head')).toHaveCSS('animation-play-state', 'paused');
+  const offsets = await svg.locator('.sd-signature path').evaluateAll(ps => ps.map(p => parseFloat(p.style.strokeDashoffset)));
+  expect(offsets.every(n => n === 0)).toBe(true);
 });
