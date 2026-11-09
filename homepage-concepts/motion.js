@@ -310,7 +310,8 @@
   // in. The pen follows the real strokes; the arm runs from his shoulder to
   // the pen with a natural bend at the elbow that stays out at his side, and
   // it never stretches. Without JS, with reduced motion or while motion is
-  // paused the finished drawing is shown instead. Replays when re-entered.
+  // paused the finished drawing is shown instead. All motion waits for entry and
+  // stops off-screen; an interrupted drawing restarts when re-entered.
   const studioSvg = document.querySelector(".studio svg");
   if (studioSvg && "IntersectionObserver" in window) {
     const q = (sel) => studioSvg.querySelector(sel);
@@ -455,11 +456,12 @@
       pose(REST);
       studioSvg.classList.add("done");
     };
-    let state = "idle"; // idle | running | complete
+    let state = "idle"; // idle | running | ending | complete
     const setState = (s) => {
       state = s;
       studioSvg.dataset.state = s;
     };
+    setState("idle");
     let step = 0,
       stepStart = 0,
       travelFrom = REST,
@@ -543,6 +545,7 @@
     };
     const begin = () => {
       if (reduced.matches || document.body.classList.contains("paused")) return;
+      if (raf3 !== null) cancelAnimationFrame(raf3);
       studioSvg.classList.add("studio-live");
       reset();
       setState("running");
@@ -555,7 +558,8 @@
       pose(REST);
       raf3 = requestAnimationFrame(frame);
     };
-    // Keep the finished drawing visible until the scene scrolls into view.
+    // Keep the static drawing still until enough of the actual SVG is visible.
+    // A full exit cancels the drawing clock as well as the CSS head motion.
     let seen = false;
     const sio = new IntersectionObserver(
       (entries) =>
@@ -567,9 +571,14 @@
             (state === "idle" || state === "complete")
           ) {
             seen = true;
+            studioSvg.classList.add("studio-in-view");
             begin();
           } else if (!en.isIntersecting) {
-            seen = false; // replay next time it scrolls into view, even if it left mid-draw
+            seen = false;
+            studioSvg.classList.remove("studio-in-view");
+            if (raf3 !== null) cancelAnimationFrame(raf3);
+            raf3 = null;
+            if (state === "running" || state === "ending") setState("idle");
           }
         }),
       { threshold: [0, 0.45] }
