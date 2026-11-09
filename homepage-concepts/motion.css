@@ -1299,6 +1299,10 @@ body.paused .studio .sd-fill {
   transform-box: fill-box;
   transform-origin: 50% 90%;
   animation: sd-nod 3.4s ease-in-out infinite alternate;
+  animation-play-state: paused;
+}
+.studio svg.studio-in-view .sd-head {
+  animation-play-state: running;
 }
 @keyframes sd-nod {
   from {
