@@ -47,7 +47,7 @@ for (const width of [320, 390, 768, 901, 961, 1024, 1280, 1400, 1600]) {
   await p.evaluate(() => document.fonts.ready);
   const text = await p.evaluate(() => document.body.innerText);
   const h1 = await p.evaluate(() => document.getElementById("hero-title").getAttribute("aria-label") || document.getElementById("hero-title").textContent);
-  if (h1 !== "Websites people remember, enjoy, love.") fail("hero message " + h1);
+  if (h1 !== "Websites people enjoy, remember.") fail("hero message " + h1);
   for (const re of banned) if (re.test(text)) fail("removed line is back: " + re + " at " + width);
   // screenshots must differ from the previous same-looking pair
   const srcs = await p.evaluate(() => [...document.querySelectorAll(".composer img, .community img, .project img")].map((i) => i.getAttribute("src")));

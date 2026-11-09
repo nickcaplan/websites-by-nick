@@ -20,7 +20,7 @@ for (const width of [1280,1440,1600,1920]) for (const theme of ['light','dark'])
     expect(g.frame.width).toBeCloseTo(830,1);
     for(const s of ['work','hero','frame','about','footer']) expect(g[s].center).toBeCloseTo(width/2,1);
     expect(g.overflow).toBe(false);
-    for(const word of ['remember.','enjoy.','love.']) {
+    for(const word of ['enjoy.','remember.']) {
       const gap=await page.evaluate(word=>{const e=document.querySelector('#hero-title .last em');e.textContent=word;const r=document.createRange();r.selectNodeContents(document.querySelector('#hero-title .line'));return document.querySelector('.bulb-outline').getBoundingClientRect().left-Math.max(e.getBoundingClientRect().right,r.getBoundingClientRect().right)},word);
       expect(gap).toBeGreaterThan(10);
     }

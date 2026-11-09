@@ -129,16 +129,14 @@
 /* Each word has a quiet, distinct light. The wire keeps its ink colour. */
 #hero-title{--bulb-colour:#9e3d1c}
 #hero-title[data-bulb-word="enjoy"]{--bulb-colour:#54604e}
-#hero-title[data-bulb-word="love"]{--bulb-colour:#9e3d1c}
 .dark #hero-title{--bulb-colour:#f0996f}
 .dark #hero-title[data-bulb-word="enjoy"]{--bulb-colour:#a8b598}
-.dark #hero-title[data-bulb-word="love"]{--bulb-colour:#f0996f}
 #hero-title[data-bulb-word] .last em{color:var(--bulb-colour)}
 #hero-title .bulb-glow{transition:opacity .28s ease}
 #hero-title .bulb-glow>path:not(.bulb-glass):not(.bulb-highlight){stroke:var(--bulb-colour)}
 #hero-title.bulb-lit .bulb-outline{stroke:var(--orange)}
 .dark #hero-title.bulb-lit .bulb-outline,
-#hero-title[data-bulb-word="love"].bulb-lit .bulb-outline{stroke:var(--bulb-colour)}
+#hero-title[data-bulb-word="remember"].bulb-lit .bulb-outline{stroke:var(--bulb-colour)}
 /* Keep the frame steady while only the bulb switches off and on. */
 #hero-title[data-bulb-word]::before{background:transparent}
 @media(prefers-reduced-motion:reduce){#hero-title .bulb-glow{transition:none}}
@@ -277,9 +275,9 @@
     <main id="main">
       <section class="entrance" aria-labelledby="hero-title">
         <div class="hero-copy">
-          <h1 id="hero-title" aria-label="Websites people remember, enjoy, love.">
+          <h1 id="hero-title" aria-label="Websites people enjoy, remember.">
             <span class="line">Websites people</span
-            ><span class="line last"><em>remember.</em></span
+            ><span class="line last"><em>enjoy.</em></span
             ><svg class="penframe" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
               <path class="pf-frame" vector-effect="non-scaling-stroke" d="M2.5 3 Q28 1.5 52 2.8 T97.5 3 Q99 28 98 52 T97.5 97 Q70 98.5 46 97.5 T2.5 97 Q1 70 1.8 46 T2.5 3" />
             </svg
@@ -570,7 +568,7 @@ function drawWire(){sizeBrowserFrame();const hb=h.getBoundingClientRect(),bb=bul
 }drawWire();addEventListener('resize',drawWire);})();</script><script>
 (()=>{
  const h=document.querySelector('#hero-title'),e=h.querySelector('.last em'),m=matchMedia('(prefers-reduced-motion:reduce)');
- const words=['remember.','enjoy.','love.'],cta=document.querySelector('.hero-bottom .cta');let i=0,pending=null,ready=false,pulls=[],cycle=0,ctaPulse=null,idlePulse=null;
+ const words=['enjoy.','remember.'],cta=document.querySelector('.hero-bottom .cta');let i=0,pending=null,ready=false,pulls=[],cycle=0,ctaPulse=null,idlePulse=null;
  const stopped=()=>m.matches||document.hidden||document.body.classList.contains('paused');
  const colour=()=>h.dataset.bulbWord=words[i].slice(0,-1);
  const clear=()=>{if(pending)clearTimeout(pending);pending=null};
@@ -584,7 +582,7 @@ function drawWire(){sizeBrowserFrame();const hb=h.getBoundingClientRect(),bb=bul
  function change(){pending=null;if(i===words.length-1)return;if(stopped())return reset();const token=++cycle;if(ctaPulse)ctaPulse.cancel();ctaPulse=cta.animate([{scale:1},{scale:1.045,offset:.5},{scale:1}],{duration:640,easing:'ease-in-out'});pulls.forEach(a=>a.cancel());const stem=h.querySelector('.wire-handle path'),ring=h.querySelector('.wire-handle circle');pulls=[stem.animate([{transform:'scaleY(1)'},{transform:'scaleY(1.857142857)'}],{duration:320,easing:'ease-in-out',fill:'forwards'}),ring.animate([{transform:'translateY(0)'},{transform:'translateY(12px)'}],{duration:320,easing:'ease-in-out',fill:'forwards'})];e.classList.add('word-leaving');h.classList.remove('bulb-lit');Promise.all(pulls.map(a=>a.finished)).then(()=>{if(token!==cycle)return;if(stopped())return reset();i=Math.min(i+1,words.length-1);e.textContent=words[i];colour();e.classList.remove('word-leaving');e.classList.add('word-entering');requestAnimationFrame(()=>requestAnimationFrame(()=>{if(token!==cycle)return;if(stopped())return reset();e.classList.remove('word-entering');h.classList.add('bulb-lit');const held=pulls;pulls=[stem.animate([{transform:'scaleY(1.857142857)'},{transform:'scaleY(1)'}],{duration:320,easing:'ease-in-out'}),ring.animate([{transform:'translateY(12px)'},{transform:'translateY(0)'}],{duration:320,easing:'ease-in-out'})];held.forEach(a=>a.cancel());Promise.all(pulls.map(a=>a.finished)).then(()=>{if(token===cycle)arm()}).catch(()=>{})}))}).catch(()=>{})}
  h.querySelectorAll('.line').forEach(l=>l.setAttribute('aria-hidden','true'));colour();
  // Every pull, including the opening one, reveals its word while held down.
- // Reduced motion skips straight to the final, steady love state.
+ // Reduced motion skips straight to the final, steady remember state.
  function firstReveal(){
   if(ready||!h.classList.contains('bulb-lit'))return;
   ready=true;initial.disconnect();i=m.matches?words.length-1:1;
