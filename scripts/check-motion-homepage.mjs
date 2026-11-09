@@ -379,12 +379,11 @@ console.log("PASS noJS");
     await p.waitForTimeout(75);
   }
   await p.locator(".studio").scrollIntoViewIfNeeded();
-  await p.locator(".type-caption .sr-only").waitFor({ state: "attached" });
   const caption = p.locator(".type-caption");
-  if (await caption.getAttribute("aria-label") !== null ||
-      await caption.locator(".tc-text").getAttribute("aria-hidden") !== "true" ||
-      await caption.locator(".sr-only").textContent() !== "Thoughtful websites for small businesses, designed and built by Nick.")
-    throw Error("Typed caption lacks a stable complete accessible copy");
+  if (await caption.textContent() !== "Thoughtful websites for small businesses, designed and built by Nick." ||
+      await caption.locator(".tc-text").getAttribute("aria-hidden") === "true" ||
+      await caption.locator(".sr-only,.tc-caret,.tc-reserve").count() !== 0)
+    throw Error("Static caption must be complete, accessible and free of duplicate copy/caret");
   console.log("PASS frozen-url-and-accessible-caption");
   await p.close();
 }

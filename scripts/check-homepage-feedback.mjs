@@ -23,7 +23,8 @@ const studioState = (p) => p.evaluate(() => {
   return {
     left: Math.round(left),
     fills,
-    clip: parseFloat(svg.querySelector(".sd-clip").getAttribute("width")),
+    clip: 300, // no title wipe in the responsive-device drawing
+    state: svg.dataset.state,
     done: svg.classList.contains("done"),
     hand: svg.querySelector(".sd-hand").getAttribute("transform"),
   };
@@ -31,7 +32,7 @@ const studioState = (p) => p.evaluate(() => {
 // Wait for the actual drawing phase instead of guessing when it starts.
 const waitForDrawing = (p) => p.waitForFunction(() => {
  const svg=document.querySelector('.studio svg');
- return svg.dataset.state==='running' && svg.dataset.step==='0' && parseFloat(svg.querySelector('.sd-clip').getAttribute('width'))>1;
+ const stroke=svg.querySelector('.sd-laptop');const left=parseFloat(stroke.style.strokeDashoffset);return svg.dataset.state==='running' && svg.dataset.step==='0' && left>0 && left<stroke.getTotalLength();
 },null,{timeout:10000});
 const CLIP_FULL = 300; // fully-open title wipe width for the current board
 const complete = (s) => s.left === 0 && s.fills.every((o) => o === "1") && s.clip >= CLIP_FULL - 1;
@@ -92,7 +93,7 @@ for (const width of [320, 390, 768, 901, 961, 1024, 1280, 1400, 1600]) {
     const svg = document.querySelector(".studio svg");
     const left = [...svg.querySelectorAll(".sd-ink")].reduce((n, el) => n + (parseFloat(getComputedStyle(el).strokeDashoffset) || 0), 0);
     const fills = [...svg.querySelectorAll(".sd-fill")].map((el) => getComputedStyle(el).opacity);
-    const clip = parseFloat(svg.querySelector(".sd-clip").getAttribute("width"));
+    const clip = 300;
     return Math.round(left) === 0 && fills.every((o) => o === "1") && clip >= 299;
   }, null, { timeout: 5000 }).catch(() => {});
   const e = await studioState(p);
@@ -102,50 +103,15 @@ for (const width of [320, 390, 768, 901, 961, 1024, 1280, 1400, 1600]) {
   await p.close();
 }
 
-// The title wipe never reveals text ahead of the pen tip: while the pen is
-// still left of the measured headline end (x=704), the wipe's right edge
-// must not pass the pen tip. Later steps keep the wipe fully open and are
-// excluded by the clip < CLIP_FULL - 1 condition.
+// The pen follows the real device outline rather than revealing a title wipe.
 {
-  const p = await b.newPage({ viewport: { width: 1280, height: 900 } });
-  await p.goto(base + "/homepage-concepts/");
-  await p.waitForLoadState("networkidle");
-  await p.evaluate(() => document.querySelector(".studio svg").scrollIntoView({ block: "center", behavior: "instant" }));
-  // While the title step runs, the wipe must never lead the pen - including
-  // the fully-open-early case. Later steps and the return-to-rest wrap keep a
-  // fully open wipe by design, so only state=running + step=0 is asserted.
-  await p.waitForFunction(
-    () => {
-      const svg = document.querySelector(".studio svg");
-      return svg.dataset.state === "running" && svg.dataset.step === "0";
-    },
-    null,
-    { timeout: 10000 }
-  );
-  let checked = 0;
-  for (let i = 0; i < 24; i++) {
-    const s = await p.evaluate(() => {
-      const svg = document.querySelector(".studio svg");
-      const m = /translate\(([-\d.]+)/.exec(svg.querySelector(".sd-hand").getAttribute("transform"));
-      return {
-        clip: parseFloat(svg.querySelector(".sd-clip").getAttribute("width")),
-        handX: m ? parseFloat(m[1]) : 0,
-        state: svg.dataset.state,
-        step: svg.dataset.step,
-      };
-    });
-    if (s.state !== "running" || s.step !== "0") break; // title step over
-    const penEnd = s.handX + 22;
-    if (penEnd >= 704) break; // the whole headline is revealed from here on
-    if (penEnd > 470) {
-      checked++;
-      if (460 + s.clip > penEnd + 2) fail(`wipe leads pen: edge ${460 + s.clip} pen tip ${penEnd}`);
-    }
-    await p.waitForTimeout(90);
-  }
-  if (checked < 3) fail("too few mid-title samples " + checked);
-  console.log("PASS wipe-tracks-pen");
-  await p.close();
+ const p=await b.newPage({viewport:{width:1280,height:900}});await p.goto(base+"/homepage-concepts/");await p.locator('.studio svg').scrollIntoViewIfNeeded();await waitForDrawing(p);
+ let checked=0;
+ for(let i=0;i<30;i++) {
+  const sample=await p.evaluate(()=>{const svg=document.querySelector('.studio svg'),path=svg.querySelector('.sd-laptop'),len=path.getTotalLength(),left=Number(path.style.strokeDashoffset),pt=path.getPointAtLength(len-left),xy=svg.querySelector('.sd-hand').getAttribute('transform').match(/-?[\d.]+/g).map(Number);return {step:Number(svg.dataset.step),left,len,error:Math.hypot(xy[0]+20-pt.x,xy[1]-20-pt.y)}});
+  if(sample.step!==0)break;if(sample.left>0&&sample.left<sample.len){checked++;if(sample.error>.3)fail('device outline leads pen '+sample.error)}await p.waitForTimeout(35);
+ }
+ if(checked<3)fail('too few device outline samples '+checked);console.log('PASS device-stroke-tracks-pen');await p.close();
 }
 
 // Leaving mid-draw and returning replays the drawing from the start, even
@@ -161,7 +127,7 @@ for (const width of [320, 390, 768, 901, 961, 1024, 1280, 1400, 1600]) {
   await p.evaluate(() => document.querySelector(".studio svg").scrollIntoView({ block: "center", behavior: "instant" }));
   let restarted = false;
   for (let i = 0; i < 15 && !restarted; i++) {
-    restarted = await p.evaluate(() => parseFloat(document.querySelector(".sd-clip").getAttribute("width")) < 100);
+    restarted = await p.evaluate(() => document.querySelector(".studio svg").dataset.state === "running");
     if (!restarted) await p.waitForTimeout(200);
   }
   if (!restarted) fail("drawing did not replay on re-entry after leaving mid-draw");
