@@ -4,7 +4,7 @@ Guidance for anyone contributing changes, including automated contributors. The 
 
 ## What the site is
 
-Three-page static site (`index.html`, `experience/`, `contact/`) with shared CSS (`assets/css/site.css`) and vanilla JS (`assets/js/`). No build step and no runtime dependencies - edit files directly and keep it that way unless Nick decides otherwise.
+Multi-page static site (Home, About, Charity, Pricing, Contact and Privacy, with retained Experience routing) with shared CSS (`assets/css/site.css`) and vanilla JS (`assets/js/`). No build step and no runtime dependencies - edit files directly and keep it that way unless Nick decides otherwise.
 
 ## Running the checks locally
 
@@ -42,3 +42,9 @@ npm run test:e2e       # browser checks: npx playwright test
 ## Batch changes for merge throughput
 
 Keep only two or three PRs in flight at once. Sync or push a PR only when it is next to merge, merge it after green checks and review, then start the next. Never start checks across all open PRs together. Cancel redundant runs on superseded commits when safe, not useful checks on current heads. Add each prospect to `/prospects/` as its page is deployed and verified live; never publish a dead listing.
+
+## Final design and performance review
+
+Before calling a visible change ready, inspect the hosted phone and desktop experience in light/dark mode and with enlarged text. Make separate whole-journey and whole-page passes: try controls, repeated actions, loading and error states, then judge the complete page's hierarchy, spacing, readability and consistency. Passing tests or finding no overlap is not a design verdict (confirmed 5 November 2026).
+
+Check performance after changes (confirmed 2 November 2026). For loading or animation changes, compare like-for-like phone and desktop cold/warm measurements before and after, flag measured slowdowns before merge and check production after deployment. State when a baseline or live check is missing rather than claiming zero impact.
