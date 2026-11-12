@@ -25,7 +25,7 @@ npm run test:e2e       # browser checks: npx playwright test
 
 1. Work happens on a branch and a pull request. Every push and PR runs `.github/workflows/test.yml`: the unit checks plus the full Playwright matrix (Chromium, Firefox, WebKit, mobile Chrome) in the official Playwright container. All checks must be green before a change is presented as ready.
    `.github/workflows/android-chrome.yml` is a proof of concept that boots an Android emulator and runs checks in real Chrome for Android (`tests/android/`). It only runs when its own files change, so it adds no time to ordinary pull requests.
-2. Each PR gets a Netlify deploy preview. Verify the change on the preview - real pages, phone and desktop widths - before calling it ready.
+2. PR previews are opt in to save build minutes: add the `preview` label to the PR, then push (an empty commit is enough) and Netlify builds a deploy preview. Without the label no preview builds. Verify the change on the preview - real pages, phone and desktop widths - before calling it ready.
 3. Only `main` deploys the live site (`.github/workflows/pages.yml` -> GitHub Pages). After any merge to `main`, check the live site once to confirm the deploy landed as intended.
 
 ## Documentation
