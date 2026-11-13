@@ -1,5 +1,7 @@
 # Working in this repo
 
+If CodeRabbit is rate-limited or skipped, run Robin straight away (/review comment or workflow run).
+
 Guidance for anyone contributing changes, including automated contributors. The requirements are in `docs/PROJECT-BRIEF.md` and important decisions are logged in `docs/decisions.md`; this file covers how to work here.
 
 ## What the site is
