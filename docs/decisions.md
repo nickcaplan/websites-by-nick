@@ -1,5 +1,9 @@
 # Decisions
 
+## 11 November 2026: Document the shipped restyle
+
+The merged 5-9 November design supersedes the old homepage screenshot carousel and forest-green/terracotta-only brief. Current illustration, caption, motion and screenshot rules are in [PROJECT-BRIEF.md](PROJECT-BRIEF.md#restyled-illustration-and-portfolio-rules), with source PR links. The 25 October theme-matched screenshot decision below is historical for the homepage: Nick requested dark captures on the light theme on 5 November. Current homepage frames are slim and internal empty gutters are cropped without clipping content. The new palette research is not a selected replacement palette.
+
 ## 8 November 2026: Prospects as independent design studies
 
 The prospects collection uses real desktop and phone screenshots of the published designs, rather than business photos that could be mistaken for completed client work. Each card opens the working concept and has a short explanation of its design choices. The collection remains noindex/nofollow, absent from the public navigation and sitemap, and explicitly labelled work in progress and uncommissioned. Contact links use the main site's `/contact/` route.

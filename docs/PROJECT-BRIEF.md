@@ -13,7 +13,8 @@ Prospective clients who want a modern, responsive website designed, built and ma
 ## Pages
 
 - **Home**: leads with the websites Nick has built. Each project shows what it is, Nick's role and a link to the live site.
-- **Experience**: Nick's background, written in terms of what it means for a client. Earlier roles are presented around the website building they involved. Use only facts Nick has approved and never invent projects, responsibilities or results.
+- **About**: Nick's background and website-building approach, with career history as supporting evidence for clients. Keep the existing Experience route/arrival behaviour working. Use only facts Nick has approved and never invent projects, responsibilities or results.
+- **Charity**: the separate charity website offer and its enquiry route. Preserve the stated scope and eligibility rather than implying unlimited free work.
 - **Pricing**: guide prices for the three kinds of website project (starter, content & growth, bespoke engineering), what each includes and how a project starts. Prices are starting points; every project is quoted individually before the visitor commits. A short section states that Nick can manage domain registration, SSL certificates and other services for clients, without promising prices or inclusions.
 - **Contact**: a short enquiry form ("Have a website in mind?"), sent through Formspree.
 - **Privacy & cookies**: describes what the site actually does.
@@ -25,12 +26,12 @@ Every page has the same navigation, visible at all screen sizes, and the same fo
 - Describe roles and work plainly. Do not invent project outcomes, target markets, results or delivery promises.
 - Do not promise a response time unless Nick confirms one.
 - Use British English.
-- Project examples use composed desktop and phone screenshots that follow the page theme. They are visual teasers; the live site is how a visitor explores a project.
+- Homepage project examples use dark website captures even in the light page theme (requested 5 November 2026). They are visual teasers; the live site is how a visitor explores a project.
 - Only the finished portrait belongs in the repository, not source photographs.
 
 ## Design requirements
 
-- Forest green and terracotta identity, with light and dark themes. Dark is the default for new visitors, and a visitor's saved choice always wins. The page is correct on first paint, with no flash of the wrong theme.
+- Use the deployed illustrated browser and easel design, with light and dark themes. The older forest-green/terracotta brief is not a constraint on future palette work; a replacement palette remains a separate decision. Dark is the default for new visitors, and a visitor's saved choice always wins. The page is correct on first paint, with no flash of the wrong theme.
 - Responsive at every width from 320px up, with phone styling on small screens and stacked project sections below desktop widths. The public site follows the viewport. A fixed phone frame exists only as a development aid on local and preview hosts.
 - Readable and usable: text contrast meets WCAG AA in both themes, body and form text is at least 16px on phones, and touch targets are at least 44px.
 - Everything works with enlarged text and at 320px with no clipping, overlap or sideways scrolling.
@@ -41,8 +42,8 @@ Every page has the same navigation, visible at all screen sizes, and the same fo
 
 - Pages load quickly on a throttled mobile connection. Fonts are self-hosted, images are optimised and sized for where they appear, and there is no render-blocking third-party code.
 - Optimisation must not visibly reduce image sharpness.
-- Project screenshots are delivered responsively. Initial screenshots are created from inert templates once the saved theme is known, so a light-theme visit never downloads the dark set first. Homepage screenshot and portrait candidates let the browser choose detail for the viewport and pixel density, with the original full-size captures as the upper-resolution fallback and as the non-home tab captures; noscript keeps complete static dark captures. The first Friends of Ashley desktop capture stays eager and high priority because it can be the mobile largest-contentful-paint element. Retina sharpness, no-JS content, theme first paint and consent are never traded for a performance score.
-- Both selected screenshot candidates load and decode before a tab or theme swap commits, preserving the atomic pair and latest-selection behaviour. If a replacement cannot load or decode, the existing working pair and its selected label stay; a later choice or retry must still work.
+- Deliver screenshots responsively, sized for the viewport and pixel density, without losing sharpness. Keep meaningful static content without JavaScript and prioritise the first visible portfolio capture when it is the largest-contentful-paint element. Homepage dark captures do not swap to light captures when the page theme changes; older theme-specific tabbed captures are not the homepage design baseline. Retina sharpness, no-JS content, theme first paint and consent are never traded for a performance score.
+- Where paired tabbed captures remain, both selected candidates load and decode before a swap commits, preserving the atomic pair and latest-selection behaviour. If a replacement cannot load or decode, the existing working pair and its selected label stay; a later choice or retry must still work.
 
 ## Privacy and analytics
 
@@ -59,3 +60,12 @@ Every page has the same navigation, visible at all screen sizes, and the same fo
 ## Out of scope
 
 Lightbox or zoom controls on screenshots, and visitor-facing preview toggles.
+
+## Restyled illustration and portfolio rules
+
+- Coordinate the changing headline word with the bulb colour. Keep the lower illustration an easel, without browser tab controls on the board.
+- Keep the cartoon's arm roots attached naturally at the sides of the torso. Show the responsive website on a laptop and a separate, non-overlapping phone. Colour each shape as it is drawn rather than adding a slow second colouring pass; retain a legible flowing Nick Caplan signature.
+- Show the complete caption beneath the cartoon without live typing or a caret. Reduced-motion and no-JavaScript visitors see the finished coloured artwork.
+- Portfolio frames are slim. Crop empty internal screenshot gutters, not meaningful content; preserve proportions and complete screenshot fragments, including during hover motion. Do not restore thick white/cream side strips.
+
+Sources: [restyle #77](https://github.com/nickcaplan/websites-by-nick/pull/77), [public routes #79](https://github.com/nickcaplan/websites-by-nick/pull/79), [easel #82](https://github.com/nickcaplan/websites-by-nick/pull/82), [slim frames #86](https://github.com/nickcaplan/websites-by-nick/pull/86), [FOA crop #87](https://github.com/nickcaplan/websites-by-nick/pull/87) and [other crops #89](https://github.com/nickcaplan/websites-by-nick/pull/89).
