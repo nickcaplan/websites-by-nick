@@ -1,3 +1,10 @@
+# Netlify is used for pull request deploy previews only.
+# Production hosting is Cloudflare Pages at https://websitesbynick.co.uk/.
+# Deploy previews are opt in: the ignore command skips PR builds unless the
+# PR carries the `preview` label (see scripts/netlify-ignore.mjs).
+[build]
+  ignore = "node scripts/netlify-ignore.mjs"
+
 [context.production]
   command = "echo '/*  https://websitesbynick.co.uk/:splat  302!' > _redirects"
 
