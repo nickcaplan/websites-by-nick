@@ -126,3 +126,9 @@ footer > .footer-cta.cta:has(>.link-action-icon){padding-right:calc(1.3em + 2rem
 .cta,.footer-cta,.card .go{min-height:44px;align-items:center}
 
 .link-icon-word{white-space:nowrap}
+/* Keep whole words in the submit label when phone text is enlarged. */
+@media(max-width:23rem){
+.contact-form .button{width:100%;padding-inline:calc(1.3em + 12px)}
+.contact-form .button .mail-icon{width:1.3em;height:1.3em;right:10px}
+.contact-form .button .cta-label,.contact-form .button .cta-end{overflow-wrap:normal;word-break:normal}
+}
