@@ -115,3 +115,12 @@ body:not(.dark) .contact-form .whatsapp-icon{color:#25d366}
 
 /* Keep the centered desktop header identical across the preview pages. */
 @media(min-width:1101px){header.nav{max-width:1040px;padding-left:50px;padding-right:50px}}
+
+/* Link-action icons: right-edge lanes for controls, inline for prose. */
+.link-action-icon{display:inline-block;margin-left:.35em;white-space:nowrap;line-height:1;vertical-align:baseline;text-decoration:none}
+.cta:has(>.link-action-icon),.footer-cta:has(>.link-action-icon),.go:has(>.link-action-icon){position:relative;gap:0;padding-right:calc(1.3em + 1.5rem)}
+.cta>.link-action-icon,.footer-cta>.link-action-icon,.go>.link-action-icon{position:absolute;right:1rem;top:50%;translate:0 -50%;margin:0}
+.contact-form .button{position:relative;padding-inline:calc(1.5em + 1.5rem)}
+.contact-form .button .mail-icon{position:absolute;right:1rem;top:50%;translate:0 -50%;width:1.5em;height:1.5em;margin:0}
+footer > .footer-cta.cta:has(>.link-action-icon){padding-right:calc(1.3em + 1.5rem);gap:0}
+.cta,.footer-cta,.card .go{min-height:44px;align-items:center}
