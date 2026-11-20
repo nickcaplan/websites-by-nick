@@ -1,0 +1,852 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Chess clock</title>
+<link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
+<script>
+// Apply saved display choices before first paint so there is no flash.
+(function () {
+  var saved = {};
+  try { saved = JSON.parse(localStorage.getItem('test-clock-settings') || '{}'); } catch (e) {}
+  var b = document.body || document.documentElement;
+  document.documentElement.dataset.theme = saved.theme || 'dark';
+  document.documentElement.dataset.style = saved.style || 'players';
+  document.documentElement.dataset.accent = saved.accent || 'green';
+})();
+</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  [hidden] { display: none !important; }
+
+  /* Theme and accent palettes */
+  :root {
+    --page-bg: #0b0d10;
+    --ink: #eef1ea;
+    --ink-dim: #9aa896;
+    --inactive-bg: #1a1f1a;
+    --inactive-ink: #aab6a4;
+    --bar-bg: #10140f;
+    --line: #2a332b;
+    --control-bg: #1a1f1a;
+    --control-ink: #cfd8c9;
+    --focus: #f2ede1;
+  }
+  html[data-theme="light"] {
+    --page-bg: #f7f4ef;
+    --ink: #1c211b;
+    --ink-dim: #5c655c;
+    --inactive-bg: #eae5d9;
+    --inactive-ink: #5f6759;
+    --bar-bg: #efeadd;
+    --line: #d5cfbf;
+    --control-bg: #eae5d9;
+    --control-ink: #3c4438;
+    --focus: #22312a;
+  }
+  html[data-accent="green"] { --accent: #a8b598; --accent-ink: #101711; --accent-soft: #a8b59840; }
+  html[data-accent="peach"] { --accent: #f0996f; --accent-ink: #241305; --accent-soft: #f0996f40; }
+  html[data-accent="sky"]   { --accent: #9fc3e8; --accent-ink: #0d1a26; --accent-soft: #9fc3e840; }
+  html[data-theme="light"][data-accent="green"] { --accent: #7d9070; --accent-ink: #101711; }
+  html[data-theme="light"][data-accent="peach"] { --accent: #e8855a; --accent-ink: #241305; }
+  html[data-theme="light"][data-accent="sky"]   { --accent: #7fadd9; --accent-ink: #0d1a26; }
+
+  html, body { height: 100%; }
+  body {
+    background: var(--page-bg);
+    color: var(--ink);
+    font-family: "SF Pro Text", "Segoe UI", system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overscroll-behavior: none;
+  }
+  button { font-family: inherit; }
+  button:focus-visible, [tabindex]:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+  .visually-hidden {
+    position: absolute; width: 1px; height: 1px; overflow: hidden;
+    clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap;
+  }
+
+  /* ---------- Setup screen ---------- */
+  .setup {
+    min-height: 100dvh; display: flex; flex-direction: column; align-items: center;
+    justify-content: center; gap: 26px; padding: 28px 20px; text-align: center;
+  }
+  .setup h1 { font-size: clamp(2rem, 7vw, 2.8rem); font-weight: 800; letter-spacing: -0.01em; }
+  .setup .lead { color: var(--ink-dim); font-size: 1.05rem; max-width: 34ch; }
+  .picker { display: flex; flex-direction: column; gap: 10px; align-items: center; }
+  .picker legend, .picker .group-label, .sheet .group-label {
+    font-size: 0.78rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-dim);
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .chip {
+    min-height: 48px; padding: 10px 18px; border-radius: 999px; cursor: pointer;
+    border: 2px solid var(--line); background: var(--control-bg); color: var(--control-ink);
+    font-size: 1rem; font-weight: 700;
+  }
+  .chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  .start {
+    min-height: 60px; padding: 14px 42px; border-radius: 999px; border: 0; cursor: pointer;
+    background: var(--accent); color: var(--accent-ink); font-size: 1.2rem; font-weight: 800;
+  }
+  .setup-groups { display: flex; flex-direction: column; gap: 22px; align-items: center; }
+
+  /* ---------- Settings sheet ---------- */
+  .sheet-backdrop {
+    position: fixed; inset: 0; background: rgba(0, 0, 0, 0.55); z-index: 40;
+    display: flex; align-items: flex-end; justify-content: center;
+  }
+  .sheet {
+    background: var(--bar-bg); color: var(--ink); border: 1px solid var(--line);
+    border-radius: 24px 24px 0 0; padding: 22px 20px 28px; width: 100%; max-width: 520px;
+    display: flex; flex-direction: column; gap: 20px; max-height: 86dvh; overflow-y: auto;
+  }
+  .sheet h2 { font-size: 1.2rem; font-weight: 800; text-align: center; }
+  .sheet .row { display: flex; flex-direction: column; gap: 8px; align-items: center; font-size: 1rem; }
+  .sheet-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .sheet-actions .chip { min-width: 130px; }
+
+  /* ---------- Clock screen ---------- */
+  .clock {
+    display: grid; grid-template-rows: 1fr auto 1fr; height: 100dvh; overflow: hidden;
+    gap: var(--gap, 0); padding: var(--page-pad, 0);
+  }
+  .player {
+    border: 0; width: 100%; min-width: 0; min-height: 0; cursor: pointer; position: relative;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 10px; padding: 16px; border-radius: var(--radius, 0);
+    background: var(--inactive-bg); color: var(--inactive-ink);
+    touch-action: manipulation; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
+  }
+  .player.top { transform: rotate(180deg); }
+  .player .pname { font-size: 1rem; font-weight: 800; letter-spacing: 0.06em; }
+  .player .time {
+    font-family: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+    font-variant-numeric: tabular-nums; line-height: 1;
+    /* Pinned to the viewport: already far larger than 200% body text, so text zoom
+       leaves it alone and it can never push the layout past 320px. */
+    font-size: min(21vw, 30vh) !important; font-weight: var(--digit-weight, 800);
+    max-width: 100%; white-space: nowrap;
+  }
+  .player .note { font-size: 0.95rem; font-weight: 700; min-height: 1.4em; }
+  .player .flag-line { position: absolute; top: 0; left: 0; right: 0; height: 4px; background: transparent; }
+
+  /* Active (to move) player */
+  .player.active { background: var(--accent); color: var(--accent-ink); }
+
+  /* Low time */
+  .player.active.low { background: var(--low-bg, #c04b28); color: var(--low-ink, #fff4ef); }
+  html[data-theme="light"] .player.active.low { --low-bg: #a53c1e; }
+
+  /* Turn pill (players style only; other styles use the note line) */
+  .turn-pill {
+    display: none; font-size: 0.8rem; font-weight: 800; border-radius: 999px; padding: 7px 16px;
+    background: var(--accent-ink); color: var(--accent); letter-spacing: 0.04em;
+    max-width: 100%; text-align: center;
+  }
+  html[data-style="players"] .player.active .turn-pill { display: inline-block; }
+  html[data-style="players"] .player.active.low .turn-pill { background: var(--low-ink, #fff4ef); color: var(--low-bg, #c04b28); }
+
+  /* Winner */
+  .player.winner { background: var(--accent); color: var(--accent-ink); }
+  html[data-style="tournament"] .player.winner { background: transparent; color: var(--ink); }
+  html[data-style="tournament"] .player.winner .flag-line { background: var(--accent); }
+
+  /* Style: studio - full-bleed halves, calmer weight */
+  html[data-style="studio"] .clock { --radius: 0; --gap: 0; --page-pad: 0; --digit-weight: 700; }
+  html[data-style="studio"] .player .pname { letter-spacing: 0.18em; text-transform: uppercase; font-size: 0.85rem; }
+
+  /* Style: players - chunky rounded cards. The whole half stays tappable:
+     the button fills its half and the card is a painted layer inside it.
+     The top player is rotated 180 degrees, which flips the inset to match. */
+  html[data-style="players"] .clock { --gap: 0; --page-pad: 0; --digit-weight: 800; }
+  html[data-style="players"] .player { padding: 22px; }
+  html[data-style="players"] .player,
+  html[data-style="players"] .player.active,
+  html[data-style="players"] .player.active.low,
+  html[data-style="players"] .player.winner { background: transparent; }
+  html[data-style="players"] .player::before {
+    content: ""; position: absolute; inset: 6px 12px 12px; border-radius: 28px;
+    background: var(--inactive-bg); border: 3px solid var(--line);
+  }
+  /* Positioned layers paint above the card layer, keeping text on top. */
+  html[data-style="players"] .player > * { position: relative; }
+  html[data-style="players"] .player.active::before { background: var(--accent); border-color: var(--accent); }
+  html[data-style="players"] .player.active.low::before { background: var(--low-bg, #c04b28); border-color: var(--low-bg, #c04b28); }
+  html[data-style="players"] .player.winner::before { background: var(--accent); border-color: var(--accent); }
+
+  /* Style: tournament - minimal, hairline marker */
+  html[data-style="tournament"] .clock { --radius: 0; --gap: 0; --page-pad: 0; --digit-weight: 300; }
+  html[data-style="tournament"] .player { background: transparent; }
+  html[data-style="tournament"] .player .time { font-size: min(23vw, 32vh) !important; }
+  html[data-style="tournament"] .player .pname { letter-spacing: 0.32em; text-transform: uppercase; font-size: 0.72rem; font-weight: 600; }
+  html[data-style="tournament"] .player.active { background: transparent; color: var(--ink); }
+  html[data-style="tournament"] .player.active .flag-line { background: var(--accent); }
+  html[data-style="tournament"] .player.active.low { background: transparent; color: var(--low-tournament, #ff9a7a); }
+  html[data-style="tournament"] .player.active.low .flag-line { background: var(--low-tournament, #ff9a7a); }
+  html[data-theme="light"][data-style="tournament"] .player.active.low { --low-tournament: #a53c1e; }
+  html[data-style="tournament"] .turn-pill { display: none !important; }
+
+  /* Centre control bar */
+  .bar {
+    display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap;
+    min-width: 0; row-gap: 8px;
+    background: var(--bar-bg); padding: 10px 12px;
+    border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+    border-radius: var(--bar-radius, 0);
+  }
+  html[data-style="players"] .bar { --bar-radius: 20px; border: 2px solid var(--line); margin: 0 12px; }
+  .bar button {
+    min-width: 52px; min-height: 52px; border-radius: 18px; border: 2px solid var(--line);
+    background: var(--control-bg); color: var(--control-ink); font-size: 1.2rem; cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center; padding: 0 14px;
+  }
+  .bar button[aria-disabled="true"] { opacity: 0.4; cursor: default; }
+  .bar .status { font-size: 0.85rem; color: var(--ink-dim); font-weight: 700; min-width: 0; text-align: center; }
+  .bar button.confirm { background: var(--low-bg, #c04b28); border-color: var(--low-bg, #c04b28); color: #fff4ef; font-size: 0.95rem; font-weight: 800; }
+
+  /* Ended state banner inside the winner panel */
+  .player .result { display: none; font-size: 1.05rem; font-weight: 800; }
+  .player.winner .result { display: block; }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ Setup screen ============ -->
+<main class="setup" id="setup-view">
+  <h1>Chess clock</h1>
+  <p class="lead">Pick a time, tap Start, then tap your side after each move.</p>
+
+  <div class="setup-groups">
+    <fieldset class="picker" style="border:0">
+      <legend>Time per player</legend>
+      <div class="chips" id="time-chips" role="group" aria-label="Time per player">
+        <button class="chip" data-minutes="1" aria-pressed="false">1 min</button>
+        <button class="chip" data-minutes="3" aria-pressed="false">3 min</button>
+        <button class="chip" data-minutes="5" aria-pressed="true">5 min</button>
+        <button class="chip" data-minutes="10" aria-pressed="false">10 min</button>
+        <button class="chip" data-minutes="15" aria-pressed="false">15 min</button>
+      </div>
+    </fieldset>
+
+    <fieldset class="picker" style="border:0">
+      <legend>Extra per move</legend>
+      <div class="chips" id="inc-chips" role="group" aria-label="Extra seconds per move">
+        <button class="chip" data-inc="0" aria-pressed="true">None</button>
+        <button class="chip" data-inc="2" aria-pressed="false">+2s</button>
+        <button class="chip" data-inc="3" aria-pressed="false">+3s</button>
+        <button class="chip" data-inc="5" aria-pressed="false">+5s</button>
+      </div>
+    </fieldset>
+
+    <fieldset class="picker" style="border:0">
+      <legend>Clock style</legend>
+      <div class="chips" id="style-chips" role="group" aria-label="Clock style">
+        <button class="chip" data-style-pick="studio" aria-pressed="false">Studio</button>
+        <button class="chip" data-style-pick="players" aria-pressed="true">Players</button>
+        <button class="chip" data-style-pick="tournament" aria-pressed="false">Tournament</button>
+      </div>
+    </fieldset>
+
+    <fieldset class="picker" style="border:0">
+      <legend>Colour</legend>
+      <div class="chips" id="accent-chips" role="group" aria-label="Clock colour">
+        <button class="chip" data-accent-pick="green" aria-pressed="true">Green</button>
+        <button class="chip" data-accent-pick="peach" aria-pressed="false">Peach</button>
+        <button class="chip" data-accent-pick="sky" aria-pressed="false">Sky</button>
+      </div>
+    </fieldset>
+
+    <fieldset class="picker" style="border:0">
+      <legend>Theme</legend>
+      <div class="chips" id="theme-chips" role="group" aria-label="Theme">
+        <button class="chip" data-theme-pick="dark" aria-pressed="true">Dark</button>
+        <button class="chip" data-theme-pick="light" aria-pressed="false">Light</button>
+      </div>
+    </fieldset>
+  </div>
+
+  <button class="start" id="start-btn">Start clock</button>
+</main>
+
+<!-- ============ Clock screen ============ -->
+<main class="clock" id="clock-view" hidden>
+  <button class="player top" id="p2" aria-label="Player 2">
+    <span class="flag-line"></span>
+    <span class="turn-pill">Tap when your move is done</span>
+    <span class="pname">Player 2</span>
+    <span class="time" id="p2-time">5:00</span>
+    <span class="note" id="p2-note"></span>
+    <span class="result" id="p2-result"></span>
+  </button>
+
+  <div class="bar" role="toolbar" aria-label="Clock controls">
+    <button id="pause-btn" aria-label="Pause">&#10073;&#10073;</button>
+    <span class="status" id="bar-status" role="status"></span>
+    <button id="settings-btn" aria-label="Clock settings">&#9881;</button>
+    <button id="reset-btn" aria-label="Reset clock" aria-disabled="true">&#8635;</button>
+  </div>
+
+  <button class="player bottom" id="p1" aria-label="Player 1">
+    <span class="flag-line"></span>
+    <span class="turn-pill">Tap when your move is done</span>
+    <span class="time" id="p1-time">5:00</span>
+    <span class="pname">Player 1</span>
+    <span class="note" id="p1-note"></span>
+    <span class="result" id="p1-result"></span>
+  </button>
+</main>
+
+<!-- ============ Settings sheet ============ -->
+<div class="sheet-backdrop" id="settings-sheet" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="settings-title" tabindex="-1">
+    <h2 id="settings-title">Clock settings</h2>
+    <div class="row">
+      <span class="group-label">Clock style</span>
+      <div class="chips" id="sheet-style-chips" role="group" aria-label="Clock style">
+        <button class="chip" data-style-pick="studio" aria-pressed="false">Studio</button>
+        <button class="chip" data-style-pick="players" aria-pressed="true">Players</button>
+        <button class="chip" data-style-pick="tournament" aria-pressed="false">Tournament</button>
+      </div>
+    </div>
+    <div class="row">
+      <span class="group-label">Colour</span>
+      <div class="chips" id="sheet-accent-chips" role="group" aria-label="Clock colour">
+        <button class="chip" data-accent-pick="green" aria-pressed="true">Green</button>
+        <button class="chip" data-accent-pick="peach" aria-pressed="false">Peach</button>
+        <button class="chip" data-accent-pick="sky" aria-pressed="false">Sky</button>
+      </div>
+    </div>
+    <div class="row">
+      <span class="group-label">Theme</span>
+      <div class="chips" id="sheet-theme-chips" role="group" aria-label="Theme">
+        <button class="chip" data-theme-pick="dark" aria-pressed="true">Dark</button>
+        <button class="chip" data-theme-pick="light" aria-pressed="false">Light</button>
+      </div>
+    </div>
+    <div class="row">
+      <span class="group-label">Move counter</span>
+      <div class="chips" id="sheet-moves-chips" role="group" aria-label="Move counter">
+        <button class="chip" data-moves-pick="off" aria-pressed="true">Off</button>
+        <button class="chip" data-moves-pick="on" aria-pressed="false">On</button>
+      </div>
+    </div>
+    <div class="row">
+      <span class="group-label">Sound</span>
+      <div class="chips" id="sheet-sound-chips" role="group" aria-label="Sound">
+        <button class="chip" data-sound-pick="on" aria-pressed="true">On</button>
+        <button class="chip" data-sound-pick="off" aria-pressed="false">Off</button>
+      </div>
+    </div>
+    <div class="sheet-actions">
+      <button class="chip" id="sheet-close">Back to game</button>
+      <button class="chip" id="sheet-change-time">Change time</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var SETTINGS_KEY = 'test-clock-settings';
+  var GAME_KEY = 'test-clock-game';
+
+  var el = {
+    html: document.documentElement,
+    setup: document.getElementById('setup-view'),
+    clock: document.getElementById('clock-view'),
+    start: document.getElementById('start-btn'),
+    p1: document.getElementById('p1'),
+    p2: document.getElementById('p2'),
+    p1time: document.getElementById('p1-time'),
+    p2time: document.getElementById('p2-time'),
+    p1note: document.getElementById('p1-note'),
+    p2note: document.getElementById('p2-note'),
+    p1result: document.getElementById('p1-result'),
+    p2result: document.getElementById('p2-result'),
+    pause: document.getElementById('pause-btn'),
+    reset: document.getElementById('reset-btn'),
+    settingsBtn: document.getElementById('settings-btn'),
+    barStatus: document.getElementById('bar-status'),
+    sheet: document.getElementById('settings-sheet'),
+    sheetClose: document.getElementById('sheet-close'),
+    sheetChangeTime: document.getElementById('sheet-change-time')
+  };
+
+  /* ---------- settings ---------- */
+  var settings = { theme: 'dark', style: 'players', accent: 'green', sound: 'on', moves: 'off', minutes: 5, inc: 0 };
+  try {
+    var savedSettings = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
+    for (var k in settings) if (savedSettings[k] !== undefined) settings[k] = savedSettings[k];
+  } catch (e) {}
+
+  function saveSettings() {
+    try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch (e) {}
+  }
+
+  function applyDisplay() {
+    el.html.dataset.theme = settings.theme;
+    el.html.dataset.style = settings.style;
+    el.html.dataset.accent = settings.accent;
+    syncPickers();
+    renderNotes();
+  }
+
+  function syncPickers() {
+    pressGroup('time-chips', 'minutes', String(settings.minutes));
+    pressGroup('inc-chips', 'inc', String(settings.inc));
+    pressGroup('style-chips', 'style-pick', settings.style);
+    pressGroup('accent-chips', 'accent-pick', settings.accent);
+    pressGroup('theme-chips', 'theme-pick', settings.theme);
+    pressGroup('sheet-style-chips', 'style-pick', settings.style);
+    pressGroup('sheet-accent-chips', 'accent-pick', settings.accent);
+    pressGroup('sheet-theme-chips', 'theme-pick', settings.theme);
+    pressGroup('sheet-moves-chips', 'moves-pick', settings.moves);
+    pressGroup('sheet-sound-chips', 'sound-pick', settings.sound);
+  }
+
+  function pressGroup(containerId, dataKey, value) {
+    var container = document.getElementById(containerId);
+    if (!container) return;
+    var buttons = container.querySelectorAll('button');
+    for (var i = 0; i < buttons.length; i++) {
+      buttons[i].setAttribute('aria-pressed', String(buttons[i].getAttribute('data-' + dataKey) === value));
+    }
+  }
+
+  function bindPicker(containerId, dataKey, apply) {
+    var container = document.getElementById(containerId);
+    if (!container) return;
+    container.addEventListener('click', function (event) {
+      var button = event.target.closest('button');
+      if (!button) return;
+      apply(button.getAttribute('data-' + dataKey));
+    });
+  }
+
+  bindPicker('time-chips', 'minutes', function (v) { settings.minutes = Number(v); saveSettings(); syncPickers(); });
+  bindPicker('inc-chips', 'inc', function (v) { settings.inc = Number(v); saveSettings(); syncPickers(); });
+  bindPicker('style-chips', 'style-pick', function (v) { settings.style = v; saveSettings(); applyDisplay(); });
+  bindPicker('accent-chips', 'accent-pick', function (v) { settings.accent = v; saveSettings(); applyDisplay(); });
+  bindPicker('theme-chips', 'theme-pick', function (v) { settings.theme = v; saveSettings(); applyDisplay(); });
+  bindPicker('sheet-style-chips', 'style-pick', function (v) { settings.style = v; saveSettings(); applyDisplay(); });
+  bindPicker('sheet-accent-chips', 'accent-pick', function (v) { settings.accent = v; saveSettings(); applyDisplay(); });
+  bindPicker('sheet-theme-chips', 'theme-pick', function (v) { settings.theme = v; saveSettings(); applyDisplay(); });
+  bindPicker('sheet-moves-chips', 'moves-pick', function (v) { settings.moves = v; saveSettings(); syncPickers(); renderNotes(); });
+  bindPicker('sheet-sound-chips', 'sound-pick', function (v) { settings.sound = v; saveSettings(); syncPickers(); });
+
+  /* ---------- sound ---------- */
+  var audioCtx = null;
+  function beep(frequency, duration, delay) {
+    if (settings.sound !== 'on') return;
+    try {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      var osc = audioCtx.createOscillator();
+      var gain = audioCtx.createGain();
+      osc.frequency.value = frequency;
+      osc.type = 'sine';
+      var at = audioCtx.currentTime + (delay || 0);
+      gain.gain.setValueAtTime(0.0001, at);
+      gain.gain.exponentialRampToValueAtTime(0.08, at + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.0001, at + duration);
+      osc.connect(gain).connect(audioCtx.destination);
+      osc.start(at);
+      osc.stop(at + duration + 0.02);
+    } catch (e) {}
+  }
+  function clickSound() { beep(1200, 0.05, 0); }
+  function alarmSound() { beep(880, 0.18, 0); beep(880, 0.18, 0.25); beep(660, 0.3, 0.5); }
+
+  /* ---------- wake lock ---------- */
+  var wakeLock = null;
+  function requestWakeLock() {
+    if (!('wakeLock' in navigator)) return;
+    navigator.wakeLock.request('screen').then(function (lock) {
+      wakeLock = lock;
+      lock.addEventListener('release', function () { wakeLock = null; });
+    }).catch(function () {});
+  }
+  function releaseWakeLock() {
+    if (wakeLock) { wakeLock.release().catch(function () {}); wakeLock = null; }
+  }
+  function parkGame() {
+    saveGame();
+    if (game.phase === 'running') pauseGame(true);
+  }
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'visible' && game.phase === 'running') requestWakeLock();
+    if (document.visibilityState === 'hidden') parkGame();
+  });
+  window.addEventListener('beforeunload', parkGame);
+  window.addEventListener('pagehide', parkGame);
+
+  /* ---------- game state ---------- */
+  var game = {
+    phase: 'setup', // setup | ready | running | paused | ended
+    active: null,   // 'p1' | 'p2'
+    remaining: { p1: 5 * 60000, p2: 5 * 60000 },
+    moves: { p1: 0, p2: 0 },
+    lastTick: null,
+    winner: null
+  };
+
+  function baseMs() { return settings.minutes * 60000; }
+  function incMs() { return settings.inc * 1000; }
+
+  function saveGame() {
+    if (game.phase === 'setup') return;
+    try {
+      localStorage.setItem(GAME_KEY, JSON.stringify({
+        phase: game.phase === 'running' ? 'paused' : game.phase,
+        active: game.active,
+        remaining: game.remaining,
+        moves: game.moves,
+        winner: game.winner,
+        minutes: settings.minutes,
+        inc: settings.inc,
+        savedAt: Date.now()
+      }));
+    } catch (e) {}
+  }
+
+  function restoreGame() {
+    var saved = null;
+    try { saved = JSON.parse(localStorage.getItem(GAME_KEY) || 'null'); } catch (e) {}
+    if (!saved || !saved.savedAt) return false;
+    if (Date.now() - saved.savedAt > 12 * 3600 * 1000) return false;
+    if (saved.minutes !== settings.minutes || saved.inc !== settings.inc) return false;
+    game.phase = saved.phase === 'running' ? 'paused' : saved.phase;
+    game.active = saved.active;
+    game.remaining = saved.remaining;
+    game.moves = saved.moves || { p1: 0, p2: 0 };
+    game.winner = saved.winner || null;
+    return true;
+  }
+
+  /* ---------- timing ---------- */
+  var timer = null;
+  function startTimer() {
+    stopTimer();
+    game.lastTick = Date.now();
+    timer = setInterval(function () {
+      var now = Date.now();
+      var delta = now - game.lastTick;
+      game.lastTick = now;
+      if (game.phase === 'running' && game.active) {
+        game.remaining[game.active] = Math.max(0, game.remaining[game.active] - delta);
+        renderTimes();
+        if (game.remaining[game.active] <= 0) endGame(other(game.active));
+      }
+    }, 100);
+  }
+  function stopTimer() { if (timer) { clearInterval(timer); timer = null; } }
+
+  function other(side) { return side === 'p1' ? 'p2' : 'p1'; }
+
+  /* ---------- actions ---------- */
+  function startGame() {
+    game.phase = 'ready';
+    game.active = null;
+    game.remaining = { p1: baseMs(), p2: baseMs() };
+    game.moves = { p1: 0, p2: 0 };
+    game.winner = null;
+    el.setup.hidden = true;
+    el.clock.hidden = false;
+    if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+    startTimer();
+    renderAll();
+  }
+
+  function press(side) {
+    if (game.phase === 'ready') {
+      // First press starts the other player's clock, like Black starting White's clock.
+      game.phase = 'running';
+      game.active = other(side);
+      game.lastTick = Date.now();
+      requestWakeLock();
+      clickSound();
+      renderAll();
+      return;
+    }
+    if (game.phase !== 'running' || side !== game.active) return;
+    game.moves[side] += 1;
+    game.remaining[side] += incMs();
+    game.active = other(side);
+    clickSound();
+    saveGame();
+    renderAll();
+  }
+
+  function pauseGame(silent) {
+    if (game.phase !== 'running') return;
+    game.phase = 'paused';
+    releaseWakeLock();
+    if (!silent) saveGame();
+    renderAll();
+  }
+
+  function resumeGame() {
+    if (game.phase !== 'paused') return;
+    game.phase = 'running';
+    game.lastTick = Date.now();
+    requestWakeLock();
+    renderAll();
+  }
+
+  var resetArmed = false;
+  var resetTimer = null;
+  function requestReset() {
+    if (game.phase === 'running') return; // reset only behind pause
+    if (!resetArmed) {
+      resetArmed = true;
+      el.reset.classList.add('confirm');
+      el.reset.textContent = 'Reset?';
+      el.reset.setAttribute('aria-label', 'Tap again to confirm reset');
+      resetTimer = setTimeout(disarmReset, 3000);
+      return;
+    }
+    doReset();
+  }
+  function disarmReset() {
+    resetArmed = false;
+    clearTimeout(resetTimer);
+    el.reset.classList.remove('confirm');
+    el.reset.innerHTML = '&#8635;';
+    el.reset.setAttribute('aria-label', 'Reset clock');
+  }
+  function doReset() {
+    disarmReset();
+    game.phase = 'ready';
+    game.active = null;
+    game.remaining = { p1: baseMs(), p2: baseMs() };
+    game.moves = { p1: 0, p2: 0 };
+    game.winner = null;
+    releaseWakeLock();
+    saveGame();
+    renderAll();
+  }
+
+  function endGame(winner) {
+    game.phase = 'ended';
+    game.winner = winner;
+    releaseWakeLock();
+    alarmSound();
+    saveGame();
+    renderAll();
+  }
+
+  function changeTime() {
+    stopSheet();
+    stopTimer();
+    releaseWakeLock();
+    game.phase = 'setup';
+    try { localStorage.removeItem(GAME_KEY); } catch (e) {}
+    el.clock.hidden = true;
+    el.setup.hidden = false;
+    el.start.focus();
+  }
+
+  /* ---------- settings sheet ---------- */
+  var sheetDialog = el.sheet.querySelector('.sheet');
+  function openSheet() {
+    if (game.phase === 'running') pauseGame();
+    el.sheet.hidden = false;
+    sheetDialog.scrollTop = 0;
+    el.clock.inert = true;
+    el.setup.inert = true;
+    sheetDialog.focus({ preventScroll: true });
+  }
+  function closeSheet() {
+    stopSheet();
+    el.settingsBtn.focus();
+  }
+  function trapSheetTab(event) {
+    var buttons = sheetDialog.querySelectorAll('button');
+    if (!buttons.length) return;
+    var first = buttons[0];
+    var last = buttons[buttons.length - 1];
+    var inside = sheetDialog.contains(document.activeElement);
+    if (event.shiftKey && (!inside || document.activeElement === first)) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && (!inside || document.activeElement === last)) {
+      event.preventDefault();
+      first.focus();
+    }
+  }
+  function stopSheet() {
+    el.sheet.hidden = true;
+    el.clock.inert = false;
+    el.setup.inert = false;
+  }
+
+  /* ---------- rendering ---------- */
+  function fmt(ms) {
+    var totalTenths = Math.ceil(ms / 100);
+    var tenths = totalTenths % 10;
+    var totalSeconds = Math.floor(totalTenths / 10);
+    var seconds = totalSeconds % 60;
+    var minutes = Math.floor(totalSeconds / 60);
+    if (totalSeconds < 20) return minutes + ':' + String(seconds).padStart(2, '0') + '.' + tenths;
+    return minutes + ':' + String(seconds).padStart(2, '0');
+  }
+
+  function renderTimes() {
+    el.p1time.textContent = fmt(game.remaining.p1);
+    el.p2time.textContent = fmt(game.remaining.p2);
+    el.p1.classList.toggle('low', game.phase === 'running' && game.active === 'p1' && game.remaining.p1 <= 10000);
+    el.p2.classList.toggle('low', game.phase === 'running' && game.active === 'p2' && game.remaining.p2 <= 10000);
+  }
+
+  function renderNotes() {
+    var notes = { p1: '', p2: '' };
+    if (game.phase === 'ready') {
+      notes.p1 = 'Tap a side to start';
+      notes.p2 = 'Tap a side to start';
+    } else if (game.phase === 'running' || game.phase === 'paused') {
+      if (settings.moves === 'on') {
+        notes.p1 = game.moves.p1 + (game.moves.p1 === 1 ? ' move' : ' moves');
+        notes.p2 = game.moves.p2 + (game.moves.p2 === 1 ? ' move' : ' moves');
+      }
+      if (game.phase === 'running' && settings.style !== 'players') {
+        if (game.active === 'p1') notes.p1 = (notes.p1 ? notes.p1 + ' · ' : '') + 'Your turn';
+        else notes.p2 = (notes.p2 ? notes.p2 + ' · ' : '') + 'Your turn';
+      }
+    }
+    el.p1note.textContent = notes.p1;
+    el.p2note.textContent = notes.p2;
+  }
+
+  function renderBar() {
+    var label = settings.minutes + ' min' + (settings.inc ? ' + ' + settings.inc + ' s' : '');
+    if (game.phase === 'paused') label = 'Paused';
+    if (game.phase === 'ended') label = 'Game over';
+    el.barStatus.textContent = label;
+    el.pause.innerHTML = game.phase === 'paused' ? '&#9654;' : '&#10073;&#10073;';
+    el.pause.setAttribute('aria-label', game.phase === 'paused' ? 'Resume' : 'Pause');
+    var pauseEnabled = game.phase === 'running' || game.phase === 'paused';
+    el.pause.setAttribute('aria-disabled', String(!pauseEnabled));
+    var resetEnabled = game.phase === 'paused' || game.phase === 'ended' || game.phase === 'ready';
+    el.reset.setAttribute('aria-disabled', String(!resetEnabled));
+    if (!resetEnabled) disarmReset();
+  }
+
+  function renderPlayers() {
+    el.p1.classList.toggle('active', game.phase === 'running' && game.active === 'p1');
+    el.p2.classList.toggle('active', game.phase === 'running' && game.active === 'p2');
+    el.p1.classList.toggle('winner', game.phase === 'ended' && game.winner === 'p1');
+    el.p2.classList.toggle('winner', game.phase === 'ended' && game.winner === 'p2');
+    el.p1result.textContent = game.phase === 'ended' && game.winner === 'p1' ? 'Time! Player 1 wins' : '';
+    el.p2result.textContent = game.phase === 'ended' && game.winner === 'p2' ? 'Time! Player 2 wins' : '';
+
+    var label = { p1: 'Player 1', p2: 'Player 2' };
+    for (var side of ['p1', 'p2']) {
+      var parts = [label[side] + ', ' + spokenTime(game.remaining[side])];
+      if (game.phase === 'running' && game.active === side) parts.push('your turn');
+      if (game.phase === 'ended' && game.winner === side) parts.push('wins on time');
+      (side === 'p1' ? el.p1 : el.p2).setAttribute('aria-label', parts.join(', '));
+    }
+  }
+
+  function spokenTime(ms) {
+    var totalSeconds = Math.ceil(ms / 1000);
+    var minutes = Math.floor(totalSeconds / 60);
+    var seconds = totalSeconds % 60;
+    return minutes + (minutes === 1 ? ' minute ' : ' minutes ') + seconds + (seconds === 1 ? ' second' : ' seconds');
+  }
+
+  function renderAll() {
+    renderTimes();
+    renderNotes();
+    renderBar();
+    renderPlayers();
+  }
+
+  /* ---------- wiring ---------- */
+  el.start.addEventListener('click', startGame);
+  el.p1.addEventListener('pointerdown', function (e) { e.preventDefault(); press('p1'); });
+  el.p2.addEventListener('pointerdown', function (e) { e.preventDefault(); press('p2'); });
+  // Keyboard activation (Enter / Space) fires click, not pointerdown.
+  el.p1.addEventListener('click', function (e) { if (e.detail === 0) press('p1'); });
+  el.p2.addEventListener('click', function (e) { if (e.detail === 0) press('p2'); });
+  el.pause.addEventListener('click', function () {
+    if (game.phase === 'running') pauseGame();
+    else if (game.phase === 'paused') resumeGame();
+  });
+  el.reset.addEventListener('click', function () {
+    if (el.reset.getAttribute('aria-disabled') === 'true') return;
+    requestReset();
+  });
+  el.settingsBtn.addEventListener('click', openSheet);
+  el.sheetClose.addEventListener('click', closeSheet);
+  el.sheetChangeTime.addEventListener('click', changeTime);
+  el.sheet.addEventListener('click', function (event) {
+    if (event.target === el.sheet) closeSheet();
+  });
+  document.addEventListener('keydown', function (event) {
+    if (!el.sheet.hidden) {
+      if (event.key === 'Escape') closeSheet();
+      else if (event.key === 'Tab') trapSheetTab(event);
+      return;
+    }
+    if (el.clock.hidden) return;
+    if (event.target.closest && event.target.closest('button') && (event.key === ' ' || event.key === 'Enter')) return;
+    if (event.key === ' ') {
+      event.preventDefault();
+      if (game.phase === 'running' && game.active) press(game.active);
+      else if (game.phase === 'ready') press('p1');
+    }
+    if (event.key === 'p' || event.key === 'P') {
+      if (game.phase === 'running') pauseGame();
+      else if (game.phase === 'paused') resumeGame();
+    }
+  });
+
+  /* ---------- boot ---------- */
+  applyDisplay();
+  var restored = false;
+  try { restored = restoreGame(); } catch (e) {}
+  if (restored && game.phase !== 'setup') {
+    el.setup.hidden = true;
+    el.clock.hidden = false;
+    startTimer();
+  }
+  renderAll();
+
+  /* Small public surface for the repo's browser checks. */
+  window.chessClock = {
+    getState: function () {
+      return {
+        phase: game.phase, active: game.active, winner: game.winner,
+        remaining: { p1: game.remaining.p1, p2: game.remaining.p2 },
+        moves: { p1: game.moves.p1, p2: game.moves.p2 },
+        settings: { theme: settings.theme, style: settings.style, accent: settings.accent, sound: settings.sound, moves: settings.moves, minutes: settings.minutes, inc: settings.inc }
+      };
+    },
+    start: startGame,
+    press: press,
+    pause: pauseGame,
+    resume: resumeGame,
+    setRemainingMs: function (side, ms) { game.remaining[side] = ms; renderTimes(); },
+    changeTime: changeTime
+  };
+
+  /* Keep the clock available for reloads without a connection. */
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('sw.js').catch(function () {});
+    });
+  }
+})();
+</script>
+</body>
+</html>
