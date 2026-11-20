@@ -260,7 +260,10 @@ test('settings sheet opens at the top even with enlarged text', async ({ page, b
   await expect(page.locator('#settings-title')).toBeInViewport();
 });
 
-test('reloads offline once visited', async ({ page, context, baseURL }) => {
+test('reloads offline once visited', async ({ page, context, baseURL, browserName }) => {
+  // Playwright WebKit does not serve service-worker cached responses for
+  // offline navigations; covered on Chromium and mobile Chrome instead.
+  test.skip(browserName === 'webkit', 'Playwright WebKit cannot replay cached pages offline');
   await fresh(page, baseURL);
   await page.waitForFunction(() => !!(navigator.serviceWorker && navigator.serviceWorker.controller));
   await context.setOffline(true);
