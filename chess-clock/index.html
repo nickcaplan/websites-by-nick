@@ -109,7 +109,9 @@
   .tile .tile-big { font-size: 1.5rem; font-weight: 800; font-variant-numeric: tabular-nums; }
   .tile .tile-sub { font-size: 0.8rem; color: var(--ink-dim); font-weight: 600; }
   .tile[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
-  .tile[aria-pressed="true"] .tile-sub { color: var(--accent-ink); opacity: 0.75; }
+  /* Full ink on the selected fill: 75% opacity dropped small helper text
+     below the 4.5:1 contrast floor in some colour combos. */
+  .tile[aria-pressed="true"] .tile-sub { color: var(--accent-ink); }
 
   /* Collapsed sections */
   .disclosure { border-top: 1px solid var(--line); padding-top: 14px; }
@@ -126,7 +128,7 @@
     display: flex; flex-direction: column; gap: 6px; min-width: 0;
     font-size: 0.78rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-dim);
   }
-  .name-field input {
+  .name-fields input {
     font: inherit; font-size: 1.05rem; font-weight: 700; text-transform: none; letter-spacing: normal;
     padding: 12px 14px; border-radius: 12px; border: 2px solid var(--line);
     background: var(--control-bg); color: var(--ink); width: 100%; min-width: 0;
@@ -156,11 +158,18 @@
     border-radius: 24px 24px 0 0; padding: 16px 20px 28px; width: 100%; max-width: 520px;
     display: flex; flex-direction: column; gap: 20px; max-height: 92dvh; overflow-y: auto;
   }
+  /* Children never shrink to fit: at enlarged text the sheet scrolls
+     instead of squashing buttons until their text spills out. */
+  .sheet > * { flex: none; }
   .sheet-top {
     display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    flex-wrap: wrap;
     position: sticky; top: -16px; background: var(--bar-bg); padding: 6px 0; z-index: 2;
   }
-  .sheet h2 { font-size: 1.25rem; font-weight: 800; text-align: left; }
+  /* Wraps onto its own row, still right-aligned, rather than overflowing
+     the sheet's right edge when the heading needs the width. */
+  .sheet-close-btn { margin-left: auto; }
+  .sheet h2 { font-size: 1.25rem; font-weight: 800; text-align: left; min-width: 0; }
   .sheet-close-btn {
     min-height: 44px; padding: 8px 18px; border-radius: 999px; cursor: pointer;
     border: 2px solid var(--line); background: var(--control-bg); color: var(--control-ink);
