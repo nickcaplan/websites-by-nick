@@ -264,6 +264,44 @@ test('settings sheet opens at the top even with enlarged text', async ({ page, b
   await expect(page.locator('#settings-title')).toBeInViewport();
 });
 
+test('sheet buttons keep their text inside at 320px with 200% text', async ({ page, baseURL }) => {
+  // Both zoom styles browsers offer: root em scaling and per-element text
+  // sizing (the latter with important priority, as strict harnesses apply
+  // it). No button may spill its text or cross the sheet's right edge.
+  for (const mode of ['root', 'element']) {
+    await page.setViewportSize({ width: 320, height: 700 });
+    await page.goto(baseURL + '/chess-clock/');
+    await page.evaluate(() => { chessClock.start(); chessClock.press('p1'); });
+    await page.locator('#settings-btn').click();
+    if (mode === 'root') {
+      await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
+    } else {
+      await page.evaluate(() => {
+        for (const x of document.querySelectorAll('body *')) {
+          const size = parseFloat(getComputedStyle(x).fontSize);
+          if (size) x.style.setProperty('font-size', size * 2 + 'px', 'important');
+        }
+      });
+    }
+    await page.waitForTimeout(150);
+    const result = await page.evaluate(() => {
+      const sheetRight = document.querySelector('#settings-sheet .sheet').getBoundingClientRect().right;
+      return ['sheet-close', 'sheet-resume', 'sheet-change-time'].map((id) => {
+        const b = document.getElementById(id);
+        return {
+          id,
+          insideSheet: b.getBoundingClientRect().right <= sheetRight + 1,
+          textFits: b.scrollHeight <= b.clientHeight + 1 && b.scrollWidth <= b.clientWidth + 1,
+        };
+      });
+    });
+    for (const r of result) {
+      expect(r.insideSheet, `${mode}: #${r.id} crosses the sheet's right edge`).toBe(true);
+      expect(r.textFits, `${mode}: #${r.id} spills its text`).toBe(true);
+    }
+  }
+});
+
 test('reloads offline once visited', async ({ page, context, baseURL, browserName }) => {
   // Playwright WebKit does not serve service-worker cached responses for
   // offline navigations; covered on Chromium and mobile Chrome instead.
