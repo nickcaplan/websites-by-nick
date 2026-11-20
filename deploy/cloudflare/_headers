@@ -30,6 +30,8 @@
   X-Robots-Tag: noindex, nofollow
 /elmbridge-community-link/*
   X-Robots-Tag: noindex, nofollow
+/test-clock/*
+  X-Robots-Tag: noindex, nofollow
 # Provider hostnames are staging surfaces, not another indexed copy of the site.
 https://:project.pages.dev/*
   X-Robots-Tag: noindex, nofollow

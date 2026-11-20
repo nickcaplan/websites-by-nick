@@ -75,6 +75,24 @@ test('full game flow: start, first tap, turns, increment, pause, confirmed reset
   expect(state.remaining.p1).toBe(3 * 60000);
 });
 
+test('10 min + 3 s control: first completed move gives the mover exactly +3s', async ({ page, baseURL }) => {
+  await fresh(page, baseURL);
+  await page.locator('#time-chips [data-minutes="10"]').click();
+  await page.locator('#inc-chips [data-inc="3"]').click();
+  await page.locator('#start-btn').click();
+  // First tap starts the other player's clock, as Black starts White's.
+  await page.locator('#p1').dispatchEvent('pointerdown');
+  // Player 2 completes their first move: exactly +3s, not more.
+  const state = await page.evaluate(() => {
+    chessClock.setRemainingMs('p2', 600000);
+    chessClock.press('p2');
+    return chessClock.getState();
+  });
+  expect(state.moves.p2).toBe(1);
+  expect(state.remaining.p2).toBe(603000);
+  await expect(page.locator('#bar-status')).toHaveText('10 min + 3 s');
+});
+
 test('reset stays locked while the clock is running', async ({ page, baseURL }) => {
   await fresh(page, baseURL);
   await page.locator('#start-btn').click();
@@ -157,6 +175,30 @@ test('no sideways scrolling at 320px, including 200% text', async ({ page, baseU
     }
   });
   expect(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth)).toBe(false);
+
+  // scrollWidth alone misses content clipped by overflow:hidden, so check the
+  // bounding boxes of the visible pieces directly on both views.
+  const fitsViewport = () => {
+    const bad = [];
+    const els = document.querySelectorAll(
+      '.player, .player .time, .player .pname, .player .note, .turn-pill, .bar, .bar button, .bar .status, .sheet, .sheet h2, .sheet .group-label, .chips, .chips .chip'
+    );
+    for (const el of els) {
+      const r = el.getBoundingClientRect();
+      if (r.width === 0 && r.height === 0) continue; // hidden
+      if (r.left < -1 || r.right > window.innerWidth + 1) {
+        bad.push(`${el.className} left=${Math.round(r.left)} right=${Math.round(r.right)}`);
+      }
+    }
+    return bad;
+  };
+  for (const view of ['setup', 'clock']) {
+    if (view === 'setup') await page.evaluate(() => chessClock.changeTime());
+    if (view === 'clock') await page.evaluate(() => chessClock.start());
+    expect(await page.evaluate(fitsViewport), `${view} at 320px 200% text`).toEqual([]);
+  }
+  await page.evaluate(() => document.getElementById('settings-btn').click());
+  expect(await page.evaluate(fitsViewport), 'settings sheet at 320px 200% text').toEqual([]);
 });
 
 test('restores a paused game after reload', async ({ page, baseURL }) => {
@@ -168,4 +210,63 @@ test('restores a paused game after reload', async ({ page, baseURL }) => {
   const state = await page.evaluate(() => chessClock.getState());
   expect(state.phase).toBe('paused');
   await expect(page.locator('#clock-view')).toBeVisible();
+});
+
+test('players style: the whole half is tappable, including edges and corners', async ({ page, baseURL }) => {
+  await fresh(page, baseURL);
+  await page.locator('#start-btn').click();
+  const box = await page.locator('#p1').boundingBox();
+  const taps = [
+    [box.x + 4, box.y + box.height - 4], // bottom-left outer corner
+    [box.x + box.width - 4, box.y + 4], // top-right, towards the bar
+    [box.x + 6, box.y + box.height / 2], // left edge strip
+  ];
+  for (const [x, y] of taps) {
+    await page.mouse.click(x, y);
+    expect((await page.evaluate(() => chessClock.getState())).active).toBe('p2');
+    await page.evaluate(() => chessClock.press('p2'));
+  }
+});
+
+test('settings sheet traps focus, closes on Escape and restores focus', async ({ page, baseURL }) => {
+  await fresh(page, baseURL);
+  await page.locator('#start-btn').click();
+  await page.locator('#settings-btn').click();
+  await expect(page.locator('#settings-sheet')).toBeVisible();
+  for (let i = 0; i < 30; i++) {
+    await page.keyboard.press(i % 4 === 3 ? 'Shift+Tab' : 'Tab');
+    const inside = await page.evaluate(() =>
+      document.querySelector('#settings-sheet .sheet').contains(document.activeElement));
+    expect(inside, `focus stays in the sheet (step ${i})`).toBe(true);
+  }
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#settings-sheet')).toBeHidden();
+  await expect(page.locator('#settings-btn')).toBeFocused();
+});
+
+test('settings sheet opens at the top even with enlarged text', async ({ page, baseURL }) => {
+  await page.setViewportSize({ width: 320, height: 500 });
+  await page.goto(baseURL + '/test-clock/');
+  await page.evaluate(() => chessClock.start());
+  await page.evaluate(() => {
+    for (const x of document.querySelectorAll('body *')) {
+      const size = parseFloat(getComputedStyle(x).fontSize);
+      if (size) x.style.fontSize = size * 2 + 'px';
+    }
+  });
+  await page.locator('#settings-btn').click();
+  await expect(page.locator('#settings-sheet')).toBeVisible();
+  expect(await page.evaluate(() => document.querySelector('#settings-sheet .sheet').scrollTop)).toBe(0);
+  await expect(page.locator('#settings-title')).toBeInViewport();
+});
+
+test('reloads offline once visited', async ({ page, context, baseURL }) => {
+  await fresh(page, baseURL);
+  await page.waitForFunction(() => !!(navigator.serviceWorker && navigator.serviceWorker.controller));
+  await context.setOffline(true);
+  await page.reload();
+  await expect(page.locator('#start-btn')).toBeVisible();
+  await page.locator('#start-btn').click();
+  expect((await page.evaluate(() => chessClock.getState())).phase).toBe('ready');
+  await context.setOffline(false);
 });

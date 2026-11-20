@@ -57,7 +57,7 @@ test('test-clock: accessible controls and time choices', () => {
     assert.match(html, new RegExp(`id="${id}"`));
   }
   for (const minutes of [1, 3, 5, 10, 15]) assert.match(html, new RegExp(`data-minutes="${minutes}"`));
-  for (const inc of [0, 2, 5]) assert.match(html, new RegExp(`data-inc="${inc}"`));
+  for (const inc of [0, 2, 3, 5]) assert.match(html, new RegExp(`data-inc="${inc}"`));
   for (const style of ['studio', 'players', 'tournament']) assert.match(html, new RegExp(`data-style-pick="${style}"`));
   for (const accent of ['green', 'peach', 'sky']) assert.match(html, new RegExp(`data-accent-pick="${accent}"`));
   assert.match(html, /aria-label="Pause"/);

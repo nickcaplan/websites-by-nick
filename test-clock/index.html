@@ -78,7 +78,7 @@
   .setup h1 { font-size: clamp(2rem, 7vw, 2.8rem); font-weight: 800; letter-spacing: -0.01em; }
   .setup .lead { color: var(--ink-dim); font-size: 1.05rem; max-width: 34ch; }
   .picker { display: flex; flex-direction: column; gap: 10px; align-items: center; }
-  .picker legend, .picker .group-label {
+  .picker legend, .picker .group-label, .sheet .group-label {
     font-size: 0.78rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-dim);
   }
   .chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
@@ -105,7 +105,7 @@
     display: flex; flex-direction: column; gap: 20px; max-height: 86dvh; overflow-y: auto;
   }
   .sheet h2 { font-size: 1.2rem; font-weight: 800; text-align: center; }
-  .sheet .row { display: flex; flex-direction: column; gap: 8px; align-items: center; }
+  .sheet .row { display: flex; flex-direction: column; gap: 8px; align-items: center; font-size: 1rem; }
   .sheet-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
   .sheet-actions .chip { min-width: 130px; }
 
@@ -115,7 +115,7 @@
     gap: var(--gap, 0); padding: var(--page-pad, 0);
   }
   .player {
-    border: 0; width: 100%; cursor: pointer; position: relative;
+    border: 0; width: 100%; min-width: 0; min-height: 0; cursor: pointer; position: relative;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     gap: 10px; padding: 16px; border-radius: var(--radius, 0);
     background: var(--inactive-bg); color: var(--inactive-ink);
@@ -126,7 +126,10 @@
   .player .time {
     font-family: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
     font-variant-numeric: tabular-nums; line-height: 1;
-    font-size: min(21vw, 30vh); font-weight: var(--digit-weight, 800);
+    /* Pinned to the viewport: already far larger than 200% body text, so text zoom
+       leaves it alone and it can never push the layout past 320px. */
+    font-size: min(21vw, 30vh) !important; font-weight: var(--digit-weight, 800);
+    max-width: 100%; white-space: nowrap;
   }
   .player .note { font-size: 0.95rem; font-weight: 700; min-height: 1.4em; }
   .player .flag-line { position: absolute; top: 0; left: 0; right: 0; height: 4px; background: transparent; }
@@ -142,6 +145,7 @@
   .turn-pill {
     display: none; font-size: 0.8rem; font-weight: 800; border-radius: 999px; padding: 7px 16px;
     background: var(--accent-ink); color: var(--accent); letter-spacing: 0.04em;
+    max-width: 100%; text-align: center;
   }
   html[data-style="players"] .player.active .turn-pill { display: inline-block; }
   html[data-style="players"] .player.active.low .turn-pill { background: var(--low-ink, #fff4ef); color: var(--low-bg, #c04b28); }
@@ -155,16 +159,29 @@
   html[data-style="studio"] .clock { --radius: 0; --gap: 0; --page-pad: 0; --digit-weight: 700; }
   html[data-style="studio"] .player .pname { letter-spacing: 0.18em; text-transform: uppercase; font-size: 0.85rem; }
 
-  /* Style: players - chunky rounded cards */
-  html[data-style="players"] .clock { --radius: 28px; --gap: 12px; --page-pad: 12px; --digit-weight: 800; }
-  html[data-style="players"] .player.top { border: 3px solid var(--line); }
-  html[data-style="players"] .player.active { border: 3px solid var(--accent); }
-  html[data-style="players"] .player.active.low { border-color: var(--low-bg, #c04b28); }
+  /* Style: players - chunky rounded cards. The whole half stays tappable:
+     the button fills its half and the card is a painted layer inside it.
+     The top player is rotated 180 degrees, which flips the inset to match. */
+  html[data-style="players"] .clock { --gap: 0; --page-pad: 0; --digit-weight: 800; }
+  html[data-style="players"] .player { padding: 22px; }
+  html[data-style="players"] .player,
+  html[data-style="players"] .player.active,
+  html[data-style="players"] .player.active.low,
+  html[data-style="players"] .player.winner { background: transparent; }
+  html[data-style="players"] .player::before {
+    content: ""; position: absolute; inset: 6px 12px 12px; border-radius: 28px;
+    background: var(--inactive-bg); border: 3px solid var(--line);
+  }
+  /* Positioned layers paint above the card layer, keeping text on top. */
+  html[data-style="players"] .player > * { position: relative; }
+  html[data-style="players"] .player.active::before { background: var(--accent); border-color: var(--accent); }
+  html[data-style="players"] .player.active.low::before { background: var(--low-bg, #c04b28); border-color: var(--low-bg, #c04b28); }
+  html[data-style="players"] .player.winner::before { background: var(--accent); border-color: var(--accent); }
 
   /* Style: tournament - minimal, hairline marker */
   html[data-style="tournament"] .clock { --radius: 0; --gap: 0; --page-pad: 0; --digit-weight: 300; }
   html[data-style="tournament"] .player { background: transparent; }
-  html[data-style="tournament"] .player .time { font-size: min(23vw, 32vh); }
+  html[data-style="tournament"] .player .time { font-size: min(23vw, 32vh) !important; }
   html[data-style="tournament"] .player .pname { letter-spacing: 0.32em; text-transform: uppercase; font-size: 0.72rem; font-weight: 600; }
   html[data-style="tournament"] .player.active { background: transparent; color: var(--ink); }
   html[data-style="tournament"] .player.active .flag-line { background: var(--accent); }
@@ -175,19 +192,20 @@
 
   /* Centre control bar */
   .bar {
-    display: flex; align-items: center; justify-content: center; gap: 14px;
+    display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap;
+    min-width: 0; row-gap: 8px;
     background: var(--bar-bg); padding: 10px 12px;
     border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
     border-radius: var(--bar-radius, 0);
   }
-  html[data-style="players"] .bar { --bar-radius: 20px; border: 2px solid var(--line); }
+  html[data-style="players"] .bar { --bar-radius: 20px; border: 2px solid var(--line); margin: 0 12px; }
   .bar button {
     min-width: 52px; min-height: 52px; border-radius: 18px; border: 2px solid var(--line);
     background: var(--control-bg); color: var(--control-ink); font-size: 1.2rem; cursor: pointer;
     display: inline-flex; align-items: center; justify-content: center; padding: 0 14px;
   }
   .bar button[aria-disabled="true"] { opacity: 0.4; cursor: default; }
-  .bar .status { font-size: 0.85rem; color: var(--ink-dim); font-weight: 700; min-width: 5.5em; text-align: center; }
+  .bar .status { font-size: 0.85rem; color: var(--ink-dim); font-weight: 700; min-width: 0; text-align: center; }
   .bar button.confirm { background: var(--low-bg, #c04b28); border-color: var(--low-bg, #c04b28); color: #fff4ef; font-size: 0.95rem; font-weight: 800; }
 
   /* Ended state banner inside the winner panel */
@@ -223,6 +241,7 @@
       <div class="chips" id="inc-chips" role="group" aria-label="Extra seconds per move">
         <button class="chip" data-inc="0" aria-pressed="true">None</button>
         <button class="chip" data-inc="2" aria-pressed="false">+2s</button>
+        <button class="chip" data-inc="3" aria-pressed="false">+3s</button>
         <button class="chip" data-inc="5" aria-pressed="false">+5s</button>
       </div>
     </fieldset>
@@ -287,7 +306,7 @@
 
 <!-- ============ Settings sheet ============ -->
 <div class="sheet-backdrop" id="settings-sheet" hidden>
-  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="settings-title" tabindex="-1">
     <h2 id="settings-title">Clock settings</h2>
     <div class="row">
       <span class="group-label">Clock style</span>
@@ -637,12 +656,38 @@
   }
 
   /* ---------- settings sheet ---------- */
+  var sheetDialog = el.sheet.querySelector('.sheet');
   function openSheet() {
     if (game.phase === 'running') pauseGame();
     el.sheet.hidden = false;
-    el.sheetClose.focus();
+    sheetDialog.scrollTop = 0;
+    el.clock.inert = true;
+    el.setup.inert = true;
+    sheetDialog.focus({ preventScroll: true });
   }
-  function stopSheet() { el.sheet.hidden = true; }
+  function closeSheet() {
+    stopSheet();
+    el.settingsBtn.focus();
+  }
+  function trapSheetTab(event) {
+    var buttons = sheetDialog.querySelectorAll('button');
+    if (!buttons.length) return;
+    var first = buttons[0];
+    var last = buttons[buttons.length - 1];
+    var inside = sheetDialog.contains(document.activeElement);
+    if (event.shiftKey && (!inside || document.activeElement === first)) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && (!inside || document.activeElement === last)) {
+      event.preventDefault();
+      first.focus();
+    }
+  }
+  function stopSheet() {
+    el.sheet.hidden = true;
+    el.clock.inert = false;
+    el.setup.inert = false;
+  }
 
   /* ---------- rendering ---------- */
   function fmt(ms) {
@@ -682,7 +727,7 @@
   }
 
   function renderBar() {
-    var label = settings.minutes + ' min' + (settings.inc ? ' + ' + settings.inc + 's' : '');
+    var label = settings.minutes + ' min' + (settings.inc ? ' + ' + settings.inc + ' s' : '');
     if (game.phase === 'paused') label = 'Paused';
     if (game.phase === 'ended') label = 'Game over';
     el.barStatus.textContent = label;
@@ -742,14 +787,18 @@
     requestReset();
   });
   el.settingsBtn.addEventListener('click', openSheet);
-  el.sheetClose.addEventListener('click', function () { stopSheet(); el.settingsBtn.focus(); });
+  el.sheetClose.addEventListener('click', closeSheet);
   el.sheetChangeTime.addEventListener('click', changeTime);
   el.sheet.addEventListener('click', function (event) {
-    if (event.target === el.sheet) { stopSheet(); el.settingsBtn.focus(); }
+    if (event.target === el.sheet) closeSheet();
   });
   document.addEventListener('keydown', function (event) {
-    if (event.key === 'Escape' && !el.sheet.hidden) { stopSheet(); el.settingsBtn.focus(); return; }
-    if (el.clock.hidden || !el.sheet.hidden) return;
+    if (!el.sheet.hidden) {
+      if (event.key === 'Escape') closeSheet();
+      else if (event.key === 'Tab') trapSheetTab(event);
+      return;
+    }
+    if (el.clock.hidden) return;
     if (event.target.closest && event.target.closest('button') && (event.key === ' ' || event.key === 'Enter')) return;
     if (event.key === ' ') {
       event.preventDefault();
@@ -790,6 +839,13 @@
     setRemainingMs: function (side, ms) { game.remaining[side] = ms; renderTimes(); },
     changeTime: changeTime
   };
+
+  /* Keep the clock available for reloads without a connection. */
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('sw.js').catch(function () {});
+    });
+  }
 })();
 </script>
 </body>
