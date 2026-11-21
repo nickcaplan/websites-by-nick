@@ -826,7 +826,8 @@ test('each side shows a White or Black pawn badge; badge, name and digits never 
       const out = { card: Math.round(card.height) };
       for (const q of ['.side', '.pname', '.time']) {
         const r = document.querySelector('#' + id + ' ' + q).getBoundingClientRect();
-        out[q] = [Math.round(r.top), Math.round(r.left + r.width / 2)]; // whole px: sub-pixel rounding noise ignored
+        out[q] = [Math.round(r.top)]; // whole px vertical position: must be identical
+        out[q + 'cx'] = r.left + r.width / 2; // horizontal centre: compared within 1px below (browsers round fractional layout differently)
         out[q + 'inside'] = r.left >= card.left && r.right <= card.right && r.top >= card.top && r.bottom <= card.bottom;
       }
       out.slotHeight = Math.round(document.querySelector('#' + id + ' .slot').getBoundingClientRect().height * 10) / 10; // the reserved slot never grows
@@ -876,7 +877,10 @@ test('each side shows a White or Black pawn badge; badge, name and digits never 
       expect(e.text).toMatch(/^Time! .+(wins|flag fell)$/);
     }
     for (const [name, got] of Object.entries(states)) {
-      expect(got, `${width}x${height}${big ? ' 200%' : ''}${moves ? ' counter on' : ''}${flip ? ' other side loses' : ''}: badge, name and digits unchanged in ${name}`).toEqual(ready);
+      const strip = (list) => list.map((m) => Object.fromEntries(Object.entries(m).filter(([k]) => !k.endsWith('cx'))));
+      const label = `${width}x${height}${big ? ' 200%' : ''}${moves ? ' counter on' : ''}${flip ? ' other side loses' : ''}: badge, name and digits unchanged in ${name}`;
+      expect(strip(got), label).toEqual(strip(ready));
+      got.forEach((m, i) => { for (const k of Object.keys(m).filter((x) => x.endsWith('cx'))) expect(Math.abs(m[k] - ready[i][k]), label + ' (' + k + ' centre x)').toBeLessThanOrEqual(1); });
     }
   }
 });
