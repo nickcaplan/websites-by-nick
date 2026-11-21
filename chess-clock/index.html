@@ -241,6 +241,7 @@
     touch-action: manipulation; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
   }
   .player.top { transform: rotate(180deg); }
+  .player .pname:empty { display: none; }
   .player .pname { font-size: 1rem; font-weight: 800; letter-spacing: 0.06em; max-width: 100%; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-shrink: 0; }
   /* Move count, on its own line under the badge. Its line is reserved (hidden) while the counter is on, so
      nothing moves when the count appears; the name keeps one line and the count is never cut. */
@@ -347,7 +348,8 @@
      so the message never pushes the name or digits out of the card. */
   /* The outcome words ("Time!", "wins", "flag fell") always show in full; only the inserted name is cut
      with an ellipsis when it is too long for the card. Up to three lines, always reserved by the slot. */
-  .player .result { display: flex; flex-wrap: wrap; justify-content: center; align-content: flex-start; column-gap: 0.3em; overflow: hidden; visibility: hidden; font-size: 0.8rem; line-height: 1.2; min-height: 3.6em; font-weight: 800; }
+  /* The reserve is rounded up to a whole pixel (where supported) so fractional layout cannot move the stack by a sub-pixel between states. */
+  .player .result { display: flex; flex-wrap: wrap; justify-content: center; align-content: flex-start; column-gap: 0.3em; overflow: hidden; visibility: hidden; font-size: 0.8rem; line-height: 1.2; min-height: 3.6em; min-height: round(up, 3.6em, 1px); font-weight: 800; }
   .player .result > span { white-space: nowrap; }
   .player .result .rname { display: flex; max-width: 100%; min-width: 0; }
   .player .result .rn { overflow: hidden; text-overflow: ellipsis; min-width: 0; }
@@ -423,9 +425,9 @@
     <h2 id="players-heading">Players</h2>
     <div class="name-fields">
       <label class="name-field" for="name-p1"><svg class="pawn pawn-white" aria-hidden="true"><use href="#pawn"/></svg>White (bottom)</label>
-      <input id="name-p1" type="text" value="Player 1" maxlength="24" autocomplete="off" spellcheck="false">
+      <input id="name-p1" type="text" value="" placeholder="Optional name" maxlength="24" autocomplete="off" spellcheck="false">
       <label class="name-field" for="name-p2"><svg class="pawn pawn-black" aria-hidden="true"><use href="#pawn"/></svg>Black (top)</label>
-      <input id="name-p2" type="text" value="Player 2" maxlength="24" autocomplete="off" spellcheck="false">
+      <input id="name-p2" type="text" value="" placeholder="Optional name" maxlength="24" autocomplete="off" spellcheck="false">
     </div>
   </section>
 
@@ -469,11 +471,11 @@
 
 <!-- ============ Clock screen ============ -->
 <main class="clock" id="clock-view" hidden>
-  <button class="player top" id="p2" aria-label="Player 2">
+  <button class="player top" id="p2" aria-label="Black">
     <span class="flag-line"></span>
     <span class="side"><svg class="pawn pawn-black" aria-hidden="true"><use href="#pawn"/></svg>Black</span>
     <span class="mv" id="p2-mv"></span>
-    <span class="pname">Player 2</span>
+    <span class="pname"></span>
     <span class="time" id="p2-time">5:00</span>
     <span class="slot"><span class="turn-pill">Tap when your move is done</span><span class="note" id="p2-note"></span><span class="result" id="p2-result"></span></span>
   </button>
@@ -488,10 +490,10 @@
     <button id="bar-change" class="bar-toggle" hidden>Change time</button>
   </div>
 
-  <button class="player bottom" id="p1" aria-label="Player 1">
+  <button class="player bottom" id="p1" aria-label="White">
     <span class="flag-line"></span>
     <span class="time" id="p1-time">5:00</span>
-    <span class="pname">Player 1</span>
+    <span class="pname"></span>
     <span class="side"><svg class="pawn pawn-white" aria-hidden="true"><use href="#pawn"/></svg>White</span>
     <span class="mv" id="p1-mv"></span>
     <span class="slot"><span class="turn-pill">Tap when your move is done</span><span class="note" id="p1-note"></span><span class="result" id="p1-result"></span></span>
@@ -592,10 +594,13 @@
   };
 
   /* ---------- settings ---------- */
-  var settings = { theme: 'dark', accent: 'green', sound: 'on', moves: 'off', minutes: 10, inc: 3, p1name: 'Player 1', p2name: 'Player 2' };
+  var settings = { theme: 'dark', accent: 'green', sound: 'on', moves: 'off', minutes: 10, inc: 3, p1name: '', p2name: '' };
   try {
     var savedSettings = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
     for (var k in settings) if (savedSettings[k] !== undefined) settings[k] = savedSettings[k];
+    // The old default names are no longer used: treat them as no name.
+    if (settings.p1name === 'Player 1') settings.p1name = '';
+    if (settings.p2name === 'Player 2') settings.p2name = '';
   } catch (e) {}
 
   function saveSettings() {
@@ -627,8 +632,11 @@
 
   function nameOf(side) {
     var raw = side === 'p1' ? settings.p1name : settings.p2name;
-    var name = (raw || '').trim();
-    return name || (side === 'p1' ? 'Player 1' : 'Player 2');
+    return (raw || '').trim();
+  }
+  // What names the side in messages: the typed name, otherwise its colour.
+  function labelOf(side) {
+    return nameOf(side) || (side === 'p1' ? 'White' : 'Black');
   }
 
   function renderNames() {
@@ -638,7 +646,7 @@
 
   function updateSummary() {
     renderSetupClock();
-    el.playSummary.textContent = settings.minutes + ' + ' + settings.inc + ' - ' + nameOf('p1') + ' (White, bottom) vs ' + nameOf('p2') + ' (Black, top)';
+    el.playSummary.textContent = settings.minutes + ' + ' + settings.inc + ' - ' + (nameOf('p1') ? nameOf('p1') + ' (White, bottom)' : 'White (bottom)') + ' vs ' + (nameOf('p2') ? nameOf('p2') + ' (Black, top)' : 'Black (top)');
   }
 
   // Path digits keep this decorative miniature crisp at any zoom, without
@@ -1147,7 +1155,7 @@
     var won = game.winner === side;
     function span(cls, text) { var e = document.createElement('span'); if (cls) e.className = cls; e.textContent = text; return e; }
     var who = span('rname', '');
-    var rn = span('rn', nameOf(side)); rn.dataset.full = nameOf(side); who.appendChild(rn);
+    var rn = span('rn', labelOf(side)); rn.dataset.full = labelOf(side); who.appendChild(rn);
     who.appendChild(span('', won ? ' ' : '\u2019s '));
     box.appendChild(span('', 'Time! '));
     box.appendChild(who);
@@ -1215,7 +1223,7 @@
 
     var label = { p1: nameOf('p1'), p2: nameOf('p2') };
     for (var side of ['p1', 'p2']) {
-      var parts = [label[side] + ', ' + (side === 'p1' ? 'White' : 'Black') + ', ' + spokenTime(game.remaining[side])];
+      var parts = [(label[side] ? label[side] + ', ' : '') + (side === 'p1' ? 'White' : 'Black') + ', ' + spokenTime(game.remaining[side])];
       if (game.phase === 'running' && game.active === side) parts.push('your turn');
       if (game.phase === 'ended' && game.winner === side) parts.push('wins on time');
       (side === 'p1' ? el.p1 : el.p2).setAttribute('aria-label', parts.join(', '));

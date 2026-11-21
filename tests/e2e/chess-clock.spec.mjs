@@ -123,7 +123,7 @@ test('flag fall ends the game and names the winner', async ({ page, baseURL }) =
   await page.locator('#p1').dispatchEvent('pointerdown');
   await page.evaluate(() => chessClock.setRemainingMs('p2', 400));
   await expect(page.locator('#bar-status')).toHaveText('Game over', { timeout: 3000 });
-  await expect(page.locator('#p1-result')).toHaveText('Time! Player 1 wins');
+  await expect(page.locator('#p1-result')).toHaveText('Time! White wins');
   const state = await page.evaluate(() => chessClock.getState());
   expect(state.phase).toBe('ended');
   expect(state.winner).toBe('p1');
@@ -342,10 +342,10 @@ test('reloads offline once visited', async ({ page, context, baseURL, browserNam
   await context.setOffline(false);
 });
 
-test('player names: prefilled, editable, shown on the clock and persisted', async ({ page, baseURL }) => {
+test('player names: optional, editable, shown on the clock and persisted', async ({ page, baseURL }) => {
   await fresh(page, baseURL);
-  await expect(page.locator('#name-p1')).toHaveValue('Player 1');
-  await expect(page.locator('#name-p2')).toHaveValue('Player 2');
+  await expect(page.locator('#name-p1')).toHaveValue('');
+  await expect(page.locator('#name-p2')).toHaveValue('');
   await page.locator('#name-p1').fill('Luca');
   await page.locator('#name-p2').fill('Dad');
   await expect(page.locator('#play-summary')).toContainText('Luca (White, bottom) vs Dad (Black, top)');
@@ -353,10 +353,10 @@ test('player names: prefilled, editable, shown on the clock and persisted', asyn
   await expect(page.locator('#p1 .pname')).toHaveText('Luca');
   await expect(page.locator('#p2 .pname')).toHaveText('Dad');
   await expect(page.locator('#p1')).toHaveAttribute('aria-label', /Luca/);
-  // Empty falls back to the default.
+  // Empty falls back to the colour; the old default names are migrated away.
   await page.evaluate(() => { chessClock.changeTime(); });
   await page.locator('#name-p1').fill('');
-  await expect(page.locator('#play-summary')).toContainText('Player 1 (White, bottom)');
+  await expect(page.locator('#play-summary')).toContainText('White (bottom) vs Dad (Black, top)');
   await page.locator('#name-p1').fill('Luca');
   // Persisted across reloads.
   await page.goto(baseURL + '/chess-clock/');
@@ -826,8 +826,7 @@ test('each side shows a White or Black pawn badge; badge, name and digits never 
       const out = { card: Math.round(card.height) };
       for (const q of ['.side', '.pname', '.time']) {
         const r = document.querySelector('#' + id + ' ' + q).getBoundingClientRect();
-        out[q] = [Math.round(r.top)]; // whole px vertical position: must be identical
-        out[q + 'cx'] = r.left + r.width / 2; // horizontal centre: compared within 1px below (browsers round fractional layout differently)
+        out[q] = [Math.round(r.top), Math.round(r.left + r.width / 2)]; // whole px: must be identical
         out[q + 'inside'] = r.left >= card.left && r.right <= card.right && r.top >= card.top && r.bottom <= card.bottom;
       }
       out.slotHeight = Math.round(document.querySelector('#' + id + ' .slot').getBoundingClientRect().height * 10) / 10; // the reserved slot never grows
@@ -877,10 +876,7 @@ test('each side shows a White or Black pawn badge; badge, name and digits never 
       expect(e.text).toMatch(/^Time! .+(wins|flag fell)$/);
     }
     for (const [name, got] of Object.entries(states)) {
-      const strip = (list) => list.map((m) => Object.fromEntries(Object.entries(m).filter(([k]) => !k.endsWith('cx'))));
-      const label = `${width}x${height}${big ? ' 200%' : ''}${moves ? ' counter on' : ''}${flip ? ' other side loses' : ''}: badge, name and digits unchanged in ${name}`;
-      expect(strip(got), label).toEqual(strip(ready));
-      got.forEach((m, i) => { for (const k of Object.keys(m).filter((x) => x.endsWith('cx'))) expect(Math.abs(m[k] - ready[i][k]), label + ' (' + k + ' centre x)').toBeLessThanOrEqual(1); });
+      expect(got, `${width}x${height}${big ? ' 200%' : ''}${moves ? ' counter on' : ''}${flip ? ' other side loses' : ''}: badge, name and digits unchanged in ${name}`).toEqual(ready);
     }
   }
 });
@@ -905,4 +901,29 @@ test('the reserved slot follows the ended result text size, however the size is 
   await expect.poll(async () => (await page.evaluate(() => chessClock.getState())).phase).toBe('ended');
   await page.waitForTimeout(400);
   expect(await slots()).toEqual(ready);
+});
+
+test('with no names typed, the clock shows only White and Black, and the old defaults are dropped', async ({ page, baseURL }) => {
+  await page.setViewportSize({ width: 320, height: 740 });
+  await page.goto(baseURL + '/chess-clock/');
+  await page.evaluate(() => { localStorage.clear(); localStorage.setItem('chess-clock-settings', JSON.stringify({ p1name: 'Player 1', p2name: 'Player 2' })); });
+  await page.goto(baseURL + '/chess-clock/');
+  await expect(page.locator('#play-summary')).toContainText('White (bottom) vs Black (top)');
+  await expect(page.locator('#name-p1')).toHaveAttribute('placeholder', 'Optional name');
+  await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; chessClock.start(); });
+  await page.locator('#moves-toggle').click();
+  await expect(page.locator('#p1 .pname')).toBeHidden();
+  await expect(page.locator('#p1')).toHaveAttribute('aria-label', /^White, /);
+  await page.waitForTimeout(400);
+  const m = () => page.evaluate(() => ['p1', 'p2'].map((id) => ['.side', '.time', '.slot'].map((q) => { const r = document.querySelector('#' + id + ' ' + q).getBoundingClientRect(); return Math.round(r.top) + '/' + Math.round(r.height); })));
+  const ready = await m();
+  await page.evaluate(() => { chessClock.press('p1'); chessClock.press('p2'); });
+  expect(await m()).toEqual(ready);
+  await page.evaluate(() => { chessClock.pause(); });
+  expect(await m()).toEqual(ready);
+  await page.evaluate(() => { chessClock.resume(); chessClock.setRemainingMs(chessClock.getState().active, 50); });
+  await expect.poll(async () => (await page.evaluate(() => chessClock.getState())).phase).toBe('ended');
+  await page.waitForTimeout(400);
+  expect(await m()).toEqual(ready);
+  await expect(page.locator('#p1-result')).toHaveText(/^Time! White( wins|.s flag fell)$/);
 });
