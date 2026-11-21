@@ -10,6 +10,7 @@ permissions:
   contents: read
   pages: write
   id-token: write
+  actions: read
 
 concurrency:
   group: pages
@@ -37,6 +38,24 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: .site-public
+
+      # deploy-pages sometimes looks for the artifact a fraction of a second after
+      # upload finalises and finds none. Wait until this run lists it (short first
+      # pause, then up to 6 bounded checks 5s apart, 30s at most). If it never
+      # shows, carry on and let deploy-pages report its own error.
+      - name: Wait for the Pages artifact to be listed
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: ${{ github.api_url }}/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts?name=github-pages
+        run: |
+          sleep 3
+          for attempt in 1 2 3 4 5 6; do
+            count=$(curl -fsS -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" "$RUN_URL" | jq '[.artifacts[] | select(.expired == false)] | length' || echo 0)
+            echo "Attempt $attempt: $count github-pages artifact(s) listed"
+            if [ "$count" -ge 1 ]; then exit 0; fi
+            sleep 5
+          done
+          echo "::warning::github-pages artifact not listed after 30s; continuing to deploy-pages"
 
       - name: Deploy to GitHub Pages
         id: deployment
