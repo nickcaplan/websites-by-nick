@@ -1,5 +1,5 @@
-// Content checks for the unlisted chess clock at /test-clock/.
-// Dependency-free: node --test tests/test-clock.test.mjs
+// Content checks for the unlisted chess clock at /chess-clock/.
+// Dependency-free: node --test tests/chess-clock.test.mjs
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
@@ -7,9 +7,9 @@ import { resolve } from 'node:path';
 import vm from 'node:vm';
 
 const root = resolve(import.meta.dirname, '..');
-const html = readFileSync(resolve(root, 'test-clock/index.html'), 'utf8');
+const html = readFileSync(resolve(root, 'chess-clock/index.html'), 'utf8');
 
-test('test-clock: complete document, single heading, not indexed', () => {
+test('chess-clock: complete document, single heading, not indexed', () => {
   assert.match(html, /^<!doctype html>/i);
   assert.match(html, /<html lang="en">/);
   assert.match(html, /<title>[^<]+<\/title>/);
@@ -18,41 +18,41 @@ test('test-clock: complete document, single heading, not indexed', () => {
   assert.match(html, /<meta\s+name="robots"\s+content="noindex, nofollow"/);
 });
 
-test('test-clock: no external requests, no analytics, no tracking', () => {
+test('chess-clock: no external requests, no analytics, no tracking', () => {
   assert.doesNotMatch(html, /src="https?:|href="https?:/);
   assert.doesNotMatch(html, /G-J3J3NS19ZS|googletagmanager|google-analytics|analytics\.js/);
   assert.doesNotMatch(html, /\bfetch\s*\(|XMLHttpRequest|sendBeacon|new Image\s*\(/);
 });
 
-test('test-clock: favicons resolve to existing assets', () => {
+test('chess-clock: favicons resolve to existing assets', () => {
   for (const m of html.matchAll(/<link[^>]+rel="(?:icon|apple-touch-icon)"[^>]*>/g)) {
     const href = m[0].match(/\shref="([^"]*)"/)[1];
     assert.ok(existsSync(resolve(root, href.slice(1))), href);
   }
 });
 
-test('test-clock: not linked from public pages, nav or sitemap', () => {
+test('chess-clock: not linked from public pages, nav or sitemap', () => {
   const pages = ['index.html', 'about/index.html', 'pricing/index.html', 'charity/index.html', 'contact/index.html', 'privacy/index.html', 'prospects/index.html'];
   for (const page of pages) {
     const source = readFileSync(resolve(root, page), 'utf8');
-    assert.doesNotMatch(source, /test-clock/, page);
+    assert.doesNotMatch(source, /chess-clock/, page);
   }
-  assert.doesNotMatch(readFileSync(resolve(root, 'sitemap.xml'), 'utf8'), /test-clock/);
-  assert.doesNotMatch(readFileSync(resolve(root, 'robots.txt'), 'utf8'), /test-clock/);
+  assert.doesNotMatch(readFileSync(resolve(root, 'sitemap.xml'), 'utf8'), /chess-clock/);
+  assert.doesNotMatch(readFileSync(resolve(root, 'robots.txt'), 'utf8'), /chess-clock/);
 });
 
-test('test-clock: inline scripts parse', () => {
+test('chess-clock: inline scripts parse', () => {
   const scripts = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)];
   assert.ok(scripts.length >= 2);
-  for (const script of scripts) new vm.Script(script[1], { filename: 'test-clock/index.html' });
+  for (const script of scripts) new vm.Script(script[1], { filename: 'chess-clock/index.html' });
 });
 
-test('test-clock: copy style rules (no em-dashes, no placeholder copy)', () => {
+test('chess-clock: copy style rules (no em-dashes, no placeholder copy)', () => {
   assert.doesNotMatch(html, /—|–/);
   assert.doesNotMatch(html, /lorem|to be confirmed|TODO/i);
 });
 
-test('test-clock: accessible controls and time choices', () => {
+test('chess-clock: accessible controls and time choices', () => {
   for (const id of ['pause-btn', 'reset-btn', 'settings-btn', 'start-btn']) {
     assert.match(html, new RegExp(`id="${id}"`));
   }
@@ -64,4 +64,15 @@ test('test-clock: accessible controls and time choices', () => {
   assert.match(html, /aria-label="Reset clock"/);
   assert.match(html, /role="dialog" aria-modal="true"/);
   assert.match(html, /aria-pressed/);
+});
+
+test('chess-clock: named players, presets and resume', () => {
+  // The Sunday format is one tile.
+  assert.match(html, /data-preset="10,3"/);
+  // Both name fields ship prefilled and editable.
+  assert.match(html, /<input id="name-p1" type="text" value="Player 1"/);
+  assert.match(html, /<input id="name-p2" type="text" value="Player 2"/);
+  // The paused sheet offers a real resume and a labelled close.
+  assert.match(html, /id="sheet-resume"/);
+  assert.match(html, /id="sheet-close">Close</);
 });
