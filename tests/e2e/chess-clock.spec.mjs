@@ -65,13 +65,14 @@ test('full game flow: start, first tap, turns, increment, pause, confirmed reset
   state = await page.evaluate(() => chessClock.getState());
   expect(state.active).toBe('p1');
 
-  // Pause, then reset requires a confirmation tap.
+  // Pause, then reset requires a confirmation tap (reset lives in the sheet).
   await page.locator('#pause-btn').click();
   expect((await page.evaluate(() => chessClock.getState())).phase).toBe('paused');
   await expect(page.locator('#bar-status')).toHaveText('Paused');
-  await page.locator('#reset-btn').click();
+  await page.locator('#settings-btn').click();
+  await page.locator('#sheet-reset').click();
   expect((await page.evaluate(() => chessClock.getState())).phase).toBe('paused');
-  await page.locator('#reset-btn').click();
+  await page.locator('#sheet-reset').click();
   state = await page.evaluate(() => chessClock.getState());
   expect(state.phase).toBe('ready');
   expect(state.remaining.p1).toBe(3 * 60000);
@@ -96,15 +97,16 @@ test('10 min + 3 s control: first completed move gives the mover exactly +3s', a
   await expect(page.locator('#bar-status')).toHaveText('10 min + 3 s');
 });
 
-test('reset works while the clock is running, behind a confirmation tap', async ({ page, baseURL }) => {
+test('reset works from the settings sheet, behind a confirmation tap', async ({ page, baseURL }) => {
   await fresh(page, baseURL);
   await page.locator('#start-btn').click();
   await page.locator('#p1').dispatchEvent('pointerdown');
-  await expect(page.locator('#reset-btn')).toHaveAttribute('aria-disabled', 'false');
-  await page.locator('#reset-btn').click();
-  // First tap only arms the confirmation; the game still runs.
-  expect((await page.evaluate(() => chessClock.getState())).phase).toBe('running');
-  await page.locator('#reset-btn').click();
+  await page.locator('#settings-btn').click();
+  await expect(page.locator('#sheet-reset')).toHaveAttribute('aria-disabled', 'false');
+  await page.locator('#sheet-reset').click();
+  // First tap only arms the confirmation; the game is not reset.
+  expect((await page.evaluate(() => chessClock.getState())).phase).not.toBe('ready');
+  await page.locator('#sheet-reset').click();
   const state = await page.evaluate(() => chessClock.getState());
   expect(state.phase).toBe('ready');
   expect(state.remaining.p1).toBe(10 * 60000);
@@ -161,7 +163,7 @@ test('settings sheet pauses the clock, sound and move counter toggle from the ba
   expect(state.phase).toBe('paused'); // the toggles do not resume the clock
   await page.locator('#pause-btn').click();
   expect((await page.evaluate(() => chessClock.getState())).phase).toBe('running');
-  await expect(page.locator('#p1-note')).toContainText('move');
+  await expect(page.locator('#p1 .pname')).toContainText('move');
   // Both choices persist across a reload.
   await page.goto(baseURL + '/chess-clock/');
   state = await page.evaluate(() => chessClock.getState());
@@ -565,9 +567,19 @@ test('bar keeps every label inside its button at 320px and 390px with 200% text'
       return bad;
     });
     expect(await spills(), `running at ${w}px with 200% text`).toEqual([]);
-    // The reset confirm state shows the longest label the bar ever has.
-    await page.locator('#reset-btn').click();
-    expect(await spills(), `reset confirm at ${w}px with 200% text`).toEqual([]);
+    // Four buttons in two even rows of two: no orphan on a row of its own.
+    const rows = await page.evaluate(() => {
+      const tops = [...document.querySelectorAll('#clock-view .bar button:not([hidden])')]
+        .map((el) => Math.round(el.getBoundingClientRect().top))
+        .sort((a, b) => a - b);
+      const groups = [];
+      for (const t of tops) {
+        const g = groups.find((grp) => Math.abs(grp[0] - t) <= 4);
+        if (g) g.push(t); else groups.push([t]);
+      }
+      return groups.map((g) => g.length).sort((a, b) => a - b);
+    });
+    expect(rows, `buttons not in two even rows at ${w}px`).toEqual([2, 2]);
   }
 });
 
@@ -696,4 +708,19 @@ test('sound cues emit a real non-silent signal, and silence when sound is off', 
   expect(sigs.length, 'flag fall alarm notes').toBe(3);
   expect(sigs.map((s) => s.freq)).toEqual([880, 880, 660]);
   for (const s of sigs) sane(s, 'flag alarm');
+});
+
+test('ended game shows the outcome on both halves and a Play again action', async ({ page, baseURL }) => {
+  await fresh(page, baseURL);
+  await page.locator('#start-btn').click();
+  await page.locator('#p1').dispatchEvent('pointerdown');
+  await page.evaluate(() => chessClock.setRemainingMs('p2', 150));
+  await expect(page.locator('#p1-result')).toContainText('wins');
+  await expect(page.locator('#p2-result')).toContainText('flag fell');
+  await expect(page.locator('#again-btn')).toBeVisible();
+  await expect(page.locator('#bar-change')).toBeVisible();
+  await page.locator('#again-btn').click();
+  const state = await page.evaluate(() => chessClock.getState());
+  expect(state.phase).toBe('ready');
+  expect(state.remaining.p1).toBe(10 * 60000);
 });
