@@ -542,3 +542,158 @@ test('sound toggle plays a confirmation cue, on the bar and in the sheet', async
   await page.locator('#sheet-sound-chips [data-sound-pick="off"]').click();
   expect(await beeps()).toBe(n);
 });
+
+test('bar keeps every label inside its button at 320px and 390px with 200% text', async ({ page, baseURL }) => {
+  for (const w of [320, 390]) {
+    await page.setViewportSize({ width: w, height: 844 });
+    await fresh(page, baseURL);
+    // Start via the page API: a restored game also shows the clock view.
+    await page.evaluate(() => { chessClock.start(); document.documentElement.style.fontSize = '200%'; });
+    const spills = () => page.evaluate(() => {
+      const bad = [];
+      document.querySelectorAll('#clock-view .bar button, #clock-view .bar .status').forEach((el) => {
+        const b = el.getBoundingClientRect();
+        const range = document.createRange();
+        range.selectNodeContents(el);
+        for (const r of range.getClientRects()) {
+          if (r.width < 1 || r.height < 1) continue;
+          if (r.left < b.left - 1 || r.right > b.right + 1) {
+            bad.push(`"${el.textContent.trim()}" text ${r.left.toFixed(0)}..${r.right.toFixed(0)} outside button ${b.left.toFixed(0)}..${b.right.toFixed(0)}`);
+          }
+        }
+      });
+      return bad;
+    });
+    expect(await spills(), `running at ${w}px with 200% text`).toEqual([]);
+    // The reset confirm state shows the longest label the bar ever has.
+    await page.locator('#reset-btn').click();
+    expect(await spills(), `reset confirm at ${w}px with 200% text`).toEqual([]);
+  }
+});
+
+test('sheet rows share one aligned, equal-width control column at 320px, 390px and 200% text', async ({ page, baseURL }) => {
+  for (const w of [320, 390]) {
+    for (const zoom of [1, 2]) {
+      await page.setViewportSize({ width: w, height: 844 });
+      await fresh(page, baseURL);
+      // Start via the page API: a restored game also shows the clock view.
+      await page.evaluate((z) => {
+        chessClock.start();
+        document.documentElement.style.fontSize = z === 2 ? '200%' : '';
+      }, zoom);
+      await page.locator('#settings-btn').click();
+      const res = await page.evaluate(() => {
+        const sheet = document.querySelector('#settings-sheet .sheet').getBoundingClientRect();
+        const rows = [...document.querySelectorAll('#settings-sheet .sheet .row')];
+        const groups = rows.map((row) => row.querySelector('.chips')).filter(Boolean);
+        const lefts = groups.map((g) => g.getBoundingClientRect().left);
+        const rights = groups.map((g) => g.getBoundingClientRect().right);
+        const widths = groups.map((g) => g.getBoundingClientRect().width);
+        const chips = groups.map((g) => [...g.children].map((c) => {
+          const r = c.getBoundingClientRect();
+          const range = document.createRange();
+          range.selectNodeContents(c);
+          let textOk = true;
+          for (const rr of range.getClientRects()) {
+            if (rr.width < 1 || rr.height < 1) continue;
+            if (rr.left < r.left - 1 || rr.right > r.right + 1) textOk = false;
+          }
+          return { w: r.width, h: r.height, textOk };
+        }));
+        return { lefts, rights, widths, chips, sheetRight: sheet.right };
+      });
+      const spread = (a) => Math.max(...a) - Math.min(...a);
+      expect(spread(res.lefts), `${w}px z${zoom}: control column left edges differ`).toBeLessThanOrEqual(1);
+      expect(spread(res.widths), `${w}px z${zoom}: control column widths differ`).toBeLessThanOrEqual(1);
+      for (const r of res.rights) {
+        expect(r, `${w}px z${zoom}: a control crosses the sheet's right edge`).toBeLessThanOrEqual(res.sheetRight + 1);
+      }
+      for (const chips of res.chips) {
+        expect(spread(chips.map((c) => c.w)), `${w}px z${zoom}: chips in a group have unequal widths`).toBeLessThanOrEqual(1);
+        expect(spread(chips.map((c) => c.h)), `${w}px z${zoom}: chips in a group have unequal heights`).toBeLessThanOrEqual(1);
+        for (const c of chips) expect(c.textOk, `${w}px z${zoom}: chip text spills its button`).toBe(true);
+      }
+    }
+  }
+});
+
+test('sound cues emit a real non-silent signal, and silence when sound is off', async ({ page, baseURL }) => {
+  await page.addInitScript(() => {
+    const proto = window.AudioContext && window.AudioContext.prototype;
+    if (!proto) return;
+    window.__signals = [];
+    const origOsc = proto.createOscillator;
+    const origGain = proto.createGain;
+    proto.createGain = function () {
+      const gain = origGain.call(this);
+      const rec = { peaks: [] };
+      const ramp0 = gain.gain.exponentialRampToValueAtTime.bind(gain.gain);
+      const set0 = gain.gain.setValueAtTime.bind(gain.gain);
+      gain.gain.exponentialRampToValueAtTime = function (v, t) { rec.peaks.push(v); return ramp0(v, t); };
+      gain.gain.setValueAtTime = function (v, t) { rec.peaks.push(v); return set0(v, t); };
+      this.__lastGainRec = rec;
+      return gain;
+    };
+    proto.createOscillator = function () {
+      const osc = origOsc.call(this);
+      const start0 = osc.start.bind(osc);
+      const stop0 = osc.stop.bind(osc);
+      const rec = { freq: 0, dur: 0, peak: 0 };
+      osc.start = function (t) {
+        rec.freq = osc.frequency.value;
+        const at = typeof t === 'number' ? t : osc.context.currentTime;
+        rec.start = at;
+        const g = osc.context.__lastGainRec;
+        rec.peak = g && g.peaks.length ? Math.max.apply(null, g.peaks) : 0;
+        return start0(t);
+      };
+      osc.stop = function (t) {
+        rec.stop = typeof t === 'number' ? t : osc.context.currentTime;
+        rec.dur = rec.stop - rec.start;
+        return stop0(t);
+      };
+      window.__signals.push(rec);
+      return osc;
+    };
+  });
+  await fresh(page, baseURL);
+  await page.locator('#start-btn').click();
+  const signals = () => page.evaluate(() => window.__signals);
+  const sane = (s, label) => {
+    expect(s.freq, `${label}: frequency out of range`).toBeGreaterThanOrEqual(300);
+    expect(s.freq, `${label}: frequency out of range`).toBeLessThanOrEqual(1400);
+    expect(s.dur, `${label}: duration out of range`).toBeGreaterThanOrEqual(0.03);
+    expect(s.dur, `${label}: duration out of range`).toBeLessThanOrEqual(0.6);
+    expect(s.peak, `${label}: silent signal`).toBeGreaterThanOrEqual(0.05);
+  };
+  // A move clicks: real signal around 1200 Hz for ~0.07s.
+  let before = (await signals()).length;
+  await page.locator('#p1').dispatchEvent('pointerdown');
+  let sigs = (await signals()).slice(before);
+  expect(sigs.length, 'move made no sound').toBeGreaterThanOrEqual(1);
+  for (const s of sigs) sane(s, 'move cue');
+  // Toggle sound OFF on the bar: the confirmation cue still sounds.
+  before = (await signals()).length;
+  await page.locator('#sound-toggle').click();
+  sigs = (await signals()).slice(before);
+  expect(sigs.length, 'toggle-off made no confirmation cue').toBeGreaterThanOrEqual(1);
+  for (const s of sigs) sane(s, 'toggle-off cue');
+  // Muted moves stay silent: no oscillator is even created.
+  await page.evaluate(() => { window.__signals = []; });
+  await page.locator('#p2').dispatchEvent('pointerdown');
+  await page.waitForTimeout(300);
+  expect((await signals()).length, 'a sound played while muted').toBe(0);
+  // Toggle back ON: confirmation cue sounds again.
+  await page.locator('#sound-toggle').click();
+  expect((await signals()).length, 'toggle-on made no confirmation cue').toBeGreaterThanOrEqual(1);
+  for (const s of await signals()) sane(s, 'toggle-on cue');
+  // Flag fall: the alarm plays three real notes.
+  await page.evaluate(() => { window.__signals = []; });
+  const active = (await page.evaluate(() => chessClock.getState())).active;
+  await page.evaluate((side) => chessClock.setRemainingMs(side, 200), active);
+  await page.waitForFunction(() => window.__signals.length >= 3, null, { timeout: 3000 });
+  sigs = await signals();
+  expect(sigs.length, 'flag fall alarm notes').toBe(3);
+  expect(sigs.map((s) => s.freq)).toEqual([880, 880, 660]);
+  for (const s of sigs) sane(s, 'flag alarm');
+});
