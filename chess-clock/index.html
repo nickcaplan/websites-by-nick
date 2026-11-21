@@ -295,12 +295,13 @@
     .bar { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; padding: 8px 10px; }
     .bar button { width: 100%; min-width: 0; min-height: 44px; padding: 0 8px; }
     .bar .status { grid-column: 1 / -1; order: -1; align-self: center; }
+    .bar button#again-btn, .bar button#bar-change { grid-column: 1 / -1; }
   }
 
   /* Ended state banner inside the winner panel. Its height is always reserved,
      so the message never pushes the name or digits out of the card. */
   .player .result { display: block; visibility: hidden; min-height: 1.3em; font-size: 1.05rem; font-weight: 800; }
-  .player.winner .result { visibility: visible; }
+  .player .result:not(:empty) { visibility: visible; }
   /* Once the game is decided the low-time note can never appear again; drop
      its reserved height so the winner line always fits the card. */
   .player.winner .note { display: none; }
