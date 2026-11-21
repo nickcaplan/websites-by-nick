@@ -808,11 +808,11 @@ test('each side shows a White or Black pawn badge; badge, name and digits never 
     await page.goto(baseURL + '/chess-clock/');
     if (big) await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
     // Longest allowed names (24 characters): the ended message and name must not change the layout.
-    await page.evaluate(() => {
-      for (const [id, v] of [['name-p1', 'Christopher Montgomerys'], ['name-p2', 'Bartholomew Featherstn']]) {
+    await page.evaluate((flipNames) => {
+      for (const [id, v] of (flipNames ? [['name-p1', 'Al Be Ci Do Ev Fi Gu Ha Iv'.slice(0, 24)], ['name-p2', 'Jo Ka Le Mo Ny Os Pa Qu Ri'.slice(0, 24)]] : [['name-p1', 'Christopher Montgomerys'], ['name-p2', 'Bartholomew Featherstn']])) {
         const i = document.getElementById(id); i.value = v; i.dispatchEvent(new Event('input', { bubbles: true }));
       }
-    });
+    }, flip);
     await page.evaluate(() => chessClock.start());
     if (moves) await page.locator('#moves-toggle').click(); // move counter on: the names gain " · N moves" while running
     await expect(page.locator('#p1 .side')).toHaveText('White');
@@ -829,6 +829,7 @@ test('each side shows a White or Black pawn badge; badge, name and digits never 
         out[q] = [Math.round(r.top), Math.round(r.left + r.width / 2)]; // whole px: sub-pixel rounding noise ignored
         out[q + 'inside'] = r.left >= card.left && r.right <= card.right && r.top >= card.top && r.bottom <= card.bottom;
       }
+      out.slotHeight = Math.round(document.querySelector('#' + id + ' .slot').getBoundingClientRect().height * 10) / 10; // the reserved slot never grows
       const side = document.querySelector('#' + id + ' .side').getBoundingClientRect();
       out.oneLine = side.height < 40 * (parseFloat(getComputedStyle(document.documentElement).fontSize) / 16);
       return out;
