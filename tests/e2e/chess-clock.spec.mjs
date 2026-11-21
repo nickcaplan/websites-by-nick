@@ -462,3 +462,83 @@ test('10 + 3 is the default, and the chosen preset stays selected after reload',
   await expect(page.locator('#preset-tiles [data-preset="3,2"]')).toHaveAttribute('aria-pressed', 'true');
   await expect(page.locator('#play-summary')).toContainText('3 + 2');
 });
+
+test('sheet sound and moves pickers keep the bar toggles in sync, both directions', async ({ page, baseURL }) => {
+  await fresh(page, baseURL);
+  await page.locator('#start-btn').click();
+  // Set a known starting state from the bar: sound off, moves on.
+  await page.locator('#sound-toggle').click();
+  await page.locator('#moves-toggle').click();
+  await expect(page.locator('#sound-toggle')).toHaveAttribute('aria-pressed', 'false');
+  await expect(page.locator('#sound-toggle')).toHaveAttribute('aria-label', 'Sound off, tap to unmute');
+  await expect(page.locator('#moves-toggle')).toHaveAttribute('aria-pressed', 'true');
+  // Flip both from the settings sheet: sound on, moves off.
+  await page.locator('#settings-btn').click();
+  await page.locator('#sheet-sound-chips [data-sound-pick="on"]').click();
+  await expect(page.locator('#sound-toggle')).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('#sound-toggle')).toHaveAttribute('aria-label', 'Sound on, tap to mute');
+  await page.locator('#sheet-moves-chips [data-moves-pick="off"]').click();
+  await expect(page.locator('#moves-toggle')).toHaveAttribute('aria-pressed', 'false');
+  await expect(page.locator('#moves-toggle')).toHaveAttribute('aria-label', 'Move counter off, tap to show');
+  await page.keyboard.press('Escape');
+  let state = await page.evaluate(() => chessClock.getState());
+  expect(state.settings.sound).toBe('on');
+  expect(state.settings.moves).toBe('off');
+  // And back again from the sheet: sound off, moves on.
+  await page.locator('#settings-btn').click();
+  await page.locator('#sheet-sound-chips [data-sound-pick="off"]').click();
+  await expect(page.locator('#sound-toggle')).toHaveAttribute('aria-pressed', 'false');
+  await page.locator('#sheet-moves-chips [data-moves-pick="on"]').click();
+  await expect(page.locator('#moves-toggle')).toHaveAttribute('aria-pressed', 'true');
+  state = await page.evaluate(() => chessClock.getState());
+  expect(state.settings.sound).toBe('off');
+  expect(state.settings.moves).toBe('on');
+});
+
+test('setup screen sound and moves pickers keep the bar toggles in sync', async ({ page, baseURL }) => {
+  await fresh(page, baseURL);
+  // The bar is visible behind the setup screen; defaults are sound on, moves off.
+  await expect(page.locator('#sound-toggle')).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('#moves-toggle')).toHaveAttribute('aria-pressed', 'false');
+  await page.locator('#more-options > summary').click();
+  await page.locator('#setup-sound-chips [data-sound-pick="off"]').click();
+  await expect(page.locator('#sound-toggle')).toHaveAttribute('aria-pressed', 'false');
+  await page.locator('#setup-moves-chips [data-moves-pick="on"]').click();
+  await expect(page.locator('#moves-toggle')).toHaveAttribute('aria-pressed', 'true');
+  // And back.
+  await page.locator('#setup-sound-chips [data-sound-pick="on"]').click();
+  await expect(page.locator('#sound-toggle')).toHaveAttribute('aria-pressed', 'true');
+  await page.locator('#setup-moves-chips [data-moves-pick="off"]').click();
+  await expect(page.locator('#moves-toggle')).toHaveAttribute('aria-pressed', 'false');
+});
+
+test('sound toggle plays a confirmation cue, on the bar and in the sheet', async ({ page, baseURL }) => {
+  await page.addInitScript(() => {
+    const proto = window.AudioContext && window.AudioContext.prototype;
+    if (!proto) return;
+    const orig = proto.createOscillator;
+    window.__beeps = 0;
+    proto.createOscillator = function () { window.__beeps++; return orig.call(this); };
+  });
+  await fresh(page, baseURL);
+  await page.locator('#start-btn').click();
+  const beeps = () => page.evaluate(() => window.__beeps);
+  // Bar toggle to OFF: the cue is requested before muting.
+  let n = await beeps();
+  await page.locator('#sound-toggle').click();
+  expect(await beeps()).toBeGreaterThan(n);
+  expect((await page.evaluate(() => chessClock.getState())).settings.sound).toBe('off');
+  // Bar toggle back ON: the cue is requested even though sound was off.
+  n = await beeps();
+  await page.locator('#sound-toggle').click();
+  expect(await beeps()).toBeGreaterThan(n);
+  expect((await page.evaluate(() => chessClock.getState())).settings.sound).toBe('on');
+  // Sheet picker change cues too; tapping the already-selected value does not.
+  await page.locator('#settings-btn').click();
+  n = await beeps();
+  await page.locator('#sheet-sound-chips [data-sound-pick="off"]').click();
+  expect(await beeps()).toBeGreaterThan(n);
+  n = await beeps();
+  await page.locator('#sheet-sound-chips [data-sound-pick="off"]').click();
+  expect(await beeps()).toBe(n);
+});
