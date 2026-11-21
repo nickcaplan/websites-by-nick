@@ -32,11 +32,13 @@
   // Pausing or hiding the tab freezes the title sketch settled; resuming or
   // returning must not clear a drawn window and start the draw again.
   const settleIntro = () => {
-    const typedTitle = document.querySelector("h1.will-type.typed");
+    const typedTitle = document.querySelector("h1.will-type");
     if (!typedTitle) return;
-    typedTitle.classList.add("drawn");
-    if (typedTitle.classList.contains("drawn"))
-      typedTitle.classList.add("sketch-settled");
+    // A stop can land before typing finishes. Persist the complete state now,
+    // not only while the temporary body/media pause styles are active.
+    typedTitle.querySelectorAll(".hc").forEach((char) => char.classList.add("on"));
+    typedTitle.querySelector(".hero-caret")?.remove();
+    typedTitle.classList.add("typed", "drawn", "sketch-settled");
     settleUrl();
   };
   // The address bar earns its keep: once the chrome has drawn, the sketched
@@ -154,6 +156,7 @@
         settleUrl();
       };
       const step = () => {
+        if (heroTitle.classList.contains("sketch-settled")) return finish();
         if (reduced.matches) return finish();
         if (document.body.classList.contains("paused")) return finish();
         if (document.body.classList.contains("hidden-page")) {
@@ -607,10 +610,12 @@
   document.addEventListener("visibilitychange", syncVisibility);
   // System motion preference is the only source of the automatic settled state.
   let lastReduced = reduced.matches;
-  const syncReduced = () => {
+  const syncReduced = (event) => {
     lastReduced = reduced.matches;
     document.body.classList.toggle("paused", lastReduced);
-    if (lastReduced) settleIntro();
+    // Rapid preference toggles can coalesce: only the resume event may arrive.
+    // Either edge means this finite intro must stay complete, not draw again.
+    if (lastReduced || event) settleIntro();
     refreshProjects();
   };
   syncReduced();
