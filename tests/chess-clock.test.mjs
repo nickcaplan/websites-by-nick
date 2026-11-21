@@ -77,8 +77,8 @@ test('chess-clock: named players, presets and resume', () => {
   // The Sunday format is one tile.
   assert.match(html, /data-preset="10,3"/);
   // Both name fields ship prefilled and editable.
-  assert.match(html, /<input id="name-p1" type="text" value="Player 1"/);
-  assert.match(html, /<input id="name-p2" type="text" value="Player 2"/);
+  assert.match(html, /<input id="name-p1" type="text" value=""/);
+  assert.match(html, /<input id="name-p2" type="text" value=""/);
   // The paused sheet offers a real resume and a labelled close.
   assert.match(html, /id="sheet-resume"/);
   assert.match(html, /id="sheet-close">Close</);

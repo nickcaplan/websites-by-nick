@@ -123,7 +123,7 @@ test('flag fall ends the game and names the winner', async ({ page, baseURL }) =
   await page.locator('#p1').dispatchEvent('pointerdown');
   await page.evaluate(() => chessClock.setRemainingMs('p2', 400));
   await expect(page.locator('#bar-status')).toHaveText('Game over', { timeout: 3000 });
-  await expect(page.locator('#p1-result')).toHaveText('Time! Player 1 wins');
+  await expect(page.locator('#p1-result')).toHaveText('Time! White wins');
   const state = await page.evaluate(() => chessClock.getState());
   expect(state.phase).toBe('ended');
   expect(state.winner).toBe('p1');
@@ -168,7 +168,7 @@ test('settings sheet pauses the clock, sound and move counter toggle from the ba
   expect(state.phase).toBe('paused'); // the toggles do not resume the clock
   await page.locator('#pause-btn').click();
   expect((await page.evaluate(() => chessClock.getState())).phase).toBe('running');
-  await expect(page.locator('#p1 .pname')).toContainText('move');
+  await expect(page.locator('#p1-mv')).toContainText('move');
   // Both choices persist across a reload.
   await page.goto(baseURL + '/chess-clock/');
   state = await page.evaluate(() => chessClock.getState());
@@ -342,21 +342,21 @@ test('reloads offline once visited', async ({ page, context, baseURL, browserNam
   await context.setOffline(false);
 });
 
-test('player names: prefilled, editable, shown on the clock and persisted', async ({ page, baseURL }) => {
+test('player names: optional, editable, shown on the clock and persisted', async ({ page, baseURL }) => {
   await fresh(page, baseURL);
-  await expect(page.locator('#name-p1')).toHaveValue('Player 1');
-  await expect(page.locator('#name-p2')).toHaveValue('Player 2');
+  await expect(page.locator('#name-p1')).toHaveValue('');
+  await expect(page.locator('#name-p2')).toHaveValue('');
   await page.locator('#name-p1').fill('Luca');
   await page.locator('#name-p2').fill('Dad');
-  await expect(page.locator('#play-summary')).toContainText('Luca (bottom) vs Dad (top)');
+  await expect(page.locator('#play-summary')).toContainText('Luca (White, bottom) vs Dad (Black, top)');
   await page.locator('#start-btn').click();
   await expect(page.locator('#p1 .pname')).toHaveText('Luca');
   await expect(page.locator('#p2 .pname')).toHaveText('Dad');
   await expect(page.locator('#p1')).toHaveAttribute('aria-label', /Luca/);
-  // Empty falls back to the default.
+  // Empty falls back to the colour; the old default names are migrated away.
   await page.evaluate(() => { chessClock.changeTime(); });
   await page.locator('#name-p1').fill('');
-  await expect(page.locator('#play-summary')).toContainText('Player 1 (bottom)');
+  await expect(page.locator('#play-summary')).toContainText('White (bottom) vs Dad (Black, top)');
   await page.locator('#name-p1').fill('Luca');
   // Persisted across reloads.
   await page.goto(baseURL + '/chess-clock/');
@@ -797,4 +797,133 @@ test('settings sheet buttons keep the same size and position when confirming', a
     await expect(page.locator('#sheet-change-time')).toHaveClass(/confirm/);
     expect(await boxes(), `${width}: both armed`).toEqual(before);
   }
+});
+
+test('each side shows a White or Black pawn badge; badge, name and digits never move or wrap', async ({ page, baseURL }) => {
+  test.setTimeout(120000); // 32 combinations
+  for (const [width, big, moves, flip, height] of [740, 900].flatMap((hh) => [false, true].flatMap((f) => [[320, false, false], [390, false, false], [320, true, false], [390, true, false], [320, false, true], [390, false, true], [320, true, true], [390, true, true]].map((c) => [...c, f, hh])))) {
+    await page.setViewportSize({ width, height });
+    await page.goto(baseURL + '/chess-clock/');
+    await page.evaluate(() => { localStorage.clear(); });
+    await page.goto(baseURL + '/chess-clock/');
+    if (big) await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
+    // Longest allowed names (24 characters): the ended message and name must not change the layout.
+    await page.evaluate((flipNames) => {
+      for (const [id, v] of (flipNames ? [['name-p1', 'Al Be Ci Do Ev Fi Gu Ha Iv'.slice(0, 24)], ['name-p2', 'Jo Ka Le Mo Ny Os Pa Qu Ri'.slice(0, 24)]] : [['name-p1', 'Christopher Montgomerys'], ['name-p2', 'Bartholomew Featherstn']])) {
+        const i = document.getElementById(id); i.value = v; i.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+    }, flip);
+    await page.evaluate(() => chessClock.start());
+    if (moves) await page.locator('#moves-toggle').click(); // move counter on: the names gain " · N moves" while running
+    await expect(page.locator('#p1 .side')).toHaveText('White');
+    await expect(page.locator('#p2 .side')).toHaveText('Black');
+    await expect(page.locator('#p1 .side svg.pawn-white use')).toHaveCount(1);
+    await expect(page.locator('#p2 .side svg.pawn-black use')).toHaveCount(1);
+    // Vertical position and horizontal centre of the badge, name and digits (the digits change
+    // width as the string changes, so their centre is compared, not their left edge).
+    const measure = () => page.evaluate(() => ['p1', 'p2'].map((id) => {
+      const card = document.getElementById(id).getBoundingClientRect();
+      const out = { card: Math.round(card.height) };
+      for (const q of ['.side', '.pname', '.time']) {
+        const r = document.querySelector('#' + id + ' ' + q).getBoundingClientRect();
+        out[q] = [Math.round(r.top), Math.round(r.left + r.width / 2)]; // whole px: must be identical
+        out[q + 'inside'] = r.left >= card.left && r.right <= card.right && r.top >= card.top && r.bottom <= card.bottom;
+      }
+      out.slotHeight = Math.round(document.querySelector('#' + id + ' .slot').getBoundingClientRect().height * 10) / 10; // the reserved slot never grows
+      const side = document.querySelector('#' + id + ' .side').getBoundingClientRect();
+      out.oneLine = side.height < 40 * (parseFloat(getComputedStyle(document.documentElement).fontSize) / 16);
+      return out;
+    }));
+    await page.waitForTimeout(500); // let the view-in transition and font-fit settle
+    const ready = await measure();
+    for (const [i, id] of ['p1', 'p2'].entries()) {
+      void i;
+      expect(await page.evaluate((id) => document.querySelector('#' + id + ' .pname').textContent, id), 'no space before an ellipsis').not.toMatch(/\s\u2026/);
+      expect(await page.evaluate((id) => { const card = document.getElementById(id).getBoundingClientRect(); const r = document.querySelector('#' + id + ' .pname').getBoundingClientRect(); return r.left >= card.left && r.right <= card.right; }, id), `${width}x${height}${big ? ' 200%' : ''}: long name stays inside its card`).toBe(true);
+    }
+    for (const m of ready) { expect(m['.sideinside'] && m.oneLine, `${width}x${height}${big ? ' 200%' : ''}${moves ? ' counter on' : ''}${flip ? ' other side loses' : ''}: badge inside card on one line`).toBe(true); }
+    const states = {};
+    await page.evaluate(() => chessClock.press('p1')); states.running = await measure();
+    if (moves) {
+      const counts = await page.evaluate(() => ['p1', 'p2'].map((id) => {
+        const box = document.querySelector('#' + id + ' .pname').getBoundingClientRect();
+        const c = document.getElementById(id + '-mv');
+        const r = c.getBoundingClientRect();
+        const card = document.getElementById(id).getBoundingClientRect();
+        return /^\d+ moves?$/.test(c.textContent) && r.left >= card.left - 0.5 && r.right <= card.right + 0.5 && r.bottom <= card.bottom + 0.5 && r.top >= card.top - 0.5 && c.scrollWidth <= c.clientWidth + 1;
+      }));
+      const nameFit = await page.evaluate(() => ['p1', 'p2'].map((id) => { const card = document.getElementById(id).getBoundingClientRect(); const r = document.querySelector('#' + id + ' .pname').getBoundingClientRect(); return r.left >= card.left && r.right <= card.right; }));
+      expect(nameFit, `${width}x${height}${big ? ' 200%' : ''}: name plus move count stays inside the card`).toEqual([true, true]);
+      expect(counts, `${width}x${height}${big ? ' 200%' : ''}: move count fully visible beside long names`).toEqual([true, true]);
+    }
+    await page.evaluate(() => chessClock.press('p2')); states.runningOther = await measure();
+    if (flip) { await page.evaluate(() => chessClock.press(chessClock.getState().active)); }
+    await page.evaluate(() => chessClock.pause()); states.paused = await measure();
+    await page.evaluate(() => { chessClock.resume(); chessClock.setRemainingMs(chessClock.getState().active, 50); });
+    await expect.poll(async () => (await page.evaluate(() => chessClock.getState())).phase).toBe('ended');
+    states.ended = await measure();
+    // The outcome words are fully inside their card whatever the name length, and the name is the part that is cut.
+    const ended = await page.evaluate(() => ['p1', 'p2'].map((id) => {
+      const card = document.getElementById(id).getBoundingClientRect();
+      const spans = [...document.querySelectorAll('#' + id + '-result > span')];
+      const inside = spans.every((e) => { const r = e.getBoundingClientRect(); return r.left >= card.left - 0.5 && r.right <= card.right + 0.5 && r.bottom <= card.bottom + 0.5 && r.top >= card.top - 0.5; });
+      const last = spans[spans.length - 1];
+      return { inside, text: document.getElementById(id + '-result').textContent, lastFull: last.scrollWidth <= last.clientWidth + 1 };
+    }));
+    for (const e of ended) {
+      expect(e.text, 'no space before an ellipsis').not.toMatch(/\s\u2026/);
+      expect(e.inside && e.lastFull, `${width}x${height}${big ? ' 200%' : ''}${moves ? ' counter on' : ''}: ended outcome words fully visible`).toBe(true);
+      expect(e.text).toMatch(/^Time! .+(wins|flag fell)$/);
+    }
+    for (const [name, got] of Object.entries(states)) {
+      expect(got, `${width}x${height}${big ? ' 200%' : ''}${moves ? ' counter on' : ''}${flip ? ' other side loses' : ''}: badge, name and digits unchanged in ${name}`).toEqual(ready);
+    }
+  }
+});
+
+test('the reserved slot follows the ended result text size, however the size is changed', async ({ page, baseURL }) => {
+  await page.setViewportSize({ width: 320, height: 740 });
+  await page.goto(baseURL + '/chess-clock/');
+  await page.evaluate(() => { localStorage.clear(); });
+  await page.goto(baseURL + '/chess-clock/');
+  await page.evaluate(() => {
+    for (const [id, v] of [['name-p1', 'Al Be Ci Do Ev Fi Gu Ha Iv'], ['name-p2', 'Jo Ka Le Mo Ny Os Pa Qu Ri']]) {
+      const i = document.getElementById(id); i.value = v; i.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+    chessClock.start();
+    // Double the result's own computed size directly (not through the root text size).
+    for (const r of document.querySelectorAll('.result')) r.style.fontSize = (parseFloat(getComputedStyle(r).fontSize) * 2) + 'px';
+  });
+  await page.waitForTimeout(400);
+  const slots = () => page.evaluate(() => ['p1', 'p2'].map((id) => Math.round(document.querySelector('#' + id + ' .slot').getBoundingClientRect().height * 10) / 10));
+  const ready = await slots();
+  await page.evaluate(() => { chessClock.press('p1'); chessClock.press('p2'); chessClock.setRemainingMs(chessClock.getState().active, 50); });
+  await expect.poll(async () => (await page.evaluate(() => chessClock.getState())).phase).toBe('ended');
+  await page.waitForTimeout(400);
+  expect(await slots()).toEqual(ready);
+});
+
+test('with no names typed, the clock shows only White and Black, and the old defaults are dropped', async ({ page, baseURL }) => {
+  await page.setViewportSize({ width: 320, height: 740 });
+  await page.goto(baseURL + '/chess-clock/');
+  await page.evaluate(() => { localStorage.clear(); localStorage.setItem('chess-clock-settings', JSON.stringify({ p1name: 'Player 1', p2name: 'Player 2' })); });
+  await page.goto(baseURL + '/chess-clock/');
+  await expect(page.locator('#play-summary')).toContainText('White (bottom) vs Black (top)');
+  await expect(page.locator('#name-p1')).toHaveAttribute('placeholder', 'Optional name');
+  await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; chessClock.start(); });
+  await page.locator('#moves-toggle').click();
+  await expect(page.locator('#p1 .pname')).toBeHidden();
+  await expect(page.locator('#p1')).toHaveAttribute('aria-label', /^White, /);
+  await page.waitForTimeout(400);
+  const m = () => page.evaluate(() => ['p1', 'p2'].map((id) => ['.side', '.time', '.slot'].map((q) => { const r = document.querySelector('#' + id + ' ' + q).getBoundingClientRect(); return Math.round(r.top) + '/' + Math.round(r.height); })));
+  const ready = await m();
+  await page.evaluate(() => { chessClock.press('p1'); chessClock.press('p2'); });
+  expect(await m()).toEqual(ready);
+  await page.evaluate(() => { chessClock.pause(); });
+  expect(await m()).toEqual(ready);
+  await page.evaluate(() => { chessClock.resume(); chessClock.setRemainingMs(chessClock.getState().active, 50); });
+  await expect.poll(async () => (await page.evaluate(() => chessClock.getState())).phase).toBe('ended');
+  await page.waitForTimeout(400);
+  expect(await m()).toEqual(ready);
+  await expect(page.locator('#p1-result')).toHaveText(/^Time! White( wins|.s flag fell)$/);
 });
