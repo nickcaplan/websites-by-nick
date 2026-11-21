@@ -473,14 +473,13 @@
           <button class="chip" data-moves-pick="off" aria-pressed="true">Off</button>
           <button class="chip" data-moves-pick="on" aria-pressed="false">On</button>
         </div>
-        <p class="hint">Shows how many moves each player has made.</p>
       </div>
     </section>
 
     <hr class="sheet-divider">
     <div class="sheet-actions">
       <button class="chip sheet-danger" id="sheet-reset" aria-label="Reset game" aria-disabled="true">Reset game</button>
-      <button class="chip sheet-danger" id="sheet-change-time">New game - change time</button>
+      <button class="chip sheet-danger" id="sheet-change-time">New game</button>
     </div>
   </div>
 </div>
@@ -1103,7 +1102,7 @@
     changeTimeArmed = false;
     clearTimeout(changeTimeTimer);
     el.sheetChangeTime.classList.remove('confirm');
-    el.sheetChangeTime.textContent = 'New game - change time';
+    el.sheetChangeTime.textContent = 'New game';
   }
   el.sheet.addEventListener('click', function (event) {
     if (event.target === el.sheet) closeSheet();
