@@ -1,5 +1,9 @@
 # Decisions
 
+## 21 November 2026: A playful chess-clock opening
+
+The unlisted chess clock opens with the approved two-faced digital clock illustration beside Play chess, a short subtitle, and Play before the time controls. Both decorative faces show the selected starting minutes immediately, including custom-minute choices. Increment seconds are added after moves, never to the starting display. Keep both windows and their digits inset within the case. The visible summary above Play is removed; an off-screen description still gives the Play button its selected time and player context. Large text may reflow the title, subtitle and tiles rather than shrinking the user's enlarged text or clipping it.
+
 ## 11 November 2026: Document the shipped restyle
 
 The merged 5-9 November design supersedes the old homepage screenshot carousel and forest-green/terracotta-only brief. Current illustration, caption, motion and screenshot rules are in [PROJECT-BRIEF.md](PROJECT-BRIEF.md#restyled-illustration-and-portfolio-rules), with source PR links. The 25 October theme-matched screenshot decision below is historical for the homepage: Nick requested dark captures on the light theme on 5 November. Current homepage frames are slim and internal empty gutters are cropped without clipping content. The new palette research is not a selected replacement palette.
