@@ -242,6 +242,9 @@
   }
   .player.top { transform: rotate(180deg); }
   .player .pname { font-size: 1rem; font-weight: 800; letter-spacing: 0.06em; }
+  /* With the move counter on, the name may wrap to two lines ("Player 1 · 12 moves" at large text),
+     so two lines are always reserved and the stack never changes height between states. */
+  html[data-moves="on"] .player .pname { min-height: 2.4em; display: flex; align-items: center; justify-content: center; text-align: center; }
   /* Colour badge: a drawn pawn plus the word, always present so nothing shifts.
      The pawn carries its own outline so it reads on dark, light, accent and low-time backgrounds. */
   .pawn { width: 28px; height: 28px; flex: none; }
@@ -1121,6 +1124,7 @@
       p1n += ' \u00b7 ' + game.moves.p1 + (game.moves.p1 === 1 ? ' move' : ' moves');
       p2n += ' \u00b7 ' + game.moves.p2 + (game.moves.p2 === 1 ? ' move' : ' moves');
     }
+    document.documentElement.setAttribute('data-moves', settings.moves === 'on' ? 'on' : 'off');
     el.p1name.textContent = p1n;
     el.p2name.textContent = p2n;
     var noteChanged = el.p1note.textContent !== notes.p1 || el.p2note.textContent !== notes.p2;

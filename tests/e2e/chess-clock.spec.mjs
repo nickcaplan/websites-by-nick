@@ -800,13 +800,14 @@ test('settings sheet buttons keep the same size and position when confirming', a
 });
 
 test('each side shows a White or Black pawn badge; badge, name and digits never move or wrap', async ({ page, baseURL }) => {
-  for (const [width, big] of [[320, false], [390, false], [320, true], [390, true]]) {
+  for (const [width, big, moves] of [[320, false, false], [390, false, false], [320, true, false], [390, true, false], [320, false, true], [390, false, true], [320, true, true], [390, true, true]]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto(baseURL + '/chess-clock/');
     await page.evaluate(() => { localStorage.clear(); });
     await page.goto(baseURL + '/chess-clock/');
     if (big) await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
     await page.evaluate(() => chessClock.start());
+    if (moves) await page.locator('#moves-toggle').click(); // move counter on: the names gain " · N moves" while running
     await expect(page.locator('#p1 .side')).toHaveText('White');
     await expect(page.locator('#p2 .side')).toHaveText('Black');
     await expect(page.locator('#p1 .side svg.pawn-white use')).toHaveCount(1);
@@ -827,7 +828,7 @@ test('each side shows a White or Black pawn badge; badge, name and digits never 
     }));
     await page.waitForTimeout(500); // let the view-in transition and font-fit settle
     const ready = await measure();
-    for (const m of ready) { expect(m['.sideinside'] && m.oneLine, `${width}${big ? ' 200%' : ''}: badge inside card on one line`).toBe(true); }
+    for (const m of ready) { expect(m['.sideinside'] && m.oneLine, `${width}${big ? ' 200%' : ''}${moves ? ' counter on' : ''}: badge inside card on one line`).toBe(true); }
     const states = {};
     await page.evaluate(() => chessClock.press('p1')); states.running = await measure();
     await page.evaluate(() => chessClock.press('p2')); states.runningOther = await measure();
@@ -836,7 +837,7 @@ test('each side shows a White or Black pawn badge; badge, name and digits never 
     await expect.poll(async () => (await page.evaluate(() => chessClock.getState())).phase).toBe('ended');
     states.ended = await measure();
     for (const [name, got] of Object.entries(states)) {
-      expect(got, `${width}${big ? ' 200%' : ''}: badge, name and digits unchanged in ${name}`).toEqual(ready);
+      expect(got, `${width}${big ? ' 200%' : ''}${moves ? ' counter on' : ''}: badge, name and digits unchanged in ${name}`).toEqual(ready);
     }
   }
 });
