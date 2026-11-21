@@ -514,7 +514,10 @@ test('setup screen sound and moves pickers keep the bar toggles in sync', async 
   await expect(page.locator('#moves-toggle')).toHaveAttribute('aria-pressed', 'false');
 });
 
-test('sound toggle plays a confirmation cue, on the bar and in the sheet', async ({ page, baseURL }) => {
+test('sound toggle plays a confirmation cue, on the bar and in the sheet', async ({ page, baseURL, browserName }) => {
+  // Headless Firefox in CI has no audio backend: resume() never resolves there,
+  // so cue measurement runs on chromium and webkit only.
+  test.skip(browserName === 'firefox', 'no audio backend in headless CI Firefox');
   await page.addInitScript(() => {
     const proto = window.AudioContext && window.AudioContext.prototype;
     if (!proto) return;
@@ -629,7 +632,8 @@ test('sheet rows share one aligned, equal-width control column at 320px, 390px a
   }
 });
 
-test('sound cues emit a real non-silent signal, and silence when sound is off', async ({ page, baseURL }) => {
+test('sound cues emit a real non-silent signal, and silence when sound is off', async ({ page, baseURL, browserName }) => {
+  test.skip(browserName === 'firefox', 'no audio backend in headless CI Firefox');
   await page.addInitScript(() => {
     const proto = window.AudioContext && window.AudioContext.prototype;
     if (!proto) return;
