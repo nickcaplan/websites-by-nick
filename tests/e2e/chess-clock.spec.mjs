@@ -715,10 +715,31 @@ test('ended game shows the outcome on both halves and a Play again action', asyn
   await page.locator('#start-btn').click();
   await page.locator('#p1').dispatchEvent('pointerdown');
   await page.evaluate(() => chessClock.setRemainingMs('p2', 150));
+  await expect(page.locator('#p1-result')).toBeVisible();
   await expect(page.locator('#p1-result')).toContainText('wins');
+  await expect(page.locator('#p2-result')).toBeVisible();
   await expect(page.locator('#p2-result')).toContainText('flag fell');
   await expect(page.locator('#again-btn')).toBeVisible();
   await expect(page.locator('#bar-change')).toBeVisible();
+  // Ended-bar buttons keep their text inside their bounds at 320px with 200% text.
+  await page.setViewportSize({ width: 320, height: 844 });
+  await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
+  const spills = await page.evaluate(() => {
+    const bad = [];
+    document.querySelectorAll('#again-btn, #bar-change').forEach((el) => {
+      const b = el.getBoundingClientRect();
+      const range = document.createRange();
+      range.selectNodeContents(el);
+      for (const r of range.getClientRects()) {
+        if (r.width < 1 || r.height < 1) continue;
+        if (r.left < b.left - 1 || r.right > b.right + 1) {
+          bad.push(`"${el.textContent.trim()}" text ${r.left.toFixed(0)}..${r.right.toFixed(0)} outside button ${b.left.toFixed(0)}..${b.right.toFixed(0)}`);
+        }
+      }
+    });
+    return bad;
+  });
+  expect(spills, 'ended-bar text spills at 320px 200%').toEqual([]);
   await page.locator('#again-btn').click();
   const state = await page.evaluate(() => chessClock.getState());
   expect(state.phase).toBe('ready');
