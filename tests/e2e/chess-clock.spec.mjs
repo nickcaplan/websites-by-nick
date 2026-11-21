@@ -799,7 +799,7 @@ test('settings sheet buttons keep the same size and position when confirming', a
   }
 });
 
-test('each side shows a White or Black pawn badge that stays put and never wraps', async ({ page, baseURL }) => {
+test('each side shows a White or Black pawn badge; badge, name and digits never move or wrap', async ({ page, baseURL }) => {
   for (const [width, big] of [[320, false], [390, false], [320, true], [390, true]]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto(baseURL + '/chess-clock/');
@@ -811,23 +811,32 @@ test('each side shows a White or Black pawn badge that stays put and never wraps
     await expect(page.locator('#p2 .side')).toHaveText('Black');
     await expect(page.locator('#p1 .side svg.pawn-white use')).toHaveCount(1);
     await expect(page.locator('#p2 .side svg.pawn-black use')).toHaveCount(1);
+    // Vertical position and horizontal centre of the badge, name and digits (the digits change
+    // width as the string changes, so their centre is compared, not their left edge).
     const measure = () => page.evaluate(() => ['p1', 'p2'].map((id) => {
-      const side = document.querySelector('#' + id + ' .side').getBoundingClientRect();
       const card = document.getElementById(id).getBoundingClientRect();
-      const name = document.querySelector('#' + id + ' .pname').getBoundingClientRect();
-      return {
-        h: Math.round(side.height), single: side.height < 40 * (parseFloat(getComputedStyle(document.documentElement).fontSize) / 16),
-        inside: side.left >= card.left && side.right <= card.right,
-        // distance from the name line, which must not change between states
-        gap: Math.round(Math.abs((id === 'p1' ? side.top - name.bottom : name.top - side.bottom))),
-      };
+      const out = { card: Math.round(card.height) };
+      for (const q of ['.side', '.pname', '.time']) {
+        const r = document.querySelector('#' + id + ' ' + q).getBoundingClientRect();
+        out[q] = [Math.round(r.top), Math.round(r.left + r.width / 2)]; // whole px: sub-pixel rounding noise ignored
+        out[q + 'inside'] = r.left >= card.left && r.right <= card.right && r.top >= card.top && r.bottom <= card.bottom;
+      }
+      const side = document.querySelector('#' + id + ' .side').getBoundingClientRect();
+      out.oneLine = side.height < 40 * (parseFloat(getComputedStyle(document.documentElement).fontSize) / 16);
+      return out;
     }));
+    await page.waitForTimeout(500); // let the view-in transition and font-fit settle
     const ready = await measure();
-    for (const m of ready) { expect(m.inside, `${width}${big ? ' 200%' : ''}: badge inside card`).toBe(true); expect(m.single, 'badge on one line').toBe(true); }
-    await page.evaluate(() => chessClock.press('p1'));
-    const running = await measure();
-    expect(running, `${width}: badge size and gap to name unchanged when the clock runs`).toEqual(ready);
-    await page.evaluate(() => chessClock.pause());
-    expect(await measure(), `${width}: unchanged when paused`).toEqual(ready);
+    for (const m of ready) { expect(m['.sideinside'] && m.oneLine, `${width}${big ? ' 200%' : ''}: badge inside card on one line`).toBe(true); }
+    const states = {};
+    await page.evaluate(() => chessClock.press('p1')); states.running = await measure();
+    await page.evaluate(() => chessClock.press('p2')); states.runningOther = await measure();
+    await page.evaluate(() => chessClock.pause()); states.paused = await measure();
+    await page.evaluate(() => { chessClock.resume(); chessClock.setRemainingMs(chessClock.getState().active, 50); });
+    await expect.poll(async () => (await page.evaluate(() => chessClock.getState())).phase).toBe('ended');
+    states.ended = await measure();
+    for (const [name, got] of Object.entries(states)) {
+      expect(got, `${width}${big ? ' 200%' : ''}: badge, name and digits unchanged in ${name}`).toEqual(ready);
+    }
   }
 });

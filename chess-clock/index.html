@@ -236,7 +236,7 @@
   .player {
     border: 0; width: 100%; min-width: 0; min-height: 0; cursor: pointer; position: relative;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    gap: 10px; padding: 16px; border-radius: var(--radius, 0);
+    gap: 4px; padding: 16px; border-radius: var(--radius, 0);
     background: var(--inactive-bg); color: var(--inactive-ink);
     touch-action: manipulation; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
   }
@@ -244,10 +244,10 @@
   .player .pname { font-size: 1rem; font-weight: 800; letter-spacing: 0.06em; }
   /* Colour badge: a drawn pawn plus the word, always present so nothing shifts.
      The pawn carries its own outline so it reads on dark, light, accent and low-time backgrounds. */
-  .pawn { width: 30px; height: 30px; flex: none; }
+  .pawn { width: 28px; height: 28px; flex: none; }
   .pawn-white { --pf: #f7f6ef; --ps: #1a1a1a; }
   .pawn-black { --pf: #1a1a1a; --ps: #f7f6ef; }
-  .player .side { display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-size: 0.95rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
+  .player .side { display: inline-flex; align-items: center; justify-content: center; gap: 6px; line-height: 1; font-size: 0.95rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
   .name-field { flex-direction: row; align-items: center; gap: 8px; }
   .name-field .pawn { width: 24px; height: 24px; }
   .player .time {
@@ -258,7 +258,13 @@
     font-size: min(21vw, 30vh); font-weight: var(--digit-weight, 800);
     max-width: 100%; white-space: nowrap;
   }
-  .player .note { font-size: 0.95rem; font-weight: 700; min-height: 1.4em; }
+  /* Two lines reserved at normal text size (hints like "Paused - tap either side to resume" wrap at 320px), so the block does not change height between states. Enlarged text reserves 2.7em, enough for two-line hints and the two-line ended result that shares this slot. */
+  .player .note { font-size: 0.95rem; font-weight: 700; min-height: max(2.7em, 36px); }
+  /* Hint (note) and ended result share one slot, so the result never adds height. */
+  .player .slot { display: grid; align-self: stretch; }
+  .player .slot > * { grid-area: 1 / 1; }
+  /* The turn pill lives in the same slot: it only shows while the side is running, when the hint and result are empty. */
+  .player .slot > .turn-pill { justify-self: center; align-self: start; }
   .player .flag-line { position: absolute; top: 0; left: 0; right: 0; height: 4px; background: transparent; }
 
   /* Active (to move) player */
@@ -274,7 +280,9 @@
     background: var(--accent-ink); color: var(--accent); letter-spacing: 0.04em;
     max-width: 100%; text-align: center;
   }
-  html[data-style="players"] .player.active .turn-pill { display: inline-block; }
+  /* The pill is hidden, not removed, so the slot keeps its size when a side becomes active. */
+  html[data-style="players"] .player .turn-pill { display: inline-block; visibility: hidden; }
+  html[data-style="players"] .player.active .turn-pill { visibility: visible; }
   html[data-style="players"] .player.active.low .turn-pill { background: var(--low-ink, #fff4ef); color: var(--low-bg, #c04b28); }
 
   /* Winner */
@@ -284,7 +292,8 @@
      the button fills its half and the card is a painted layer inside it.
      The top player is rotated 180 degrees, which flips the inset to match. */
   html[data-style="players"] .clock { --gap: 0; --page-pad: 0; --digit-weight: 800; }
-  html[data-style="players"] .player { padding: 22px; }
+  /* Vertical padding trimmed (centred content does not move) so the reserved badge and hint rows still fit at 200% text. */
+  html[data-style="players"] .player { padding: 14px 22px; }
   html[data-style="players"] .player,
   html[data-style="players"] .player.active,
   html[data-style="players"] .player.active.low,
@@ -331,11 +340,11 @@
 
   /* Ended state banner inside the winner panel. Its height is always reserved,
      so the message never pushes the name or digits out of the card. */
-  .player .result { display: block; visibility: hidden; min-height: 1.3em; font-size: 1.05rem; font-weight: 800; }
+  .player .result { display: block; visibility: hidden; font-size: 1.05rem; font-weight: 800; }
   .player .result:not(:empty) { visibility: visible; }
-  /* Once the game is decided the low-time note can never appear again; drop
-     its reserved height so the winner line always fits the card. */
-  .player.winner .note { display: none; }
+  /* Once the game is decided the note is hidden but keeps its height, so the
+     name, badge and digits do not move when the game ends. */
+  .player.winner .note { visibility: hidden; }
 
   @media (prefers-reduced-motion: reduce) {
     * { transition: none !important; animation: none !important; }
@@ -452,12 +461,10 @@
 <main class="clock" id="clock-view" hidden>
   <button class="player top" id="p2" aria-label="Player 2">
     <span class="flag-line"></span>
-    <span class="turn-pill">Tap when your move is done</span>
     <span class="side"><svg class="pawn pawn-black" aria-hidden="true"><use href="#pawn"/></svg>Black</span>
     <span class="pname">Player 2</span>
     <span class="time" id="p2-time">5:00</span>
-    <span class="note" id="p2-note"></span>
-    <span class="result" id="p2-result"></span>
+    <span class="slot"><span class="turn-pill">Tap when your move is done</span><span class="note" id="p2-note"></span><span class="result" id="p2-result"></span></span>
   </button>
 
   <div class="bar" role="toolbar" aria-label="Clock controls">
@@ -472,12 +479,10 @@
 
   <button class="player bottom" id="p1" aria-label="Player 1">
     <span class="flag-line"></span>
-    <span class="turn-pill">Tap when your move is done</span>
     <span class="time" id="p1-time">5:00</span>
     <span class="pname">Player 1</span>
     <span class="side"><svg class="pawn pawn-white" aria-hidden="true"><use href="#pawn"/></svg>White</span>
-    <span class="note" id="p1-note"></span>
-    <span class="result" id="p1-result"></span>
+    <span class="slot"><span class="turn-pill">Tap when your move is done</span><span class="note" id="p1-note"></span><span class="result" id="p1-result"></span></span>
   </button>
 </main>
 
@@ -1059,13 +1064,25 @@
   function fitTime(t) {
     if (!t || el.clock.hidden) return;
     t.style.fontSize = '';
+    t.style.minHeight = '';
+    t.style.display = '';
     var size = parseFloat(getComputedStyle(t).fontSize);
     if (!size) return;
     var maxHeight = Math.max(40, fitBudget(t));
+    var fullHeight = Math.min(t.getBoundingClientRect().height, maxHeight);
     var guard = 60;
     while (guard-- > 0 && size > 10 && (t.scrollWidth > t.clientWidth || t.scrollHeight > maxHeight)) {
       size *= 0.92;
       t.style.fontSize = size.toFixed(1) + 'px';
+    }
+    // When the digits shrink to stay inside the card (the tenths make them wider),
+    // keep the row at the height it had at full size, so the badge, name and digits
+    // above and below do not move.
+    if (t.style.fontSize) {
+      t.style.minHeight = fullHeight + 'px';
+      t.style.display = 'flex';
+      t.style.alignItems = 'center';
+      t.style.justifyContent = 'center';
     }
   }
   function fitTimes() {
@@ -1094,10 +1111,10 @@
     var notes = { p1: '', p2: '' };
     if (game.phase === 'ready') {
       notes.p1 = 'White moves first';
-      notes.p2 = 'Black taps to start White\u2019s clock';
+      notes.p2 = 'Black taps to start';
     } else if (game.phase === 'paused') {
-      notes.p1 = 'Paused - tap either side to resume';
-      notes.p2 = 'Paused - tap either side to resume';
+      notes.p1 = 'Paused - tap to resume';
+      notes.p2 = 'Paused - tap to resume';
     }
     var p1n = nameOf('p1'), p2n = nameOf('p2');
     if (settings.moves === 'on' && (game.phase === 'running' || game.phase === 'paused')) {
@@ -1106,8 +1123,12 @@
     }
     el.p1name.textContent = p1n;
     el.p2name.textContent = p2n;
+    var noteChanged = el.p1note.textContent !== notes.p1 || el.p2note.textContent !== notes.p2;
     el.p1note.textContent = notes.p1;
     el.p2note.textContent = notes.p2;
+    // A hint change can resize the stack; refit so a size picked while the
+    // old hint was showing never lingers (the digits must not move between states).
+    if (noteChanged) requestAnimationFrame(fitTimes);
   }
 
   function renderBar() {
