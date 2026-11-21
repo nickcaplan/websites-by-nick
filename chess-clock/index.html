@@ -224,9 +224,9 @@
   .sheet-divider { border: 0; border-top: 1px solid var(--line); margin: 0; }
   .sheet-danger { align-self: stretch; justify-content: center; }
   .sheet-danger.confirm { background: var(--low-bg, #c04b28); border-color: var(--low-bg, #c04b28); color: #fff4ef; }
-  /* Armed confirm takes the whole row so its longer label stays short enough
-     to keep the button inside the visible sheet at small widths / 200% text. */
-  .sheet-actions .chip.confirm { grid-column: 1 / -1; }
+  /* Armed confirm swaps its label in place: both buttons keep their column,
+     width and height in every state, so nothing jumps when confirming. */
+  .sheet-actions .chip { text-align: center; line-height: 1.2; padding-left: 8px; padding-right: 8px; }
 
   /* ---------- Clock screen ---------- */
   .clock {
@@ -1203,7 +1203,7 @@
     if (!changeTimeArmed) {
       changeTimeArmed = true;
       el.sheetChangeTime.classList.add('confirm');
-      el.sheetChangeTime.textContent = 'Tap again to reset';
+      el.sheetChangeTime.textContent = 'New game?';
       changeTimeTimer = setTimeout(disarmChangeTime, 3000);
       return;
     }

@@ -394,7 +394,7 @@ test('change time asks before resetting the clock', async ({ page, baseURL }) =>
   await page.locator('#settings-btn').click();
   await page.locator('#sheet-change-time').click();
   // First tap only arms it: still in the game, confirmation showing.
-  await expect(page.locator('#sheet-change-time')).toContainText('Tap again to reset');
+  await expect(page.locator('#sheet-change-time')).toContainText('New game?');
   expect((await page.evaluate(() => chessClock.getState())).phase).toBe('paused');
   await page.locator('#sheet-change-time').click();
   await expect(page.locator('#setup-view')).toBeVisible();
@@ -770,4 +770,26 @@ test('ended game shows the outcome on both halves and a Play again action', asyn
   const state = await page.evaluate(() => chessClock.getState());
   expect(state.phase).toBe('ready');
   expect(state.remaining.p1).toBe(10 * 60000);
+});
+
+test('settings sheet buttons keep the same size and position when confirming', async ({ page, baseURL }) => {
+  for (const width of [320, 390, 800]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto(baseURL + '/chess-clock/');
+    await page.evaluate(() => { localStorage.clear(); chessClock.start(); chessClock.press('p1'); });
+    await page.locator('#settings-btn').click();
+    const sel = '#sheet-reset, #sheet-change-time, #sheet-close, #sheet-resume, .sheet .chips .chip';
+    const boxes = () => page.evaluate((s) => [...document.querySelectorAll(s)].map((b) => {
+      const r = b.getBoundingClientRect();
+      return [b.id || b.className, Math.round(r.x), Math.round(r.y), Math.round(r.width), Math.round(r.height)];
+    }), sel);
+    await page.waitForTimeout(500); // let the sheet finish sliding in
+    const before = await boxes();
+    await page.locator('#sheet-reset').click();
+    await expect(page.locator('#sheet-reset')).toHaveClass(/confirm/);
+    expect(await boxes(), `${width}: reset armed`).toEqual(before);
+    await page.locator('#sheet-change-time').click();
+    await expect(page.locator('#sheet-change-time')).toHaveClass(/confirm/);
+    expect(await boxes(), `${width}: both armed`).toEqual(before);
+  }
 });
