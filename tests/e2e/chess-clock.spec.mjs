@@ -231,15 +231,26 @@ test('no sideways scrolling at 320px, including 200% text', async ({ page, baseU
   expect(await page.evaluate(fitsViewport), 'settings sheet at 320px 200% text').toEqual([]);
 });
 
-test('restores a paused game after reload', async ({ page, baseURL }) => {
+test('a reload starts a fresh session on the setup screen, keeping settings', async ({ page, baseURL }) => {
   await fresh(page, baseURL);
+  await page.evaluate(() => localStorage.setItem('chess-clock-settings', JSON.stringify({ theme: 'light', accent: 'peach', sound: 'off', moves: 'on', minutes: 5, inc: 0, p1name: 'Ann', p2name: 'Bo' })));
+  await page.goto(baseURL + '/chess-clock/');
   await page.locator('#start-btn').click();
   await page.locator('#p1').dispatchEvent('pointerdown');
   await page.evaluate(() => chessClock.pause());
   await page.goto(baseURL + '/chess-clock/');
   const state = await page.evaluate(() => chessClock.getState());
-  expect(state.phase).toBe('paused');
-  await expect(page.locator('#clock-view')).toBeVisible();
+  expect(state.phase).toBe('setup');
+  expect(state.moves).toEqual({ p1: 0, p2: 0 });
+  expect(state.settings).toEqual({ theme: 'light', accent: 'peach', sound: 'off', moves: 'on', minutes: 5, inc: 0, p1name: 'Ann', p2name: 'Bo' });
+  await expect(page.locator('#start-btn')).toBeVisible();
+  await expect(page.locator('#clock-view')).toBeHidden();
+  expect(await page.evaluate(() => localStorage.getItem('chess-clock-game'))).toBeNull();
+  // A game saved by an earlier version is discarded too.
+  await page.evaluate(() => localStorage.setItem('chess-clock-game', JSON.stringify({ phase: 'paused', active: 'p1', remaining: { p1: 1000, p2: 1000 }, moves: { p1: 1, p2: 1 }, minutes: 10, inc: 3, savedAt: Date.now() })));
+  await page.goto(baseURL + '/chess-clock/');
+  expect((await page.evaluate(() => chessClock.getState())).phase).toBe('setup');
+  expect(await page.evaluate(() => localStorage.getItem('chess-clock-game'))).toBeNull();
 });
 
 test('players style: the whole half is tappable, including edges and corners', async ({ page, baseURL }) => {
@@ -579,7 +590,7 @@ test('bar keeps every label inside its button at 320px and 390px with 200% text'
   for (const w of [320, 390]) {
     await page.setViewportSize({ width: w, height: 844 });
     await fresh(page, baseURL);
-    // Start via the page API: a restored game also shows the clock view.
+    // Start via the page API: start without the setup screen.
     await page.evaluate(() => { chessClock.start(); document.documentElement.style.fontSize = '200%'; });
     const spills = () => page.evaluate(() => {
       const bad = [];
@@ -618,7 +629,7 @@ test('sheet rows share one aligned, equal-width control column at 320px, 390px a
     for (const zoom of [1, 2]) {
       await page.setViewportSize({ width: w, height: 844 });
       await fresh(page, baseURL);
-      // Start via the page API: a restored game also shows the clock view.
+      // Start via the page API: start without the setup screen.
       await page.evaluate((z) => {
         chessClock.start();
         document.documentElement.style.fontSize = z === 2 ? '200%' : '';

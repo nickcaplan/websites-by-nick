@@ -835,35 +835,10 @@
   function baseMs() { return settings.minutes * 60000; }
   function incMs() { return settings.inc * 1000; }
 
-  function saveGame() {
-    if (game.phase === 'setup') return;
-    try {
-      localStorage.setItem(GAME_KEY, JSON.stringify({
-        phase: game.phase === 'running' ? 'paused' : game.phase,
-        active: game.active,
-        remaining: game.remaining,
-        moves: game.moves,
-        winner: game.winner,
-        minutes: settings.minutes,
-        inc: settings.inc,
-        savedAt: Date.now()
-      }));
-    } catch (e) {}
-  }
-
-  function restoreGame() {
-    var saved = null;
-    try { saved = JSON.parse(localStorage.getItem(GAME_KEY) || 'null'); } catch (e) {}
-    if (!saved || !saved.savedAt) return false;
-    if (Date.now() - saved.savedAt > 12 * 3600 * 1000) return false;
-    if (saved.minutes !== settings.minutes || saved.inc !== settings.inc) return false;
-    game.phase = saved.phase === 'running' ? 'paused' : saved.phase;
-    game.active = saved.active;
-    game.remaining = saved.remaining;
-    game.moves = saved.moves || { p1: 0, p2: 0 };
-    game.winner = saved.winner || null;
-    return true;
-  }
+  // A game is never saved: every visit starts at the setup screen. Remove any
+  // game an earlier version of the page saved in this browser.
+  function saveGame() {}
+  try { localStorage.removeItem(GAME_KEY); } catch (e) {}
 
   /* ---------- timing ---------- */
   var timer = null;
@@ -1339,13 +1314,6 @@
   applyDisplay();
   renderNames();
   updateSummary();
-  var restored = false;
-  try { restored = restoreGame(); } catch (e) {}
-  if (restored && game.phase !== 'setup') {
-    el.setup.hidden = true;
-    el.clock.hidden = false;
-    startTimer();
-  }
   renderAll();
   fitTimes();
 
