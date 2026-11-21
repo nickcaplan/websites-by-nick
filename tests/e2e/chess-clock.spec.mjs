@@ -40,8 +40,7 @@ test('full game flow: start, first tap, turns, increment, pause, confirmed reset
   await expect(page.locator('#clock-view')).toBeVisible();
   expect((await page.evaluate(() => chessClock.getState())).phase).toBe('ready');
 
-  // Tapping a side before the game starts does nothing.
-  await page.locator('#p1').dispatchEvent('pointerdown');
+  // Tapping Black before the game starts does nothing.
   await page.locator('#p2').dispatchEvent('pointerdown');
   expect((await page.evaluate(() => chessClock.getState())).phase).toBe('ready');
 
@@ -970,4 +969,23 @@ test('Start game button keeps its size and place through ready, running and paus
     expect(await box(), `${w}px paused`).toEqual(ready);
     expect(await shape(), `${w}px paused shape`).toEqual(readyShape);
   }
+});
+
+test('tapping White before the game starts starts White\'s clock, like Start game', async ({ page, baseURL }) => {
+  await fresh(page, baseURL);
+  await page.locator('#start-btn').click();
+  let state = await page.evaluate(() => chessClock.getState());
+  expect(state.phase).toBe('ready');
+  await page.locator('#p2').dispatchEvent('pointerdown');
+  expect((await page.evaluate(() => chessClock.getState())).phase).toBe('ready');
+  await page.locator('#p1').dispatchEvent('pointerdown');
+  state = await page.evaluate(() => chessClock.getState());
+  expect(state.phase).toBe('running');
+  expect(state.active).toBe('p1');
+  expect(state.moves.p1).toBe(0);
+  // Once running, tapping White passes the turn to Black as before.
+  await page.locator('#p1').dispatchEvent('pointerdown');
+  state = await page.evaluate(() => chessClock.getState());
+  expect(state.active).toBe('p2');
+  expect(state.moves.p1).toBe(1);
 });
