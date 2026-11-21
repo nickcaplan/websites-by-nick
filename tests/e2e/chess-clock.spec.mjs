@@ -880,3 +880,25 @@ test('each side shows a White or Black pawn badge; badge, name and digits never 
     }
   }
 });
+
+test('the reserved slot follows the ended result text size, however the size is changed', async ({ page, baseURL }) => {
+  await page.setViewportSize({ width: 320, height: 740 });
+  await page.goto(baseURL + '/chess-clock/');
+  await page.evaluate(() => { localStorage.clear(); });
+  await page.goto(baseURL + '/chess-clock/');
+  await page.evaluate(() => {
+    for (const [id, v] of [['name-p1', 'Al Be Ci Do Ev Fi Gu Ha Iv'], ['name-p2', 'Jo Ka Le Mo Ny Os Pa Qu Ri']]) {
+      const i = document.getElementById(id); i.value = v; i.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+    chessClock.start();
+    // Double the result's own computed size directly (not through the root text size).
+    for (const r of document.querySelectorAll('.result')) r.style.fontSize = (parseFloat(getComputedStyle(r).fontSize) * 2) + 'px';
+  });
+  await page.waitForTimeout(400);
+  const slots = () => page.evaluate(() => ['p1', 'p2'].map((id) => Math.round(document.querySelector('#' + id + ' .slot').getBoundingClientRect().height * 10) / 10));
+  const ready = await slots();
+  await page.evaluate(() => { chessClock.press('p1'); chessClock.press('p2'); chessClock.setRemainingMs(chessClock.getState().active, 50); });
+  await expect.poll(async () => (await page.evaluate(() => chessClock.getState())).phase).toBe('ended');
+  await page.waitForTimeout(400);
+  expect(await slots()).toEqual(ready);
+});

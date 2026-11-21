@@ -266,7 +266,7 @@
   /* Two lines reserved at normal text size (hints like "Paused - tap either side to resume" wrap at 320px), so the block does not change height between states. Enlarged text reserves 2.7em, enough for two-line hints and the two-line ended result that shares this slot. */
   .player .note { font-size: 0.95rem; font-weight: 700; min-height: max(2.7em, 36px); }
   /* Hint (note) and ended result share one slot, so the result never adds height. */
-  .player .slot { display: grid; align-self: stretch; min-height: 3rem; flex-shrink: 0; }
+  .player .slot { display: grid; align-self: stretch; flex-shrink: 0; }
   .player .slot > * { grid-area: 1 / 1; }
   /* The turn pill lives in the same slot: it only shows while the side is running, when the hint and result are empty. */
   .player .slot > .turn-pill { justify-self: center; align-self: start; }
@@ -347,7 +347,7 @@
      so the message never pushes the name or digits out of the card. */
   /* The outcome words ("Time!", "wins", "flag fell") always show in full; only the inserted name is cut
      with an ellipsis when it is too long for the card. Up to three lines, always reserved by the slot. */
-  .player .result { display: flex; flex-wrap: wrap; justify-content: center; align-content: flex-start; column-gap: 0.3em; overflow: hidden; visibility: hidden; font-size: 0.8rem; line-height: 1.2; font-weight: 800; }
+  .player .result { display: flex; flex-wrap: wrap; justify-content: center; align-content: flex-start; column-gap: 0.3em; overflow: hidden; visibility: hidden; font-size: 0.8rem; line-height: 1.2; min-height: 3.6em; font-weight: 800; }
   .player .result > span { white-space: nowrap; }
   .player .result .rname { display: flex; max-width: 100%; min-width: 0; }
   .player .result .rn { overflow: hidden; text-overflow: ellipsis; min-width: 0; }
