@@ -96,13 +96,18 @@ test('10 min + 3 s control: first completed move gives the mover exactly +3s', a
   await expect(page.locator('#bar-status')).toHaveText('10 min + 3 s');
 });
 
-test('reset stays locked while the clock is running', async ({ page, baseURL }) => {
+test('reset works while the clock is running, behind a confirmation tap', async ({ page, baseURL }) => {
   await fresh(page, baseURL);
   await page.locator('#start-btn').click();
   await page.locator('#p1').dispatchEvent('pointerdown');
-  await expect(page.locator('#reset-btn')).toHaveAttribute('aria-disabled', 'true');
-  await page.locator('#reset-btn').click({ force: true });
+  await expect(page.locator('#reset-btn')).toHaveAttribute('aria-disabled', 'false');
+  await page.locator('#reset-btn').click();
+  // First tap only arms the confirmation; the game still runs.
   expect((await page.evaluate(() => chessClock.getState())).phase).toBe('running');
+  await page.locator('#reset-btn').click();
+  const state = await page.evaluate(() => chessClock.getState());
+  expect(state.phase).toBe('ready');
+  expect(state.remaining.p1).toBe(10 * 60000);
 });
 
 test('flag fall ends the game and names the winner', async ({ page, baseURL }) => {
@@ -120,34 +125,48 @@ test('flag fall ends the game and names the winner', async ({ page, baseURL }) =
   await expect(page.locator('#p2-time')).toHaveText('0:15.4');
 });
 
-test('style, colour, theme and sound choices persist locally', async ({ page, baseURL }) => {
+test('colour, theme and sound choices persist locally', async ({ page, baseURL }) => {
   await fresh(page, baseURL);
   await page.locator('#appearance summary').click();
-  await page.locator('#style-chips [data-style-pick="tournament"]').click();
   await page.locator('#accent-chips [data-accent-pick="sky"]').click();
   await page.locator('#theme-chips [data-theme-pick="light"]').click();
+  await page.locator('#more-options summary').click();
+  await page.locator('#setup-sound-chips [data-sound-pick="off"]').click();
   await page.goto(baseURL + '/chess-clock/');
-  expect(await page.evaluate(() => document.documentElement.dataset.style)).toBe('tournament');
   expect(await page.evaluate(() => document.documentElement.dataset.accent)).toBe('sky');
   expect(await page.evaluate(() => document.documentElement.dataset.theme)).toBe('light');
   // No tracking: nothing leaves the device when changing settings.
   const state = await page.evaluate(() => chessClock.getState());
-  expect(state.settings.style).toBe('tournament');
+  expect(state.settings.sound).toBe('off');
 });
 
-test('settings sheet pauses the clock and switches style mid-game', async ({ page, baseURL }) => {
+test('settings sheet pauses the clock, sound and move counter toggle from the bar', async ({ page, baseURL }) => {
   await fresh(page, baseURL);
   await page.locator('#start-btn').click();
   await page.locator('#p1').dispatchEvent('pointerdown');
   await page.locator('#settings-btn').click();
   expect((await page.evaluate(() => chessClock.getState())).phase).toBe('paused');
   await expect(page.locator('#settings-sheet')).toBeVisible();
-  await page.locator('#sheet-style-chips [data-style-pick="studio"]').click();
-  expect(await page.evaluate(() => document.documentElement.dataset.style)).toBe('studio');
   await page.keyboard.press('Escape');
   await expect(page.locator('#settings-sheet')).toBeHidden();
+  // Sound and move counter toggle straight from the clock bar, mid-game.
+  await expect(page.locator('#sound-toggle')).toHaveAttribute('aria-pressed', 'true');
+  await page.locator('#sound-toggle').click();
+  let state = await page.evaluate(() => chessClock.getState());
+  expect(state.settings.sound).toBe('off');
+  await expect(page.locator('#sound-toggle')).toHaveAttribute('aria-pressed', 'false');
+  await page.locator('#moves-toggle').click();
+  state = await page.evaluate(() => chessClock.getState());
+  expect(state.settings.moves).toBe('on');
+  expect(state.phase).toBe('paused'); // the toggles do not resume the clock
   await page.locator('#pause-btn').click();
   expect((await page.evaluate(() => chessClock.getState())).phase).toBe('running');
+  await expect(page.locator('#p1-note')).toContainText('move');
+  // Both choices persist across a reload.
+  await page.goto(baseURL + '/chess-clock/');
+  state = await page.evaluate(() => chessClock.getState());
+  expect(state.settings.moves).toBe('on');
+  expect(state.settings.sound).toBe('off');
 });
 
 test('keyboard: space presses the active side', async ({ page, baseURL }) => {
@@ -380,6 +399,37 @@ test('change time asks before resetting the clock', async ({ page, baseURL }) =>
   expect((await page.evaluate(() => chessClock.getState())).phase).toBe('setup');
 });
 
+test('the play button sits at the top of the setup screen', async ({ page, baseURL }) => {
+  await fresh(page, baseURL);
+  const btn = await page.locator('#start-btn').boundingBox();
+  const timeHeading = await page.locator('#time-heading').boundingBox();
+  expect(btn.y).toBeLessThan(timeHeading.y);
+});
+
+test('no 15 minute option anywhere', async ({ page, baseURL }) => {
+  await fresh(page, baseURL);
+  await expect(page.locator('[data-preset="15,0"]')).toHaveCount(0);
+  await page.locator('#custom-time summary').click();
+  await expect(page.locator('#time-chips [data-minutes="15"]')).toHaveCount(0);
+});
+
+test('tapping either side while paused resumes the game', async ({ page, baseURL }) => {
+  await fresh(page, baseURL);
+  await page.locator('#start-btn').click();
+  await page.locator('#p1').dispatchEvent('pointerdown');
+  await page.locator('#pause-btn').click();
+  expect((await page.evaluate(() => chessClock.getState())).phase).toBe('paused');
+  await page.locator('#p2').dispatchEvent('pointerdown');
+  let state = await page.evaluate(() => chessClock.getState());
+  expect(state.phase).toBe('running');
+  expect(state.active).toBe('p2'); // the side to move keeps ticking
+  await page.locator('#pause-btn').click();
+  await page.locator('#p1').dispatchEvent('pointerdown');
+  state = await page.evaluate(() => chessClock.getState());
+  expect(state.phase).toBe('running');
+  expect(state.active).toBe('p2');
+});
+
 test('sound: audio context unlocks on the first tap', async ({ page, baseURL }) => {
   await fresh(page, baseURL);
   await page.locator('#start-btn').click();
@@ -397,11 +447,18 @@ test('sound: audio context unlocks on the first tap', async ({ page, baseURL }) 
   }
 });
 
-test('10 + 3 preset tile sets minutes and increment together', async ({ page, baseURL }) => {
+test('10 + 3 is the default, and the chosen preset stays selected after reload', async ({ page, baseURL }) => {
   await fresh(page, baseURL);
-  await page.locator('#preset-tiles [data-preset="10,3"]').click();
-  const state = await page.evaluate(() => chessClock.getState());
+  let state = await page.evaluate(() => chessClock.getState());
   expect(state.settings.minutes).toBe(10);
   expect(state.settings.inc).toBe(3);
+  await expect(page.locator('#preset-tiles [data-preset="10,3"]')).toHaveAttribute('aria-pressed', 'true');
   await expect(page.locator('#play-summary')).toContainText('10 + 3');
+  await page.locator('#preset-tiles [data-preset="3,2"]').click();
+  state = await page.evaluate(() => chessClock.getState());
+  expect(state.settings.minutes).toBe(3);
+  expect(state.settings.inc).toBe(2);
+  await page.goto(baseURL + '/chess-clock/');
+  await expect(page.locator('#preset-tiles [data-preset="3,2"]')).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('#play-summary')).toContainText('3 + 2');
 });
