@@ -94,7 +94,7 @@
   .setup-clock { display: block; width: 100%; height: auto; overflow: visible; }
   .clock-case { fill: var(--accent); stroke: #233f31; stroke-width: 4; }
   .clock-window { fill: #203e30; }
-  .clock-digits { fill: none; stroke: #f0efda; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .clock-digits { transform-box: fill-box; transform-origin: center; fill: none; stroke: #f0efda; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
   .setup .lead { font-size: clamp(0.875rem, 3.7vw, 1.05rem); }
   .start { box-shadow: 0 5px 0 #748b5f; display: flex; align-items: center; justify-content: center; gap: 16px; }
   .start svg { width: 24px; height: 24px; flex: none; }
@@ -343,8 +343,8 @@
     <h1>Play chess</h1>
     <svg class="setup-clock" viewBox="0 0 180 142" aria-hidden="true" focusable="false">
       <ellipse cx="90" cy="133" rx="84" ry="7" fill="#233f31"/>
-      <rect x="24" y="4" width="44" height="16" rx="7" fill="#dac698"/>
-      <rect x="112" y="4" width="44" height="16" rx="7" fill="#dac698"/>
+      <rect class="clock-plunger" x="24" y="4" width="44" height="16" rx="7" fill="#dac698"/>
+      <rect class="clock-plunger" x="112" y="4" width="44" height="16" rx="7" fill="#dac698"/>
       <path class="clock-case" d="M17 23 H163 L175 117 Q177 130 162 130 H18 Q3 130 5 117 Z"/>
       <rect class="clock-window" x="24" y="46" width="62" height="49" rx="6"/>
       <rect class="clock-window" x="94" y="46" width="62" height="49" rx="6"/>
@@ -642,6 +642,44 @@
         path.setAttribute('transform', 'translate(' + (start + i * 12 * scale) + ' 62) scale(' + scale + ' 1)');
         group.appendChild(path);
       }
+    });
+  }
+
+  function animateOpening() {
+    var motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (motion.matches || el.setup.hidden || !Element.prototype.animate) return;
+    var effects = [];
+    function add(node, frames, duration, delay) {
+      var effect = node.animate(frames, { duration: duration, delay: delay, easing: 'linear', fill: 'both' });
+      effects.push(effect);
+      // Remove the effect after its final, unchanged frame. No paused effects
+      // or timers are left behind, and settings can change during the intro.
+      effect.onfinish = function () { effect.cancel(); };
+    }
+    document.querySelectorAll('.setup-clock .clock-digits').forEach(function (node, i) {
+      add(node, [
+        { transform: 'scaleY(1)', opacity: 1 },
+        { transform: 'scaleY(.03)', opacity: .25, offset: .23 },
+        { transform: 'scaleY(1.2)', opacity: 1, offset: .52 },
+        { transform: 'scaleY(.9)', offset: .74 },
+        { transform: 'scaleY(1)' }
+      ], 580, i * 120);
+    });
+    document.querySelectorAll('.setup-clock .clock-plunger').forEach(function (node, i) {
+      add(node, [
+        { transform: 'translateY(0)' },
+        { transform: 'translateY(8px)', offset: .25 },
+        { transform: 'translateY(8px)', offset: .5 },
+        { transform: 'translateY(-3px)', offset: .75 },
+        { transform: 'none' }
+      ], 420, i * 180);
+    });
+    function cancelForReducedMotion(event) {
+      if (event.matches) effects.forEach(function (effect) { effect.cancel(); });
+    }
+    motion.addEventListener('change', cancelForReducedMotion);
+    Promise.all(effects.map(function (effect) { return effect.finished.catch(function () {}); })).then(function () {
+      motion.removeEventListener('change', cancelForReducedMotion);
     });
   }
 
@@ -1215,6 +1253,8 @@
   }
   renderAll();
   fitTimes();
+
+  animateOpening();
 
   /* Small public surface for the repo's browser checks. */
   window.chessClock = {
