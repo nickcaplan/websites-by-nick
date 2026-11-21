@@ -110,6 +110,11 @@ test('reset works from the settings sheet, behind a confirmation tap', async ({ 
   const state = await page.evaluate(() => chessClock.getState());
   expect(state.phase).toBe('ready');
   expect(state.remaining.p1).toBe(10 * 60000);
+  // The sheet closes so players can start; the clock is usable, not inert.
+  await expect(page.locator('#settings-sheet')).toBeHidden();
+  expect(await page.evaluate(() => document.getElementById('clock-view').inert)).toBe(false);
+  await page.locator('#p1').dispatchEvent('pointerdown');
+  expect((await page.evaluate(() => chessClock.getState())).phase).toBe('running');
 });
 
 test('flag fall ends the game and names the winner', async ({ page, baseURL }) => {

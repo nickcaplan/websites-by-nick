@@ -933,6 +933,11 @@
     releaseWakeLock();
     saveGame();
     renderAll();
+    // A confirmed reset from the sheet closes it, so players can start straight away.
+    if (!el.sheet.hidden) {
+      stopSheet();
+      el.settingsBtn.focus();
+    }
   }
 
   function endGame(winner) {
