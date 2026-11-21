@@ -112,16 +112,17 @@ test('each player label stays paired with its own input at every setup width', a
           if (size) el.style.fontSize = size * 2 + 'px';
         }
       });
+      // WebKit flex rounding can differ by 1/64px. Permit <0.1px, not visible overflow.
       const rows = await page.locator('.name-row').evaluateAll(rows => rows.map(row => {
         const label = row.querySelector('label');
         const input = row.querySelector('input');
         const l = label.getBoundingClientRect();
         const i = input.getBoundingClientRect();
         const r = row.getBoundingClientRect();
-        return {match:label.htmlFor === input.id,top:r.top,bottom:r.bottom, labelTop:l.top,inputTop:i.top,inputBottom:i.bottom,inside:i.right <= r.right && l.right <= r.right};
+        return {match:label.htmlFor === input.id,top:r.top,bottom:r.bottom, labelTop:l.top,inputTop:i.top,inputBottom:i.bottom,inside:i.right <= r.right + 0.1 && l.right <= r.right + 0.1};
       }));
       expect(rows).toHaveLength(2);
-      expect(rows.every(r => r.match && r.inside && r.inputTop >= r.top && r.inputBottom <= r.bottom)).toBe(true);
+      expect(rows.every(r => r.match && r.inside && r.inputTop >= r.top - 0.1 && r.inputBottom <= r.bottom + 0.1)).toBe(true);
       expect(rows[1].top).toBeGreaterThan(rows[0].bottom);
       if (width >= 620 && scale === 1) expect(rows.every(r => r.inputTop <= r.labelTop && r.labelTop < r.inputBottom)).toBe(true);
     }
