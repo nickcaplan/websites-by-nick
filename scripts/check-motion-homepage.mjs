@@ -113,7 +113,8 @@ await settle.waitForTimeout(700);
 await settle.emulateMedia({reducedMotion:"reduce"});
 await settle.waitForFunction(() => {
   const h = document.getElementById("hero-title");
-  return h.classList.contains("typed") && h.classList.contains("drawn");
+  return document.body.classList.contains("paused") && h.classList.contains("sketch-settled") &&
+    h.classList.contains("typed") && h.classList.contains("drawn");
 });
 const settled = await settle.evaluate(() => {
   const h = document.getElementById("hero-title");
