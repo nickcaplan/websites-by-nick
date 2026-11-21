@@ -330,7 +330,7 @@
     display: inline-flex; align-items: center; justify-content: center; padding: 0 14px;
   }
   .bar button[aria-disabled="true"] { opacity: 0.4; cursor: default; }
-  .bar button.start { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
+  .bar button.ready-go { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
   .bar button.bar-toggle { font-size: 1rem; font-weight: 800; }
   .bar button.bar-toggle[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
   .bar .status { font-size: 0.85rem; color: var(--ink-dim); font-weight: 700; min-width: 0; text-align: center; }
@@ -1178,7 +1178,7 @@
     var playShown = game.phase === 'paused' || game.phase === 'ready';
     el.pause.innerHTML = playShown ? '&#9654;' : '&#10073;&#10073;';
     el.pause.setAttribute('aria-label', game.phase === 'ready' ? 'Start game' : game.phase === 'paused' ? 'Resume' : 'Pause');
-    el.pause.classList.toggle('start', game.phase === 'ready');
+    el.pause.classList.toggle('ready-go', game.phase === 'ready');
     var pauseEnabled = game.phase === 'running' || game.phase === 'paused' || game.phase === 'ready';
     el.pause.setAttribute('aria-disabled', String(!pauseEnabled));
     var resetEnabled = game.phase !== 'setup';

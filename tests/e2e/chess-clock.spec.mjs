@@ -955,13 +955,19 @@ test('Start game button keeps its size and place through ready, running and paus
     await fresh(page, baseURL);
     await page.evaluate((b) => { if (b) document.documentElement.style.fontSize = '200%'; chessClock.start(); }, big);
     const box = () => page.locator('#pause-btn').evaluate((e) => { const r = e.getBoundingClientRect(); return [r.x, r.y, r.width, r.height].map((n) => Math.round(n * 10) / 10); });
+    // The painted shape (shadow, border, radius) must be identical in every state; only colour may change.
+    const shape = () => page.locator('#pause-btn').evaluate((e) => { const c = getComputedStyle(e); return [c.boxShadow, c.borderTopWidth, c.borderRightWidth, c.borderBottomWidth, c.borderLeftWidth, c.borderStyle, c.borderTopLeftRadius, c.borderBottomRightRadius, c.outlineStyle]; });
     const ready = await box();
+    const readyShape = await shape();
+    expect(readyShape[0], `${w}px ready: no shadow ledge`).toBe('none');
     await expect(page.locator('#pause-btn')).toHaveAttribute('aria-label', 'Start game');
     await expect(page.locator('#pause-btn')).toHaveAttribute('aria-disabled', 'false');
     await page.locator('#pause-btn').click();
     expect((await page.evaluate(() => chessClock.getState())).active).toBe('p1');
     expect(await box(), `${w}px running`).toEqual(ready);
+    expect(await shape(), `${w}px running shape`).toEqual(readyShape);
     await page.locator('#pause-btn').click();
     expect(await box(), `${w}px paused`).toEqual(ready);
+    expect(await shape(), `${w}px paused shape`).toEqual(readyShape);
   }
 });
