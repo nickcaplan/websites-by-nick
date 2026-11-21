@@ -882,8 +882,12 @@
       clickSound();
       return;
     }
-    // Before the game starts the sides do nothing: the Start button begins it.
-    if (game.phase === 'ready') return;
+    // Before the game starts, tapping White starts White's clock (same as the
+    // Start button). Tapping Black does nothing.
+    if (game.phase === 'ready') {
+      if (side === 'p1') beginGame();
+      return;
+    }
     if (game.phase !== 'running' || side !== game.active) return;
     game.moves[side] += 1;
     game.remaining[side] += incMs();
