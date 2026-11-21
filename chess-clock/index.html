@@ -11,6 +11,7 @@
 <meta property="og:url" content="https://websitesbynick.co.uk/chess-clock/">
 <meta property="og:image" content="https://websitesbynick.co.uk/chess-clock/social-preview.png">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://websitesbynick.co.uk/chess-clock/social-preview.png">
 <meta name="twitter:title" content="Chess clock">
 <meta name="twitter:description" content="A free two-player chess clock with time controls and increments.">
 <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml">
@@ -89,7 +90,7 @@
   .setup-section h2, .sheet-section h3 {
     font-size: 0.85rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-dim);
   }
-  .picker { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
+  .picker { display: flex; flex-direction: column; gap: 14px; align-items: flex-start; }
   .picker legend, .picker .group-label, .sheet .group-label {
     font-size: 0.78rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-dim);
   }
@@ -136,7 +137,7 @@
   .disclosure summary::after { content: "\203A"; font-size: 1.4rem; font-weight: 800; line-height: 1; transition: transform 0.15s ease; }
   .disclosure[open] summary::after { transform: rotate(90deg); }
   .disclosure > *:not(summary) { margin-top: 12px; }
-  .disclosure .picker { margin-bottom: 14px; }
+  .disclosure .picker { margin-bottom: 20px; }
 
   /* Player name fields */
   .name-fields { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
@@ -189,9 +190,14 @@
     background: var(--accent); color: var(--accent-ink); font-size: 1.15rem; font-weight: 800;
   }
   .sheet-section { display: flex; flex-direction: column; gap: 12px; }
-  .sheet .row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 14px; font-size: 1rem; }
-  .sheet .row .group-label { flex: 1 1 auto; }
-  .sheet .row .chips { flex: 0 0 auto; flex-wrap: nowrap; }
+  /* Label column plus one aligned control column: every picker group shares
+     the same left edge, width and height, and wraps as a whole below its
+     label when enlarged text needs the room. */
+  .sheet .row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; font-size: 1rem; }
+  .sheet .row .group-label { flex: 0 1 8em; min-width: 0; }
+  .sheet .row .chips { flex: 1 1 12.5em; display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 8px; max-width: 100%; }
+  .sheet .row .chips .chip { width: 100%; min-width: 0; padding-left: 6px; padding-right: 6px; justify-content: center; }
+  .sheet .row .chips .chip-swatch { width: 100%; min-width: 0; padding: 0; }
   .sheet .row .hint { flex-basis: 100%; }
   .sheet .hint { margin: 0; font-size: 0.85rem; color: var(--ink-dim); }
   .sheet-divider { border: 0; border-top: 1px solid var(--line); margin: 0; }
@@ -283,9 +289,11 @@
   /* Narrow screens: six controls become two balanced rows of three, so
      nothing wraps onto a row of its own and tap targets stay full-width. */
   @media (max-width: 560px) {
-    .bar { display: grid; grid-template-columns: repeat(3, 1fr); row-gap: 8px; }
-    .bar button { width: 100%; }
-    .bar .status { align-self: center; }
+    /* Two wide columns so enlarged labels (Moves, Reset?) stay inside their
+       buttons; the status text gets its own full-width row. */
+    .bar { display: grid; grid-template-columns: 1fr 1fr; row-gap: 8px; }
+    .bar button { width: 100%; padding: 0 8px; }
+    .bar .status { grid-column: 1 / -1; order: -1; align-self: center; }
   }
 
   /* Ended state banner inside the winner panel. Its height is always reserved,
