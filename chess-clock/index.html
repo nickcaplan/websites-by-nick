@@ -1324,7 +1324,26 @@
   renderAll();
   fitTimes();
 
-  animateOpening();
+  // Play the opening once the page is fully loaded, its fonts are ready and the
+  // tab is visible, then wait half a second so the first frame is not missed.
+  var OPENING_DELAY_MS = 500;
+  function whenLoaded(done) {
+    var fonts = document.fonts && document.fonts.ready ? document.fonts.ready.catch(function () {}) : Promise.resolve();
+    function afterLoad() { fonts.then(done); }
+    if (document.readyState === 'complete') afterLoad();
+    else window.addEventListener('load', afterLoad, { once: true });
+  }
+  function whenVisible(done) {
+    if (document.visibilityState !== 'hidden') { done(); return; }
+    document.addEventListener('visibilitychange', function onVisible() {
+      if (document.visibilityState === 'hidden') return;
+      document.removeEventListener('visibilitychange', onVisible);
+      done();
+    });
+  }
+  whenLoaded(function () {
+    whenVisible(function () { setTimeout(animateOpening, OPENING_DELAY_MS); });
+  });
 
   /* Small public surface for the repo's browser checks. */
   window.chessClock = {
