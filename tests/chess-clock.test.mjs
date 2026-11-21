@@ -53,14 +53,14 @@ test('chess-clock: copy style rules (no em-dashes, no placeholder copy)', () => 
 });
 
 test('chess-clock: accessible controls and time choices', () => {
-  for (const id of ['pause-btn', 'reset-btn', 'settings-btn', 'start-btn', 'sound-toggle', 'moves-toggle']) {
+  for (const id of ['pause-btn', 'sheet-reset', 'settings-btn', 'start-btn', 'sound-toggle', 'moves-toggle']) {
     assert.match(html, new RegExp(`id="${id}"`));
   }
   for (const minutes of [1, 3, 5, 10]) assert.match(html, new RegExp(`data-minutes="${minutes}"`));
   for (const inc of [0, 2, 3, 5]) assert.match(html, new RegExp(`data-inc="${inc}"`));
   for (const accent of ['green', 'peach', 'sky']) assert.match(html, new RegExp(`data-accent-pick="${accent}"`));
   assert.match(html, /aria-label="Pause"/);
-  assert.match(html, /aria-label="Reset clock"/);
+  assert.match(html, /aria-label="Reset game"/);
   assert.match(html, /role="dialog" aria-modal="true"/);
   assert.match(html, /aria-pressed/);
 });
