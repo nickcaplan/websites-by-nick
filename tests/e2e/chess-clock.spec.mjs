@@ -800,6 +800,7 @@ test('settings sheet buttons keep the same size and position when confirming', a
 });
 
 test('each side shows a White or Black pawn badge; badge, name and digits never move or wrap', async ({ page, baseURL }) => {
+  test.setTimeout(120000); // 32 combinations
   for (const [width, big, moves, flip, height] of [740, 900].flatMap((hh) => [false, true].flatMap((f) => [[320, false, false], [390, false, false], [320, true, false], [390, true, false], [320, false, true], [390, false, true], [320, true, true], [390, true, true]].map((c) => [...c, f, hh])))) {
     await page.setViewportSize({ width, height });
     await page.goto(baseURL + '/chess-clock/');
@@ -836,6 +837,7 @@ test('each side shows a White or Black pawn badge; badge, name and digits never 
     const ready = await measure();
     for (const [i, id] of ['p1', 'p2'].entries()) {
       void i;
+      expect(await page.evaluate((id) => document.querySelector('#' + id + ' .pname').textContent, id), 'no space before an ellipsis').not.toMatch(/\s\u2026/);
       expect(await page.evaluate((id) => { const card = document.getElementById(id).getBoundingClientRect(); const r = document.querySelector('#' + id + ' .pname').getBoundingClientRect(); return r.left >= card.left && r.right <= card.right; }, id), `${width}x${height}${big ? ' 200%' : ''}: long name stays inside its card`).toBe(true);
     }
     for (const m of ready) { expect(m['.sideinside'] && m.oneLine, `${width}x${height}${big ? ' 200%' : ''}${moves ? ' counter on' : ''}${flip ? ' other side loses' : ''}: badge inside card on one line`).toBe(true); }
@@ -868,6 +870,7 @@ test('each side shows a White or Black pawn badge; badge, name and digits never 
       return { inside, text: document.getElementById(id + '-result').textContent, lastFull: last.scrollWidth <= last.clientWidth + 1 };
     }));
     for (const e of ended) {
+      expect(e.text, 'no space before an ellipsis').not.toMatch(/\s\u2026/);
       expect(e.inside && e.lastFull, `${width}x${height}${big ? ' 200%' : ''}${moves ? ' counter on' : ''}: ended outcome words fully visible`).toBe(true);
       expect(e.text).toMatch(/^Time! .+(wins|flag fell)$/);
     }

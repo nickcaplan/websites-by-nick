@@ -632,8 +632,8 @@
   }
 
   function renderNames() {
-    el.p1name.textContent = nameOf('p1');
-    el.p2name.textContent = nameOf('p2');
+    el.p1name.textContent = nameOf('p1'); el.p1name.dataset.full = nameOf('p1');
+    el.p2name.textContent = nameOf('p2'); el.p2name.dataset.full = nameOf('p2');
   }
 
   function updateSummary() {
@@ -1098,6 +1098,7 @@
     }
   }
   function fitTimes() {
+    refitNames();
     fitTime(el.p1time);
     fitTime(el.p2time);
   }
@@ -1119,17 +1120,39 @@
     });
   }
 
+  // Cut a long name to what fits its box and end it with an ellipsis, without a space before the
+  // ellipsis (CSS text-overflow can leave a gap there). The full name stays in dataset.full.
+  function fitNameText(e) {
+    var full = e.dataset.full != null ? e.dataset.full : e.textContent;
+    e.dataset.full = full;
+    e.textContent = full;
+    if (!e.clientWidth || e.scrollWidth <= e.clientWidth + 0.5) return;
+    var lo = 1, hi = full.length - 1, best = 1;
+    while (lo <= hi) {
+      var mid = (lo + hi) >> 1;
+      e.textContent = full.slice(0, mid).replace(/\s+$/, '') + '\u2026';
+      if (e.scrollWidth <= e.clientWidth + 0.5) { best = mid; lo = mid + 1; } else { hi = mid - 1; }
+    }
+    e.textContent = full.slice(0, best).replace(/\s+$/, '') + '\u2026';
+  }
+  function refitNames() {
+    if (el.clock.hidden) return;
+    var all = [el.p1name, el.p2name].concat([].slice.call(document.querySelectorAll('.result .rn')));
+    all.forEach(fitNameText);
+  }
+
   function renderResult(box, side) {
     box.textContent = '';
     if (game.phase !== 'ended') return;
     var won = game.winner === side;
     function span(cls, text) { var e = document.createElement('span'); if (cls) e.className = cls; e.textContent = text; return e; }
     var who = span('rname', '');
-    who.appendChild(span('rn', nameOf(side)));
+    var rn = span('rn', nameOf(side)); rn.dataset.full = nameOf(side); who.appendChild(rn);
     who.appendChild(span('', won ? ' ' : '\u2019s '));
     box.appendChild(span('', 'Time! '));
     box.appendChild(who);
     box.appendChild(span('', won ? 'wins' : 'flag fell'));
+    refitNames();
   }
 
   function renderNotes() {
@@ -1147,8 +1170,8 @@
       c2 = ' \u00b7 ' + game.moves.p2 + (game.moves.p2 === 1 ? ' move' : ' moves');
     }
     document.documentElement.setAttribute('data-moves', settings.moves === 'on' ? 'on' : 'off');
-    el.p1name.textContent = nameOf('p1');
-    el.p2name.textContent = nameOf('p2');
+    el.p1name.textContent = nameOf('p1'); el.p1name.dataset.full = nameOf('p1');
+    el.p2name.textContent = nameOf('p2'); el.p2name.dataset.full = nameOf('p2');
     document.getElementById('p1-mv').textContent = c1.replace(' \u00b7 ', '');
     document.getElementById('p2-mv').textContent = c2.replace(' \u00b7 ', '');
     var noteChanged = el.p1note.textContent !== notes.p1 || el.p2note.textContent !== notes.p2;
@@ -1156,6 +1179,7 @@
     el.p2note.textContent = notes.p2;
     // A hint change can resize the stack; refit so a size picked while the
     // old hint was showing never lingers (the digits must not move between states).
+    refitNames();
     if (noteChanged) requestAnimationFrame(fitTimes);
   }
 
