@@ -1,5 +1,9 @@
 # Decisions
 
+## 21 November 2026: Flip-and-slam clock greeting
+
+On each document load the opening illustration runs the chosen 700ms flip-and-slam sequence: alternating top-button presses and vertical readout flips, with the case, Play and time tiles stationary. The selected time stays correct throughout. Controls work immediately, no sound plays, and reduced-motion visitors see the final state without animation. Preset changes do not replay it.
+
 ## 21 November 2026: A playful chess-clock opening
 
 The unlisted chess clock opens with the approved two-faced digital clock illustration beside Play chess, a short subtitle, and Play before the time controls. Both decorative faces show the selected starting minutes immediately, including custom-minute choices. Increment seconds are added after moves, never to the starting display. Keep both windows and their digits inset within the case. The visible summary above Play is removed; an off-screen description still gives the Play button its selected time and player context. Large text may reflow the title, subtitle and tiles rather than shrinking the user's enlarged text or clipping it.
