@@ -168,7 +168,7 @@ test('settings sheet pauses the clock, sound and move counter toggle from the ba
   expect(state.phase).toBe('paused'); // the toggles do not resume the clock
   await page.locator('#pause-btn').click();
   expect((await page.evaluate(() => chessClock.getState())).phase).toBe('running');
-  await expect(page.locator('#p1 .pname')).toContainText('move');
+  await expect(page.locator('#p1-mv')).toContainText('move');
   // Both choices persist across a reload.
   await page.goto(baseURL + '/chess-clock/');
   state = await page.evaluate(() => chessClock.getState());
@@ -800,8 +800,8 @@ test('settings sheet buttons keep the same size and position when confirming', a
 });
 
 test('each side shows a White or Black pawn badge; badge, name and digits never move or wrap', async ({ page, baseURL }) => {
-  for (const [width, big, moves, flip] of [false, true].flatMap((f) => [[320, false, false], [390, false, false], [320, true, false], [390, true, false], [320, false, true], [390, false, true], [320, true, true], [390, true, true]].map((c) => [...c, f]))) {
-    await page.setViewportSize({ width, height: 900 });
+  for (const [width, big, moves, flip, height] of [740, 900].flatMap((hh) => [false, true].flatMap((f) => [[320, false, false], [390, false, false], [320, true, false], [390, true, false], [320, false, true], [390, false, true], [320, true, true], [390, true, true]].map((c) => [...c, f, hh])))) {
+    await page.setViewportSize({ width, height });
     await page.goto(baseURL + '/chess-clock/');
     await page.evaluate(() => { localStorage.clear(); });
     await page.goto(baseURL + '/chess-clock/');
@@ -834,17 +834,45 @@ test('each side shows a White or Black pawn badge; badge, name and digits never 
     }));
     await page.waitForTimeout(500); // let the view-in transition and font-fit settle
     const ready = await measure();
-    for (const m of ready) { expect(m['.sideinside'] && m.oneLine, `${width}${big ? ' 200%' : ''}${moves ? ' counter on' : ''}${flip ? ' other side loses' : ''}: badge inside card on one line`).toBe(true); }
+    for (const [i, id] of ['p1', 'p2'].entries()) {
+      void i;
+      expect(await page.evaluate((id) => { const card = document.getElementById(id).getBoundingClientRect(); const r = document.querySelector('#' + id + ' .pname').getBoundingClientRect(); return r.left >= card.left && r.right <= card.right; }, id), `${width}x${height}${big ? ' 200%' : ''}: long name stays inside its card`).toBe(true);
+    }
+    for (const m of ready) { expect(m['.sideinside'] && m.oneLine, `${width}x${height}${big ? ' 200%' : ''}${moves ? ' counter on' : ''}${flip ? ' other side loses' : ''}: badge inside card on one line`).toBe(true); }
     const states = {};
     await page.evaluate(() => chessClock.press('p1')); states.running = await measure();
+    if (moves) {
+      const counts = await page.evaluate(() => ['p1', 'p2'].map((id) => {
+        const box = document.querySelector('#' + id + ' .pname').getBoundingClientRect();
+        const c = document.getElementById(id + '-mv');
+        const r = c.getBoundingClientRect();
+        const card = document.getElementById(id).getBoundingClientRect();
+        return /^\d+ moves?$/.test(c.textContent) && r.left >= card.left - 0.5 && r.right <= card.right + 0.5 && r.bottom <= card.bottom + 0.5 && r.top >= card.top - 0.5 && c.scrollWidth <= c.clientWidth + 1;
+      }));
+      const nameFit = await page.evaluate(() => ['p1', 'p2'].map((id) => { const card = document.getElementById(id).getBoundingClientRect(); const r = document.querySelector('#' + id + ' .pname').getBoundingClientRect(); return r.left >= card.left && r.right <= card.right; }));
+      expect(nameFit, `${width}x${height}${big ? ' 200%' : ''}: name plus move count stays inside the card`).toEqual([true, true]);
+      expect(counts, `${width}x${height}${big ? ' 200%' : ''}: move count fully visible beside long names`).toEqual([true, true]);
+    }
     await page.evaluate(() => chessClock.press('p2')); states.runningOther = await measure();
     if (flip) { await page.evaluate(() => chessClock.press(chessClock.getState().active)); }
     await page.evaluate(() => chessClock.pause()); states.paused = await measure();
     await page.evaluate(() => { chessClock.resume(); chessClock.setRemainingMs(chessClock.getState().active, 50); });
     await expect.poll(async () => (await page.evaluate(() => chessClock.getState())).phase).toBe('ended');
     states.ended = await measure();
+    // The outcome words are fully inside their card whatever the name length, and the name is the part that is cut.
+    const ended = await page.evaluate(() => ['p1', 'p2'].map((id) => {
+      const card = document.getElementById(id).getBoundingClientRect();
+      const spans = [...document.querySelectorAll('#' + id + '-result > span')];
+      const inside = spans.every((e) => { const r = e.getBoundingClientRect(); return r.left >= card.left - 0.5 && r.right <= card.right + 0.5 && r.bottom <= card.bottom + 0.5 && r.top >= card.top - 0.5; });
+      const last = spans[spans.length - 1];
+      return { inside, text: document.getElementById(id + '-result').textContent, lastFull: last.scrollWidth <= last.clientWidth + 1 };
+    }));
+    for (const e of ended) {
+      expect(e.inside && e.lastFull, `${width}x${height}${big ? ' 200%' : ''}${moves ? ' counter on' : ''}: ended outcome words fully visible`).toBe(true);
+      expect(e.text).toMatch(/^Time! .+(wins|flag fell)$/);
+    }
     for (const [name, got] of Object.entries(states)) {
-      expect(got, `${width}${big ? ' 200%' : ''}${moves ? ' counter on' : ''}${flip ? ' other side loses' : ''}: badge, name and digits unchanged in ${name}`).toEqual(ready);
+      expect(got, `${width}x${height}${big ? ' 200%' : ''}${moves ? ' counter on' : ''}${flip ? ' other side loses' : ''}: badge, name and digits unchanged in ${name}`).toEqual(ready);
     }
   }
 });

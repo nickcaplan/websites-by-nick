@@ -241,16 +241,18 @@
     touch-action: manipulation; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
   }
   .player.top { transform: rotate(180deg); }
-  .player .pname { font-size: 1rem; font-weight: 800; letter-spacing: 0.06em; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; overflow-wrap: anywhere; max-height: 2.5em; }
-  /* With the move counter on, the name may wrap to two lines ("Player 1 · 12 moves" at large text),
-     so two lines are always reserved and the stack never changes height between states. */
-  html[data-moves="on"] .player .pname { height: 2.5em; }
+  .player .pname { font-size: 1rem; font-weight: 800; letter-spacing: 0.06em; max-width: 100%; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-shrink: 0; }
+  /* Move count, on its own line under the badge. Its line is reserved (hidden) while the counter is on, so
+     nothing moves when the count appears; the name keeps one line and the count is never cut. */
+  .player .mv { flex-shrink: 0; display: none; font-size: 0.8rem; font-weight: 700; white-space: nowrap; line-height: 1.2; }
+  html[data-moves="on"] .player .mv { display: block; visibility: hidden; min-height: 1.2em; }
+  html[data-moves="on"] .player .mv:not(:empty) { visibility: visible; }
   /* Colour badge: a drawn pawn plus the word, always present so nothing shifts.
      The pawn carries its own outline so it reads on dark, light, accent and low-time backgrounds. */
   .pawn { width: 28px; height: 28px; flex: none; }
   .pawn-white { --pf: #f7f6ef; --ps: #1a1a1a; }
   .pawn-black { --pf: #1a1a1a; --ps: #f7f6ef; }
-  .player .side { display: inline-flex; align-items: center; justify-content: center; gap: 6px; line-height: 1; font-size: 0.95rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
+  .player .side { flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; gap: 6px; line-height: 1; font-size: 0.95rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
   .name-field { flex-direction: row; align-items: center; gap: 8px; }
   .name-field .pawn { width: 24px; height: 24px; }
   .player .time {
@@ -264,7 +266,7 @@
   /* Two lines reserved at normal text size (hints like "Paused - tap either side to resume" wrap at 320px), so the block does not change height between states. Enlarged text reserves 2.7em, enough for two-line hints and the two-line ended result that shares this slot. */
   .player .note { font-size: 0.95rem; font-weight: 700; min-height: max(2.7em, 36px); }
   /* Hint (note) and ended result share one slot, so the result never adds height. */
-  .player .slot { display: grid; align-self: stretch; }
+  .player .slot { display: grid; align-self: stretch; min-height: 3.1rem; flex-shrink: 0; }
   .player .slot > * { grid-area: 1 / 1; }
   /* The turn pill lives in the same slot: it only shows while the side is running, when the hint and result are empty. */
   .player .slot > .turn-pill { justify-self: center; align-self: start; }
@@ -343,8 +345,12 @@
 
   /* Ended state banner inside the winner panel. Its height is always reserved,
      so the message never pushes the name or digits out of the card. */
-  /* Clamped to two lines so a long name cannot make the ended slot taller (the full text stays in the accessible name). */
-  .player .result { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; overflow-wrap: anywhere; visibility: hidden; font-size: 1.05rem; font-weight: 800; }
+  /* The outcome words ("Time!", "wins", "flag fell") always show in full; only the inserted name is cut
+     with an ellipsis when it is too long for the card. Up to three lines, always reserved by the slot. */
+  .player .result { display: flex; flex-wrap: wrap; justify-content: center; align-content: flex-start; column-gap: 0.3em; overflow: hidden; visibility: hidden; font-size: 0.8rem; font-weight: 800; }
+  .player .result > span { white-space: nowrap; }
+  .player .result .rname { display: flex; max-width: 100%; min-width: 0; }
+  .player .result .rn { overflow: hidden; text-overflow: ellipsis; min-width: 0; }
   .player .result:not(:empty) { visibility: visible; }
   /* Once the game is decided the note is hidden but keeps its height, so the
      name, badge and digits do not move when the game ends. */
@@ -466,6 +472,7 @@
   <button class="player top" id="p2" aria-label="Player 2">
     <span class="flag-line"></span>
     <span class="side"><svg class="pawn pawn-black" aria-hidden="true"><use href="#pawn"/></svg>Black</span>
+    <span class="mv" id="p2-mv"></span>
     <span class="pname">Player 2</span>
     <span class="time" id="p2-time">5:00</span>
     <span class="slot"><span class="turn-pill">Tap when your move is done</span><span class="note" id="p2-note"></span><span class="result" id="p2-result"></span></span>
@@ -486,6 +493,7 @@
     <span class="time" id="p1-time">5:00</span>
     <span class="pname">Player 1</span>
     <span class="side"><svg class="pawn pawn-white" aria-hidden="true"><use href="#pawn"/></svg>White</span>
+    <span class="mv" id="p1-mv"></span>
     <span class="slot"><span class="turn-pill">Tap when your move is done</span><span class="note" id="p1-note"></span><span class="result" id="p1-result"></span></span>
   </button>
 </main>
@@ -1111,6 +1119,19 @@
     });
   }
 
+  function renderResult(box, side) {
+    box.textContent = '';
+    if (game.phase !== 'ended') return;
+    var won = game.winner === side;
+    function span(cls, text) { var e = document.createElement('span'); if (cls) e.className = cls; e.textContent = text; return e; }
+    var who = span('rname', '');
+    who.appendChild(span('rn', nameOf(side)));
+    who.appendChild(span('', won ? ' ' : '\u2019s '));
+    box.appendChild(span('', 'Time! '));
+    box.appendChild(who);
+    box.appendChild(span('', won ? 'wins' : 'flag fell'));
+  }
+
   function renderNotes() {
     var notes = { p1: '', p2: '' };
     if (game.phase === 'ready') {
@@ -1120,14 +1141,16 @@
       notes.p1 = 'Paused - tap to resume';
       notes.p2 = 'Paused - tap to resume';
     }
-    var p1n = nameOf('p1'), p2n = nameOf('p2');
+    var c1 = '', c2 = '';
     if (settings.moves === 'on' && (game.phase === 'running' || game.phase === 'paused')) {
-      p1n += ' \u00b7 ' + game.moves.p1 + (game.moves.p1 === 1 ? ' move' : ' moves');
-      p2n += ' \u00b7 ' + game.moves.p2 + (game.moves.p2 === 1 ? ' move' : ' moves');
+      c1 = ' \u00b7 ' + game.moves.p1 + (game.moves.p1 === 1 ? ' move' : ' moves');
+      c2 = ' \u00b7 ' + game.moves.p2 + (game.moves.p2 === 1 ? ' move' : ' moves');
     }
     document.documentElement.setAttribute('data-moves', settings.moves === 'on' ? 'on' : 'off');
-    el.p1name.textContent = p1n;
-    el.p2name.textContent = p2n;
+    el.p1name.textContent = nameOf('p1');
+    el.p2name.textContent = nameOf('p2');
+    document.getElementById('p1-mv').textContent = c1.replace(' \u00b7 ', '');
+    document.getElementById('p2-mv').textContent = c2.replace(' \u00b7 ', '');
     var noteChanged = el.p1note.textContent !== notes.p1 || el.p2note.textContent !== notes.p2;
     el.p1note.textContent = notes.p1;
     el.p2note.textContent = notes.p2;
@@ -1163,12 +1186,8 @@
     el.p2.classList.toggle('active', game.phase === 'running' && game.active === 'p2');
     el.p1.classList.toggle('winner', game.phase === 'ended' && game.winner === 'p1');
     el.p2.classList.toggle('winner', game.phase === 'ended' && game.winner === 'p2');
-    el.p1result.textContent = game.phase === 'ended'
-      ? (game.winner === 'p1' ? 'Time! ' + nameOf('p1') + ' wins' : 'Time! ' + nameOf('p1') + '\u2019s flag fell')
-      : '';
-    el.p2result.textContent = game.phase === 'ended'
-      ? (game.winner === 'p2' ? 'Time! ' + nameOf('p2') + ' wins' : 'Time! ' + nameOf('p2') + '\u2019s flag fell')
-      : '';
+    renderResult(el.p1result, 'p1');
+    renderResult(el.p2result, 'p2');
 
     var label = { p1: nameOf('p1'), p2: nameOf('p2') };
     for (var side of ['p1', 'p2']) {
