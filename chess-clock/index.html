@@ -80,12 +80,31 @@
   }
 
   /* ---------- Setup screen ---------- */
+  html[data-theme="dark"] body:has(#setup-view:not([hidden])) { background: #0e1c15; }
+  html[data-theme="dark"] .setup { --ink: #f0efda; --control-bg: #1a2c22; --line: #3a4d3d; color: var(--ink); }
   .setup {
     min-height: 100dvh; display: flex; flex-direction: column; align-items: stretch;
     gap: 22px; padding: 28px 20px; max-width: 620px; margin: 0 auto; width: 100%;
   }
   .setup h1 { font-size: clamp(2rem, 7vw, 2.8rem); font-weight: 800; letter-spacing: -0.01em; }
-  .setup .lead { color: var(--ink-dim); font-size: 1.05rem; max-width: 34ch; margin-top: -14px; }
+  .setup .lead { color: var(--ink-dim); font-size: 1.05rem; margin: -10px 0 4px; }
+  .setup-hero { display: grid; grid-template-columns: minmax(0, 1fr) 100px; align-items: center; gap: 10px; }
+  .setup-kicker { grid-column: 1 / -1; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-dim); }
+  .setup h1 { font-size: clamp(2rem, 10.25vw, 3rem); line-height: 1.08; letter-spacing: -0.035em; }
+  .setup-clock { display: block; width: 100%; height: auto; overflow: visible; }
+  .clock-case { fill: var(--accent); stroke: #233f31; stroke-width: 4; }
+  .clock-window { fill: #203e30; }
+  .clock-digits { fill: none; stroke: #f0efda; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .setup .lead { font-size: clamp(0.875rem, 3.7vw, 1.05rem); }
+  .start { box-shadow: 0 5px 0 #748b5f; display: flex; align-items: center; justify-content: center; gap: 16px; }
+  .start svg { width: 24px; height: 24px; flex: none; }
+  .tile::after { content: 'Selected'; visibility: hidden; font-size: 0.8rem; font-weight: 800; margin-top: 6px; }
+  .tile[aria-pressed="true"]::after { visibility: visible; }
+  /* Let real enlarged text reflow rather than shrink it to keep the illustration alongside. */
+  @media (max-width: 360px) { .setup-hero { grid-template-columns: minmax(0, 1fr) 80px; gap: 8px; } }
+  @media (min-width: 700px) { .setup-hero { grid-template-columns: minmax(0, 1fr) 120px; } }
+
+
   .setup-section { display: flex; flex-direction: column; gap: 12px; }
   .setup-section h2, .sheet-section h3 {
     font-size: 0.85rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-dim);
@@ -109,17 +128,17 @@
     min-height: 64px; padding: 16px 42px; border-radius: 18px; border: 0; cursor: pointer;
     background: var(--accent); color: var(--accent-ink); font-size: 1.3rem; font-weight: 800; width: 100%;
   }
-  .play-summary { color: var(--ink-dim); font-size: 0.95rem; font-weight: 700; margin-bottom: -10px; }
+
 
   /* Time preset tiles */
-  .preset-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+  .preset-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 8em), 1fr)); gap: 10px; }
   .tile {
     display: flex; flex-direction: column; gap: 4px; align-items: flex-start; text-align: left;
-    padding: 14px 16px; border-radius: 16px; border: 2px solid var(--line);
+    padding: 14px; border-radius: 18px; border: 2px solid var(--line);
     background: var(--control-bg); color: var(--control-ink); cursor: pointer;
   }
-  .tile .tile-big { font-size: 1.5rem; font-weight: 800; font-variant-numeric: tabular-nums; }
-  .tile .tile-sub { font-size: 0.8rem; color: var(--ink-dim); font-weight: 600; }
+  .tile .tile-big { font-size: 1.65rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .tile .tile-sub { font-size: 0.85rem; color: var(--ink-dim); font-weight: 650; line-height: 1.35; }
   .tile[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
   /* Full ink on the selected fill: 75% opacity dropped small helper text
      below the 4.5:1 contrast floor in some colour combos. */
@@ -140,10 +159,10 @@
   .disclosure .picker { margin-bottom: 20px; }
 
   /* Player name fields */
-  .name-fields { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+  .name-fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 9em), 1fr)); gap: 12px; align-items: center; }
   .name-field {
     display: flex; flex-direction: column; gap: 6px; min-width: 0;
-    font-size: 0.78rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-dim);
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.11em; text-transform: uppercase; color: var(--ink-dim);
   }
   .name-fields input {
     font: inherit; font-size: 1.05rem; font-weight: 700; text-transform: none; letter-spacing: normal;
@@ -319,11 +338,25 @@
 
 <!-- ============ Setup screen ============ -->
 <main class="setup" id="setup-view">
-  <h1>Play chess</h1>
-  <p class="lead">A chess clock: two timers, one tap per move.</p>
+  <header class="setup-hero">
+    <p class="setup-kicker">A little time to play</p>
+    <h1>Play chess</h1>
+    <svg class="setup-clock" viewBox="0 0 180 142" aria-hidden="true" focusable="false">
+      <ellipse cx="90" cy="133" rx="84" ry="7" fill="#233f31"/>
+      <rect x="24" y="4" width="44" height="16" rx="7" fill="#dac698"/>
+      <rect x="112" y="4" width="44" height="16" rx="7" fill="#dac698"/>
+      <path class="clock-case" d="M17 23 H163 L175 117 Q177 130 162 130 H18 Q3 130 5 117 Z"/>
+      <rect class="clock-window" x="24" y="46" width="62" height="49" rx="6"/>
+      <rect class="clock-window" x="94" y="46" width="62" height="49" rx="6"/>
+      <g class="clock-digits" id="setup-clock-left"></g>
+      <g class="clock-digits" id="setup-clock-right"></g>
+      <rect x="78" y="112" width="24" height="5" rx="2.5" fill="#526c45"/>
+    </svg>
+  </header>
+  <p class="lead">Two timers. One tap per move.</p>
 
-  <p class="play-summary" id="play-summary"></p>
-  <button class="start" id="start-btn">Play</button>
+  <p class="visually-hidden" id="play-summary"></p>
+  <button class="start" id="start-btn" aria-describedby="play-summary">Play <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 19 19 5 M7 5h12v12"/></svg></button>
 
   <section class="setup-section" aria-labelledby="time-heading">
     <h2 id="time-heading">Time</h2>
@@ -548,6 +581,7 @@
   }
 
   function syncPickers() {
+    updateSummary();
     pressGroup('time-chips', 'minutes', String(settings.minutes));
     pressGroup('inc-chips', 'inc', String(settings.inc));
     pressGroup('preset-tiles', 'preset', settings.minutes + ',' + settings.inc);
@@ -573,7 +607,42 @@
   }
 
   function updateSummary() {
+    renderSetupClock();
     el.playSummary.textContent = settings.minutes + ' + ' + settings.inc + ' - ' + nameOf('p1') + ' (bottom) vs ' + nameOf('p2') + ' (top)';
+  }
+
+  // Path digits keep this decorative miniature crisp at any zoom, without
+  // inheriting enlarged UI text into its fixed readout windows.
+  function renderSetupClock() {
+    var numerals = [
+      'M4 1Q0 1 0 5V13Q0 17 4 17Q8 17 8 13V5Q8 1 4 1Z',
+      'M1 4L4 1H5V17 M1 17H8',
+      'M0 4Q0 1 4 1Q8 1 8 5Q8 8 4 11L0 15V17H8',
+      'M0 2Q8 -1 8 5Q8 9 4 9Q8 9 8 13Q8 19 0 16',
+      'M6 17V1L0 12H8',
+      'M8 1H0V8H4Q8 8 8 12V13Q8 19 0 16',
+      'M8 2Q0 -1 0 7V13Q0 17 4 17Q8 17 8 13V12Q8 7 0 9',
+      'M0 1H8L2 17',
+      'M4 9Q0 9 0 5Q0 1 4 1Q8 1 8 5Q8 9 4 9Q0 9 0 13Q0 17 4 17Q8 17 8 13Q8 9 4 9',
+      'M0 16Q8 19 8 11V5Q8 1 4 1Q0 1 0 5V6Q0 11 8 9'
+    ];
+    var minutes = Number(settings.minutes);
+    var label = String(Number.isFinite(minutes) && minutes > 0 && minutes <= 999 ? Math.floor(minutes) : 10) + ':00';
+    ['setup-clock-left', 'setup-clock-right'].forEach(function (id, side) {
+      var group = document.getElementById(id);
+      group.replaceChildren();
+      group.setAttribute('data-time', label);
+      var width = label.length * 12 - 4;
+      var scale = Math.min(1, 48 / width);
+      var start = (side ? 125 : 55) - width * scale / 2;
+      for (var i = 0; i < label.length; i++) {
+        var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        var d = label[i] === ':' ? 'M4 6v1 M4 12v1' : numerals[Number(label[i])];
+        path.setAttribute('d', d);
+        path.setAttribute('transform', 'translate(' + (start + i * 12 * scale) + ' 62) scale(' + scale + ' 1)');
+        group.appendChild(path);
+      }
+    });
   }
 
   function pressGroup(containerId, dataKey, value) {
