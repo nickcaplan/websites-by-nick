@@ -1093,7 +1093,7 @@
     if (!changeTimeArmed) {
       changeTimeArmed = true;
       el.sheetChangeTime.classList.add('confirm');
-      el.sheetChangeTime.textContent = 'The clock resets - tap again to confirm';
+      el.sheetChangeTime.textContent = 'Tap again to reset';
       changeTimeTimer = setTimeout(disarmChangeTime, 3000);
       return;
     }
