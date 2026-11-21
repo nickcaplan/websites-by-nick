@@ -348,7 +348,7 @@ test('player names: prefilled, editable, shown on the clock and persisted', asyn
   await expect(page.locator('#name-p2')).toHaveValue('Player 2');
   await page.locator('#name-p1').fill('Luca');
   await page.locator('#name-p2').fill('Dad');
-  await expect(page.locator('#play-summary')).toContainText('Luca (bottom) vs Dad (top)');
+  await expect(page.locator('#play-summary')).toContainText('Luca (White, bottom) vs Dad (Black, top)');
   await page.locator('#start-btn').click();
   await expect(page.locator('#p1 .pname')).toHaveText('Luca');
   await expect(page.locator('#p2 .pname')).toHaveText('Dad');
@@ -356,7 +356,7 @@ test('player names: prefilled, editable, shown on the clock and persisted', asyn
   // Empty falls back to the default.
   await page.evaluate(() => { chessClock.changeTime(); });
   await page.locator('#name-p1').fill('');
-  await expect(page.locator('#play-summary')).toContainText('Player 1 (bottom)');
+  await expect(page.locator('#play-summary')).toContainText('Player 1 (White, bottom)');
   await page.locator('#name-p1').fill('Luca');
   // Persisted across reloads.
   await page.goto(baseURL + '/chess-clock/');
@@ -796,5 +796,38 @@ test('settings sheet buttons keep the same size and position when confirming', a
     await page.locator('#sheet-change-time').click();
     await expect(page.locator('#sheet-change-time')).toHaveClass(/confirm/);
     expect(await boxes(), `${width}: both armed`).toEqual(before);
+  }
+});
+
+test('each side shows a White or Black pawn badge that stays put and never wraps', async ({ page, baseURL }) => {
+  for (const [width, big] of [[320, false], [390, false], [320, true], [390, true]]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto(baseURL + '/chess-clock/');
+    await page.evaluate(() => { localStorage.clear(); });
+    await page.goto(baseURL + '/chess-clock/');
+    if (big) await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
+    await page.evaluate(() => chessClock.start());
+    await expect(page.locator('#p1 .side')).toHaveText('White');
+    await expect(page.locator('#p2 .side')).toHaveText('Black');
+    await expect(page.locator('#p1 .side svg.pawn-white use')).toHaveCount(1);
+    await expect(page.locator('#p2 .side svg.pawn-black use')).toHaveCount(1);
+    const measure = () => page.evaluate(() => ['p1', 'p2'].map((id) => {
+      const side = document.querySelector('#' + id + ' .side').getBoundingClientRect();
+      const card = document.getElementById(id).getBoundingClientRect();
+      const name = document.querySelector('#' + id + ' .pname').getBoundingClientRect();
+      return {
+        h: Math.round(side.height), single: side.height < 40 * (parseFloat(getComputedStyle(document.documentElement).fontSize) / 16),
+        inside: side.left >= card.left && side.right <= card.right,
+        // distance from the name line, which must not change between states
+        gap: Math.round(Math.abs((id === 'p1' ? side.top - name.bottom : name.top - side.bottom))),
+      };
+    }));
+    const ready = await measure();
+    for (const m of ready) { expect(m.inside, `${width}${big ? ' 200%' : ''}: badge inside card`).toBe(true); expect(m.single, 'badge on one line').toBe(true); }
+    await page.evaluate(() => chessClock.press('p1'));
+    const running = await measure();
+    expect(running, `${width}: badge size and gap to name unchanged when the clock runs`).toEqual(ready);
+    await page.evaluate(() => chessClock.pause());
+    expect(await measure(), `${width}: unchanged when paused`).toEqual(ready);
   }
 });

@@ -242,6 +242,14 @@
   }
   .player.top { transform: rotate(180deg); }
   .player .pname { font-size: 1rem; font-weight: 800; letter-spacing: 0.06em; }
+  /* Colour badge: a drawn pawn plus the word, always present so nothing shifts.
+     The pawn carries its own outline so it reads on dark, light, accent and low-time backgrounds. */
+  .pawn { width: 30px; height: 30px; flex: none; }
+  .pawn-white { --pf: #f7f6ef; --ps: #1a1a1a; }
+  .pawn-black { --pf: #1a1a1a; --ps: #f7f6ef; }
+  .player .side { display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-size: 0.95rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
+  .name-field { flex-direction: row; align-items: center; gap: 8px; }
+  .name-field .pawn { width: 24px; height: 24px; }
   .player .time {
     font-family: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
     font-variant-numeric: tabular-nums; line-height: 1;
@@ -337,6 +345,9 @@
 <body>
 
 <!-- ============ Setup screen ============ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="pawn" viewBox="0 0 24 24"><g fill="var(--pf)" stroke="var(--ps)" stroke-width="1.3" stroke-linejoin="round"><circle cx="12" cy="6.6" r="3.4"/><rect x="8.4" y="9.6" width="7.2" height="2.2" rx="1.1"/><path d="M9.6 11.6h4.8c.2 2.6 1.4 4 2.6 5.6H7c1.2-1.6 2.4-3 2.6-5.6z"/><rect x="5.4" y="17" width="13.2" height="3.4" rx="1.7"/></g></symbol>
+</svg>
 <main class="setup" id="setup-view">
   <header class="setup-hero">
     <p class="setup-kicker">A little time to play</p>
@@ -392,9 +403,9 @@
   <section class="setup-section" aria-labelledby="players-heading">
     <h2 id="players-heading">Players</h2>
     <div class="name-fields">
-      <label class="name-field" for="name-p1">Bottom of screen</label>
+      <label class="name-field" for="name-p1"><svg class="pawn pawn-white" aria-hidden="true"><use href="#pawn"/></svg>White (bottom)</label>
       <input id="name-p1" type="text" value="Player 1" maxlength="24" autocomplete="off" spellcheck="false">
-      <label class="name-field" for="name-p2">Top of screen</label>
+      <label class="name-field" for="name-p2"><svg class="pawn pawn-black" aria-hidden="true"><use href="#pawn"/></svg>Black (top)</label>
       <input id="name-p2" type="text" value="Player 2" maxlength="24" autocomplete="off" spellcheck="false">
     </div>
   </section>
@@ -442,6 +453,7 @@
   <button class="player top" id="p2" aria-label="Player 2">
     <span class="flag-line"></span>
     <span class="turn-pill">Tap when your move is done</span>
+    <span class="side"><svg class="pawn pawn-black" aria-hidden="true"><use href="#pawn"/></svg>Black</span>
     <span class="pname">Player 2</span>
     <span class="time" id="p2-time">5:00</span>
     <span class="note" id="p2-note"></span>
@@ -463,6 +475,7 @@
     <span class="turn-pill">Tap when your move is done</span>
     <span class="time" id="p1-time">5:00</span>
     <span class="pname">Player 1</span>
+    <span class="side"><svg class="pawn pawn-white" aria-hidden="true"><use href="#pawn"/></svg>White</span>
     <span class="note" id="p1-note"></span>
     <span class="result" id="p1-result"></span>
   </button>
@@ -608,7 +621,7 @@
 
   function updateSummary() {
     renderSetupClock();
-    el.playSummary.textContent = settings.minutes + ' + ' + settings.inc + ' - ' + nameOf('p1') + ' (bottom) vs ' + nameOf('p2') + ' (top)';
+    el.playSummary.textContent = settings.minutes + ' + ' + settings.inc + ' - ' + nameOf('p1') + ' (White, bottom) vs ' + nameOf('p2') + ' (Black, top)';
   }
 
   // Path digits keep this decorative miniature crisp at any zoom, without
@@ -1133,7 +1146,7 @@
 
     var label = { p1: nameOf('p1'), p2: nameOf('p2') };
     for (var side of ['p1', 'p2']) {
-      var parts = [label[side] + ', ' + spokenTime(game.remaining[side])];
+      var parts = [label[side] + ', ' + (side === 'p1' ? 'White' : 'Black') + ', ' + spokenTime(game.remaining[side])];
       if (game.phase === 'running' && game.active === side) parts.push('your turn');
       if (game.phase === 'ended' && game.winner === side) parts.push('wins on time');
       (side === 'p1' ? el.p1 : el.p2).setAttribute('aria-label', parts.join(', '));
