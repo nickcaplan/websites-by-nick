@@ -53,17 +53,24 @@ test('chess-clock: copy style rules (no em-dashes, no placeholder copy)', () => 
 });
 
 test('chess-clock: accessible controls and time choices', () => {
-  for (const id of ['pause-btn', 'reset-btn', 'settings-btn', 'start-btn']) {
+  for (const id of ['pause-btn', 'sheet-reset', 'settings-btn', 'start-btn', 'sound-toggle', 'moves-toggle']) {
     assert.match(html, new RegExp(`id="${id}"`));
   }
-  for (const minutes of [1, 3, 5, 10, 15]) assert.match(html, new RegExp(`data-minutes="${minutes}"`));
+  for (const minutes of [1, 3, 5, 10]) assert.match(html, new RegExp(`data-minutes="${minutes}"`));
   for (const inc of [0, 2, 3, 5]) assert.match(html, new RegExp(`data-inc="${inc}"`));
-  for (const style of ['studio', 'players', 'tournament']) assert.match(html, new RegExp(`data-style-pick="${style}"`));
   for (const accent of ['green', 'peach', 'sky']) assert.match(html, new RegExp(`data-accent-pick="${accent}"`));
   assert.match(html, /aria-label="Pause"/);
-  assert.match(html, /aria-label="Reset clock"/);
+  assert.match(html, /aria-label="Reset game"/);
   assert.match(html, /role="dialog" aria-modal="true"/);
   assert.match(html, /aria-pressed/);
+});
+
+test('chess-clock: one style only, no 15 minute option, 10 + 3 the default', () => {
+  // Nick 21 Nov 2026: styles removed, 15 minutes removed, Sunday control the default.
+  assert.doesNotMatch(html, /data-style-pick/);
+  assert.doesNotMatch(html, /data-preset="15,0"/);
+  assert.doesNotMatch(html, /data-minutes="15"/);
+  assert.match(html, /data-preset="10,3" aria-pressed="true"/);
 });
 
 test('chess-clock: named players, presets and resume', () => {

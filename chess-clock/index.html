@@ -5,6 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <title>Chess clock</title>
+<meta property="og:type" content="website">
+<meta property="og:title" content="Chess clock">
+<meta property="og:description" content="A free two-player chess clock with time controls and increments.">
+<meta property="og:url" content="https://websitesbynick.co.uk/chess-clock/">
+<meta property="og:image" content="https://websitesbynick.co.uk/chess-clock/social-preview.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://websitesbynick.co.uk/chess-clock/social-preview.png">
+<meta name="twitter:title" content="Chess clock">
+<meta name="twitter:description" content="A free two-player chess clock with time controls and increments.">
 <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
 <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
@@ -15,7 +24,7 @@
   try { saved = JSON.parse(localStorage.getItem('chess-clock-settings') || '{}'); } catch (e) {}
   var b = document.body || document.documentElement;
   document.documentElement.dataset.theme = saved.theme || 'dark';
-  document.documentElement.dataset.style = saved.style || 'players';
+  document.documentElement.dataset.style = 'players';
   document.documentElement.dataset.accent = saved.accent || 'green';
 })();
 </script>
@@ -81,7 +90,7 @@
   .setup-section h2, .sheet-section h3 {
     font-size: 0.85rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-dim);
   }
-  .picker { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
+  .picker { display: flex; flex-direction: column; gap: 14px; align-items: flex-start; }
   .picker legend, .picker .group-label, .sheet .group-label {
     font-size: 0.78rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-dim);
   }
@@ -93,6 +102,9 @@
     display: inline-flex; align-items: center; gap: 8px;
   }
   .chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  /* Swatch-only colour chips: no text name, the colour itself is the label. */
+  .chip-swatch { width: 52px; min-width: 52px; padding: 0; justify-content: center; }
+  .chip-swatch .swatch { width: 24px; height: 24px; }
   .start {
     min-height: 64px; padding: 16px 42px; border-radius: 18px; border: 0; cursor: pointer;
     background: var(--accent); color: var(--accent-ink); font-size: 1.3rem; font-weight: 800; width: 100%;
@@ -113,14 +125,19 @@
      below the 4.5:1 contrast floor in some colour combos. */
   .tile[aria-pressed="true"] .tile-sub { color: var(--accent-ink); }
 
-  /* Collapsed sections */
-  .disclosure { border-top: 1px solid var(--line); padding-top: 14px; }
+  /* Collapsed sections: the summary reads as a tappable row, not plain text. */
   .disclosure summary {
-    cursor: pointer; font-size: 1rem; font-weight: 800; min-height: 44px;
-    display: flex; align-items: center;
+    list-style: none;
+    cursor: pointer; font-size: 1rem; font-weight: 800; min-height: 52px;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 12px 16px; border-radius: 14px;
+    border: 2px solid var(--line); background: var(--control-bg); color: var(--control-ink);
   }
+  .disclosure summary::-webkit-details-marker { display: none; }
+  .disclosure summary::after { content: "\203A"; font-size: 1.4rem; font-weight: 800; line-height: 1; transition: transform 0.15s ease; }
+  .disclosure[open] summary::after { transform: rotate(90deg); }
   .disclosure > *:not(summary) { margin-top: 12px; }
-  .disclosure .picker { margin-bottom: 14px; }
+  .disclosure .picker { margin-bottom: 20px; }
 
   /* Player name fields */
   .name-fields { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
@@ -134,19 +151,12 @@
     background: var(--control-bg); color: var(--ink); width: 100%; min-width: 0;
   }
 
-  /* Colour swatches and style previews */
+  /* Colour swatches */
   .swatch { width: 16px; height: 16px; border-radius: 50%; border: 1px solid var(--line); flex: none; }
   .swatch-green { background: #a8b598; }
   .swatch-peach { background: #f0996f; }
   .swatch-sky { background: #9fc3e8; }
   .chip[aria-pressed="true"] .swatch { border-color: var(--accent-ink); }
-  .style-preview {
-    width: 22px; height: 16px; border-radius: 3px; flex: none;
-    background: linear-gradient(to bottom, var(--line) 0 40%, transparent 40% 60%, var(--line) 60% 100%);
-  }
-  .style-preview-players { border-radius: 6px; }
-  .style-preview-studio { background: linear-gradient(to bottom, var(--line) 0 48%, var(--accent) 48% 52%, var(--line) 52% 100%); }
-  .style-preview-tournament { background: linear-gradient(to bottom, transparent 0 48%, var(--line) 48% 52%, transparent 52% 100%); border-bottom: 2px solid var(--line); border-radius: 0; }
 
   /* ---------- Settings sheet ---------- */
   .sheet-backdrop {
@@ -180,7 +190,18 @@
     background: var(--accent); color: var(--accent-ink); font-size: 1.15rem; font-weight: 800;
   }
   .sheet-section { display: flex; flex-direction: column; gap: 12px; }
-  .sheet .row { display: flex; flex-direction: column; gap: 8px; align-items: stretch; font-size: 1rem; }
+  /* Label column plus one aligned control column: every picker group shares
+     the same left edge, width and height, and wraps as a whole below its
+     label when enlarged text needs the room. */
+  .sheet .row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; font-size: 1rem; }
+  .sheet .row .group-label { flex: 0 1 8em; min-width: 0; }
+  .sheet .row .chips { flex: 1 1 12.5em; display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 8px; max-width: 100%; }
+  .sheet .row .chips .chip { width: 100%; min-width: 0; padding-left: 6px; padding-right: 6px; justify-content: center; }
+  .sheet .row .chips .chip-swatch { width: 100%; min-width: 0; padding: 0; }
+  .sheet .row .hint { flex-basis: 100%; }
+  .sheet .hint { margin: 0; font-size: 0.85rem; color: var(--ink-dim); }
+  .sheet-actions { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; }
+  .sheet-actions .chip { width: 100%; min-width: 0; justify-content: center; }
   .sheet-divider { border: 0; border-top: 1px solid var(--line); margin: 0; }
   .sheet-danger { align-self: stretch; justify-content: center; }
   .sheet-danger.confirm { background: var(--low-bg, #c04b28); border-color: var(--low-bg, #c04b28); color: #fff4ef; }
@@ -217,7 +238,7 @@
   .player.active.low { background: var(--low-bg, #c04b28); color: var(--low-ink, #fff4ef); }
   html[data-theme="light"] .player.active.low { --low-bg: #a53c1e; }
 
-  /* Turn pill (players style only; other styles use the note line) */
+  /* Turn pill on the active player */
   .turn-pill {
     display: none; font-size: 0.8rem; font-weight: 800; border-radius: 999px; padding: 7px 16px;
     background: var(--accent-ink); color: var(--accent); letter-spacing: 0.04em;
@@ -228,12 +249,6 @@
 
   /* Winner */
   .player.winner { background: var(--accent); color: var(--accent-ink); }
-  html[data-style="tournament"] .player.winner { background: transparent; color: var(--ink); }
-  html[data-style="tournament"] .player.winner .flag-line { background: var(--accent); }
-
-  /* Style: studio - full-bleed halves, calmer weight */
-  html[data-style="studio"] .clock { --radius: 0; --gap: 0; --page-pad: 0; --digit-weight: 700; }
-  html[data-style="studio"] .player .pname { letter-spacing: 0.18em; text-transform: uppercase; font-size: 0.85rem; }
 
   /* Style: players - chunky rounded cards. The whole half stays tappable:
      the button fills its half and the card is a painted layer inside it.
@@ -254,18 +269,6 @@
   html[data-style="players"] .player.active.low::before { background: var(--low-bg, #c04b28); border-color: var(--low-bg, #c04b28); }
   html[data-style="players"] .player.winner::before { background: var(--accent); border-color: var(--accent); }
 
-  /* Style: tournament - minimal, hairline marker */
-  html[data-style="tournament"] .clock { --radius: 0; --gap: 0; --page-pad: 0; --digit-weight: 300; }
-  html[data-style="tournament"] .player { background: transparent; }
-  html[data-style="tournament"] .player .time { font-size: min(23vw, 32vh); }
-  html[data-style="tournament"] .player .pname { letter-spacing: 0.32em; text-transform: uppercase; font-size: 0.72rem; font-weight: 600; }
-  html[data-style="tournament"] .player.active { background: transparent; color: var(--ink); }
-  html[data-style="tournament"] .player.active .flag-line { background: var(--accent); }
-  html[data-style="tournament"] .player.active.low { background: transparent; color: var(--low-tournament, #ff9a7a); }
-  html[data-style="tournament"] .player.active.low .flag-line { background: var(--low-tournament, #ff9a7a); }
-  html[data-theme="light"][data-style="tournament"] .player.active.low { --low-tournament: #a53c1e; }
-  html[data-style="tournament"] .turn-pill { display: none !important; }
-
   /* Centre control bar */
   .bar {
     display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap;
@@ -276,18 +279,30 @@
   }
   html[data-style="players"] .bar { --bar-radius: 20px; border: 2px solid var(--line); margin: 0 12px; }
   .bar button {
+    line-height: 1;
     min-width: 52px; min-height: 52px; border-radius: 18px; border: 2px solid var(--line);
     background: var(--control-bg); color: var(--control-ink); font-size: 1.2rem; cursor: pointer;
     display: inline-flex; align-items: center; justify-content: center; padding: 0 14px;
   }
   .bar button[aria-disabled="true"] { opacity: 0.4; cursor: default; }
+  .bar button.bar-toggle { font-size: 1rem; font-weight: 800; }
+  .bar button.bar-toggle[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
   .bar .status { font-size: 0.85rem; color: var(--ink-dim); font-weight: 700; min-width: 0; text-align: center; }
   .bar button.confirm { background: var(--low-bg, #c04b28); border-color: var(--low-bg, #c04b28); color: #fff4ef; font-size: 0.95rem; font-weight: 800; }
+  /* Narrow screens: compact buttons in two even rows of two, with the
+     status on its own full-width row, so nothing is orphaned and enlarged
+     labels stay inside their buttons. */
+  @media (max-width: 560px) {
+    .bar { display: grid; grid-template-columns: repeat(2, 1fr); grid-auto-rows: minmax(44px, auto); gap: 8px; padding: 8px 10px; }
+    .bar button { width: 100%; min-width: 0; min-height: 44px; padding: 0 8px; }
+    .bar .status { grid-column: 1 / -1; order: -1; align-self: center; }
+    .bar button#again-btn, .bar button#bar-change { grid-column: 1 / -1; }
+  }
 
   /* Ended state banner inside the winner panel. Its height is always reserved,
      so the message never pushes the name or digits out of the card. */
   .player .result { display: block; visibility: hidden; min-height: 1.3em; font-size: 1.05rem; font-weight: 800; }
-  .player.winner .result { visibility: visible; }
+  .player .result:not(:empty) { visibility: visible; }
   /* Once the game is decided the low-time note can never appear again; drop
      its reserved height so the winner line always fits the card. */
   .player.winner .note { display: none; }
@@ -304,14 +319,16 @@
   <h1>Play chess</h1>
   <p class="lead">A chess clock: two timers, one tap per move.</p>
 
+  <p class="play-summary" id="play-summary"></p>
+  <button class="start" id="start-btn">Play</button>
+
   <section class="setup-section" aria-labelledby="time-heading">
     <h2 id="time-heading">Time</h2>
     <div class="preset-tiles" id="preset-tiles" role="group" aria-label="Time control">
-      <button class="tile" data-preset="1,0" aria-pressed="false"><span class="tile-big">1 + 0</span><span class="tile-sub">1 minute each, no extra</span></button>
+      <button class="tile" data-preset="1,0" aria-pressed="false"><span class="tile-big">1 + 0</span><span class="tile-sub">1 minute each, nothing added</span></button>
       <button class="tile" data-preset="3,2" aria-pressed="false"><span class="tile-big">3 + 2</span><span class="tile-sub">3 minutes each, 2 seconds a move</span></button>
-      <button class="tile" data-preset="5,0" aria-pressed="true"><span class="tile-big">5 + 0</span><span class="tile-sub">5 minutes each, no extra</span></button>
-      <button class="tile" data-preset="10,3" aria-pressed="false"><span class="tile-big">10 + 3</span><span class="tile-sub">10 minutes each, 3 seconds a move</span></button>
-      <button class="tile" data-preset="15,0" aria-pressed="false"><span class="tile-big">15 + 0</span><span class="tile-sub">15 minutes each, no extra</span></button>
+      <button class="tile" data-preset="5,0" aria-pressed="false"><span class="tile-big">5 + 0</span><span class="tile-sub">5 minutes each, nothing added</span></button>
+      <button class="tile" data-preset="10,3" aria-pressed="true"><span class="tile-big">10 + 3</span><span class="tile-sub">10 minutes each, 3 seconds a move</span></button>
     </div>
     <details class="disclosure" id="custom-time">
       <summary>Custom time</summary>
@@ -320,17 +337,16 @@
         <div class="chips" id="time-chips" role="group" aria-label="Minutes each">
           <button class="chip" data-minutes="1" aria-pressed="false">1 min</button>
           <button class="chip" data-minutes="3" aria-pressed="false">3 min</button>
-          <button class="chip" data-minutes="5" aria-pressed="true">5 min</button>
-          <button class="chip" data-minutes="10" aria-pressed="false">10 min</button>
-          <button class="chip" data-minutes="15" aria-pressed="false">15 min</button>
+          <button class="chip" data-minutes="5" aria-pressed="false">5 min</button>
+          <button class="chip" data-minutes="10" aria-pressed="true">10 min</button>
         </div>
       </fieldset>
       <fieldset class="picker" style="border:0">
         <legend>Extra seconds a move</legend>
         <div class="chips" id="inc-chips" role="group" aria-label="Extra seconds a move">
-          <button class="chip" data-inc="0" aria-pressed="true">None</button>
+          <button class="chip" data-inc="0" aria-pressed="false">None</button>
           <button class="chip" data-inc="2" aria-pressed="false">+2s</button>
-          <button class="chip" data-inc="3" aria-pressed="false">+3s</button>
+          <button class="chip" data-inc="3" aria-pressed="true">+3s</button>
           <button class="chip" data-inc="5" aria-pressed="false">+5s</button>
         </div>
       </fieldset>
@@ -347,25 +363,14 @@
     </div>
   </section>
 
-  <p class="play-summary" id="play-summary"></p>
-  <button class="start" id="start-btn">Play</button>
-
   <details class="disclosure" id="appearance">
     <summary>Appearance</summary>
     <fieldset class="picker" style="border:0">
-      <legend>Clock style</legend>
-      <div class="chips" id="style-chips" role="group" aria-label="Clock style">
-        <button class="chip" data-style-pick="players" aria-pressed="true"><span class="style-preview style-preview-players" aria-hidden="true"></span>Players</button>
-        <button class="chip" data-style-pick="studio" aria-pressed="false"><span class="style-preview style-preview-studio" aria-hidden="true"></span>Studio</button>
-        <button class="chip" data-style-pick="tournament" aria-pressed="false"><span class="style-preview style-preview-tournament" aria-hidden="true"></span>Tournament</button>
-      </div>
-    </fieldset>
-    <fieldset class="picker" style="border:0">
       <legend>Colour</legend>
       <div class="chips" id="accent-chips" role="group" aria-label="Clock colour">
-        <button class="chip" data-accent-pick="green" aria-pressed="true"><span class="swatch swatch-green" aria-hidden="true"></span>Green</button>
-        <button class="chip" data-accent-pick="peach" aria-pressed="false"><span class="swatch swatch-peach" aria-hidden="true"></span>Peach</button>
-        <button class="chip" data-accent-pick="sky" aria-pressed="false"><span class="swatch swatch-sky" aria-hidden="true"></span>Sky</button>
+        <button class="chip chip-swatch" data-accent-pick="green" aria-pressed="true" aria-label="Green"><span class="swatch swatch-green" aria-hidden="true"></span></button>
+        <button class="chip chip-swatch" data-accent-pick="peach" aria-pressed="false" aria-label="Peach"><span class="swatch swatch-peach" aria-hidden="true"></span></button>
+        <button class="chip chip-swatch" data-accent-pick="sky" aria-pressed="false" aria-label="Sky"><span class="swatch swatch-sky" aria-hidden="true"></span></button>
       </div>
     </fieldset>
     <fieldset class="picker" style="border:0">
@@ -410,8 +415,11 @@
   <div class="bar" role="toolbar" aria-label="Clock controls">
     <button id="pause-btn" aria-label="Pause">&#10073;&#10073;</button>
     <span class="status" id="bar-status" role="status"></span>
+    <button id="sound-toggle" class="bar-toggle" aria-label="Sound on, tap to mute" aria-pressed="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor" stroke="none"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18 6a8.5 8.5 0 0 1 0 12"/></svg></button>
+    <button id="moves-toggle" class="bar-toggle" aria-label="Move counter off, tap to show" aria-pressed="false">Moves</button>
     <button id="settings-btn" aria-label="Clock settings">&#9881;</button>
-    <button id="reset-btn" aria-label="Reset clock" aria-disabled="true">&#8635;</button>
+    <button id="again-btn" class="bar-toggle" hidden>Play again</button>
+    <button id="bar-change" class="bar-toggle" hidden>Change time</button>
   </div>
 
   <button class="player bottom" id="p1" aria-label="Player 1">
@@ -434,21 +442,13 @@
     <button class="resume" id="sheet-resume">Resume game</button>
 
     <section class="sheet-section" aria-labelledby="sheet-display-heading">
-      <h3 id="sheet-display-heading">Display</h3>
-      <div class="row">
-        <span class="group-label">Clock style</span>
-        <div class="chips" id="sheet-style-chips" role="group" aria-label="Clock style">
-          <button class="chip" data-style-pick="players" aria-pressed="true"><span class="style-preview style-preview-players" aria-hidden="true"></span>Players</button>
-          <button class="chip" data-style-pick="studio" aria-pressed="false"><span class="style-preview style-preview-studio" aria-hidden="true"></span>Studio</button>
-          <button class="chip" data-style-pick="tournament" aria-pressed="false"><span class="style-preview style-preview-tournament" aria-hidden="true"></span>Tournament</button>
-        </div>
-      </div>
+      <h3 class="visually-hidden" id="sheet-display-heading">Display</h3>
       <div class="row">
         <span class="group-label">Colour</span>
         <div class="chips" id="sheet-accent-chips" role="group" aria-label="Clock colour">
-          <button class="chip" data-accent-pick="green" aria-pressed="true"><span class="swatch swatch-green" aria-hidden="true"></span>Green</button>
-          <button class="chip" data-accent-pick="peach" aria-pressed="false"><span class="swatch swatch-peach" aria-hidden="true"></span>Peach</button>
-          <button class="chip" data-accent-pick="sky" aria-pressed="false"><span class="swatch swatch-sky" aria-hidden="true"></span>Sky</button>
+          <button class="chip chip-swatch" data-accent-pick="green" aria-pressed="true" aria-label="Green"><span class="swatch swatch-green" aria-hidden="true"></span></button>
+          <button class="chip chip-swatch" data-accent-pick="peach" aria-pressed="false" aria-label="Peach"><span class="swatch swatch-peach" aria-hidden="true"></span></button>
+          <button class="chip chip-swatch" data-accent-pick="sky" aria-pressed="false" aria-label="Sky"><span class="swatch swatch-sky" aria-hidden="true"></span></button>
         </div>
       </div>
       <div class="row">
@@ -461,7 +461,7 @@
     </section>
 
     <section class="sheet-section" aria-labelledby="sheet-game-heading">
-      <h3 id="sheet-game-heading">Game options</h3>
+      <h3 class="visually-hidden" id="sheet-game-heading">Game options</h3>
       <div class="row">
         <span class="group-label">Sound</span>
         <div class="chips" id="sheet-sound-chips" role="group" aria-label="Sound">
@@ -479,7 +479,10 @@
     </section>
 
     <hr class="sheet-divider">
-    <button class="chip sheet-danger" id="sheet-change-time">New game - change time</button>
+    <div class="sheet-actions">
+      <button class="chip sheet-danger" id="sheet-reset" aria-label="Reset game" aria-disabled="true">Reset game</button>
+      <button class="chip sheet-danger" id="sheet-change-time">New game</button>
+    </div>
   </div>
 </div>
 
@@ -504,8 +507,12 @@
     p1result: document.getElementById('p1-result'),
     p2result: document.getElementById('p2-result'),
     pause: document.getElementById('pause-btn'),
-    reset: document.getElementById('reset-btn'),
+    soundToggle: document.getElementById('sound-toggle'),
+    movesToggle: document.getElementById('moves-toggle'),
+    reset: document.getElementById('sheet-reset'),
     settingsBtn: document.getElementById('settings-btn'),
+    again: document.getElementById('again-btn'),
+    barChange: document.getElementById('bar-change'),
     barStatus: document.getElementById('bar-status'),
     sheet: document.getElementById('settings-sheet'),
     sheetClose: document.getElementById('sheet-close'),
@@ -519,7 +526,7 @@
   };
 
   /* ---------- settings ---------- */
-  var settings = { theme: 'dark', style: 'players', accent: 'green', sound: 'on', moves: 'off', minutes: 5, inc: 0, p1name: 'Player 1', p2name: 'Player 2' };
+  var settings = { theme: 'dark', accent: 'green', sound: 'on', moves: 'off', minutes: 10, inc: 3, p1name: 'Player 1', p2name: 'Player 2' };
   try {
     var savedSettings = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
     for (var k in settings) if (savedSettings[k] !== undefined) settings[k] = savedSettings[k];
@@ -531,7 +538,7 @@
 
   function applyDisplay() {
     el.html.dataset.theme = settings.theme;
-    el.html.dataset.style = settings.style;
+    el.html.dataset.style = 'players';
     el.html.dataset.accent = settings.accent;
     syncPickers();
     renderNotes();
@@ -541,10 +548,8 @@
     pressGroup('time-chips', 'minutes', String(settings.minutes));
     pressGroup('inc-chips', 'inc', String(settings.inc));
     pressGroup('preset-tiles', 'preset', settings.minutes + ',' + settings.inc);
-    pressGroup('style-chips', 'style-pick', settings.style);
     pressGroup('accent-chips', 'accent-pick', settings.accent);
     pressGroup('theme-chips', 'theme-pick', settings.theme);
-    pressGroup('sheet-style-chips', 'style-pick', settings.style);
     pressGroup('sheet-accent-chips', 'accent-pick', settings.accent);
     pressGroup('sheet-theme-chips', 'theme-pick', settings.theme);
     pressGroup('sheet-moves-chips', 'moves-pick', settings.moves);
@@ -589,16 +594,14 @@
 
   bindPicker('time-chips', 'minutes', function (v) { settings.minutes = Number(v); saveSettings(); syncPickers(); });
   bindPicker('inc-chips', 'inc', function (v) { settings.inc = Number(v); saveSettings(); syncPickers(); });
-  bindPicker('style-chips', 'style-pick', function (v) { settings.style = v; saveSettings(); applyDisplay(); });
   bindPicker('accent-chips', 'accent-pick', function (v) { settings.accent = v; saveSettings(); applyDisplay(); });
   bindPicker('theme-chips', 'theme-pick', function (v) { settings.theme = v; saveSettings(); applyDisplay(); });
-  bindPicker('sheet-style-chips', 'style-pick', function (v) { settings.style = v; saveSettings(); applyDisplay(); });
   bindPicker('sheet-accent-chips', 'accent-pick', function (v) { settings.accent = v; saveSettings(); applyDisplay(); });
   bindPicker('sheet-theme-chips', 'theme-pick', function (v) { settings.theme = v; saveSettings(); applyDisplay(); });
-  bindPicker('sheet-moves-chips', 'moves-pick', function (v) { settings.moves = v; saveSettings(); syncPickers(); renderNotes(); });
-  bindPicker('sheet-sound-chips', 'sound-pick', function (v) { settings.sound = v; saveSettings(); syncPickers(); });
-  bindPicker('setup-moves-chips', 'moves-pick', function (v) { settings.moves = v; saveSettings(); syncPickers(); renderNotes(); });
-  bindPicker('setup-sound-chips', 'sound-pick', function (v) { settings.sound = v; saveSettings(); syncPickers(); });
+  bindPicker('sheet-moves-chips', 'moves-pick', function (v) { settings.moves = v; saveSettings(); syncPickers(); renderNotes(); renderBarToggles(); });
+  bindPicker('sheet-sound-chips', 'sound-pick', function (v) { if (v !== settings.sound) beep(660, 0.12, 0, true); settings.sound = v; saveSettings(); syncPickers(); renderBarToggles(); });
+  bindPicker('setup-moves-chips', 'moves-pick', function (v) { settings.moves = v; saveSettings(); syncPickers(); renderNotes(); renderBarToggles(); });
+  bindPicker('setup-sound-chips', 'sound-pick', function (v) { settings.sound = v; saveSettings(); syncPickers(); renderBarToggles(); });
   bindPicker('preset-tiles', 'preset', function (v) {
     var parts = v.split(',');
     settings.minutes = Number(parts[0]);
@@ -623,8 +626,8 @@
   }
   // Browsers only unlock audio inside a user gesture; the first tap wakes the context.
   document.addEventListener('pointerdown', ensureAudio);
-  function beep(frequency, duration, delay) {
-    if (settings.sound !== 'on') return;
+  function beep(frequency, duration, delay, force) {
+    if (!force && settings.sound !== 'on') return;
     try {
       if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       var start = function () {
@@ -749,6 +752,12 @@
   }
 
   function press(side) {
+    if (game.phase === 'paused') {
+      // A tap on either side resumes; the side to move keeps ticking.
+      resumeGame();
+      clickSound();
+      return;
+    }
     if (game.phase === 'ready') {
       // First press starts the other player's clock, like Black starting White's clock.
       game.phase = 'running';
@@ -787,7 +796,6 @@
   var resetArmed = false;
   var resetTimer = null;
   function requestReset() {
-    if (game.phase === 'running') return; // reset only behind pause
     if (!resetArmed) {
       resetArmed = true;
       el.reset.classList.add('confirm');
@@ -802,8 +810,8 @@
     resetArmed = false;
     clearTimeout(resetTimer);
     el.reset.classList.remove('confirm');
-    el.reset.innerHTML = '&#8635;';
-    el.reset.setAttribute('aria-label', 'Reset clock');
+    el.reset.textContent = 'Reset game';
+    el.reset.setAttribute('aria-label', 'Reset game');
   }
   function doReset() {
     disarmReset();
@@ -957,18 +965,19 @@
   function renderNotes() {
     var notes = { p1: '', p2: '' };
     if (game.phase === 'ready') {
-      notes.p1 = 'Tap to start ' + nameOf('p2') + '\u2019s clock';
-      notes.p2 = 'Tap to start ' + nameOf('p1') + '\u2019s clock';
-    } else if (game.phase === 'running' || game.phase === 'paused') {
-      if (settings.moves === 'on') {
-        notes.p1 = game.moves.p1 + (game.moves.p1 === 1 ? ' move' : ' moves');
-        notes.p2 = game.moves.p2 + (game.moves.p2 === 1 ? ' move' : ' moves');
-      }
-      if (game.phase === 'running' && settings.style !== 'players') {
-        if (game.active === 'p1') notes.p1 = (notes.p1 ? notes.p1 + ' · ' : '') + 'Your turn';
-        else notes.p2 = (notes.p2 ? notes.p2 + ' · ' : '') + 'Your turn';
-      }
+      notes.p1 = 'White moves first';
+      notes.p2 = 'Black taps to start White\u2019s clock';
+    } else if (game.phase === 'paused') {
+      notes.p1 = 'Paused - tap either side to resume';
+      notes.p2 = 'Paused - tap either side to resume';
     }
+    var p1n = nameOf('p1'), p2n = nameOf('p2');
+    if (settings.moves === 'on' && (game.phase === 'running' || game.phase === 'paused')) {
+      p1n += ' \u00b7 ' + game.moves.p1 + (game.moves.p1 === 1 ? ' move' : ' moves');
+      p2n += ' \u00b7 ' + game.moves.p2 + (game.moves.p2 === 1 ? ' move' : ' moves');
+    }
+    el.p1name.textContent = p1n;
+    el.p2name.textContent = p2n;
     el.p1note.textContent = notes.p1;
     el.p2note.textContent = notes.p2;
   }
@@ -982,9 +991,17 @@
     el.pause.setAttribute('aria-label', game.phase === 'paused' ? 'Resume' : 'Pause');
     var pauseEnabled = game.phase === 'running' || game.phase === 'paused';
     el.pause.setAttribute('aria-disabled', String(!pauseEnabled));
-    var resetEnabled = game.phase === 'paused' || game.phase === 'ended' || game.phase === 'ready';
+    var resetEnabled = game.phase !== 'setup';
     el.reset.setAttribute('aria-disabled', String(!resetEnabled));
     if (!resetEnabled) disarmReset();
+    // Ended games swap the controls for a clear Play again + Change time.
+    var ended = game.phase === 'ended';
+    el.pause.hidden = ended;
+    el.soundToggle.hidden = ended;
+    el.movesToggle.hidden = ended;
+    el.settingsBtn.hidden = ended;
+    el.again.hidden = !ended;
+    el.barChange.hidden = !ended;
   }
 
   function renderPlayers() {
@@ -992,8 +1009,12 @@
     el.p2.classList.toggle('active', game.phase === 'running' && game.active === 'p2');
     el.p1.classList.toggle('winner', game.phase === 'ended' && game.winner === 'p1');
     el.p2.classList.toggle('winner', game.phase === 'ended' && game.winner === 'p2');
-    el.p1result.textContent = game.phase === 'ended' && game.winner === 'p1' ? 'Time! ' + nameOf('p1') + ' wins' : '';
-    el.p2result.textContent = game.phase === 'ended' && game.winner === 'p2' ? 'Time! ' + nameOf('p2') + ' wins' : '';
+    el.p1result.textContent = game.phase === 'ended'
+      ? (game.winner === 'p1' ? 'Time! ' + nameOf('p1') + ' wins' : 'Time! ' + nameOf('p1') + '\u2019s flag fell')
+      : '';
+    el.p2result.textContent = game.phase === 'ended'
+      ? (game.winner === 'p2' ? 'Time! ' + nameOf('p2') + ' wins' : 'Time! ' + nameOf('p2') + '\u2019s flag fell')
+      : '';
 
     var label = { p1: nameOf('p1'), p2: nameOf('p2') };
     for (var side of ['p1', 'p2']) {
@@ -1011,8 +1032,22 @@
     return minutes + (minutes === 1 ? ' minute ' : ' minutes ') + seconds + (seconds === 1 ? ' second' : ' seconds');
   }
 
+  var ICON_SOUND_ON = '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor" stroke="none"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18 6a8.5 8.5 0 0 1 0 12"/></svg>';
+  var ICON_SOUND_OFF = '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor" stroke="none"/><line x1="16" y1="9" x2="22" y2="15"/><line x1="22" y1="9" x2="16" y2="15"/></svg>';
+
+  function renderBarToggles() {
+    var soundOn = settings.sound === 'on';
+    el.soundToggle.innerHTML = soundOn ? ICON_SOUND_ON : ICON_SOUND_OFF;
+    el.soundToggle.setAttribute('aria-pressed', String(soundOn));
+    el.soundToggle.setAttribute('aria-label', soundOn ? 'Sound on, tap to mute' : 'Sound off, tap to unmute');
+    var movesOn = settings.moves === 'on';
+    el.movesToggle.setAttribute('aria-pressed', String(movesOn));
+    el.movesToggle.setAttribute('aria-label', movesOn ? 'Move counter on, tap to hide' : 'Move counter off, tap to show');
+  }
+
   function renderAll() {
     renderTimes();
+    renderBarToggles();
     renderNotes();
     renderBar();
     renderPlayers();
@@ -1029,9 +1064,20 @@
     if (game.phase === 'running') pauseGame();
     else if (game.phase === 'paused') resumeGame();
   });
+  el.again.addEventListener('click', function () { doReset(); });
+  el.barChange.addEventListener('click', function () { changeTime(); });
   el.reset.addEventListener('click', function () {
     if (el.reset.getAttribute('aria-disabled') === 'true') return;
     requestReset();
+  });
+  el.soundToggle.addEventListener('click', function () {
+    beep(660, 0.12, 0, true); // confirmation cue, also before muting
+    settings.sound = settings.sound === 'on' ? 'off' : 'on';
+    saveSettings(); syncPickers(); renderBarToggles();
+  });
+  el.movesToggle.addEventListener('click', function () {
+    settings.moves = settings.moves === 'on' ? 'off' : 'on';
+    saveSettings(); syncPickers(); renderNotes(); renderBarToggles();
   });
   el.settingsBtn.addEventListener('click', openSheet);
   el.sheetClose.addEventListener('click', closeSheet);
@@ -1058,7 +1104,7 @@
     changeTimeArmed = false;
     clearTimeout(changeTimeTimer);
     el.sheetChangeTime.classList.remove('confirm');
-    el.sheetChangeTime.textContent = 'New game - change time';
+    el.sheetChangeTime.textContent = 'New game';
   }
   el.sheet.addEventListener('click', function (event) {
     if (event.target === el.sheet) closeSheet();
@@ -1105,7 +1151,7 @@
         phase: game.phase, active: game.active, winner: game.winner,
         remaining: { p1: game.remaining.p1, p2: game.remaining.p2 },
         moves: { p1: game.moves.p1, p2: game.moves.p2 },
-        settings: { theme: settings.theme, style: settings.style, accent: settings.accent, sound: settings.sound, moves: settings.moves, minutes: settings.minutes, inc: settings.inc, p1name: settings.p1name, p2name: settings.p2name },
+        settings: { theme: settings.theme, accent: settings.accent, sound: settings.sound, moves: settings.moves, minutes: settings.minutes, inc: settings.inc, p1name: settings.p1name, p2name: settings.p2name },
         audio: audioCtx ? audioCtx.state : 'none'
       };
     },

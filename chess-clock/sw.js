@@ -4,7 +4,7 @@
    navigations fall back to the cached page. */
 'use strict';
 
-var CACHE = 'chess-clock-v2';
+var CACHE = 'chess-clock-v4';
 var ALLOWED = ['/chess-clock', '/chess-clock/index.html', '/chess-clock/sw.js'];
 
 self.addEventListener('install', function (event) {
