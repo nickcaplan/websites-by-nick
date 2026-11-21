@@ -200,6 +200,8 @@
   .sheet .row .chips .chip-swatch { width: 100%; min-width: 0; padding: 0; }
   .sheet .row .hint { flex-basis: 100%; }
   .sheet .hint { margin: 0; font-size: 0.85rem; color: var(--ink-dim); }
+  .sheet-actions { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; }
+  .sheet-actions .chip { width: 100%; min-width: 0; justify-content: center; }
   .sheet-divider { border: 0; border-top: 1px solid var(--line); margin: 0; }
   .sheet-danger { align-self: stretch; justify-content: center; }
   .sheet-danger.confirm { background: var(--low-bg, #c04b28); border-color: var(--low-bg, #c04b28); color: #fff4ef; }
@@ -286,13 +288,12 @@
   .bar button.bar-toggle[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
   .bar .status { font-size: 0.85rem; color: var(--ink-dim); font-weight: 700; min-width: 0; text-align: center; }
   .bar button.confirm { background: var(--low-bg, #c04b28); border-color: var(--low-bg, #c04b28); color: #fff4ef; font-size: 0.95rem; font-weight: 800; }
-  /* Narrow screens: six controls become two balanced rows of three, so
-     nothing wraps onto a row of its own and tap targets stay full-width. */
+  /* Narrow screens: compact buttons in two even rows of two, with the
+     status on its own full-width row, so nothing is orphaned and enlarged
+     labels stay inside their buttons. */
   @media (max-width: 560px) {
-    /* Two wide columns so enlarged labels (Moves, Reset?) stay inside their
-       buttons; the status text gets its own full-width row. */
-    .bar { display: grid; grid-template-columns: 1fr 1fr; row-gap: 8px; }
-    .bar button { width: 100%; padding: 0 8px; }
+    .bar { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; padding: 8px 10px; }
+    .bar button { width: 100%; min-width: 0; min-height: 44px; padding: 0 8px; }
     .bar .status { grid-column: 1 / -1; order: -1; align-self: center; }
   }
 
@@ -322,9 +323,9 @@
   <section class="setup-section" aria-labelledby="time-heading">
     <h2 id="time-heading">Time</h2>
     <div class="preset-tiles" id="preset-tiles" role="group" aria-label="Time control">
-      <button class="tile" data-preset="1,0" aria-pressed="false"><span class="tile-big">1 + 0</span><span class="tile-sub">1 minute each, no extra</span></button>
+      <button class="tile" data-preset="1,0" aria-pressed="false"><span class="tile-big">1 + 0</span><span class="tile-sub">1 minute each, nothing added</span></button>
       <button class="tile" data-preset="3,2" aria-pressed="false"><span class="tile-big">3 + 2</span><span class="tile-sub">3 minutes each, 2 seconds a move</span></button>
-      <button class="tile" data-preset="5,0" aria-pressed="false"><span class="tile-big">5 + 0</span><span class="tile-sub">5 minutes each, no extra</span></button>
+      <button class="tile" data-preset="5,0" aria-pressed="false"><span class="tile-big">5 + 0</span><span class="tile-sub">5 minutes each, nothing added</span></button>
       <button class="tile" data-preset="10,3" aria-pressed="true"><span class="tile-big">10 + 3</span><span class="tile-sub">10 minutes each, 3 seconds a move</span></button>
     </div>
     <details class="disclosure" id="custom-time">
@@ -415,7 +416,8 @@
     <button id="sound-toggle" class="bar-toggle" aria-label="Sound on, tap to mute" aria-pressed="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor" stroke="none"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18 6a8.5 8.5 0 0 1 0 12"/></svg></button>
     <button id="moves-toggle" class="bar-toggle" aria-label="Move counter off, tap to show" aria-pressed="false">Moves</button>
     <button id="settings-btn" aria-label="Clock settings">&#9881;</button>
-    <button id="reset-btn" aria-label="Reset clock" aria-disabled="true">&#8635;</button>
+    <button id="again-btn" class="bar-toggle" hidden>Play again</button>
+    <button id="bar-change" class="bar-toggle" hidden>Change time</button>
   </div>
 
   <button class="player bottom" id="p1" aria-label="Player 1">
@@ -476,7 +478,10 @@
     </section>
 
     <hr class="sheet-divider">
-    <button class="chip sheet-danger" id="sheet-change-time">New game - change time</button>
+    <div class="sheet-actions">
+      <button class="chip sheet-danger" id="sheet-reset" aria-label="Reset game" aria-disabled="true">Reset game</button>
+      <button class="chip sheet-danger" id="sheet-change-time">New game - change time</button>
+    </div>
   </div>
 </div>
 
@@ -503,8 +508,10 @@
     pause: document.getElementById('pause-btn'),
     soundToggle: document.getElementById('sound-toggle'),
     movesToggle: document.getElementById('moves-toggle'),
-    reset: document.getElementById('reset-btn'),
+    reset: document.getElementById('sheet-reset'),
     settingsBtn: document.getElementById('settings-btn'),
+    again: document.getElementById('again-btn'),
+    barChange: document.getElementById('bar-change'),
     barStatus: document.getElementById('bar-status'),
     sheet: document.getElementById('settings-sheet'),
     sheetClose: document.getElementById('sheet-close'),
@@ -802,8 +809,8 @@
     resetArmed = false;
     clearTimeout(resetTimer);
     el.reset.classList.remove('confirm');
-    el.reset.innerHTML = '&#8635;';
-    el.reset.setAttribute('aria-label', 'Reset clock');
+    el.reset.textContent = 'Reset game';
+    el.reset.setAttribute('aria-label', 'Reset game');
   }
   function doReset() {
     disarmReset();
@@ -957,14 +964,19 @@
   function renderNotes() {
     var notes = { p1: '', p2: '' };
     if (game.phase === 'ready') {
-      notes.p1 = 'Tap to start ' + nameOf('p2') + '\u2019s clock';
-      notes.p2 = 'Tap to start ' + nameOf('p1') + '\u2019s clock';
-    } else if (game.phase === 'running' || game.phase === 'paused') {
-      if (settings.moves === 'on') {
-        notes.p1 = game.moves.p1 + (game.moves.p1 === 1 ? ' move' : ' moves');
-        notes.p2 = game.moves.p2 + (game.moves.p2 === 1 ? ' move' : ' moves');
-      }
+      notes.p1 = 'White moves first';
+      notes.p2 = 'Black taps to start White\u2019s clock';
+    } else if (game.phase === 'paused') {
+      notes.p1 = 'Paused - tap either side to resume';
+      notes.p2 = 'Paused - tap either side to resume';
     }
+    var p1n = nameOf('p1'), p2n = nameOf('p2');
+    if (settings.moves === 'on' && (game.phase === 'running' || game.phase === 'paused')) {
+      p1n += ' \u00b7 ' + game.moves.p1 + (game.moves.p1 === 1 ? ' move' : ' moves');
+      p2n += ' \u00b7 ' + game.moves.p2 + (game.moves.p2 === 1 ? ' move' : ' moves');
+    }
+    el.p1name.textContent = p1n;
+    el.p2name.textContent = p2n;
     el.p1note.textContent = notes.p1;
     el.p2note.textContent = notes.p2;
   }
@@ -981,6 +993,14 @@
     var resetEnabled = game.phase !== 'setup';
     el.reset.setAttribute('aria-disabled', String(!resetEnabled));
     if (!resetEnabled) disarmReset();
+    // Ended games swap the controls for a clear Play again + Change time.
+    var ended = game.phase === 'ended';
+    el.pause.hidden = ended;
+    el.soundToggle.hidden = ended;
+    el.movesToggle.hidden = ended;
+    el.settingsBtn.hidden = ended;
+    el.again.hidden = !ended;
+    el.barChange.hidden = !ended;
   }
 
   function renderPlayers() {
@@ -988,8 +1008,12 @@
     el.p2.classList.toggle('active', game.phase === 'running' && game.active === 'p2');
     el.p1.classList.toggle('winner', game.phase === 'ended' && game.winner === 'p1');
     el.p2.classList.toggle('winner', game.phase === 'ended' && game.winner === 'p2');
-    el.p1result.textContent = game.phase === 'ended' && game.winner === 'p1' ? 'Time! ' + nameOf('p1') + ' wins' : '';
-    el.p2result.textContent = game.phase === 'ended' && game.winner === 'p2' ? 'Time! ' + nameOf('p2') + ' wins' : '';
+    el.p1result.textContent = game.phase === 'ended'
+      ? (game.winner === 'p1' ? 'Time! ' + nameOf('p1') + ' wins' : 'Time! ' + nameOf('p1') + '\u2019s flag fell')
+      : '';
+    el.p2result.textContent = game.phase === 'ended'
+      ? (game.winner === 'p2' ? 'Time! ' + nameOf('p2') + ' wins' : 'Time! ' + nameOf('p2') + '\u2019s flag fell')
+      : '';
 
     var label = { p1: nameOf('p1'), p2: nameOf('p2') };
     for (var side of ['p1', 'p2']) {
@@ -1039,6 +1063,8 @@
     if (game.phase === 'running') pauseGame();
     else if (game.phase === 'paused') resumeGame();
   });
+  el.again.addEventListener('click', function () { doReset(); });
+  el.barChange.addEventListener('click', function () { changeTime(); });
   el.reset.addEventListener('click', function () {
     if (el.reset.getAttribute('aria-disabled') === 'true') return;
     requestReset();
