@@ -394,7 +394,7 @@ test('change time asks before resetting the clock', async ({ page, baseURL }) =>
   await page.locator('#settings-btn').click();
   await page.locator('#sheet-change-time').click();
   // First tap only arms it: still in the game, confirmation showing.
-  await expect(page.locator('#sheet-change-time')).toContainText('clock resets');
+  await expect(page.locator('#sheet-change-time')).toContainText('Tap again to reset');
   expect((await page.evaluate(() => chessClock.getState())).phase).toBe('paused');
   await page.locator('#sheet-change-time').click();
   await expect(page.locator('#setup-view')).toBeVisible();
