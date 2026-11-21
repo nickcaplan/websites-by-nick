@@ -394,11 +394,33 @@ test('change time asks before resetting the clock', async ({ page, baseURL }) =>
   await page.locator('#settings-btn').click();
   await page.locator('#sheet-change-time').click();
   // First tap only arms it: still in the game, confirmation showing.
-  await expect(page.locator('#sheet-change-time')).toContainText('clock resets');
+  await expect(page.locator('#sheet-change-time')).toContainText('Tap again to reset');
   expect((await page.evaluate(() => chessClock.getState())).phase).toBe('paused');
   await page.locator('#sheet-change-time').click();
   await expect(page.locator('#setup-view')).toBeVisible();
   expect((await page.evaluate(() => chessClock.getState())).phase).toBe('setup');
+});
+
+test('armed new-game button stays inside the visible viewport at small widths with 200% text', async ({ page, baseURL }) => {
+  // Arming New game swaps in a longer label; the action row must stay inside
+  // the visible sheet so the confirm text is never cut off.
+  for (const width of [320, 390]) {
+    await page.setViewportSize({ width, height: 700 });
+    await page.goto(baseURL + '/chess-clock/');
+    await page.evaluate(() => { chessClock.start(); chessClock.press('p1'); });
+    await page.locator('#settings-btn').click();
+    await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
+    await page.locator('#sheet-change-time').click();
+    await page.waitForTimeout(150);
+    const r = await page.evaluate(() => {
+      const b = document.getElementById('sheet-change-time').getBoundingClientRect();
+      return { top: b.top, bottom: b.bottom, left: b.left, right: b.right, vw: innerWidth, vh: innerHeight };
+    });
+    expect(r.bottom, `${width}: armed button below visible bottom`).toBeLessThanOrEqual(r.vh);
+    expect(r.top, `${width}: armed button above visible top`).toBeGreaterThanOrEqual(0);
+    expect(r.right, `${width}: armed button past visible right edge`).toBeLessThanOrEqual(r.vw);
+    expect(r.left, `${width}: armed button past visible left edge`).toBeGreaterThanOrEqual(0);
+  }
 });
 
 test('the play button sits at the top of the setup screen', async ({ page, baseURL }) => {

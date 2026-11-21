@@ -200,11 +200,14 @@
   .sheet .row .chips .chip-swatch { width: 100%; min-width: 0; padding: 0; }
   .sheet .row .hint { flex-basis: 100%; }
   .sheet .hint { margin: 0; font-size: 0.85rem; color: var(--ink-dim); }
-  .sheet-actions { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; }
+  .sheet-actions { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; position: sticky; bottom: -28px; padding-bottom: 28px; background: var(--bar-bg); }
   .sheet-actions .chip { width: 100%; min-width: 0; justify-content: center; }
   .sheet-divider { border: 0; border-top: 1px solid var(--line); margin: 0; }
   .sheet-danger { align-self: stretch; justify-content: center; }
   .sheet-danger.confirm { background: var(--low-bg, #c04b28); border-color: var(--low-bg, #c04b28); color: #fff4ef; }
+  /* Armed confirm takes the whole row so its longer label stays short enough
+     to keep the button inside the visible sheet at small widths / 200% text. */
+  .sheet-actions .chip.confirm { grid-column: 1 / -1; }
 
   /* ---------- Clock screen ---------- */
   .clock {
@@ -1093,7 +1096,7 @@
     if (!changeTimeArmed) {
       changeTimeArmed = true;
       el.sheetChangeTime.classList.add('confirm');
-      el.sheetChangeTime.textContent = 'The clock resets - tap again to confirm';
+      el.sheetChangeTime.textContent = 'Tap again to reset';
       changeTimeTimer = setTimeout(disarmChangeTime, 3000);
       return;
     }
