@@ -5,6 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <title>Chess clock</title>
+<meta property="og:type" content="website">
+<meta property="og:title" content="Chess clock">
+<meta property="og:description" content="A free two-player chess clock with time controls and increments.">
+<meta property="og:url" content="https://websitesbynick.co.uk/chess-clock/">
+<meta property="og:image" content="https://websitesbynick.co.uk/chess-clock/social-preview.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Chess clock">
+<meta name="twitter:description" content="A free two-player chess clock with time controls and increments.">
 <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
 <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
@@ -396,7 +404,7 @@
   <div class="bar" role="toolbar" aria-label="Clock controls">
     <button id="pause-btn" aria-label="Pause">&#10073;&#10073;</button>
     <span class="status" id="bar-status" role="status"></span>
-    <button id="sound-toggle" class="bar-toggle" aria-label="Sound on, tap to mute" aria-pressed="true">&#128266;</button>
+    <button id="sound-toggle" class="bar-toggle" aria-label="Sound on, tap to mute" aria-pressed="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor" stroke="none"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18 6a8.5 8.5 0 0 1 0 12"/></svg></button>
     <button id="moves-toggle" class="bar-toggle" aria-label="Move counter off, tap to show" aria-pressed="false">Moves</button>
     <button id="settings-btn" aria-label="Clock settings">&#9881;</button>
     <button id="reset-btn" aria-label="Reset clock" aria-disabled="true">&#8635;</button>
@@ -451,11 +459,11 @@
       </div>
       <div class="row">
         <span class="group-label">Move counter</span>
-        <p class="hint">Shows how many moves each player has made.</p>
         <div class="chips" id="sheet-moves-chips" role="group" aria-label="Move counter">
           <button class="chip" data-moves-pick="off" aria-pressed="true">Off</button>
           <button class="chip" data-moves-pick="on" aria-pressed="false">On</button>
         </div>
+        <p class="hint">Shows how many moves each player has made.</p>
       </div>
     </section>
 
@@ -575,7 +583,7 @@
   bindPicker('sheet-accent-chips', 'accent-pick', function (v) { settings.accent = v; saveSettings(); applyDisplay(); });
   bindPicker('sheet-theme-chips', 'theme-pick', function (v) { settings.theme = v; saveSettings(); applyDisplay(); });
   bindPicker('sheet-moves-chips', 'moves-pick', function (v) { settings.moves = v; saveSettings(); syncPickers(); renderNotes(); renderBarToggles(); });
-  bindPicker('sheet-sound-chips', 'sound-pick', function (v) { settings.sound = v; saveSettings(); syncPickers(); renderBarToggles(); });
+  bindPicker('sheet-sound-chips', 'sound-pick', function (v) { if (v !== settings.sound) beep(660, 0.12, 0, true); settings.sound = v; saveSettings(); syncPickers(); renderBarToggles(); });
   bindPicker('setup-moves-chips', 'moves-pick', function (v) { settings.moves = v; saveSettings(); syncPickers(); renderNotes(); renderBarToggles(); });
   bindPicker('setup-sound-chips', 'sound-pick', function (v) { settings.sound = v; saveSettings(); syncPickers(); renderBarToggles(); });
   bindPicker('preset-tiles', 'preset', function (v) {
@@ -602,8 +610,8 @@
   }
   // Browsers only unlock audio inside a user gesture; the first tap wakes the context.
   document.addEventListener('pointerdown', ensureAudio);
-  function beep(frequency, duration, delay) {
-    if (settings.sound !== 'on') return;
+  function beep(frequency, duration, delay, force) {
+    if (!force && settings.sound !== 'on') return;
     try {
       if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       var start = function () {
@@ -991,9 +999,12 @@
     return minutes + (minutes === 1 ? ' minute ' : ' minutes ') + seconds + (seconds === 1 ? ' second' : ' seconds');
   }
 
+  var ICON_SOUND_ON = '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor" stroke="none"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18 6a8.5 8.5 0 0 1 0 12"/></svg>';
+  var ICON_SOUND_OFF = '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor" stroke="none"/><line x1="16" y1="9" x2="22" y2="15"/><line x1="22" y1="9" x2="16" y2="15"/></svg>';
+
   function renderBarToggles() {
     var soundOn = settings.sound === 'on';
-    el.soundToggle.innerHTML = soundOn ? '&#128266;' : '&#128263;';
+    el.soundToggle.innerHTML = soundOn ? ICON_SOUND_ON : ICON_SOUND_OFF;
     el.soundToggle.setAttribute('aria-pressed', String(soundOn));
     el.soundToggle.setAttribute('aria-label', soundOn ? 'Sound on, tap to mute' : 'Sound off, tap to unmute');
     var movesOn = settings.moves === 'on';
@@ -1025,6 +1036,7 @@
     requestReset();
   });
   el.soundToggle.addEventListener('click', function () {
+    beep(660, 0.12, 0, true); // confirmation cue, also before muting
     settings.sound = settings.sound === 'on' ? 'off' : 'on';
     saveSettings(); syncPickers(); renderBarToggles();
   });
