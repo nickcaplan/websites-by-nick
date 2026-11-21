@@ -330,6 +330,7 @@
     display: inline-flex; align-items: center; justify-content: center; padding: 0 14px;
   }
   .bar button[aria-disabled="true"] { opacity: 0.4; cursor: default; }
+  .bar button.ready-go { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
   .bar button.bar-toggle { font-size: 1rem; font-weight: 800; }
   .bar button.bar-toggle[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
   .bar .status { font-size: 0.85rem; color: var(--ink-dim); font-weight: 700; min-width: 0; text-align: center; }
@@ -881,22 +882,25 @@
       clickSound();
       return;
     }
-    if (game.phase === 'ready') {
-      // First press starts the other player's clock, like Black starting White's clock.
-      game.phase = 'running';
-      game.active = other(side);
-      game.lastTick = Date.now();
-      requestWakeLock();
-      clickSound();
-      renderAll();
-      return;
-    }
+    // Before the game starts the sides do nothing: the Start button begins it.
+    if (game.phase === 'ready') return;
     if (game.phase !== 'running' || side !== game.active) return;
     game.moves[side] += 1;
     game.remaining[side] += incMs();
     game.active = other(side);
     clickSound();
     saveGame();
+    renderAll();
+  }
+
+  // Start game: White's clock starts at once, then each tap passes the turn.
+  function beginGame() {
+    if (game.phase !== 'ready') return;
+    game.phase = 'running';
+    game.active = 'p1';
+    game.lastTick = Date.now();
+    requestWakeLock();
+    clickSound();
     renderAll();
   }
 
@@ -1142,7 +1146,7 @@
     var notes = { p1: '', p2: '' };
     if (game.phase === 'ready') {
       notes.p1 = 'White moves first';
-      notes.p2 = 'Black taps to start';
+      notes.p2 = 'Press ▶ to start';
     } else if (game.phase === 'paused') {
       notes.p1 = 'Paused - tap to resume';
       notes.p2 = 'Paused - tap to resume';
@@ -1171,9 +1175,11 @@
     if (game.phase === 'paused') label = 'Paused';
     if (game.phase === 'ended') label = 'Game over';
     el.barStatus.textContent = label;
-    el.pause.innerHTML = game.phase === 'paused' ? '&#9654;' : '&#10073;&#10073;';
-    el.pause.setAttribute('aria-label', game.phase === 'paused' ? 'Resume' : 'Pause');
-    var pauseEnabled = game.phase === 'running' || game.phase === 'paused';
+    var playShown = game.phase === 'paused' || game.phase === 'ready';
+    el.pause.innerHTML = playShown ? '&#9654;' : '&#10073;&#10073;';
+    el.pause.setAttribute('aria-label', game.phase === 'ready' ? 'Start game' : game.phase === 'paused' ? 'Resume' : 'Pause');
+    el.pause.classList.toggle('ready-go', game.phase === 'ready');
+    var pauseEnabled = game.phase === 'running' || game.phase === 'paused' || game.phase === 'ready';
     el.pause.setAttribute('aria-disabled', String(!pauseEnabled));
     var resetEnabled = game.phase !== 'setup';
     el.reset.setAttribute('aria-disabled', String(!resetEnabled));
@@ -1243,6 +1249,7 @@
   el.pause.addEventListener('click', function () {
     if (game.phase === 'running') pauseGame();
     else if (game.phase === 'paused') resumeGame();
+    else if (game.phase === 'ready') beginGame();
   });
   el.again.addEventListener('click', function () { doReset(); });
   el.barChange.addEventListener('click', function () { changeTime(); });
@@ -1300,7 +1307,7 @@
     if (event.key === ' ') {
       event.preventDefault();
       if (game.phase === 'running' && game.active) press(game.active);
-      else if (game.phase === 'ready') press('p1');
+      else if (game.phase === 'ready') beginGame();
     }
     if (event.key === 'p' || event.key === 'P') {
       if (game.phase === 'running') pauseGame();
@@ -1331,6 +1338,7 @@
       };
     },
     start: startGame,
+    begin: beginGame,
     press: press,
     pause: pauseGame,
     resume: resumeGame,
