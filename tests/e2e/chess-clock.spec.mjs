@@ -989,3 +989,19 @@ test('tapping White before the game starts starts White\'s clock, like Start gam
   expect(state.active).toBe('p2');
   expect(state.moves.p1).toBe(1);
 });
+
+test('setup option titles keep at least 12px clear of their buttons at 320px, 390px and 200% text', async ({ page, baseURL }) => {
+  for (const [w, big] of [[320, false], [390, false], [390, true]]) {
+    await page.setViewportSize({ width: w, height: 900 });
+    await fresh(page, baseURL);
+    if (big) await page.addStyleTag({ content: 'html { font-size: 200% }' });
+    await page.locator('#custom-time summary').click();
+    await page.locator('#more-options summary').click();
+    const gaps = await page.evaluate(() => [...document.querySelectorAll('.picker')].filter((p) => p.getClientRects().length).map((p) => {
+      const r = document.createRange(); r.selectNodeContents(p.querySelector('legend'));
+      return { label: p.querySelector('legend').textContent.trim(), gap: p.querySelector('.chip').getBoundingClientRect().top - r.getBoundingClientRect().bottom };
+    }));
+    expect(gaps.length).toBeGreaterThanOrEqual(4);
+    for (const g of gaps) expect(g.gap, `${w}px${big ? ' 200%' : ''} ${g.label}`).toBeGreaterThanOrEqual(12);
+  }
+});

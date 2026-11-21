@@ -113,6 +113,9 @@
   .picker legend, .picker .group-label, .sheet .group-label {
     font-size: 0.78rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-dim);
   }
+  /* A fieldset legend is not a flex item, so the picker gap never reached it:
+     give every legend its own space above the buttons. */
+  .picker legend { padding: 0 0 12px; }
   .chips { display: flex; flex-wrap: wrap; gap: 8px; }
   .chip {
     min-height: 48px; padding: 10px 18px; border-radius: 999px; cursor: pointer;
@@ -212,7 +215,7 @@
   /* Label column plus one aligned control column: every picker group shares
      the same left edge, width and height, and wraps as a whole below its
      label when enlarged text needs the room. */
-  .sheet .row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; font-size: 1rem; }
+  .sheet .row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 14px; font-size: 1rem; }
   .sheet .row .group-label { flex: 0 1 8em; min-width: 0; }
   .sheet .row .chips { flex: 1 1 12.5em; display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 8px; max-width: 100%; }
   .sheet .row .chips .chip { width: 100%; min-width: 0; padding-left: 6px; padding-right: 6px; justify-content: center; }
