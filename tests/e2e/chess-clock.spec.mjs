@@ -800,12 +800,18 @@ test('settings sheet buttons keep the same size and position when confirming', a
 });
 
 test('each side shows a White or Black pawn badge; badge, name and digits never move or wrap', async ({ page, baseURL }) => {
-  for (const [width, big, moves] of [[320, false, false], [390, false, false], [320, true, false], [390, true, false], [320, false, true], [390, false, true], [320, true, true], [390, true, true]]) {
+  for (const [width, big, moves, flip] of [false, true].flatMap((f) => [[320, false, false], [390, false, false], [320, true, false], [390, true, false], [320, false, true], [390, false, true], [320, true, true], [390, true, true]].map((c) => [...c, f]))) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto(baseURL + '/chess-clock/');
     await page.evaluate(() => { localStorage.clear(); });
     await page.goto(baseURL + '/chess-clock/');
     if (big) await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
+    // Longest allowed names (24 characters): the ended message and name must not change the layout.
+    await page.evaluate(() => {
+      for (const [id, v] of [['name-p1', 'Christopher Montgomerys'], ['name-p2', 'Bartholomew Featherstn']]) {
+        const i = document.getElementById(id); i.value = v; i.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+    });
     await page.evaluate(() => chessClock.start());
     if (moves) await page.locator('#moves-toggle').click(); // move counter on: the names gain " · N moves" while running
     await expect(page.locator('#p1 .side')).toHaveText('White');
@@ -828,16 +834,17 @@ test('each side shows a White or Black pawn badge; badge, name and digits never 
     }));
     await page.waitForTimeout(500); // let the view-in transition and font-fit settle
     const ready = await measure();
-    for (const m of ready) { expect(m['.sideinside'] && m.oneLine, `${width}${big ? ' 200%' : ''}${moves ? ' counter on' : ''}: badge inside card on one line`).toBe(true); }
+    for (const m of ready) { expect(m['.sideinside'] && m.oneLine, `${width}${big ? ' 200%' : ''}${moves ? ' counter on' : ''}${flip ? ' other side loses' : ''}: badge inside card on one line`).toBe(true); }
     const states = {};
     await page.evaluate(() => chessClock.press('p1')); states.running = await measure();
     await page.evaluate(() => chessClock.press('p2')); states.runningOther = await measure();
+    if (flip) { await page.evaluate(() => chessClock.press(chessClock.getState().active)); }
     await page.evaluate(() => chessClock.pause()); states.paused = await measure();
     await page.evaluate(() => { chessClock.resume(); chessClock.setRemainingMs(chessClock.getState().active, 50); });
     await expect.poll(async () => (await page.evaluate(() => chessClock.getState())).phase).toBe('ended');
     states.ended = await measure();
     for (const [name, got] of Object.entries(states)) {
-      expect(got, `${width}${big ? ' 200%' : ''}${moves ? ' counter on' : ''}: badge, name and digits unchanged in ${name}`).toEqual(ready);
+      expect(got, `${width}${big ? ' 200%' : ''}${moves ? ' counter on' : ''}${flip ? ' other side loses' : ''}: badge, name and digits unchanged in ${name}`).toEqual(ready);
     }
   }
 });
