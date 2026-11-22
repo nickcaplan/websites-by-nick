@@ -73,6 +73,11 @@
     overscroll-behavior: none;
   }
   button { font-family: inherit; }
+  /* Native touch highlight paints a blue rectangle over the clock in Chrome.
+     Keep the physical surface feedback and keyboard-only focus ring instead. */
+  button, summary, input, select, label, [tabindex] { -webkit-tap-highlight-color: transparent; }
+  button, summary { user-select: none; -webkit-user-select: none; }
+  button:focus:not(:focus-visible), summary:focus:not(:focus-visible) { outline: none; }
   button:focus-visible, [tabindex]:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
   .visually-hidden {
     position: absolute; width: 1px; height: 1px; overflow: hidden;

@@ -39,3 +39,16 @@ for(const width of [320,390,768,1440])test(`LCD contains the entire content bloc
   for(const row of rows.flat()){expect(row.top,row.name+' top breathing room').toBeGreaterThanOrEqual(4);expect(row.bottom,row.name+' bottom breathing room').toBeGreaterThanOrEqual(4)}
  }
 });
+
+test('clock targets suppress native tap highlight but retain keyboard focus',async({page})=>{
+ await page.goto('/chess-clock/');
+ const targets=page.locator('button,summary,input,select,label,[tabindex]');
+ for(const color of await targets.evaluateAll(es=>es.map(e=>getComputedStyle(e).webkitTapHighlightColor)))expect(color).toBe('rgba(0, 0, 0, 0)');
+ await page.locator('#start-btn').click();await page.locator('#pause-btn').click();
+ await page.locator('#p1').click();
+ expect(await page.locator('#p1').evaluate(e=>getComputedStyle(e).userSelect)).toBe('none');
+ await page.keyboard.press('Tab');
+ expect(await page.evaluate(()=>document.activeElement.matches(':focus-visible'))).toBe(true);
+ expect(await page.evaluate(()=>getComputedStyle(document.activeElement).outlineStyle)).toBe('solid');
+ expect(await page.evaluate(()=>parseFloat(getComputedStyle(document.activeElement).outlineWidth))).toBeGreaterThanOrEqual(3);
+});
