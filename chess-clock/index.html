@@ -109,8 +109,7 @@
   .setup .lead { font-size: clamp(0.875rem, 3.7vw, 1.05rem); }
   .start { box-shadow: none; display: flex; align-items: center; justify-content: center; gap: 16px; }
   .start svg { width: 24px; height: 24px; flex: none; }
-  .tile::after { content: 'Selected'; visibility: hidden; font-size: 0.8rem; font-weight: 800; margin-top: 6px; }
-  .tile[aria-pressed="true"]::after { visibility: visible; }
+  .tile[aria-pressed="true"] { outline: 2px solid var(--accent-ink); outline-offset: -6px; }
   /* Let real enlarged text reflow rather than shrink it to keep the illustration alongside. */
   @media (max-width: 360px) { .setup-hero { gap: 8px; } }
   @media (max-width: 499px) {
@@ -152,7 +151,7 @@
   .preset-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 8em), 1fr)); gap: 10px; }
   .tile {
     display: flex; flex-direction: column; gap: 4px; align-items: flex-start; text-align: left;
-    padding: 14px; border-radius: 18px; border: 2px solid var(--line);
+    min-height: 44px; padding: 10px; border-radius: 18px; border: 2px solid var(--line);
     background: var(--control-bg); color: var(--control-ink); cursor: pointer;
   }
   .tile .tile-big { font-size: 1.65rem; font-weight: 800; font-variant-numeric: tabular-nums; }
