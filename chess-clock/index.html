@@ -383,6 +383,11 @@ html[data-style="players"] .player.tap-depth::before {animation:lcd-press 240ms 
   .bar button.bar-toggle[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
   .bar .status { font-size: 0.85rem; color: var(--ink-dim); font-weight: 700; min-width: 0; text-align: center; }
   .bar button.confirm { background: var(--low-bg, #c04b28); border-color: var(--low-bg, #c04b28); color: #fff4ef; font-size: 0.95rem; font-weight: 800; }
+  /* Reserve both changing labels so state changes never recenter the toolbar. */
+  @media (min-width: 561px) {
+    #pause-btn { width: max(68px, 4em); flex: none; padding-inline: 0; }
+    .bar .status { width: 14ch; flex: none; }
+  }
   /* Narrow screens: compact buttons in two even rows of two, with the
      status on its own full-width row, so nothing is orphaned and enlarged
      labels stay inside their buttons. */
