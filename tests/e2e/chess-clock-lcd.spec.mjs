@@ -25,3 +25,17 @@ test('reduced motion changes turns without a press animation',async({page})=>{
  expect(await page.evaluate(()=>chessClock.getState().active)).toBe('p1');
  expect(await page.locator('#p1').evaluate(e=>getComputedStyle(e,'::before').animationName)).toBe('none');
 });
+
+for(const width of [320,390,768,1440])test(`LCD contains the entire content block at ${width}`,async({page})=>{
+ await page.setViewportSize({width,height:844});await page.goto('/chess-clock/');await page.locator('#start-btn').click();await page.locator('#pause-btn').click();
+ for(const theme of ['dark','light']){
+  await page.evaluate(t=>document.documentElement.dataset.theme=t,theme);
+  const rows=await page.locator('.player').evaluateAll(panels=>panels.map(panel=>{
+   const cs=getComputedStyle(panel,'::after'),r=panel.getBoundingClientRect(),rotate=panel.classList.contains('top');
+   const top=r.top+parseFloat(rotate?cs.bottom:cs.top),bottom=r.bottom-parseFloat(rotate?cs.top:cs.bottom);
+   const children=[...panel.querySelectorAll('.time,.side,.pname,.turn-pill')].filter(e=>e.getBoundingClientRect().height&&getComputedStyle(e).visibility!=='hidden'&&e.textContent.trim());
+   return children.map(e=>{const c=e.getBoundingClientRect();return {name:e.className,top:c.top-top,bottom:bottom-c.bottom}})
+  }));
+  for(const row of rows.flat()){expect(row.top,row.name+' top breathing room').toBeGreaterThanOrEqual(4);expect(row.bottom,row.name+' bottom breathing room').toBeGreaterThanOrEqual(4)}
+ }
+});
