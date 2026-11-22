@@ -1034,7 +1034,7 @@ test('setup compact header packs copy beside the full-size clock without overlap
     const m = await page.evaluate(() => {
       const r = (s) => document.querySelector(s).getBoundingClientRect();
       const kicker = r('.setup-kicker'), h1 = r('.setup-hero h1'), lead = r('.setup-hero .lead'), clock = r('.setup-clock');
-      return { leadRight:lead.right,clockLeft:clock.left, kickerBottom: kicker.bottom, h1Top: h1.top, h1Bottom: h1.bottom, leadTop: lead.top, leadLines: (() => { const g = document.createRange(); g.selectNodeContents(document.querySelector('.setup-hero .lead')); return new Set([...g.getClientRects()].filter(r=>r.height>0).map(r=>Math.round(r.top))).size; })(), clockBottom: clock.bottom, scrollW: document.documentElement.scrollWidth };
+      return { leadRight:lead.right,clockLeft:clock.left, kickerBottom: kicker.bottom, h1Top: h1.top, h1Bottom: h1.bottom, leadTop: lead.top, leadLines: (() => { const walker = document.createTreeWalker(document.querySelector('.setup-hero .lead'), NodeFilter.SHOW_TEXT); const tops = []; while(walker.nextNode()){ if(!walker.currentNode.textContent.trim()) continue; const g = document.createRange(); g.selectNodeContents(walker.currentNode); tops.push(...[...g.getClientRects()].filter(r=>r.height>0).map(r=>Math.round(r.top))); } return new Set(tops).size; })(), clockBottom: clock.bottom, scrollW: document.documentElement.scrollWidth };
     });
     const tag = `${w}px${big ? ' 200%' : ''}`;
     expect(m.leadRight + 7, `${tag} tagline clear of clock`).toBeLessThanOrEqual(m.clockLeft);
@@ -1048,14 +1048,22 @@ test('setup compact header packs copy beside the full-size clock without overlap
 });
 
 test('compact header lifts Play about 30px at 390 and never drops it at 320',async({page,baseURL})=>{
- // Baseline main at 1bcd3df, same viewport/text: Play y=176 at 390,
- // y=156.03 at 320. The illustration remains 32.5vw in both layouts.
- for(const [width,baseline] of [[320,156.03],[390,176]]){
+ // Compare with the exact pre-change header CSS in the same browser/font stack.
+ for(const width of [320,390]){
   await page.setViewportSize({width,height:844});await fresh(page,baseURL);
   const play=await page.locator('#start-btn').boundingBox(),clock=await page.locator('.setup-clock').boundingBox();
   expect(play.height).toBe(64);expect(clock.width).toBeCloseTo(width*.325,1);
-  const lift=baseline-play.y;
+  await page.addStyleTag({content: `
+    .setup {padding-top:28px}
+    .setup-hero {row-gap:${width<=360?8:10}px;margin-bottom:0}
+    .setup-hero .lead {grid-column:1 / -1;grid-row:3}
+    .setup-hero .lead span {display:inline}
+    .setup-clock {grid-row:1 / 3}
+  `});
+  const baseline=await page.locator('#start-btn').boundingBox();
+  const lift=baseline.y-play.y;
   expect(lift).toBeGreaterThanOrEqual(0);
   if(width===390){expect(lift).toBeGreaterThanOrEqual(28);expect(lift).toBeLessThanOrEqual(33)}
  }
+
 });
