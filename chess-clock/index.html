@@ -162,6 +162,8 @@
      below the 4.5:1 contrast floor in some colour combos. */
   .tile[aria-pressed="true"] .tile-sub { color: var(--accent-ink); }
 
+  #custom-time summary { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: center; }
+  #custom-time-value { font-size: .85rem; font-weight: 650; color: var(--ink-dim); }
   /* Collapsed sections: the summary reads as a tappable row, not plain text. */
   .disclosure summary {
     list-style: none;
@@ -448,7 +450,7 @@ html[data-style="players"] .player.tap-depth::before {animation:lcd-press 240ms 
       <button class="tile" data-preset="10,3" aria-pressed="true"><span class="tile-big">10 + 3</span><span class="tile-sub">10 minutes each, 3 seconds a move</span></button>
     </div>
     <details class="disclosure" id="custom-time">
-      <summary>Custom time</summary>
+      <summary>Custom time <span id="custom-time-value"></span></summary>
       <fieldset class="picker" style="border:0">
         <legend>Minutes each</legend>
         <div class="chips" id="time-chips" role="group" aria-label="Minutes each">
@@ -699,6 +701,7 @@ html[data-style="players"] .player.tap-depth::before {animation:lcd-press 240ms 
 
   function updateSummary() {
     renderSetupClock();
+    document.getElementById('custom-time-value').textContent = settings.minutes + ' min + ' + settings.inc + ' s';
     el.playSummary.textContent = settings.minutes + ' + ' + settings.inc + ' - ' + (nameOf('p1') ? nameOf('p1') + ' (White, bottom)' : 'White (bottom)') + ' vs ' + (nameOf('p2') ? nameOf('p2') + ' (Black, top)' : 'Black (top)');
   }
 
