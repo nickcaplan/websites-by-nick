@@ -167,7 +167,9 @@
   .disclosure .picker { margin-bottom: 20px; }
 
   /* Player name fields */
-  .name-fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 9em), 1fr)); gap: 12px; align-items: center; }
+  .name-fields { display: flex; flex-direction: column; gap: 12px; }
+  .name-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  .name-row > * { flex: 1 1 9em; }
   .name-field {
     display: flex; flex-direction: column; gap: 6px; min-width: 0;
     font-size: 0.7rem; font-weight: 700; letter-spacing: 0.11em; text-transform: uppercase; color: var(--ink-dim);
@@ -433,10 +435,14 @@
   <section class="setup-section" aria-labelledby="players-heading">
     <h2 id="players-heading">Players</h2>
     <div class="name-fields">
+      <div class="name-row">
       <label class="name-field" for="name-p1"><svg class="pawn pawn-white" aria-hidden="true"><use href="#pawn"/></svg>White (bottom)</label>
       <input id="name-p1" type="text" value="" placeholder="Optional name" maxlength="24" autocomplete="off" spellcheck="false">
+      </div>
+      <div class="name-row">
       <label class="name-field" for="name-p2"><svg class="pawn pawn-black" aria-hidden="true"><use href="#pawn"/></svg>Black (top)</label>
       <input id="name-p2" type="text" value="" placeholder="Optional name" maxlength="24" autocomplete="off" spellcheck="false">
+      </div>
     </div>
   </section>
 
