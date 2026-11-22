@@ -94,7 +94,7 @@
   .setup-kicker { grid-column: 1; grid-row: 1; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-dim); }
   .setup-hero h1 { grid-column: 1; grid-row: 2; }
   .setup-hero .lead { grid-column: 1; grid-row: 3; }
-  @media(max-width:499px){.setup-hero {row-gap:5px}.setup-hero .lead span {display:block}}
+  
   .setup-clock { grid-column: 2; grid-row: 1 / 4; align-self: center; }
   .setup h1 { font-size: clamp(1.8rem, 9.4vw, 3rem); line-height: 1.08; letter-spacing: -0.035em; }
   .setup-clock { display: block; width: 100%; height: auto; overflow: visible; }
@@ -108,6 +108,11 @@
   .tile[aria-pressed="true"]::after { visibility: visible; }
   /* Let real enlarged text reflow rather than shrink it to keep the illustration alongside. */
   @media (max-width: 360px) { .setup-hero { gap: 8px; } }
+  @media (max-width: 499px) {
+    .setup { padding-top: 20px; }
+    .setup-hero { row-gap: 5px; margin-bottom: 4px; }
+    .setup-hero .lead span { display: block; }
+  }
 
 
   .setup-section { display: flex; flex-direction: column; gap: 12px; }
