@@ -10,6 +10,10 @@ async function fresh(page, baseURL) {
   await page.goto(baseURL + '/chess-clock/');
 }
 
+async function seedNames(page,p1name,p2name){
+ await page.evaluate(names=>{const old=JSON.parse(localStorage.getItem('chess-clock-settings')||'{}');localStorage.setItem('chess-clock-settings',JSON.stringify({...old,...names}))},{p1name,p2name});await page.reload();
+}
+
 test('loads dark, unlisted and without external requests', async ({ page, baseURL }) => {
   const external = [];
   page.on('request', (r) => { if (!r.url().startsWith(baseURL)) external.push(r.url()); });
@@ -361,31 +365,17 @@ test('reloads offline once visited', async ({ page, context, baseURL, browserNam
   await context.setOffline(false);
 });
 
-test('player names: optional, editable, shown on the clock and persisted', async ({ page, baseURL }) => {
-  await fresh(page, baseURL);
-  await expect(page.locator('#name-p1')).toHaveValue('');
-  await expect(page.locator('#name-p2')).toHaveValue('');
-  await page.locator('#name-p1').fill('Luca');
-  await page.locator('#name-p2').fill('Dad');
-  await expect(page.locator('#play-summary')).toContainText('Luca (White, bottom) vs Dad (Black, top)');
-  await page.locator('#start-btn').click();
-  await expect(page.locator('#p1 .pname')).toHaveText('Luca');
-  await expect(page.locator('#p2 .pname')).toHaveText('Dad');
-  await expect(page.locator('#p1')).toHaveAttribute('aria-label', /Luca/);
-  // Empty falls back to the colour; the old default names are migrated away.
-  await page.evaluate(() => { chessClock.changeTime(); });
-  await page.locator('#name-p1').fill('');
-  await expect(page.locator('#play-summary')).toContainText('White (bottom) vs Dad (Black, top)');
-  await page.locator('#name-p1').fill('Luca');
-  // Persisted across reloads.
-  await page.goto(baseURL + '/chess-clock/');
-  await expect(page.locator('#name-p1')).toHaveValue('Luca');
-  await expect(page.locator('#name-p2')).toHaveValue('Dad');
+test('legacy saved names remain readable without setup fields', async ({ page, baseURL }) => {
+ await fresh(page,baseURL);await seedNames(page,'Luca','Dad');
+ await expect(page.locator('#name-p1,#name-p2,#players-heading')).toHaveCount(0);
+ await expect(page.locator('#play-summary')).toContainText('Luca (White, bottom) vs Dad (Black, top)');
+ await page.locator('#start-btn').click();await expect(page.locator('#p1 .pname')).toHaveText('Luca');await expect(page.locator('#p2 .pname')).toHaveText('Dad');
+ await page.reload();await expect(page.locator('#play-summary')).toContainText('Luca (White, bottom) vs Dad (Black, top)');
 });
 
 test('game-over text names the winner', async ({ page, baseURL }) => {
   await fresh(page, baseURL);
-  await page.locator('#name-p1').fill('Luca');
+  await seedNames(page,'Luca','');
   await page.locator('#start-btn').click();
   await page.evaluate(() => {
     chessClock.start();
@@ -828,11 +818,8 @@ test('each side shows a White or Black pawn badge; badge, name and digits never 
     await page.goto(baseURL + '/chess-clock/');
     if (big) await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
     // Longest allowed names (24 characters): the ended message and name must not change the layout.
-    await page.evaluate((flipNames) => {
-      for (const [id, v] of (flipNames ? [['name-p1', 'Al Be Ci Do Ev Fi Gu Ha Iv'.slice(0, 24)], ['name-p2', 'Jo Ka Le Mo Ny Os Pa Qu Ri'.slice(0, 24)]] : [['name-p1', 'Christopher Montgomerys'], ['name-p2', 'Bartholomew Featherstn']])) {
-        const i = document.getElementById(id); i.value = v; i.dispatchEvent(new Event('input', { bubbles: true }));
-      }
-    }, flip);
+    await seedNames(page, ...(flip ? ['Al Be Ci Do Ev Fi Gu Ha Iv'.slice(0,24),'Jo Ka Le Mo Ny Os Pa Qu Ri'.slice(0,24)] : ['Christopher Montgomerys','Bartholomew Featherstn']));
+    if(big) await page.evaluate(()=>document.documentElement.style.fontSize='200%');
     await page.evaluate(() => chessClock.start());
     if (moves) await page.locator('#moves-toggle').click(); // move counter on: the names gain " · N moves" while running
     await expect(page.locator('#p1 .side')).toHaveText('White');
@@ -906,10 +893,8 @@ test('the reserved slot follows the ended result text size, however the size is 
   await page.goto(baseURL + '/chess-clock/');
   await page.evaluate(() => { localStorage.clear(); });
   await page.goto(baseURL + '/chess-clock/');
+  await seedNames(page,'Al Be Ci Do Ev Fi Gu Ha Iv','Jo Ka Le Mo Ny Os Pa Qu Ri');
   await page.evaluate(() => {
-    for (const [id, v] of [['name-p1', 'Al Be Ci Do Ev Fi Gu Ha Iv'], ['name-p2', 'Jo Ka Le Mo Ny Os Pa Qu Ri']]) {
-      const i = document.getElementById(id); i.value = v; i.dispatchEvent(new Event('input', { bubbles: true }));
-    }
     chessClock.start();
     // Double the result's own computed size directly (not through the root text size).
     for (const r of document.querySelectorAll('.result')) r.style.fontSize = (parseFloat(getComputedStyle(r).fontSize) * 2) + 'px';
@@ -929,7 +914,7 @@ test('with no names typed, the clock shows only White and Black, and the old def
   await page.evaluate(() => { localStorage.clear(); localStorage.setItem('chess-clock-settings', JSON.stringify({ p1name: 'Player 1', p2name: 'Player 2' })); });
   await page.goto(baseURL + '/chess-clock/');
   await expect(page.locator('#play-summary')).toContainText('White (bottom) vs Black (top)');
-  await expect(page.locator('#name-p1')).toHaveAttribute('placeholder', 'Optional name');
+  await expect(page.locator('#name-p1,#name-p2')).toHaveCount(0);
   await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; chessClock.start(); });
   await page.locator('#moves-toggle').click();
   await expect(page.locator('#p1 .pname')).toBeHidden();

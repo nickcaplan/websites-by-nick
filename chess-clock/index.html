@@ -470,20 +470,6 @@ html[data-style="players"] .player.tap-depth::before {animation:lcd-press 240ms 
     </details>
   </section>
 
-  <section class="setup-section" aria-labelledby="players-heading">
-    <h2 id="players-heading">Players</h2>
-    <div class="name-fields">
-      <div class="name-row">
-      <label class="name-field" for="name-p1"><svg class="pawn pawn-white" aria-hidden="true"><use href="#pawn"/></svg>White (bottom)</label>
-      <input id="name-p1" type="text" value="" placeholder="Optional name" maxlength="24" autocomplete="off" spellcheck="false">
-      </div>
-      <div class="name-row">
-      <label class="name-field" for="name-p2"><svg class="pawn pawn-black" aria-hidden="true"><use href="#pawn"/></svg>Black (top)</label>
-      <input id="name-p2" type="text" value="" placeholder="Optional name" maxlength="24" autocomplete="off" spellcheck="false">
-      </div>
-    </div>
-  </section>
-
   <details class="disclosure" id="appearance">
     <summary>Appearance</summary>
     <fieldset class="picker" style="border:0">
@@ -639,8 +625,6 @@ html[data-style="players"] .player.tap-depth::before {animation:lcd-press 240ms 
     sheetClose: document.getElementById('sheet-close'),
     sheetChangeTime: document.getElementById('sheet-change-time'),
     sheetResume: document.getElementById('sheet-resume'),
-    nameP1: document.getElementById('name-p1'),
-    nameP2: document.getElementById('name-p2'),
     p1name: document.querySelector('#p1 .pname'),
     p2name: document.querySelector('#p2 .pname'),
     playSummary: document.getElementById('play-summary')
@@ -813,8 +797,6 @@ html[data-style="players"] .player.tap-depth::before {animation:lcd-press 240ms 
   });
   bindPicker('time-chips', 'minutes', function (v) { updateSummary(); });
   bindPicker('inc-chips', 'inc', function (v) { updateSummary(); });
-  el.nameP1.addEventListener('input', function () { settings.p1name = el.nameP1.value; saveSettings(); renderNames(); updateSummary(); renderNotes(); });
-  el.nameP2.addEventListener('input', function () { settings.p2name = el.nameP2.value; saveSettings(); renderNames(); updateSummary(); renderNotes(); });
 
   /* ---------- sound ---------- */
   var audioCtx = null;
@@ -1386,8 +1368,6 @@ html[data-style="players"] .player.tap-depth::before {animation:lcd-press 240ms 
   });
 
   /* ---------- boot ---------- */
-  el.nameP1.value = settings.p1name;
-  el.nameP2.value = settings.p2name;
   applyDisplay();
   renderNames();
   updateSummary();
