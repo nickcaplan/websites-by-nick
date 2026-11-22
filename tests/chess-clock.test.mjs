@@ -76,9 +76,10 @@ test('chess-clock: one style only, no 15 minute option, 10 + 3 the default', () 
 test('chess-clock: named players, presets and resume', () => {
   // The Sunday format is one tile.
   assert.match(html, /data-preset="10,3"/);
-  // Both name fields ship prefilled and editable.
-  assert.match(html, /<input id="name-p1" type="text" value=""/);
-  assert.match(html, /<input id="name-p2" type="text" value=""/);
+  // Setup fields are removed; legacy saved names remain readable.
+  assert.doesNotMatch(html, /id="name-p[12]"/);
+  assert.match(html, /settings.p1name/);
+  assert.match(html, /settings.p2name/);
   // The paused sheet offers a real resume and a labelled close.
   assert.match(html, /id="sheet-resume"/);
   assert.match(html, /id="sheet-close">Close</);
