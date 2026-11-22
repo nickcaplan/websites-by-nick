@@ -1025,7 +1025,7 @@ test('setup header clock picture is larger, and the title stays on one line, cle
   }
 });
 
-test('setup header packs the headings: no spread, tagline on one line and clear of the clock picture', async ({ page, baseURL }) => {
+test('setup compact header packs copy beside the full-size clock without overlap', async ({ page, baseURL }) => {
   // [width, enlarged text, max kicker->title gap, max title->tagline gap]
   for (const [w, big, maxKickerGap, maxLeadGap] of [[320, false, 24, 28], [390, false, 34, 32], [430, false, 38, 36], [700, false, 46, 44], [390, true, null, null]]) {
     await page.setViewportSize({ width: w, height: 844 });
@@ -1034,15 +1034,15 @@ test('setup header packs the headings: no spread, tagline on one line and clear 
     const m = await page.evaluate(() => {
       const r = (s) => document.querySelector(s).getBoundingClientRect();
       const kicker = r('.setup-kicker'), h1 = r('.setup-hero h1'), lead = r('.setup-hero .lead'), clock = r('.setup-clock');
-      return { kickerBottom: kicker.bottom, h1Top: h1.top, h1Bottom: h1.bottom, leadTop: lead.top, leadLines: (() => { const g = document.createRange(); g.selectNodeContents(document.querySelector('.setup-hero .lead')); return g.getClientRects().length; })(), clockBottom: clock.bottom, scrollW: document.documentElement.scrollWidth };
+      return { leadRight:lead.right,clockLeft:clock.left, kickerBottom: kicker.bottom, h1Top: h1.top, h1Bottom: h1.bottom, leadTop: lead.top, leadLines: (() => { const g = document.createRange(); g.selectNodeContents(document.querySelector('.setup-hero .lead')); return g.getClientRects().length; })(), clockBottom: clock.bottom, scrollW: document.documentElement.scrollWidth };
     });
     const tag = `${w}px${big ? ' 200%' : ''}`;
-    expect(m.clockBottom, `${tag} clock clear of tagline`).toBeLessThanOrEqual(m.leadTop + 1);
+    expect(m.leadRight + 7, `${tag} tagline clear of clock`).toBeLessThanOrEqual(m.clockLeft);
     expect(m.scrollW, `${tag} no sideways scroll`).toBeLessThanOrEqual(w);
     if (!big) {
       expect(m.h1Top - m.kickerBottom, `${tag} kicker-to-title gap`).toBeLessThanOrEqual(maxKickerGap);
       expect(m.leadTop - m.h1Bottom, `${tag} title-to-tagline gap`).toBeLessThanOrEqual(maxLeadGap);
-      expect(m.leadLines, `${tag} tagline lines`).toBe(1);
+      expect(m.leadLines, `${tag} tagline lines`).toBe(w < 500 ? 2 : 1);
     }
   }
 });
