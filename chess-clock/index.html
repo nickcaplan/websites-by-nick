@@ -88,9 +88,9 @@
   }
   .setup h1 { font-size: clamp(2rem, 7vw, 2.8rem); font-weight: 800; letter-spacing: -0.01em; }
   .setup .lead { color: var(--ink-dim); font-size: 1.05rem; margin: -10px 0 4px; }
-  .setup-hero { display: grid; grid-template-columns: minmax(0, 1fr) 100px; align-items: center; gap: 10px; }
+  .setup-hero { display: grid; grid-template-columns: minmax(0, 1fr) var(--clock-w); align-items: center; gap: 10px; --clock-w: min(32.5vw, 170px); }
   .setup-kicker { grid-column: 1 / -1; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-dim); }
-  .setup h1 { font-size: clamp(2rem, 10.25vw, 3rem); line-height: 1.08; letter-spacing: -0.035em; }
+  .setup h1 { font-size: clamp(1.8rem, 9.4vw, 3rem); line-height: 1.08; letter-spacing: -0.035em; }
   .setup-clock { display: block; width: 100%; height: auto; overflow: visible; }
   .clock-case { fill: var(--accent); stroke: #233f31; stroke-width: 4; }
   .clock-window { fill: #203e30; }
@@ -101,8 +101,7 @@
   .tile::after { content: 'Selected'; visibility: hidden; font-size: 0.8rem; font-weight: 800; margin-top: 6px; }
   .tile[aria-pressed="true"]::after { visibility: visible; }
   /* Let real enlarged text reflow rather than shrink it to keep the illustration alongside. */
-  @media (max-width: 360px) { .setup-hero { grid-template-columns: minmax(0, 1fr) 80px; gap: 8px; } }
-  @media (min-width: 700px) { .setup-hero { grid-template-columns: minmax(0, 1fr) 120px; } }
+  @media (max-width: 360px) { .setup-hero { gap: 8px; } }
 
 
   .setup-section { display: flex; flex-direction: column; gap: 12px; }
@@ -115,7 +114,7 @@
   }
   /* A fieldset legend is not a flex item, so the picker gap never reached it:
      give every legend its own space above the buttons. */
-  .picker legend { padding: 0 0 12px; }
+  .picker legend { padding: 0 0 13px; }
   .chips { display: flex; flex-wrap: wrap; gap: 8px; }
   .chip {
     min-height: 48px; padding: 10px 18px; border-radius: 999px; cursor: pointer;

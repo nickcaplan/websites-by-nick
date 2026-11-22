@@ -1005,3 +1005,22 @@ test('setup option titles keep at least 12px clear of their buttons at 320px, 39
     for (const g of gaps) expect(g.gap, `${w}px${big ? ' 200%' : ''} ${g.label}`).toBeGreaterThanOrEqual(12);
   }
 });
+
+test('setup header clock picture is larger, and the title stays on one line, clear of it', async ({ page, baseURL }) => {
+  for (const [w, minClock] of [[320, 100], [390, 120], [700, 160]]) {
+    await page.setViewportSize({ width: w, height: 844 });
+    await fresh(page, baseURL);
+    const m = await page.evaluate(() => {
+      const svg = document.querySelector('.setup-clock').getBoundingClientRect();
+      const h1 = document.querySelector('.setup-hero h1');
+      const r = document.createRange(); r.selectNodeContents(h1);
+      const t = r.getBoundingClientRect();
+      return { clock: svg.width, titleRight: t.right, clockLeft: svg.left, clockRight: svg.right, lines: Math.round(h1.getBoundingClientRect().height / parseFloat(getComputedStyle(h1).lineHeight)), scrollW: document.documentElement.scrollWidth };
+    });
+    expect(m.clock, `${w}px clock width`).toBeGreaterThanOrEqual(minClock);
+    expect(m.lines, `${w}px title lines`).toBe(1);
+    expect(m.titleRight, `${w}px title clear of clock`).toBeLessThanOrEqual(m.clockLeft - 4);
+    expect(m.clockRight, `${w}px clock inside page`).toBeLessThanOrEqual(w);
+    expect(m.scrollW, `${w}px no sideways scroll`).toBeLessThanOrEqual(w);
+  }
+});
