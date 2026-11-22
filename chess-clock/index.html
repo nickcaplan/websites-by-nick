@@ -339,6 +339,7 @@ html[data-style="players"] .player::after {
    Extend the painted recess, not the content, to keep the full block inside. */
 @media(min-width:600px){html[data-style="players"] .player::after {inset:12px 18px 12px}}
 html[data-style="players"] .player > * {z-index:1}
+html[data-style="players"] .player.winner::after,
 html[data-style="players"] .player.active::after,
 html[data-theme="light"][data-style="players"] .player::after {background-color:#bdc99f}
 html[data-style="players"] .player.active.low::after {background-color:var(--low-bg,#c04b28)}
