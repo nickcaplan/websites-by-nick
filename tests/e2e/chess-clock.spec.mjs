@@ -1046,3 +1046,16 @@ test('setup compact header packs copy beside the full-size clock without overlap
     }
   }
 });
+
+test('compact header lifts Play about 30px at 390 and never drops it at 320',async({page,baseURL})=>{
+ // Baseline main at 1bcd3df, same viewport/text: Play y=176 at 390,
+ // y=156.03 at 320. The illustration remains 32.5vw in both layouts.
+ for(const [width,baseline] of [[320,156.03],[390,176]]){
+  await page.setViewportSize({width,height:844});await fresh(page,baseURL);
+  const play=await page.locator('#start-btn').boundingBox(),clock=await page.locator('.setup-clock').boundingBox();
+  expect(play.height).toBe(64);expect(clock.width).toBeCloseTo(width*.325,1);
+  const lift=baseline-play.y;
+  expect(lift).toBeGreaterThanOrEqual(0);
+  if(width===390){expect(lift).toBeGreaterThanOrEqual(28);expect(lift).toBeLessThanOrEqual(33)}
+ }
+});
