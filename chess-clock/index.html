@@ -94,13 +94,13 @@
   .setup h1 { font-size: clamp(2rem, 7vw, 2.8rem); font-weight: 800; letter-spacing: -0.01em; }
   .setup .lead { color: var(--ink-dim); font-size: 1.05rem; margin: 0; }
   .setup-hero { display: grid; grid-template-columns: minmax(0, 1fr) var(--clock-w); align-items: center; gap: 10px; --clock-w: min(32.5vw, 170px); }
-  /* The clock picture is taller than the headings, so it spans the kicker and title rows
-     on the right while the headings pack together on the left; the tagline sits below,
-     full width. The headings never spread to fill the picture's height. */
+  /* Pack the full-size illustration beside all header copy. The subtitle can
+     wrap on phones instead of adding another full-width row below the clock. */
   .setup-kicker { grid-column: 1; grid-row: 1; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-dim); }
   .setup-hero h1 { grid-column: 1; grid-row: 2; }
-  .setup-hero .lead { grid-column: 1 / -1; grid-row: 3; }
-  .setup-clock { grid-column: 2; grid-row: 1 / 3; align-self: center; }
+  .setup-hero .lead { grid-column: 1; grid-row: 3; }
+  
+  .setup-clock { grid-column: 2; grid-row: 1 / 4; align-self: center; }
   .setup h1 { font-size: clamp(1.8rem, 9.4vw, 3rem); line-height: 1.08; letter-spacing: -0.035em; }
   .setup-clock { display: block; width: 100%; height: auto; overflow: visible; }
   .clock-case { fill: var(--accent); stroke: #233f31; stroke-width: 4; }
@@ -113,6 +113,11 @@
   .tile[aria-pressed="true"]::after { visibility: visible; }
   /* Let real enlarged text reflow rather than shrink it to keep the illustration alongside. */
   @media (max-width: 360px) { .setup-hero { gap: 8px; } }
+  @media (max-width: 499px) {
+    .setup { padding-top: 20px; }
+    .setup-hero { row-gap: 5px; margin-bottom: 4px; }
+    .setup-hero .lead span { display: block; }
+  }
 
 
   .setup-section { display: flex; flex-direction: column; gap: 12px; }
@@ -417,7 +422,7 @@ html[data-style="players"] .player.tap-depth::before {animation:lcd-press 240ms 
   <header class="setup-hero">
     <p class="setup-kicker">A little time to play</p>
     <h1>Play chess</h1>
-    <p class="lead">Two timers. One tap per move.</p>
+    <p class="lead"><span>Two timers.</span> <span>One tap per move.</span></p>
     <svg class="setup-clock" viewBox="0 0 180 142" aria-hidden="true" focusable="false">
       <ellipse cx="90" cy="133" rx="84" ry="7" fill="#233f31"/>
       <rect class="clock-plunger" x="24" y="4" width="44" height="16" rx="7" fill="#dac698"/>
