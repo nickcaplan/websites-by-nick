@@ -1,34 +1,35 @@
 /**
- * Netlify ignore command (configured in netlify.toml). Exit 1 builds, exit 0
- * skips: https://docs.netlify.com/build/configure-builds/ignore-builds/
- *
- * Pull request deploy previews are opt in: they build only when the PR
- * carries the `preview` label. Add the label, then push (an empty commit is
- * enough) to build a preview. Anything that cannot be checked (no PR
- * context, GitHub API unavailable) builds as before, so production and
- * branch behaviour is unchanged.
+ * Netlify ignore command: exit 1 builds, exit 0 skips.
+ * Build only a verified PR carrying the preview label. Missing context or a
+ * failed label check skips the build, even if that PR was actually labelled.
+ * Production hosting is Cloudflare Pages, unaffected by this Netlify gate.
  */
-const repo = 'nickcaplan/websites-by-nick';
-const { PULL_REQUEST, REVIEW_ID } = process.env;
+import { pathToFileURL } from 'node:url';
 
-if (PULL_REQUEST === 'true' && REVIEW_ID) {
+export async function shouldBuild(env = process.env, request = fetch, log = console.log) {
+  const { PULL_REQUEST, REVIEW_ID } = env;
+  if (PULL_REQUEST !== 'true' || !/^[1-9]\d*$/.test(REVIEW_ID || '')) {
+    log('No valid PR context: skipping Netlify build.');
+    return false;
+  }
   try {
-    const res = await fetch(`https://api.github.com/repos/${repo}/pulls/${REVIEW_ID}`, {
+    const res = await request(`https://api.github.com/repos/nickcaplan/websites-by-nick/pulls/${REVIEW_ID}`, {
       headers: { Accept: 'application/vnd.github+json', 'User-Agent': 'netlify-ignore' },
     });
-    if (res.ok) {
-      const pr = await res.json();
-      const labels = (pr.labels || []).map((label) => label.name);
-      if (!labels.includes('preview')) {
-        console.log(`PR #${REVIEW_ID} has no "preview" label: skipping this deploy preview. Add the label and push to build one.`);
-        process.exit(0);
-      }
-      console.log(`PR #${REVIEW_ID} is labelled "preview": building this deploy preview.`);
-    } else {
-      console.log(`Could not check PR labels (GitHub API HTTP ${res.status}); building on Netlify.`);
+    if (!res.ok) {
+      log(`Could not verify PR labels (GitHub API HTTP ${res.status}): skipping Netlify build.`);
+      return false;
     }
-  } catch (error) {
-    console.log(`Could not check PR labels (${error.message}); building on Netlify.`);
+    const pr = await res.json();
+    const allowed = Array.isArray(pr?.labels) && pr.labels.some(label => label?.name === 'preview');
+    log(allowed ? 'Verified preview label: building Netlify preview.' : 'No preview label: skipping Netlify build.');
+    return allowed;
+  } catch {
+    log('Could not verify PR labels: skipping Netlify build.');
+    return false;
   }
 }
-process.exit(1);
+
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  process.exit((await shouldBuild()) ? 1 : 0);
+}
