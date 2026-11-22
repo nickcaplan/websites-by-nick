@@ -40,30 +40,36 @@ test('full game flow: start, first tap, turns, increment, pause, confirmed reset
   await expect(page.locator('#clock-view')).toBeVisible();
   expect((await page.evaluate(() => chessClock.getState())).phase).toBe('ready');
 
-  // First tap on a side starts the OTHER player's clock.
-  await page.locator('#p1').dispatchEvent('pointerdown');
+  // Tapping Black before the game starts does nothing.
+  await page.locator('#p2').dispatchEvent('pointerdown');
+  expect((await page.evaluate(() => chessClock.getState())).phase).toBe('ready');
+
+  // The Start button starts White's clock at once.
+  await expect(page.locator('#pause-btn')).toHaveAttribute('aria-label', 'Start game');
+  await page.locator('#pause-btn').click();
   let state = await page.evaluate(() => chessClock.getState());
   expect(state.phase).toBe('running');
-  expect(state.active).toBe('p2');
-  const before = state.remaining.p2;
+  expect(state.active).toBe('p1');
+  const before = state.remaining.p1;
   await page.waitForTimeout(1100);
   state = await page.evaluate(() => chessClock.getState());
-  expect(state.remaining.p2).toBeLessThan(before);
-  expect(state.remaining.p1).toBe(3 * 60000);
+  expect(state.remaining.p1).toBeLessThan(before);
+  expect(state.remaining.p2).toBe(3 * 60000);
+  await expect(page.locator('#pause-btn')).toHaveAttribute('aria-label', 'Pause');
 
   // Active player taps: their turn ends and they gain the 2s increment.
-  await page.evaluate(() => chessClock.setRemainingMs('p2', 60000));
-  await page.locator('#p2').dispatchEvent('pointerdown');
+  await page.evaluate(() => chessClock.setRemainingMs('p1', 60000));
+  await page.locator('#p1').dispatchEvent('pointerdown');
   state = await page.evaluate(() => chessClock.getState());
-  expect(state.active).toBe('p1');
-  expect(state.moves.p2).toBe(1);
-  expect(state.remaining.p2).toBeGreaterThanOrEqual(61000);
-  expect(state.remaining.p2).toBeLessThanOrEqual(63000);
+  expect(state.active).toBe('p2');
+  expect(state.moves.p1).toBe(1);
+  expect(state.remaining.p1).toBeGreaterThanOrEqual(61000);
+  expect(state.remaining.p1).toBeLessThanOrEqual(63000);
 
   // Tapping the waiting side does nothing.
-  await page.locator('#p2').dispatchEvent('pointerdown');
+  await page.locator('#p1').dispatchEvent('pointerdown');
   state = await page.evaluate(() => chessClock.getState());
-  expect(state.active).toBe('p1');
+  expect(state.active).toBe('p2');
 
   // Pause, then reset requires a confirmation tap (reset lives in the sheet).
   await page.locator('#pause-btn').click();
@@ -84,23 +90,22 @@ test('10 min + 3 s control: first completed move gives the mover exactly +3s', a
   await page.locator('#time-chips [data-minutes="10"]').click();
   await page.locator('#inc-chips [data-inc="3"]').click();
   await page.locator('#start-btn').click();
-  // First tap starts the other player's clock, as Black starts White's.
-  await page.locator('#p1').dispatchEvent('pointerdown');
-  // Player 2 completes their first move: exactly +3s, not more.
+  // Start game runs White's clock; White completes the first move: exactly +3s, not more.
+  await page.locator('#pause-btn').click();
   const state = await page.evaluate(() => {
-    chessClock.setRemainingMs('p2', 600000);
-    chessClock.press('p2');
+    chessClock.setRemainingMs('p1', 600000);
+    chessClock.press('p1');
     return chessClock.getState();
   });
-  expect(state.moves.p2).toBe(1);
-  expect(state.remaining.p2).toBe(603000);
+  expect(state.moves.p1).toBe(1);
+  expect(state.remaining.p1).toBe(603000);
   await expect(page.locator('#bar-status')).toHaveText('10 min + 3 s');
 });
 
 test('reset works from the settings sheet, behind a confirmation tap', async ({ page, baseURL }) => {
   await fresh(page, baseURL);
   await page.locator('#start-btn').click();
-  await page.locator('#p1').dispatchEvent('pointerdown');
+  await page.locator('#pause-btn').click();
   await page.locator('#settings-btn').click();
   await expect(page.locator('#sheet-reset')).toHaveAttribute('aria-disabled', 'false');
   await page.locator('#sheet-reset').click();
@@ -110,21 +115,26 @@ test('reset works from the settings sheet, behind a confirmation tap', async ({ 
   const state = await page.evaluate(() => chessClock.getState());
   expect(state.phase).toBe('ready');
   expect(state.remaining.p1).toBe(10 * 60000);
+  // The sheet closes so players can start; the clock is usable, not inert.
+  await expect(page.locator('#settings-sheet')).toBeHidden();
+  expect(await page.evaluate(() => document.getElementById('clock-view').inert)).toBe(false);
+  await page.locator('#pause-btn').click();
+  expect((await page.evaluate(() => chessClock.getState())).phase).toBe('running');
 });
 
 test('flag fall ends the game and names the winner', async ({ page, baseURL }) => {
   await fresh(page, baseURL);
   await page.locator('#start-btn').click();
-  await page.locator('#p1').dispatchEvent('pointerdown');
-  await page.evaluate(() => chessClock.setRemainingMs('p2', 400));
+  await page.locator('#pause-btn').click();
+  await page.evaluate(() => chessClock.setRemainingMs('p1', 400));
   await expect(page.locator('#bar-status')).toHaveText('Game over', { timeout: 3000 });
-  await expect(page.locator('#p1-result')).toHaveText('Time! Player 1 wins');
+  await expect(page.locator('#p2-result')).toHaveText('Time! Black wins');
   const state = await page.evaluate(() => chessClock.getState());
   expect(state.phase).toBe('ended');
-  expect(state.winner).toBe('p1');
+  expect(state.winner).toBe('p2');
   // Tenths of a second show in the last 20 seconds.
-  await page.evaluate(() => { chessClock.start(); chessClock.press('p1'); chessClock.setRemainingMs('p2', 15400); });
-  await expect(page.locator('#p2-time')).toHaveText('0:15.4');
+  await page.evaluate(() => { chessClock.start(); chessClock.begin(); chessClock.setRemainingMs('p1', 15400); });
+  await expect(page.locator('#p1-time')).toHaveText('0:15.4');
 });
 
 test('colour, theme and sound choices persist locally', async ({ page, baseURL }) => {
@@ -145,7 +155,7 @@ test('colour, theme and sound choices persist locally', async ({ page, baseURL }
 test('settings sheet pauses the clock, sound and move counter toggle from the bar', async ({ page, baseURL }) => {
   await fresh(page, baseURL);
   await page.locator('#start-btn').click();
-  await page.locator('#p1').dispatchEvent('pointerdown');
+  await page.locator('#pause-btn').click();
   await page.locator('#settings-btn').click();
   expect((await page.evaluate(() => chessClock.getState())).phase).toBe('paused');
   await expect(page.locator('#settings-sheet')).toBeVisible();
@@ -163,7 +173,7 @@ test('settings sheet pauses the clock, sound and move counter toggle from the ba
   expect(state.phase).toBe('paused'); // the toggles do not resume the clock
   await page.locator('#pause-btn').click();
   expect((await page.evaluate(() => chessClock.getState())).phase).toBe('running');
-  await expect(page.locator('#p1 .pname')).toContainText('move');
+  await expect(page.locator('#p1-mv')).toContainText('move');
   // Both choices persist across a reload.
   await page.goto(baseURL + '/chess-clock/');
   state = await page.evaluate(() => chessClock.getState());
@@ -177,9 +187,10 @@ test('keyboard: space presses the active side', async ({ page, baseURL }) => {
   await page.locator('body').press(' ');
   let state = await page.evaluate(() => chessClock.getState());
   expect(state.phase).toBe('running');
+  expect(state.active).toBe('p1');
   await page.locator('body').press(' ');
   state = await page.evaluate(() => chessClock.getState());
-  expect(state.active).toBe('p1');
+  expect(state.active).toBe('p2');
 });
 
 test('no sideways scrolling at 320px, including 200% text', async ({ page, baseURL }) => {
@@ -226,20 +237,32 @@ test('no sideways scrolling at 320px, including 200% text', async ({ page, baseU
   expect(await page.evaluate(fitsViewport), 'settings sheet at 320px 200% text').toEqual([]);
 });
 
-test('restores a paused game after reload', async ({ page, baseURL }) => {
+test('a reload starts a fresh session on the setup screen, keeping settings', async ({ page, baseURL }) => {
   await fresh(page, baseURL);
+  await page.evaluate(() => localStorage.setItem('chess-clock-settings', JSON.stringify({ theme: 'light', accent: 'peach', sound: 'off', moves: 'on', minutes: 5, inc: 0, p1name: 'Ann', p2name: 'Bo' })));
+  await page.goto(baseURL + '/chess-clock/');
   await page.locator('#start-btn').click();
-  await page.locator('#p1').dispatchEvent('pointerdown');
+  await page.locator('#pause-btn').click();
   await page.evaluate(() => chessClock.pause());
   await page.goto(baseURL + '/chess-clock/');
   const state = await page.evaluate(() => chessClock.getState());
-  expect(state.phase).toBe('paused');
-  await expect(page.locator('#clock-view')).toBeVisible();
+  expect(state.phase).toBe('setup');
+  expect(state.moves).toEqual({ p1: 0, p2: 0 });
+  expect(state.settings).toEqual({ theme: 'light', accent: 'peach', sound: 'off', moves: 'on', minutes: 5, inc: 0, p1name: 'Ann', p2name: 'Bo' });
+  await expect(page.locator('#start-btn')).toBeVisible();
+  await expect(page.locator('#clock-view')).toBeHidden();
+  expect(await page.evaluate(() => localStorage.getItem('chess-clock-game'))).toBeNull();
+  // A game saved by an earlier version is discarded too.
+  await page.evaluate(() => localStorage.setItem('chess-clock-game', JSON.stringify({ phase: 'paused', active: 'p1', remaining: { p1: 1000, p2: 1000 }, moves: { p1: 1, p2: 1 }, minutes: 10, inc: 3, savedAt: Date.now() })));
+  await page.goto(baseURL + '/chess-clock/');
+  expect((await page.evaluate(() => chessClock.getState())).phase).toBe('setup');
+  expect(await page.evaluate(() => localStorage.getItem('chess-clock-game'))).toBeNull();
 });
 
 test('players style: the whole half is tappable, including edges and corners', async ({ page, baseURL }) => {
   await fresh(page, baseURL);
   await page.locator('#start-btn').click();
+  await page.evaluate(() => chessClock.begin());
   const box = await page.locator('#p1').boundingBox();
   const taps = [
     [box.x + 4, box.y + box.height - 4], // bottom-left outer corner
@@ -250,6 +273,7 @@ test('players style: the whole half is tappable, including edges and corners', a
     await page.mouse.click(x, y);
     expect((await page.evaluate(() => chessClock.getState())).active).toBe('p2');
     await page.evaluate(() => chessClock.press('p2'));
+    expect((await page.evaluate(() => chessClock.getState())).active).toBe('p1');
   }
 });
 
@@ -292,7 +316,7 @@ test('sheet buttons keep their text inside at 320px with 200% text', async ({ pa
   for (const mode of ['root', 'element']) {
     await page.setViewportSize({ width: 320, height: 700 });
     await page.goto(baseURL + '/chess-clock/');
-    await page.evaluate(() => { chessClock.start(); chessClock.press('p1'); });
+    await page.evaluate(() => { chessClock.start(); chessClock.begin(); });
     await page.locator('#settings-btn').click();
     if (mode === 'root') {
       await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
@@ -337,21 +361,21 @@ test('reloads offline once visited', async ({ page, context, baseURL, browserNam
   await context.setOffline(false);
 });
 
-test('player names: prefilled, editable, shown on the clock and persisted', async ({ page, baseURL }) => {
+test('player names: optional, editable, shown on the clock and persisted', async ({ page, baseURL }) => {
   await fresh(page, baseURL);
-  await expect(page.locator('#name-p1')).toHaveValue('Player 1');
-  await expect(page.locator('#name-p2')).toHaveValue('Player 2');
+  await expect(page.locator('#name-p1')).toHaveValue('');
+  await expect(page.locator('#name-p2')).toHaveValue('');
   await page.locator('#name-p1').fill('Luca');
   await page.locator('#name-p2').fill('Dad');
-  await expect(page.locator('#play-summary')).toContainText('Luca (bottom) vs Dad (top)');
+  await expect(page.locator('#play-summary')).toContainText('Luca (White, bottom) vs Dad (Black, top)');
   await page.locator('#start-btn').click();
   await expect(page.locator('#p1 .pname')).toHaveText('Luca');
   await expect(page.locator('#p2 .pname')).toHaveText('Dad');
   await expect(page.locator('#p1')).toHaveAttribute('aria-label', /Luca/);
-  // Empty falls back to the default.
+  // Empty falls back to the colour; the old default names are migrated away.
   await page.evaluate(() => { chessClock.changeTime(); });
   await page.locator('#name-p1').fill('');
-  await expect(page.locator('#play-summary')).toContainText('Player 1 (bottom)');
+  await expect(page.locator('#play-summary')).toContainText('White (bottom) vs Dad (Black, top)');
   await page.locator('#name-p1').fill('Luca');
   // Persisted across reloads.
   await page.goto(baseURL + '/chess-clock/');
@@ -365,6 +389,7 @@ test('game-over text names the winner', async ({ page, baseURL }) => {
   await page.locator('#start-btn').click();
   await page.evaluate(() => {
     chessClock.start();
+    chessClock.begin();
     chessClock.press('p1');
     chessClock.setRemainingMs('p2', 100);
   });
@@ -375,7 +400,7 @@ test('game-over text names the winner', async ({ page, baseURL }) => {
 test('settings sheet: resume actually resumes, close leaves the clock paused', async ({ page, baseURL }) => {
   await fresh(page, baseURL);
   await page.locator('#start-btn').click();
-  await page.locator('#p1').dispatchEvent('pointerdown');
+  await page.locator('#pause-btn').click();
   await page.locator('#settings-btn').click();
   await expect(page.locator('#settings-title')).toHaveText('Game paused');
   await page.locator('#sheet-close').click();
@@ -390,11 +415,11 @@ test('settings sheet: resume actually resumes, close leaves the clock paused', a
 test('change time asks before resetting the clock', async ({ page, baseURL }) => {
   await fresh(page, baseURL);
   await page.locator('#start-btn').click();
-  await page.locator('#p1').dispatchEvent('pointerdown');
+  await page.locator('#pause-btn').click();
   await page.locator('#settings-btn').click();
   await page.locator('#sheet-change-time').click();
   // First tap only arms it: still in the game, confirmation showing.
-  await expect(page.locator('#sheet-change-time')).toContainText('Tap again to reset');
+  await expect(page.locator('#sheet-change-time')).toContainText('New game?');
   expect((await page.evaluate(() => chessClock.getState())).phase).toBe('paused');
   await page.locator('#sheet-change-time').click();
   await expect(page.locator('#setup-view')).toBeVisible();
@@ -407,7 +432,7 @@ test('armed new-game button stays inside the visible viewport at small widths wi
   for (const width of [320, 390]) {
     await page.setViewportSize({ width, height: 700 });
     await page.goto(baseURL + '/chess-clock/');
-    await page.evaluate(() => { chessClock.start(); chessClock.press('p1'); });
+    await page.evaluate(() => { chessClock.start(); chessClock.begin(); });
     await page.locator('#settings-btn').click();
     await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
     await page.locator('#sheet-change-time').click();
@@ -440,24 +465,24 @@ test('no 15 minute option anywhere', async ({ page, baseURL }) => {
 test('tapping either side while paused resumes the game', async ({ page, baseURL }) => {
   await fresh(page, baseURL);
   await page.locator('#start-btn').click();
-  await page.locator('#p1').dispatchEvent('pointerdown');
+  await page.locator('#pause-btn').click();
   await page.locator('#pause-btn').click();
   expect((await page.evaluate(() => chessClock.getState())).phase).toBe('paused');
   await page.locator('#p2').dispatchEvent('pointerdown');
   let state = await page.evaluate(() => chessClock.getState());
   expect(state.phase).toBe('running');
-  expect(state.active).toBe('p2'); // the side to move keeps ticking
+  expect(state.active).toBe('p1'); // the side to move keeps ticking
   await page.locator('#pause-btn').click();
   await page.locator('#p1').dispatchEvent('pointerdown');
   state = await page.evaluate(() => chessClock.getState());
   expect(state.phase).toBe('running');
-  expect(state.active).toBe('p2');
+  expect(state.active).toBe('p1');
 });
 
 test('sound: audio context unlocks on the first tap', async ({ page, baseURL }) => {
   await fresh(page, baseURL);
   await page.locator('#start-btn').click();
-  await page.locator('#p1').dispatchEvent('pointerdown');
+  await page.locator('#pause-btn').click();
   const audio = (await page.evaluate(() => chessClock.getState())).audio;
   expect(['running', 'suspended']).toContain(audio); // headless may keep it suspended; the unlock path must not throw
   await page.waitForTimeout(300);
@@ -574,7 +599,7 @@ test('bar keeps every label inside its button at 320px and 390px with 200% text'
   for (const w of [320, 390]) {
     await page.setViewportSize({ width: w, height: 844 });
     await fresh(page, baseURL);
-    // Start via the page API: a restored game also shows the clock view.
+    // Start via the page API: start without the setup screen.
     await page.evaluate(() => { chessClock.start(); document.documentElement.style.fontSize = '200%'; });
     const spills = () => page.evaluate(() => {
       const bad = [];
@@ -613,7 +638,7 @@ test('sheet rows share one aligned, equal-width control column at 320px, 390px a
     for (const zoom of [1, 2]) {
       await page.setViewportSize({ width: w, height: 844 });
       await fresh(page, baseURL);
-      // Start via the page API: a restored game also shows the clock view.
+      // Start via the page API: start without the setup screen.
       await page.evaluate((z) => {
         chessClock.start();
         document.documentElement.style.fontSize = z === 2 ? '200%' : '';
@@ -706,7 +731,7 @@ test('sound cues emit a real non-silent signal, and silence when sound is off', 
   };
   // A move clicks: real signal around 1200 Hz for ~0.07s.
   let before = (await signals()).length;
-  await page.locator('#p1').dispatchEvent('pointerdown');
+  await page.locator('#pause-btn').click(); // Start game
   let sigs = (await signals()).slice(before);
   expect(sigs.length, 'move made no sound').toBeGreaterThanOrEqual(1);
   for (const s of sigs) sane(s, 'move cue');
@@ -739,12 +764,12 @@ test('sound cues emit a real non-silent signal, and silence when sound is off', 
 test('ended game shows the outcome on both halves and a Play again action', async ({ page, baseURL }) => {
   await fresh(page, baseURL);
   await page.locator('#start-btn').click();
-  await page.locator('#p1').dispatchEvent('pointerdown');
-  await page.evaluate(() => chessClock.setRemainingMs('p2', 150));
-  await expect(page.locator('#p1-result')).toBeVisible();
-  await expect(page.locator('#p1-result')).toContainText('wins');
+  await page.locator('#pause-btn').click();
+  await page.evaluate(() => chessClock.setRemainingMs('p1', 150));
   await expect(page.locator('#p2-result')).toBeVisible();
-  await expect(page.locator('#p2-result')).toContainText('flag fell');
+  await expect(page.locator('#p2-result')).toContainText('wins');
+  await expect(page.locator('#p1-result')).toBeVisible();
+  await expect(page.locator('#p1-result')).toContainText('flag fell');
   await expect(page.locator('#again-btn')).toBeVisible();
   await expect(page.locator('#bar-change')).toBeVisible();
   // Ended-bar buttons keep their text inside their bounds at 320px with 200% text.
@@ -770,4 +795,254 @@ test('ended game shows the outcome on both halves and a Play again action', asyn
   const state = await page.evaluate(() => chessClock.getState());
   expect(state.phase).toBe('ready');
   expect(state.remaining.p1).toBe(10 * 60000);
+});
+
+test('settings sheet buttons keep the same size and position when confirming', async ({ page, baseURL }) => {
+  for (const width of [320, 390, 800]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto(baseURL + '/chess-clock/');
+    await page.evaluate(() => { localStorage.clear(); chessClock.start(); chessClock.begin(); });
+    await page.locator('#settings-btn').click();
+    const sel = '#sheet-reset, #sheet-change-time, #sheet-close, #sheet-resume, .sheet .chips .chip';
+    const boxes = () => page.evaluate((s) => [...document.querySelectorAll(s)].map((b) => {
+      const r = b.getBoundingClientRect();
+      return [b.id || b.className, Math.round(r.x), Math.round(r.y), Math.round(r.width), Math.round(r.height)];
+    }), sel);
+    await page.waitForTimeout(500); // let the sheet finish sliding in
+    const before = await boxes();
+    await page.locator('#sheet-reset').click();
+    await expect(page.locator('#sheet-reset')).toHaveClass(/confirm/);
+    expect(await boxes(), `${width}: reset armed`).toEqual(before);
+    await page.locator('#sheet-change-time').click();
+    await expect(page.locator('#sheet-change-time')).toHaveClass(/confirm/);
+    expect(await boxes(), `${width}: both armed`).toEqual(before);
+  }
+});
+
+test('each side shows a White or Black pawn badge; badge, name and digits never move or wrap', async ({ page, baseURL }) => {
+  test.setTimeout(120000); // 32 combinations
+  for (const [width, big, moves, flip, height] of [740, 900].flatMap((hh) => [false, true].flatMap((f) => [[320, false, false], [390, false, false], [320, true, false], [390, true, false], [320, false, true], [390, false, true], [320, true, true], [390, true, true]].map((c) => [...c, f, hh])))) {
+    await page.setViewportSize({ width, height });
+    await page.goto(baseURL + '/chess-clock/');
+    await page.evaluate(() => { localStorage.clear(); });
+    await page.goto(baseURL + '/chess-clock/');
+    if (big) await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
+    // Longest allowed names (24 characters): the ended message and name must not change the layout.
+    await page.evaluate((flipNames) => {
+      for (const [id, v] of (flipNames ? [['name-p1', 'Al Be Ci Do Ev Fi Gu Ha Iv'.slice(0, 24)], ['name-p2', 'Jo Ka Le Mo Ny Os Pa Qu Ri'.slice(0, 24)]] : [['name-p1', 'Christopher Montgomerys'], ['name-p2', 'Bartholomew Featherstn']])) {
+        const i = document.getElementById(id); i.value = v; i.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+    }, flip);
+    await page.evaluate(() => chessClock.start());
+    if (moves) await page.locator('#moves-toggle').click(); // move counter on: the names gain " · N moves" while running
+    await expect(page.locator('#p1 .side')).toHaveText('White');
+    await expect(page.locator('#p2 .side')).toHaveText('Black');
+    await expect(page.locator('#p1 .side svg.pawn-white use')).toHaveCount(1);
+    await expect(page.locator('#p2 .side svg.pawn-black use')).toHaveCount(1);
+    // Vertical position and horizontal centre of the badge, name and digits (the digits change
+    // width as the string changes, so their centre is compared, not their left edge).
+    const measure = () => page.evaluate(() => ['p1', 'p2'].map((id) => {
+      const card = document.getElementById(id).getBoundingClientRect();
+      const out = { card: Math.round(card.height) };
+      for (const q of ['.side', '.pname', '.time']) {
+        const r = document.querySelector('#' + id + ' ' + q).getBoundingClientRect();
+        out[q] = [Math.round(r.top), Math.round(r.left + r.width / 2)]; // whole px: must be identical
+        out[q + 'inside'] = r.left >= card.left && r.right <= card.right && r.top >= card.top && r.bottom <= card.bottom;
+      }
+      out.slotHeight = Math.round(document.querySelector('#' + id + ' .slot').getBoundingClientRect().height * 10) / 10; // the reserved slot never grows
+      const side = document.querySelector('#' + id + ' .side').getBoundingClientRect();
+      out.oneLine = side.height < 40 * (parseFloat(getComputedStyle(document.documentElement).fontSize) / 16);
+      return out;
+    }));
+    await page.waitForTimeout(500); // let the view-in transition and font-fit settle
+    const ready = await measure();
+    for (const [i, id] of ['p1', 'p2'].entries()) {
+      void i;
+      expect(await page.evaluate((id) => document.querySelector('#' + id + ' .pname').textContent, id), 'no space before an ellipsis').not.toMatch(/\s\u2026/);
+      expect(await page.evaluate((id) => { const card = document.getElementById(id).getBoundingClientRect(); const r = document.querySelector('#' + id + ' .pname').getBoundingClientRect(); return r.left >= card.left && r.right <= card.right; }, id), `${width}x${height}${big ? ' 200%' : ''}: long name stays inside its card`).toBe(true);
+    }
+    for (const m of ready) { expect(m['.sideinside'] && m.oneLine, `${width}x${height}${big ? ' 200%' : ''}${moves ? ' counter on' : ''}${flip ? ' other side loses' : ''}: badge inside card on one line`).toBe(true); }
+    const states = {};
+    await page.evaluate(() => chessClock.begin()); states.running = await measure();
+    if (moves) {
+      const counts = await page.evaluate(() => ['p1', 'p2'].map((id) => {
+        const box = document.querySelector('#' + id + ' .pname').getBoundingClientRect();
+        const c = document.getElementById(id + '-mv');
+        const r = c.getBoundingClientRect();
+        const card = document.getElementById(id).getBoundingClientRect();
+        return /^\d+ moves?$/.test(c.textContent) && r.left >= card.left - 0.5 && r.right <= card.right + 0.5 && r.bottom <= card.bottom + 0.5 && r.top >= card.top - 0.5 && c.scrollWidth <= c.clientWidth + 1;
+      }));
+      const nameFit = await page.evaluate(() => ['p1', 'p2'].map((id) => { const card = document.getElementById(id).getBoundingClientRect(); const r = document.querySelector('#' + id + ' .pname').getBoundingClientRect(); return r.left >= card.left && r.right <= card.right; }));
+      expect(nameFit, `${width}x${height}${big ? ' 200%' : ''}: name plus move count stays inside the card`).toEqual([true, true]);
+      expect(counts, `${width}x${height}${big ? ' 200%' : ''}: move count fully visible beside long names`).toEqual([true, true]);
+    }
+    await page.evaluate(() => chessClock.press('p1')); states.runningOther = await measure();
+    if (flip) { await page.evaluate(() => chessClock.press(chessClock.getState().active)); }
+    await page.evaluate(() => chessClock.pause()); states.paused = await measure();
+    await page.evaluate(() => { chessClock.resume(); chessClock.setRemainingMs(chessClock.getState().active, 50); });
+    await expect.poll(async () => (await page.evaluate(() => chessClock.getState())).phase).toBe('ended');
+    states.ended = await measure();
+    // The outcome words are fully inside their card whatever the name length, and the name is the part that is cut.
+    const ended = await page.evaluate(() => ['p1', 'p2'].map((id) => {
+      const card = document.getElementById(id).getBoundingClientRect();
+      const spans = [...document.querySelectorAll('#' + id + '-result > span')];
+      const inside = spans.every((e) => { const r = e.getBoundingClientRect(); return r.left >= card.left - 0.5 && r.right <= card.right + 0.5 && r.bottom <= card.bottom + 0.5 && r.top >= card.top - 0.5; });
+      const last = spans[spans.length - 1];
+      return { inside, text: document.getElementById(id + '-result').textContent, lastFull: last.scrollWidth <= last.clientWidth + 1 };
+    }));
+    for (const e of ended) {
+      expect(e.text, 'no space before an ellipsis').not.toMatch(/\s\u2026/);
+      expect(e.inside && e.lastFull, `${width}x${height}${big ? ' 200%' : ''}${moves ? ' counter on' : ''}: ended outcome words fully visible`).toBe(true);
+      expect(e.text).toMatch(/^Time! .+(wins|flag fell)$/);
+    }
+    for (const [name, got] of Object.entries(states)) {
+      expect(got, `${width}x${height}${big ? ' 200%' : ''}${moves ? ' counter on' : ''}${flip ? ' other side loses' : ''}: badge, name and digits unchanged in ${name}`).toEqual(ready);
+    }
+  }
+});
+
+test('the reserved slot follows the ended result text size, however the size is changed', async ({ page, baseURL }) => {
+  await page.setViewportSize({ width: 320, height: 740 });
+  await page.goto(baseURL + '/chess-clock/');
+  await page.evaluate(() => { localStorage.clear(); });
+  await page.goto(baseURL + '/chess-clock/');
+  await page.evaluate(() => {
+    for (const [id, v] of [['name-p1', 'Al Be Ci Do Ev Fi Gu Ha Iv'], ['name-p2', 'Jo Ka Le Mo Ny Os Pa Qu Ri']]) {
+      const i = document.getElementById(id); i.value = v; i.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+    chessClock.start();
+    // Double the result's own computed size directly (not through the root text size).
+    for (const r of document.querySelectorAll('.result')) r.style.fontSize = (parseFloat(getComputedStyle(r).fontSize) * 2) + 'px';
+  });
+  await page.waitForTimeout(400);
+  const slots = () => page.evaluate(() => ['p1', 'p2'].map((id) => Math.round(document.querySelector('#' + id + ' .slot').getBoundingClientRect().height * 10) / 10));
+  const ready = await slots();
+  await page.evaluate(() => { chessClock.begin(); chessClock.press('p1'); chessClock.setRemainingMs(chessClock.getState().active, 50); });
+  await expect.poll(async () => (await page.evaluate(() => chessClock.getState())).phase).toBe('ended');
+  await page.waitForTimeout(400);
+  expect(await slots()).toEqual(ready);
+});
+
+test('with no names typed, the clock shows only White and Black, and the old defaults are dropped', async ({ page, baseURL }) => {
+  await page.setViewportSize({ width: 320, height: 740 });
+  await page.goto(baseURL + '/chess-clock/');
+  await page.evaluate(() => { localStorage.clear(); localStorage.setItem('chess-clock-settings', JSON.stringify({ p1name: 'Player 1', p2name: 'Player 2' })); });
+  await page.goto(baseURL + '/chess-clock/');
+  await expect(page.locator('#play-summary')).toContainText('White (bottom) vs Black (top)');
+  await expect(page.locator('#name-p1')).toHaveAttribute('placeholder', 'Optional name');
+  await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; chessClock.start(); });
+  await page.locator('#moves-toggle').click();
+  await expect(page.locator('#p1 .pname')).toBeHidden();
+  await expect(page.locator('#p1')).toHaveAttribute('aria-label', /^White, /);
+  await page.waitForTimeout(400);
+  const m = () => page.evaluate(() => ['p1', 'p2'].map((id) => ['.side', '.time', '.slot'].map((q) => { const r = document.querySelector('#' + id + ' ' + q).getBoundingClientRect(); return Math.round(r.top) + '/' + Math.round(r.height); })));
+  const ready = await m();
+  await page.evaluate(() => { chessClock.begin(); chessClock.press('p1'); });
+  expect(await m()).toEqual(ready);
+  await page.evaluate(() => { chessClock.pause(); });
+  expect(await m()).toEqual(ready);
+  await page.evaluate(() => { chessClock.resume(); chessClock.setRemainingMs(chessClock.getState().active, 50); });
+  await expect.poll(async () => (await page.evaluate(() => chessClock.getState())).phase).toBe('ended');
+  await page.waitForTimeout(400);
+  expect(await m()).toEqual(ready);
+  await expect(page.locator('#p1-result')).toHaveText(/^Time! White( wins|.s flag fell)$/);
+});
+
+test('Start game button keeps its size and place through ready, running and paused', async ({ page, baseURL }) => {
+  for (const [w, big] of [[320, true], [390, false]]) {
+    await page.setViewportSize({ width: w, height: 780 });
+    await fresh(page, baseURL);
+    await page.evaluate((b) => { if (b) document.documentElement.style.fontSize = '200%'; chessClock.start(); }, big);
+    const box = () => page.locator('#pause-btn').evaluate((e) => { const r = e.getBoundingClientRect(); return [r.x, r.y, r.width, r.height].map((n) => Math.round(n * 10) / 10); });
+    // The painted shape (shadow, border, radius) must be identical in every state; only colour may change.
+    const shape = () => page.locator('#pause-btn').evaluate((e) => { const c = getComputedStyle(e); return [c.boxShadow, c.borderTopWidth, c.borderRightWidth, c.borderBottomWidth, c.borderLeftWidth, c.borderStyle, c.borderTopLeftRadius, c.borderBottomRightRadius, c.outlineStyle]; });
+    const ready = await box();
+    const readyShape = await shape();
+    expect(readyShape[0], `${w}px ready: no shadow ledge`).toBe('none');
+    await expect(page.locator('#pause-btn')).toHaveAttribute('aria-label', 'Start game');
+    await expect(page.locator('#pause-btn')).toHaveAttribute('aria-disabled', 'false');
+    await page.locator('#pause-btn').click();
+    expect((await page.evaluate(() => chessClock.getState())).active).toBe('p1');
+    expect(await box(), `${w}px running`).toEqual(ready);
+    expect(await shape(), `${w}px running shape`).toEqual(readyShape);
+    await page.locator('#pause-btn').click();
+    expect(await box(), `${w}px paused`).toEqual(ready);
+    expect(await shape(), `${w}px paused shape`).toEqual(readyShape);
+  }
+});
+
+test('tapping White before the game starts starts White\'s clock, like Start game', async ({ page, baseURL }) => {
+  await fresh(page, baseURL);
+  await page.locator('#start-btn').click();
+  let state = await page.evaluate(() => chessClock.getState());
+  expect(state.phase).toBe('ready');
+  await page.locator('#p2').dispatchEvent('pointerdown');
+  expect((await page.evaluate(() => chessClock.getState())).phase).toBe('ready');
+  await page.locator('#p1').dispatchEvent('pointerdown');
+  state = await page.evaluate(() => chessClock.getState());
+  expect(state.phase).toBe('running');
+  expect(state.active).toBe('p1');
+  expect(state.moves.p1).toBe(0);
+  // Once running, tapping White passes the turn to Black as before.
+  await page.locator('#p1').dispatchEvent('pointerdown');
+  state = await page.evaluate(() => chessClock.getState());
+  expect(state.active).toBe('p2');
+  expect(state.moves.p1).toBe(1);
+});
+
+test('setup option titles keep at least 12px clear of their buttons at 320px, 390px and 200% text', async ({ page, baseURL }) => {
+  for (const [w, big] of [[320, false], [390, false], [390, true]]) {
+    await page.setViewportSize({ width: w, height: 900 });
+    await fresh(page, baseURL);
+    if (big) await page.addStyleTag({ content: 'html { font-size: 200% }' });
+    await page.locator('#custom-time summary').click();
+    await page.locator('#more-options summary').click();
+    const gaps = await page.evaluate(() => [...document.querySelectorAll('.picker')].filter((p) => p.getClientRects().length).map((p) => {
+      const r = document.createRange(); r.selectNodeContents(p.querySelector('legend'));
+      return { label: p.querySelector('legend').textContent.trim(), gap: p.querySelector('.chip').getBoundingClientRect().top - r.getBoundingClientRect().bottom };
+    }));
+    expect(gaps.length).toBeGreaterThanOrEqual(4);
+    for (const g of gaps) expect(g.gap, `${w}px${big ? ' 200%' : ''} ${g.label}`).toBeGreaterThanOrEqual(12);
+  }
+});
+
+test('setup header clock picture is larger, and the title stays on one line, clear of it', async ({ page, baseURL }) => {
+  for (const [w, minClock] of [[320, 100], [390, 120], [700, 160]]) {
+    await page.setViewportSize({ width: w, height: 844 });
+    await fresh(page, baseURL);
+    const m = await page.evaluate(() => {
+      const svg = document.querySelector('.setup-clock').getBoundingClientRect();
+      const h1 = document.querySelector('.setup-hero h1');
+      const r = document.createRange(); r.selectNodeContents(h1);
+      const t = r.getBoundingClientRect();
+      return { clock: svg.width, titleRight: t.right, clockLeft: svg.left, clockRight: svg.right, lines: Math.round(h1.getBoundingClientRect().height / parseFloat(getComputedStyle(h1).lineHeight)), scrollW: document.documentElement.scrollWidth };
+    });
+    expect(m.clock, `${w}px clock width`).toBeGreaterThanOrEqual(minClock);
+    expect(m.lines, `${w}px title lines`).toBe(1);
+    expect(m.titleRight, `${w}px title clear of clock`).toBeLessThanOrEqual(m.clockLeft - 4);
+    expect(m.clockRight, `${w}px clock inside page`).toBeLessThanOrEqual(w);
+    expect(m.scrollW, `${w}px no sideways scroll`).toBeLessThanOrEqual(w);
+  }
+});
+
+test('setup header packs the headings: no spread, tagline on one line and clear of the clock picture', async ({ page, baseURL }) => {
+  // [width, enlarged text, max kicker->title gap, max title->tagline gap]
+  for (const [w, big, maxKickerGap, maxLeadGap] of [[320, false, 24, 28], [390, false, 34, 32], [430, false, 38, 36], [700, false, 46, 44], [390, true, null, null]]) {
+    await page.setViewportSize({ width: w, height: 844 });
+    await fresh(page, baseURL);
+    if (big) await page.addStyleTag({ content: 'html { font-size: 200% }' });
+    const m = await page.evaluate(() => {
+      const r = (s) => document.querySelector(s).getBoundingClientRect();
+      const kicker = r('.setup-kicker'), h1 = r('.setup-hero h1'), lead = r('.setup-hero .lead'), clock = r('.setup-clock');
+      return { kickerBottom: kicker.bottom, h1Top: h1.top, h1Bottom: h1.bottom, leadTop: lead.top, leadLines: (() => { const g = document.createRange(); g.selectNodeContents(document.querySelector('.setup-hero .lead')); return g.getClientRects().length; })(), clockBottom: clock.bottom, scrollW: document.documentElement.scrollWidth };
+    });
+    const tag = `${w}px${big ? ' 200%' : ''}`;
+    expect(m.clockBottom, `${tag} clock clear of tagline`).toBeLessThanOrEqual(m.leadTop + 1);
+    expect(m.scrollW, `${tag} no sideways scroll`).toBeLessThanOrEqual(w);
+    if (!big) {
+      expect(m.h1Top - m.kickerBottom, `${tag} kicker-to-title gap`).toBeLessThanOrEqual(maxKickerGap);
+      expect(m.leadTop - m.h1Bottom, `${tag} title-to-tagline gap`).toBeLessThanOrEqual(maxLeadGap);
+      expect(m.leadLines, `${tag} tagline lines`).toBe(1);
+    }
+  }
 });

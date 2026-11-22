@@ -87,22 +87,27 @@
     gap: 22px; padding: 28px 20px; max-width: 620px; margin: 0 auto; width: 100%;
   }
   .setup h1 { font-size: clamp(2rem, 7vw, 2.8rem); font-weight: 800; letter-spacing: -0.01em; }
-  .setup .lead { color: var(--ink-dim); font-size: 1.05rem; margin: -10px 0 4px; }
-  .setup-hero { display: grid; grid-template-columns: minmax(0, 1fr) 100px; align-items: center; gap: 10px; }
-  .setup-kicker { grid-column: 1 / -1; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-dim); }
-  .setup h1 { font-size: clamp(2rem, 10.25vw, 3rem); line-height: 1.08; letter-spacing: -0.035em; }
+  .setup .lead { color: var(--ink-dim); font-size: 1.05rem; margin: 0; }
+  .setup-hero { display: grid; grid-template-columns: minmax(0, 1fr) var(--clock-w); align-items: center; gap: 10px; --clock-w: min(32.5vw, 170px); }
+  /* The clock picture is taller than the headings, so it spans the kicker and title rows
+     on the right while the headings pack together on the left; the tagline sits below,
+     full width. The headings never spread to fill the picture's height. */
+  .setup-kicker { grid-column: 1; grid-row: 1; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-dim); }
+  .setup-hero h1 { grid-column: 1; grid-row: 2; }
+  .setup-hero .lead { grid-column: 1 / -1; grid-row: 3; }
+  .setup-clock { grid-column: 2; grid-row: 1 / 3; align-self: center; }
+  .setup h1 { font-size: clamp(1.8rem, 9.4vw, 3rem); line-height: 1.08; letter-spacing: -0.035em; }
   .setup-clock { display: block; width: 100%; height: auto; overflow: visible; }
   .clock-case { fill: var(--accent); stroke: #233f31; stroke-width: 4; }
   .clock-window { fill: #203e30; }
-  .clock-digits { fill: none; stroke: #f0efda; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .clock-digits { transform-box: fill-box; transform-origin: center; fill: none; stroke: #f0efda; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
   .setup .lead { font-size: clamp(0.875rem, 3.7vw, 1.05rem); }
   .start { box-shadow: 0 5px 0 #748b5f; display: flex; align-items: center; justify-content: center; gap: 16px; }
   .start svg { width: 24px; height: 24px; flex: none; }
   .tile::after { content: 'Selected'; visibility: hidden; font-size: 0.8rem; font-weight: 800; margin-top: 6px; }
   .tile[aria-pressed="true"]::after { visibility: visible; }
   /* Let real enlarged text reflow rather than shrink it to keep the illustration alongside. */
-  @media (max-width: 360px) { .setup-hero { grid-template-columns: minmax(0, 1fr) 80px; gap: 8px; } }
-  @media (min-width: 700px) { .setup-hero { grid-template-columns: minmax(0, 1fr) 120px; } }
+  @media (max-width: 360px) { .setup-hero { gap: 8px; } }
 
 
   .setup-section { display: flex; flex-direction: column; gap: 12px; }
@@ -113,6 +118,9 @@
   .picker legend, .picker .group-label, .sheet .group-label {
     font-size: 0.78rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-dim);
   }
+  /* A fieldset legend is not a flex item, so the picker gap never reached it:
+     give every legend its own space above the buttons. */
+  .picker legend { padding: 0 0 13px; }
   .chips { display: flex; flex-wrap: wrap; gap: 8px; }
   .chip {
     min-height: 48px; padding: 10px 18px; border-radius: 999px; cursor: pointer;
@@ -214,7 +222,7 @@
   /* Label column plus one aligned control column: every picker group shares
      the same left edge, width and height, and wraps as a whole below its
      label when enlarged text needs the room. */
-  .sheet .row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; font-size: 1rem; }
+  .sheet .row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 14px; font-size: 1rem; }
   .sheet .row .group-label { flex: 0 1 8em; min-width: 0; }
   .sheet .row .chips { flex: 1 1 12.5em; display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 8px; max-width: 100%; }
   .sheet .row .chips .chip { width: 100%; min-width: 0; padding-left: 6px; padding-right: 6px; justify-content: center; }
@@ -226,9 +234,9 @@
   .sheet-divider { border: 0; border-top: 1px solid var(--line); margin: 0; }
   .sheet-danger { align-self: stretch; justify-content: center; }
   .sheet-danger.confirm { background: var(--low-bg, #c04b28); border-color: var(--low-bg, #c04b28); color: #fff4ef; }
-  /* Armed confirm takes the whole row so its longer label stays short enough
-     to keep the button inside the visible sheet at small widths / 200% text. */
-  .sheet-actions .chip.confirm { grid-column: 1 / -1; }
+  /* Armed confirm swaps its label in place: both buttons keep their column,
+     width and height in every state, so nothing jumps when confirming. */
+  .sheet-actions .chip { text-align: center; line-height: 1.2; padding-left: 8px; padding-right: 8px; }
 
   /* ---------- Clock screen ---------- */
   .clock {
@@ -238,12 +246,26 @@
   .player {
     border: 0; width: 100%; min-width: 0; min-height: 0; cursor: pointer; position: relative;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    gap: 10px; padding: 16px; border-radius: var(--radius, 0);
+    gap: 4px; padding: 16px; border-radius: var(--radius, 0);
     background: var(--inactive-bg); color: var(--inactive-ink);
     touch-action: manipulation; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
   }
   .player.top { transform: rotate(180deg); }
-  .player .pname { font-size: 1rem; font-weight: 800; letter-spacing: 0.06em; }
+  .player .pname:empty { display: none; }
+  .player .pname { font-size: 1rem; font-weight: 800; letter-spacing: 0.06em; max-width: 100%; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-shrink: 0; }
+  /* Move count, on its own line under the badge. Its line is reserved (hidden) while the counter is on, so
+     nothing moves when the count appears; the name keeps one line and the count is never cut. */
+  .player .mv { flex-shrink: 0; display: none; font-size: 0.8rem; font-weight: 700; white-space: nowrap; line-height: 1.2; }
+  html[data-moves="on"] .player .mv { display: block; visibility: hidden; min-height: 1.2em; }
+  html[data-moves="on"] .player .mv:not(:empty) { visibility: visible; }
+  /* Colour badge: a drawn pawn plus the word, always present so nothing shifts.
+     The pawn carries its own outline so it reads on dark, light, accent and low-time backgrounds. */
+  .pawn { width: 28px; height: 28px; flex: none; }
+  .pawn-white { --pf: #f7f6ef; --ps: #1a1a1a; }
+  .pawn-black { --pf: #1a1a1a; --ps: #f7f6ef; }
+  .player .side { flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; gap: 6px; line-height: 1; font-size: 0.95rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
+  .name-field { flex-direction: row; align-items: center; gap: 8px; }
+  .name-field .pawn { width: 24px; height: 24px; }
   .player .time {
     font-family: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
     font-variant-numeric: tabular-nums; line-height: 1;
@@ -252,7 +274,13 @@
     font-size: min(21vw, 30vh); font-weight: var(--digit-weight, 800);
     max-width: 100%; white-space: nowrap;
   }
-  .player .note { font-size: 0.95rem; font-weight: 700; min-height: 1.4em; }
+  /* Two lines reserved at normal text size (hints like "Paused - tap either side to resume" wrap at 320px), so the block does not change height between states. Enlarged text reserves 2.7em, enough for two-line hints and the two-line ended result that shares this slot. */
+  .player .note { font-size: 0.95rem; font-weight: 700; min-height: max(2.7em, 36px); }
+  /* Hint (note) and ended result share one slot, so the result never adds height. */
+  .player .slot { display: grid; align-self: stretch; flex-shrink: 0; }
+  .player .slot > * { grid-area: 1 / 1; }
+  /* The turn pill lives in the same slot: it only shows while the side is running, when the hint and result are empty. */
+  .player .slot > .turn-pill { justify-self: center; align-self: start; }
   .player .flag-line { position: absolute; top: 0; left: 0; right: 0; height: 4px; background: transparent; }
 
   /* Active (to move) player */
@@ -268,7 +296,9 @@
     background: var(--accent-ink); color: var(--accent); letter-spacing: 0.04em;
     max-width: 100%; text-align: center;
   }
-  html[data-style="players"] .player.active .turn-pill { display: inline-block; }
+  /* The pill is hidden, not removed, so the slot keeps its size when a side becomes active. */
+  html[data-style="players"] .player .turn-pill { display: inline-block; visibility: hidden; }
+  html[data-style="players"] .player.active .turn-pill { visibility: visible; }
   html[data-style="players"] .player.active.low .turn-pill { background: var(--low-ink, #fff4ef); color: var(--low-bg, #c04b28); }
 
   /* Winner */
@@ -278,7 +308,8 @@
      the button fills its half and the card is a painted layer inside it.
      The top player is rotated 180 degrees, which flips the inset to match. */
   html[data-style="players"] .clock { --gap: 0; --page-pad: 0; --digit-weight: 800; }
-  html[data-style="players"] .player { padding: 22px; }
+  /* Vertical padding trimmed (centred content does not move) so the reserved badge and hint rows still fit at 200% text. */
+  html[data-style="players"] .player { padding: 14px 22px; }
   html[data-style="players"] .player,
   html[data-style="players"] .player.active,
   html[data-style="players"] .player.active.low,
@@ -309,6 +340,7 @@
     display: inline-flex; align-items: center; justify-content: center; padding: 0 14px;
   }
   .bar button[aria-disabled="true"] { opacity: 0.4; cursor: default; }
+  .bar button.ready-go { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
   .bar button.bar-toggle { font-size: 1rem; font-weight: 800; }
   .bar button.bar-toggle[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
   .bar .status { font-size: 0.85rem; color: var(--ink-dim); font-weight: 700; min-width: 0; text-align: center; }
@@ -325,11 +357,17 @@
 
   /* Ended state banner inside the winner panel. Its height is always reserved,
      so the message never pushes the name or digits out of the card. */
-  .player .result { display: block; visibility: hidden; min-height: 1.3em; font-size: 1.05rem; font-weight: 800; }
+  /* The outcome words ("Time!", "wins", "flag fell") always show in full; only the inserted name is cut
+     with an ellipsis when it is too long for the card. Up to three lines, always reserved by the slot. */
+  /* The reserve is rounded up to a whole pixel (where supported) so fractional layout cannot move the stack by a sub-pixel between states. */
+  .player .result { display: flex; flex-wrap: wrap; justify-content: center; align-content: flex-start; column-gap: 0.3em; overflow: hidden; visibility: hidden; font-size: 0.8rem; line-height: 1.2; min-height: 3.6em; min-height: round(up, 3.6em, 1px); font-weight: 800; }
+  .player .result > span { white-space: nowrap; }
+  .player .result .rname { display: flex; max-width: 100%; min-width: 0; }
+  .player .result .rn { overflow: hidden; text-overflow: ellipsis; min-width: 0; }
   .player .result:not(:empty) { visibility: visible; }
-  /* Once the game is decided the low-time note can never appear again; drop
-     its reserved height so the winner line always fits the card. */
-  .player.winner .note { display: none; }
+  /* Once the game is decided the note is hidden but keeps its height, so the
+     name, badge and digits do not move when the game ends. */
+  .player.winner .note { visibility: hidden; }
 
   @media (prefers-reduced-motion: reduce) {
     * { transition: none !important; animation: none !important; }
@@ -339,14 +377,18 @@
 <body>
 
 <!-- ============ Setup screen ============ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="pawn" viewBox="0 0 24 24"><defs><path id="pawn-shape" d="M15.3 6.2A3.3 3.3 0 1 1 8.7 6.2A3.3 3.3 0 1 1 15.3 6.2ZM9.1 9.4H14.9A0.9 0.9 0 0 1 14.9 11.2H9.1A0.9 0.9 0 0 1 9.1 9.4ZM9.6 11C9.6 14 8.4 15.5 7.2 18H16.8C15.6 15.5 14.4 14 14.4 11ZM6.7 18H17.3A1.3 1.3 0 0 1 18.6 19.4A1.3 1.3 0 0 1 17.3 20.8H6.7A1.3 1.3 0 0 1 5.4 19.4A1.3 1.3 0 0 1 6.7 18Z"/></defs><use href="#pawn-shape" fill="var(--ps)" stroke="var(--ps)" stroke-width="3.2" stroke-linejoin="round"/><use href="#pawn-shape" fill="var(--pf)"/></symbol>
+</svg>
 <main class="setup" id="setup-view">
   <header class="setup-hero">
     <p class="setup-kicker">A little time to play</p>
     <h1>Play chess</h1>
+    <p class="lead">Two timers. One tap per move.</p>
     <svg class="setup-clock" viewBox="0 0 180 142" aria-hidden="true" focusable="false">
       <ellipse cx="90" cy="133" rx="84" ry="7" fill="#233f31"/>
-      <rect x="24" y="4" width="44" height="16" rx="7" fill="#dac698"/>
-      <rect x="112" y="4" width="44" height="16" rx="7" fill="#dac698"/>
+      <rect class="clock-plunger" x="24" y="4" width="44" height="16" rx="7" fill="#dac698"/>
+      <rect class="clock-plunger" x="112" y="4" width="44" height="16" rx="7" fill="#dac698"/>
       <path class="clock-case" d="M17 23 H163 L175 117 Q177 130 162 130 H18 Q3 130 5 117 Z"/>
       <rect class="clock-window" x="24" y="46" width="62" height="49" rx="6"/>
       <rect class="clock-window" x="94" y="46" width="62" height="49" rx="6"/>
@@ -355,7 +397,6 @@
       <rect x="78" y="112" width="24" height="5" rx="2.5" fill="#526c45"/>
     </svg>
   </header>
-  <p class="lead">Two timers. One tap per move.</p>
 
   <p class="visually-hidden" id="play-summary"></p>
   <button class="start" id="start-btn" aria-describedby="play-summary">Play <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 19 19 5 M7 5h12v12"/></svg></button>
@@ -395,12 +436,12 @@
     <h2 id="players-heading">Players</h2>
     <div class="name-fields">
       <div class="name-row">
-      <label class="name-field" for="name-p1">Bottom of screen</label>
-      <input id="name-p1" type="text" value="Player 1" maxlength="24" autocomplete="off" spellcheck="false">
+      <label class="name-field" for="name-p1"><svg class="pawn pawn-white" aria-hidden="true"><use href="#pawn"/></svg>White (bottom)</label>
+      <input id="name-p1" type="text" value="" placeholder="Optional name" maxlength="24" autocomplete="off" spellcheck="false">
       </div>
       <div class="name-row">
-      <label class="name-field" for="name-p2">Top of screen</label>
-      <input id="name-p2" type="text" value="Player 2" maxlength="24" autocomplete="off" spellcheck="false">
+      <label class="name-field" for="name-p2"><svg class="pawn pawn-black" aria-hidden="true"><use href="#pawn"/></svg>Black (top)</label>
+      <input id="name-p2" type="text" value="" placeholder="Optional name" maxlength="24" autocomplete="off" spellcheck="false">
       </div>
     </div>
   </section>
@@ -445,13 +486,13 @@
 
 <!-- ============ Clock screen ============ -->
 <main class="clock" id="clock-view" hidden>
-  <button class="player top" id="p2" aria-label="Player 2">
+  <button class="player top" id="p2" aria-label="Black">
     <span class="flag-line"></span>
-    <span class="turn-pill">Tap when your move is done</span>
-    <span class="pname">Player 2</span>
+    <span class="side"><svg class="pawn pawn-black" aria-hidden="true"><use href="#pawn"/></svg>Black</span>
+    <span class="mv" id="p2-mv"></span>
+    <span class="pname"></span>
     <span class="time" id="p2-time">5:00</span>
-    <span class="note" id="p2-note"></span>
-    <span class="result" id="p2-result"></span>
+    <span class="slot"><span class="turn-pill">Tap when your move is done</span><span class="note" id="p2-note"></span><span class="result" id="p2-result"></span></span>
   </button>
 
   <div class="bar" role="toolbar" aria-label="Clock controls">
@@ -464,13 +505,13 @@
     <button id="bar-change" class="bar-toggle" hidden>Change time</button>
   </div>
 
-  <button class="player bottom" id="p1" aria-label="Player 1">
+  <button class="player bottom" id="p1" aria-label="White">
     <span class="flag-line"></span>
-    <span class="turn-pill">Tap when your move is done</span>
     <span class="time" id="p1-time">5:00</span>
-    <span class="pname">Player 1</span>
-    <span class="note" id="p1-note"></span>
-    <span class="result" id="p1-result"></span>
+    <span class="pname"></span>
+    <span class="side"><svg class="pawn pawn-white" aria-hidden="true"><use href="#pawn"/></svg>White</span>
+    <span class="mv" id="p1-mv"></span>
+    <span class="slot"><span class="turn-pill">Tap when your move is done</span><span class="note" id="p1-note"></span><span class="result" id="p1-result"></span></span>
   </button>
 </main>
 
@@ -568,10 +609,13 @@
   };
 
   /* ---------- settings ---------- */
-  var settings = { theme: 'dark', accent: 'green', sound: 'on', moves: 'off', minutes: 10, inc: 3, p1name: 'Player 1', p2name: 'Player 2' };
+  var settings = { theme: 'dark', accent: 'green', sound: 'on', moves: 'off', minutes: 10, inc: 3, p1name: '', p2name: '' };
   try {
     var savedSettings = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
     for (var k in settings) if (savedSettings[k] !== undefined) settings[k] = savedSettings[k];
+    // The old default names are no longer used: treat them as no name.
+    if (settings.p1name === 'Player 1') settings.p1name = '';
+    if (settings.p2name === 'Player 2') settings.p2name = '';
   } catch (e) {}
 
   function saveSettings() {
@@ -603,18 +647,21 @@
 
   function nameOf(side) {
     var raw = side === 'p1' ? settings.p1name : settings.p2name;
-    var name = (raw || '').trim();
-    return name || (side === 'p1' ? 'Player 1' : 'Player 2');
+    return (raw || '').trim();
+  }
+  // What names the side in messages: the typed name, otherwise its colour.
+  function labelOf(side) {
+    return nameOf(side) || (side === 'p1' ? 'White' : 'Black');
   }
 
   function renderNames() {
-    el.p1name.textContent = nameOf('p1');
-    el.p2name.textContent = nameOf('p2');
+    el.p1name.textContent = nameOf('p1'); el.p1name.dataset.full = nameOf('p1');
+    el.p2name.textContent = nameOf('p2'); el.p2name.dataset.full = nameOf('p2');
   }
 
   function updateSummary() {
     renderSetupClock();
-    el.playSummary.textContent = settings.minutes + ' + ' + settings.inc + ' - ' + nameOf('p1') + ' (bottom) vs ' + nameOf('p2') + ' (top)';
+    el.playSummary.textContent = settings.minutes + ' + ' + settings.inc + ' - ' + (nameOf('p1') ? nameOf('p1') + ' (White, bottom)' : 'White (bottom)') + ' vs ' + (nameOf('p2') ? nameOf('p2') + ' (Black, top)' : 'Black (top)');
   }
 
   // Path digits keep this decorative miniature crisp at any zoom, without
@@ -648,6 +695,44 @@
         path.setAttribute('transform', 'translate(' + (start + i * 12 * scale) + ' 62) scale(' + scale + ' 1)');
         group.appendChild(path);
       }
+    });
+  }
+
+  function animateOpening() {
+    var motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (motion.matches || el.setup.hidden || !Element.prototype.animate) return;
+    var effects = [];
+    function add(node, frames, duration, delay) {
+      var effect = node.animate(frames, { duration: duration, delay: delay, easing: 'linear', fill: 'both' });
+      effects.push(effect);
+      // Remove the effect after its final, unchanged frame. No paused effects
+      // or timers are left behind, and settings can change during the intro.
+      effect.onfinish = function () { effect.cancel(); };
+    }
+    document.querySelectorAll('.setup-clock .clock-digits').forEach(function (node, i) {
+      add(node, [
+        { transform: 'scaleY(1)', opacity: 1 },
+        { transform: 'scaleY(.03)', opacity: .25, offset: .23 },
+        { transform: 'scaleY(1.2)', opacity: 1, offset: .52 },
+        { transform: 'scaleY(.9)', offset: .74 },
+        { transform: 'scaleY(1)' }
+      ], 580, i * 120);
+    });
+    document.querySelectorAll('.setup-clock .clock-plunger').forEach(function (node, i) {
+      add(node, [
+        { transform: 'translateY(0)' },
+        { transform: 'translateY(8px)', offset: .25 },
+        { transform: 'translateY(8px)', offset: .5 },
+        { transform: 'translateY(-3px)', offset: .75 },
+        { transform: 'none' }
+      ], 420, i * 180);
+    });
+    function cancelForReducedMotion(event) {
+      if (event.matches) effects.forEach(function (effect) { effect.cancel(); });
+    }
+    motion.addEventListener('change', cancelForReducedMotion);
+    Promise.all(effects.map(function (effect) { return effect.finished.catch(function () {}); })).then(function () {
+      motion.removeEventListener('change', cancelForReducedMotion);
     });
   }
 
@@ -765,35 +850,10 @@
   function baseMs() { return settings.minutes * 60000; }
   function incMs() { return settings.inc * 1000; }
 
-  function saveGame() {
-    if (game.phase === 'setup') return;
-    try {
-      localStorage.setItem(GAME_KEY, JSON.stringify({
-        phase: game.phase === 'running' ? 'paused' : game.phase,
-        active: game.active,
-        remaining: game.remaining,
-        moves: game.moves,
-        winner: game.winner,
-        minutes: settings.minutes,
-        inc: settings.inc,
-        savedAt: Date.now()
-      }));
-    } catch (e) {}
-  }
-
-  function restoreGame() {
-    var saved = null;
-    try { saved = JSON.parse(localStorage.getItem(GAME_KEY) || 'null'); } catch (e) {}
-    if (!saved || !saved.savedAt) return false;
-    if (Date.now() - saved.savedAt > 12 * 3600 * 1000) return false;
-    if (saved.minutes !== settings.minutes || saved.inc !== settings.inc) return false;
-    game.phase = saved.phase === 'running' ? 'paused' : saved.phase;
-    game.active = saved.active;
-    game.remaining = saved.remaining;
-    game.moves = saved.moves || { p1: 0, p2: 0 };
-    game.winner = saved.winner || null;
-    return true;
-  }
+  // A game is never saved: every visit starts at the setup screen. Remove any
+  // game an earlier version of the page saved in this browser.
+  function saveGame() {}
+  try { localStorage.removeItem(GAME_KEY); } catch (e) {}
 
   /* ---------- timing ---------- */
   var timer = null;
@@ -836,14 +896,10 @@
       clickSound();
       return;
     }
+    // Before the game starts, tapping White starts White's clock (same as the
+    // Start button). Tapping Black does nothing.
     if (game.phase === 'ready') {
-      // First press starts the other player's clock, like Black starting White's clock.
-      game.phase = 'running';
-      game.active = other(side);
-      game.lastTick = Date.now();
-      requestWakeLock();
-      clickSound();
-      renderAll();
+      if (side === 'p1') beginGame();
       return;
     }
     if (game.phase !== 'running' || side !== game.active) return;
@@ -852,6 +908,17 @@
     game.active = other(side);
     clickSound();
     saveGame();
+    renderAll();
+  }
+
+  // Start game: White's clock starts at once, then each tap passes the turn.
+  function beginGame() {
+    if (game.phase !== 'ready') return;
+    game.phase = 'running';
+    game.active = 'p1';
+    game.lastTick = Date.now();
+    requestWakeLock();
+    clickSound();
     renderAll();
   }
 
@@ -901,6 +968,11 @@
     releaseWakeLock();
     saveGame();
     renderAll();
+    // A confirmed reset from the sheet closes it, so players can start straight away.
+    if (!el.sheet.hidden) {
+      stopSheet();
+      el.settingsBtn.focus();
+    }
   }
 
   function endGame(winner) {
@@ -1009,16 +1081,29 @@
   function fitTime(t) {
     if (!t || el.clock.hidden) return;
     t.style.fontSize = '';
+    t.style.minHeight = '';
+    t.style.display = '';
     var size = parseFloat(getComputedStyle(t).fontSize);
     if (!size) return;
     var maxHeight = Math.max(40, fitBudget(t));
+    var fullHeight = Math.min(t.getBoundingClientRect().height, maxHeight);
     var guard = 60;
     while (guard-- > 0 && size > 10 && (t.scrollWidth > t.clientWidth || t.scrollHeight > maxHeight)) {
       size *= 0.92;
       t.style.fontSize = size.toFixed(1) + 'px';
     }
+    // When the digits shrink to stay inside the card (the tenths make them wider),
+    // keep the row at the height it had at full size, so the badge, name and digits
+    // above and below do not move.
+    if (t.style.fontSize) {
+      t.style.minHeight = fullHeight + 'px';
+      t.style.display = 'flex';
+      t.style.alignItems = 'center';
+      t.style.justifyContent = 'center';
+    }
   }
   function fitTimes() {
+    refitNames();
     fitTime(el.p1time);
     fitTime(el.p2time);
   }
@@ -1040,24 +1125,67 @@
     });
   }
 
+  // Cut a long name to what fits its box and end it with an ellipsis, without a space before the
+  // ellipsis (CSS text-overflow can leave a gap there). The full name stays in dataset.full.
+  function fitNameText(e) {
+    var full = e.dataset.full != null ? e.dataset.full : e.textContent;
+    e.dataset.full = full;
+    e.textContent = full;
+    if (!e.clientWidth || e.scrollWidth <= e.clientWidth + 0.5) return;
+    var lo = 1, hi = full.length - 1, best = 1;
+    while (lo <= hi) {
+      var mid = (lo + hi) >> 1;
+      e.textContent = full.slice(0, mid).replace(/\s+$/, '') + '\u2026';
+      if (e.scrollWidth <= e.clientWidth + 0.5) { best = mid; lo = mid + 1; } else { hi = mid - 1; }
+    }
+    e.textContent = full.slice(0, best).replace(/\s+$/, '') + '\u2026';
+  }
+  function refitNames() {
+    if (el.clock.hidden) return;
+    var all = [el.p1name, el.p2name].concat([].slice.call(document.querySelectorAll('.result .rn')));
+    all.forEach(fitNameText);
+  }
+
+  function renderResult(box, side) {
+    box.textContent = '';
+    if (game.phase !== 'ended') return;
+    var won = game.winner === side;
+    function span(cls, text) { var e = document.createElement('span'); if (cls) e.className = cls; e.textContent = text; return e; }
+    var who = span('rname', '');
+    var rn = span('rn', labelOf(side)); rn.dataset.full = labelOf(side); who.appendChild(rn);
+    who.appendChild(span('', won ? ' ' : '\u2019s '));
+    box.appendChild(span('', 'Time! '));
+    box.appendChild(who);
+    box.appendChild(span('', won ? 'wins' : 'flag fell'));
+    refitNames();
+  }
+
   function renderNotes() {
     var notes = { p1: '', p2: '' };
     if (game.phase === 'ready') {
       notes.p1 = 'White moves first';
-      notes.p2 = 'Black taps to start White\u2019s clock';
+      notes.p2 = 'Press ▶ to start';
     } else if (game.phase === 'paused') {
-      notes.p1 = 'Paused - tap either side to resume';
-      notes.p2 = 'Paused - tap either side to resume';
+      notes.p1 = 'Paused - tap to resume';
+      notes.p2 = 'Paused - tap to resume';
     }
-    var p1n = nameOf('p1'), p2n = nameOf('p2');
+    var c1 = '', c2 = '';
     if (settings.moves === 'on' && (game.phase === 'running' || game.phase === 'paused')) {
-      p1n += ' \u00b7 ' + game.moves.p1 + (game.moves.p1 === 1 ? ' move' : ' moves');
-      p2n += ' \u00b7 ' + game.moves.p2 + (game.moves.p2 === 1 ? ' move' : ' moves');
+      c1 = ' \u00b7 ' + game.moves.p1 + (game.moves.p1 === 1 ? ' move' : ' moves');
+      c2 = ' \u00b7 ' + game.moves.p2 + (game.moves.p2 === 1 ? ' move' : ' moves');
     }
-    el.p1name.textContent = p1n;
-    el.p2name.textContent = p2n;
+    document.documentElement.setAttribute('data-moves', settings.moves === 'on' ? 'on' : 'off');
+    el.p1name.textContent = nameOf('p1'); el.p1name.dataset.full = nameOf('p1');
+    el.p2name.textContent = nameOf('p2'); el.p2name.dataset.full = nameOf('p2');
+    document.getElementById('p1-mv').textContent = c1.replace(' \u00b7 ', '');
+    document.getElementById('p2-mv').textContent = c2.replace(' \u00b7 ', '');
+    var noteChanged = el.p1note.textContent !== notes.p1 || el.p2note.textContent !== notes.p2;
     el.p1note.textContent = notes.p1;
     el.p2note.textContent = notes.p2;
+    // A hint change can resize the stack; refit so a size picked while the
+    // old hint was showing never lingers (the digits must not move between states).
+    refitNames();
+    if (noteChanged) requestAnimationFrame(fitTimes);
   }
 
   function renderBar() {
@@ -1065,9 +1193,11 @@
     if (game.phase === 'paused') label = 'Paused';
     if (game.phase === 'ended') label = 'Game over';
     el.barStatus.textContent = label;
-    el.pause.innerHTML = game.phase === 'paused' ? '&#9654;' : '&#10073;&#10073;';
-    el.pause.setAttribute('aria-label', game.phase === 'paused' ? 'Resume' : 'Pause');
-    var pauseEnabled = game.phase === 'running' || game.phase === 'paused';
+    var playShown = game.phase === 'paused' || game.phase === 'ready';
+    el.pause.innerHTML = playShown ? '&#9654;' : '&#10073;&#10073;';
+    el.pause.setAttribute('aria-label', game.phase === 'ready' ? 'Start game' : game.phase === 'paused' ? 'Resume' : 'Pause');
+    el.pause.classList.toggle('ready-go', game.phase === 'ready');
+    var pauseEnabled = game.phase === 'running' || game.phase === 'paused' || game.phase === 'ready';
     el.pause.setAttribute('aria-disabled', String(!pauseEnabled));
     var resetEnabled = game.phase !== 'setup';
     el.reset.setAttribute('aria-disabled', String(!resetEnabled));
@@ -1087,16 +1217,12 @@
     el.p2.classList.toggle('active', game.phase === 'running' && game.active === 'p2');
     el.p1.classList.toggle('winner', game.phase === 'ended' && game.winner === 'p1');
     el.p2.classList.toggle('winner', game.phase === 'ended' && game.winner === 'p2');
-    el.p1result.textContent = game.phase === 'ended'
-      ? (game.winner === 'p1' ? 'Time! ' + nameOf('p1') + ' wins' : 'Time! ' + nameOf('p1') + '\u2019s flag fell')
-      : '';
-    el.p2result.textContent = game.phase === 'ended'
-      ? (game.winner === 'p2' ? 'Time! ' + nameOf('p2') + ' wins' : 'Time! ' + nameOf('p2') + '\u2019s flag fell')
-      : '';
+    renderResult(el.p1result, 'p1');
+    renderResult(el.p2result, 'p2');
 
     var label = { p1: nameOf('p1'), p2: nameOf('p2') };
     for (var side of ['p1', 'p2']) {
-      var parts = [label[side] + ', ' + spokenTime(game.remaining[side])];
+      var parts = [(label[side] ? label[side] + ', ' : '') + (side === 'p1' ? 'White' : 'Black') + ', ' + spokenTime(game.remaining[side])];
       if (game.phase === 'running' && game.active === side) parts.push('your turn');
       if (game.phase === 'ended' && game.winner === side) parts.push('wins on time');
       (side === 'p1' ? el.p1 : el.p2).setAttribute('aria-label', parts.join(', '));
@@ -1141,6 +1267,7 @@
   el.pause.addEventListener('click', function () {
     if (game.phase === 'running') pauseGame();
     else if (game.phase === 'paused') resumeGame();
+    else if (game.phase === 'ready') beginGame();
   });
   el.again.addEventListener('click', function () { doReset(); });
   el.barChange.addEventListener('click', function () { changeTime(); });
@@ -1171,7 +1298,7 @@
     if (!changeTimeArmed) {
       changeTimeArmed = true;
       el.sheetChangeTime.classList.add('confirm');
-      el.sheetChangeTime.textContent = 'Tap again to reset';
+      el.sheetChangeTime.textContent = 'New game?';
       changeTimeTimer = setTimeout(disarmChangeTime, 3000);
       return;
     }
@@ -1198,7 +1325,7 @@
     if (event.key === ' ') {
       event.preventDefault();
       if (game.phase === 'running' && game.active) press(game.active);
-      else if (game.phase === 'ready') press('p1');
+      else if (game.phase === 'ready') beginGame();
     }
     if (event.key === 'p' || event.key === 'P') {
       if (game.phase === 'running') pauseGame();
@@ -1212,15 +1339,36 @@
   applyDisplay();
   renderNames();
   updateSummary();
-  var restored = false;
-  try { restored = restoreGame(); } catch (e) {}
-  if (restored && game.phase !== 'setup') {
-    el.setup.hidden = true;
-    el.clock.hidden = false;
-    startTimer();
-  }
   renderAll();
   fitTimes();
+
+  // Play the opening once the page is fully loaded, its fonts are ready and the
+  // tab is visible, then wait half a second so the first frame is not missed.
+  var OPENING_DELAY_MS = 500;
+  function whenLoaded(done) {
+    var fonts = document.fonts && document.fonts.ready ? document.fonts.ready.catch(function () {}) : Promise.resolve();
+    function afterLoad() { fonts.then(done); }
+    if (document.readyState === 'complete') afterLoad();
+    else window.addEventListener('load', afterLoad, { once: true });
+  }
+  // The opening needs half a second of visible time: if the tab is hidden
+  // while the delay runs, cancel it and start the delay again once shown.
+  whenLoaded(function () {
+    var timer = null;
+    function arm() {
+      clearTimeout(timer);
+      timer = null;
+      if (document.visibilityState === 'hidden') return;
+      timer = setTimeout(function () {
+        timer = null;
+        if (document.visibilityState === 'hidden') return;
+        document.removeEventListener('visibilitychange', arm);
+        animateOpening();
+      }, OPENING_DELAY_MS);
+    }
+    document.addEventListener('visibilitychange', arm);
+    arm();
+  });
 
   /* Small public surface for the repo's browser checks. */
   window.chessClock = {
@@ -1234,6 +1382,7 @@
       };
     },
     start: startGame,
+    begin: beginGame,
     press: press,
     pause: pauseGame,
     resume: resumeGame,
