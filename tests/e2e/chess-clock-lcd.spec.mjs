@@ -43,7 +43,10 @@ for(const width of [320,390,768,1440])test(`LCD contains the entire content bloc
 test('clock targets suppress native tap highlight but retain keyboard focus',async({page})=>{
  await page.goto('/chess-clock/');
  const targets=page.locator('button,summary,input,select,label,[tabindex]');
- for(const color of await targets.evaluateAll(es=>es.map(e=>getComputedStyle(e).webkitTapHighlightColor)))expect(color).toBe('rgba(0, 0, 0, 0)');
+ // Firefox has no WebKit native highlight property. Selection and focus still
+ // run in every browser; assert the highlight where the browser implements it.
+ const supportsHighlight=await page.evaluate(()=>CSS.supports('-webkit-tap-highlight-color','transparent'));
+ if(supportsHighlight)for(const color of await targets.evaluateAll(es=>es.map(e=>getComputedStyle(e).webkitTapHighlightColor)))expect(color).toBe('rgba(0, 0, 0, 0)');
  await page.locator('#start-btn').click();await page.locator('#pause-btn').click();
  await page.locator('#p1').click();
  expect(await page.locator('#p1').evaluate(e=>getComputedStyle(e).userSelect)).toBe('none');
