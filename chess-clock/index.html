@@ -94,6 +94,7 @@
   .setup-kicker { grid-column: 1; grid-row: 1; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-dim); }
   .setup-hero h1 { grid-column: 1; grid-row: 2; }
   .setup-hero .lead { grid-column: 1; grid-row: 3; }
+  @media(max-width:499px){.setup-hero .lead span {display:block}}
   .setup-clock { grid-column: 2; grid-row: 1 / 4; align-self: center; }
   .setup h1 { font-size: clamp(1.8rem, 9.4vw, 3rem); line-height: 1.08; letter-spacing: -0.035em; }
   .setup-clock { display: block; width: 100%; height: auto; overflow: visible; }
@@ -383,7 +384,7 @@
   <header class="setup-hero">
     <p class="setup-kicker">A little time to play</p>
     <h1>Play chess</h1>
-    <p class="lead">Two timers. One tap per move.</p>
+    <p class="lead"><span>Two timers.</span> <span>One tap per move.</span></p>
     <svg class="setup-clock" viewBox="0 0 180 142" aria-hidden="true" focusable="false">
       <ellipse cx="90" cy="133" rx="84" ry="7" fill="#233f31"/>
       <rect class="clock-plunger" x="24" y="4" width="44" height="16" rx="7" fill="#dac698"/>

@@ -1034,7 +1034,7 @@ test('setup compact header packs copy beside the full-size clock without overlap
     const m = await page.evaluate(() => {
       const r = (s) => document.querySelector(s).getBoundingClientRect();
       const kicker = r('.setup-kicker'), h1 = r('.setup-hero h1'), lead = r('.setup-hero .lead'), clock = r('.setup-clock');
-      return { leadRight:lead.right,clockLeft:clock.left, kickerBottom: kicker.bottom, h1Top: h1.top, h1Bottom: h1.bottom, leadTop: lead.top, leadLines: (() => { const g = document.createRange(); g.selectNodeContents(document.querySelector('.setup-hero .lead')); return g.getClientRects().length; })(), clockBottom: clock.bottom, scrollW: document.documentElement.scrollWidth };
+      return { leadRight:lead.right,clockLeft:clock.left, kickerBottom: kicker.bottom, h1Top: h1.top, h1Bottom: h1.bottom, leadTop: lead.top, leadLines: (() => { const g = document.createRange(); g.selectNodeContents(document.querySelector('.setup-hero .lead')); return new Set([...g.getClientRects()].filter(r=>r.height>0).map(r=>Math.round(r.top))).size; })(), clockBottom: clock.bottom, scrollW: document.documentElement.scrollWidth };
     });
     const tag = `${w}px${big ? ' 200%' : ''}`;
     expect(m.leadRight + 7, `${tag} tagline clear of clock`).toBeLessThanOrEqual(m.clockLeft);
