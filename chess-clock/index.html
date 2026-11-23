@@ -163,6 +163,8 @@
   .tile[aria-pressed="true"] .tile-sub { color: var(--accent-ink); }
 
   #custom-time summary { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: center; }
+  /* Keep the state glyph exact, never capture a partly rotated corner on close. */
+  #custom-time summary::after { transition: none; flex: none; }
   #custom-time-value { font-size: .85rem; font-weight: 650; color: var(--ink-dim); }
   /* Collapsed sections: the summary reads as a tappable row, not plain text. */
   .disclosure summary {
