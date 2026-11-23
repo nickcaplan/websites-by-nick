@@ -7,3 +7,15 @@ for(const width of[320,390,768,1440])test(`preset cards compact and stable ${wid
  for(const tile of await page.locator('.tile').all()){await tile.click();expect(await rects()).toEqual(now);await expect(tile).toHaveAttribute('aria-pressed','true')}
  expect(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth)).toBe(false);
 });
+
+test('selection has no inset outline on load, click, blur or reload; keyboard focus remains',async({page,baseURL})=>{
+ await page.goto(baseURL+'/chess-clock/');const tile=page.locator('[data-preset="3,2"]');
+ const selected=page.locator('.tile[aria-pressed="true"]');
+ const noOutline=async()=>expect(await selected.evaluate(e=>getComputedStyle(e).outlineStyle)).toBe('none');
+ await noOutline();await tile.click();await noOutline();await page.locator('h1').click();await noOutline();await page.reload();await noOutline();
+ await page.keyboard.press('Tab');
+ while(!(await tile.evaluate(e=>e===document.activeElement)))await page.keyboard.press('Tab');
+ expect(await tile.evaluate(e=>e.matches(':focus-visible'))).toBe(true);
+ expect(await tile.evaluate(e=>getComputedStyle(e).outlineStyle)).toBe('solid');
+ expect(await tile.evaluate(e=>getComputedStyle(e).outlineOffset)).toBe('3px');
+});
