@@ -394,7 +394,7 @@ html[data-style="players"] .player.tap-depth::before {animation:lcd-press 240ms 
      status on its own full-width row, so nothing is orphaned and enlarged
      labels stay inside their buttons. */
   @media (max-width: 560px) {
-    .bar { display: grid; grid-template-columns: repeat(2, 1fr); grid-auto-rows: minmax(44px, auto); gap: 8px; padding: 8px 10px; }
+    .bar { display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: auto; grid-auto-rows: minmax(44px, auto); gap: 8px; padding: 8px 10px; }
     .bar button { width: 100%; min-width: 0; min-height: 44px; padding: 0 8px; }
     .bar .status { grid-column: 1 / -1; order: -1; align-self: center; }
     .bar button#again-btn, .bar button#bar-change { grid-column: 1 / -1; }
