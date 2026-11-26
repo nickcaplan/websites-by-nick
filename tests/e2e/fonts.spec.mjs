@@ -27,21 +27,15 @@ for (const path of ['/', '/experience/', '/contact/']) {
       // Mobile projects keep their device viewport; desktop projects exercise
       // the full-sized headline.
       if (!isMobile) await page.setViewportSize({ width: 1440, height: 900 });
-      // The homepage headline cycles its last word on a timer; with a hold longer
-      // than that timer the text would change between the two measurements for
-      // reasons unrelated to fonts. Reduced motion keeps the headline fixed.
-      await page.emulateMedia({ reducedMotion: 'reduce' });
       // Delay the webfont response instead of holding it: an indefinitely held
       // request is killed on WebKit before release (the face goes to "error"
       // and the same-document swap can never happen). A delayed response keeps
       // the face "loading" while the fallback paints, then completes the swap
-      // inside the SAME document. The delay is 6s, not 2.5s: WebKit on CI can reach the
-      // pre-swap checks late (seen on /contact/), and a delay shorter than that
-      // lets the font arrive first. Every fulfill is no-store: WebKit's memory
+      // inside the SAME document. Every fulfill is no-store: WebKit's memory
       // cache would otherwise serve the font across the per-variant
       // navigations without a network request (the preload and the CSS fetch
       // share the cache). The delay is well beyond the fallback-paint work.
-      const FONT_DELAY_MS = 6000;
+      const FONT_DELAY_MS = 2500;
       let fontRequested;
       const requested = new Promise((resolve) => { fontRequested = resolve; });
       await page.route('**/assets/fonts/dmsans.woff2', async (route) => {
@@ -114,7 +108,7 @@ for (const path of ['/', '/experience/', '/contact/']) {
         await page.waitForFunction(() => {
           const face = [...document.fonts].find((f) => f.family.replace(/["']/g, '') === 'DM Sans' && f.weight === '400');
           return face && face.status === 'loaded';
-        }, { timeout: 12000 });
+        }, { timeout: 8000 });
         await page.evaluate(() => document.fonts.ready);
         await paint();
         const after = await page.evaluate(measure);
