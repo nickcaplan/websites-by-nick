@@ -132,3 +132,10 @@ footer > .footer-cta.cta:has(>.link-action-icon){padding-right:calc(1.3em + 2rem
 .contact-form .button .mail-icon{width:1.3em;height:1.3em;right:10px}
 .contact-form .button .cta-label,.contact-form .button .cta-end{overflow-wrap:normal;word-break:normal}
 }
+
+/* Section headings are set in one plain colour. Only the hero word changes colour, because the bulb drives it. */
+h2 em,
+footer h2 em {
+  color: inherit;
+  font-weight: inherit;
+}

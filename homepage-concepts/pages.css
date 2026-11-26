@@ -40,7 +40,7 @@
   margin: 90px 0 30px;
 }
 .pg h2 em {
-  color: var(--orange);
+  color: inherit;
 }
 .cards {
   display: grid;
@@ -204,8 +204,7 @@
 .dark .band {
   background: #29362e;
 }
-.dark .pg h1 em,
-.dark .pg h2 em {
+.dark .pg h1 em {
   color: #f0996f;
 }
 .dark .card.ink {
