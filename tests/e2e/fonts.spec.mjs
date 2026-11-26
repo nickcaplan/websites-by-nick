@@ -27,6 +27,10 @@ for (const path of ['/', '/experience/', '/contact/']) {
       // Mobile projects keep their device viewport; desktop projects exercise
       // the full-sized headline.
       if (!isMobile) await page.setViewportSize({ width: 1440, height: 900 });
+      // The homepage headline cycles its last word on a timer; with a hold longer
+      // than that timer the text would change between the two measurements for
+      // reasons unrelated to fonts. Reduced motion keeps the headline fixed.
+      await page.emulateMedia({ reducedMotion: 'reduce' });
       // Delay the webfont response instead of holding it: an indefinitely held
       // request is killed on WebKit before release (the face goes to "error"
       // and the same-document swap can never happen). A delayed response keeps
